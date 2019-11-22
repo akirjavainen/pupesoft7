@@ -4170,7 +4170,8 @@ if (!function_exists('print_pdf_lahete')) {
     if (fwrite($fh, $pdf->generate()) === FALSE) die("PDF create error $pdffilenimi");
     fclose($fh);
 
-      copy($pdffilenimi, "/var/www/tmp/".$laskurow[tunnus].".pdf"); // MODIFIED, added for direct e-mail from Ikkunalaskuri
+    if (file_exists("/var/www/tmp")) copy($pdffilenimi, "/var/www/tmp/".$laskurow[tunnus].".pdf"); // MODIFIED, added for direct e-mail from JWIO ERP
+
     if ($tee == 'NAYTATILAUS') {
       //Työnnetään tuo pdf vaan putkeen!
       echo file_get_contents($pdffilenimi);

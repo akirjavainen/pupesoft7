@@ -1513,7 +1513,7 @@ if (!function_exists('print_pdf_tarjous')) {
     }
     elseif ($tee == 'NAYTATILAUS') {
       //Työnnetään tuo pdf vaan putkeen!
-      copy($pdf_tarjousfilenimi, "/var/www/tmp/".$laskurow[tunnus].".pdf"); // MODIFIED, added for direct e-mail from Ikkunalaskuri
+      if (file_exists("/var/www/tmp")) copy($pdf_tarjousfilenimi, "/var/www/tmp/".$laskurow[tunnus].".pdf"); // MODIFIED, added for direct e-mail from JWIO ERP
       echo file_get_contents($pdf_tarjousfilenimi);
     }
     elseif ($komento != '' and $komento != 'edi') {
