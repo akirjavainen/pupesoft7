@@ -1300,10 +1300,11 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
       }
 // MODIFIED, added link on next line, also added toimitustapa lower:
       echo "  <tr class='aktiivi'>
-	  <td valign='top'><a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tilrow[tunnukset]&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tilrow[tunnukset_ruudulle]</a>
-          <a href='/pupesoft/tilauskasittely/tilaus_myynti.php?tilausnumero=$tilrow[tunnukset_ruudulle]&mista=muokkaatilaus&toim=RIVISYOTTO'>(M)</a></td>
+	  <td valign='top'><a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tilrow[tunnukset]&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tilrow[tunnukset_ruudulle]</a></td>
           <td valign='top'>$tilrow[ytunnus]<br><a href='/raportit/nimihaku.php?search=$tilrow[nimi]'>$tilrow[nimi]</a> $tilrow[nimitark]</td>
-          <td valign='top'>$tilrow[tilauksia]<br>$tilrow[riveja]</td>
+          <td valign='top'>$tilrow[tilauksia]<br>$tilrow[riveja]
+          <a href='/pupesoft/tilauskasittely/tilaus_myynti.php?tilausnumero=$tilrow[tunnukset_ruudulle]&mista=muokkaatilaus&toim=RIVISYOTTO'> (M)</a>
+          <a href='/toimitusvahvistus/index.php?nonavi=1&default_order=$tilrow[tunnukset_ruudulle]'> (R)</a></td>
           <td valign='top' align='right' nowrap>$tilrow[arvo]</td>
 <td valign='top'>$tilrow[meh]<br>$tilrow[toimitustapa]</td>
           <td valign='top'>$teksti<br>$toimitusselite</td>
