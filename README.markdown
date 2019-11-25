@@ -15,7 +15,7 @@ Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille,
 
 5. Muokkaa inc/salasanat.php-tiedostoon tietokannan käyttäjä ja salasana, tietokantapalvelimen osoitteeksi "localhost".
 
-6. Mikäli kyseessä on uusi asennus, perusta tietokanta ("mysql -uKÄYTTÄJÄ -pSALASANA", sitten "CREATE DATABASE pupesoft CHARACTER SET utf8 COLLATE utf8_unicode_ci;" ja "exit"). Aja referenssidata ja tietokantarakenne sisään ("mysql -uKÄYTTÄJÄ -pSALASANA pupesoft < referenssitietokantakuvaus.sql").
+6. Mikäli kyseessä on uusi asennus, perusta tietokanta ("mysql -uKÄYTTÄJÄ -pSALASANA", sitten "CREATE DATABASE pupesoft CHARACTER SET utf8 COLLATE utf8_unicode_ci;"). Aja referenssidata ja tietokantarakenne sisään ("mysql -uKÄYTTÄJÄ -pSALASANA pupesoft < referenssitietokantakuvaus.sql").
 
 7. Tietokannan käyttäjien/oikeuksien ja crontab-varmuuskopiointien asettamiseen löytyy ohjeita virallisesta asennusohjeesta.
 
@@ -40,7 +40,9 @@ log_errors = On
 
 Seuraa /var/log/apache2/error_log- tai /var/log/httpd/error_log-tiedostoa. Tämä auttaa myös ratkomaan ongelmatilanteita, joissa selain näyttää tyhjää valkoista sivua tuomalla virheilmoitukset esiin.
 
-Vanhan latin1/ISO-8859-1 -tietokannan konvertointiin UTF-8 -merkistöön on monta tapaa. Tärkeintä on ensin varmuuskopioida kanta ("mysqldump -uKÄYTTÄJÄ -pSALASANA pupesoft >pupesoft.sql"). Yksi vaihtoehto on kokeilla ajaa kantaan "ALTER DATABASE pupesoft CHARACTER SET utf8 COLLATE utf8_unicode_ci;", toisaalta joskus parempia tuloksia on saatu ajamalla tietokantadumppiin konversio-ohjelma, kuten "iconv --from-code=ISO-8859-1 --to-code=UTF-8 pupesoft.sql >pupesoft-utf8.sql", minkä lisäksi "sed -i 's/latin1/utf8/g' pupesoft-utf8.sql", sitten dumppi uudestaan sisään kantaan "mysql -uKÄYTTÄJÄ -pSALASANA pupesoft < pupesoft-utf8.sql".
+Vanhan latin1/ISO-8859-1 -tietokannan konvertointiin UTF-8 -merkistöön on monta tapaa. Tärkeintä on ensin varmuuskopioida kanta ("mysqldump -uKÄYTTÄJÄ -pSALASANA pupesoft >pupesoft.sql"). Yksi vaihtoehto on kokeilla ajaa kantaan SQL-kysely "ALTER DATABASE pupesoft CHARACTER SET utf8 COLLATE utf8_unicode_ci;", toisaalta joskus parempia tuloksia on saatu ajamalla tietokantadumppiin konversio-ohjelma, kuten "iconv --from-code=ISO-8859-1 --to-code=UTF-8 pupesoft.sql >pupesoft-utf8.sql", minkä lisäksi "sed -i 's/latin1/utf8/g' pupesoft-utf8.sql", sitten dumppi uudestaan sisään kantaan "mysql -uKÄYTTÄJÄ -pSALASANA pupesoft < pupesoft-utf8.sql".
 
-Konversion jälkeen Pupesoftissa kannattaa käydä mahdollisimman monen modulin puolella ja tarkistaa, että "ääkköset" näkyvät oikein. Muussa tapauksessa palautetaan varmuuskopio ja kokeilla toista tapaa. Myös Pupesoftin omaa konversioskriptiä UTF8_mysqlkonversio.php voi testata.
+Konversion jälkeen Pupesoftissa kannattaa käydä mahdollisimman monen modulin puolella ja tarkistaa, että "ääkköset" näkyvät oikein. Muussa tapauksessa palautetaan varmuuskopio ja kokeilla toista tapaa. Myös Pupesoftin omaa konversioskriptiä UTF8_mysqlkonversio.php voi testata. Tietokannan oletusmerkistön voi tarkistaa SQL-kyselyllä:
+
+"SELECT default_character_set_name FROM information_schema.SCHEMATA WHERE schema_name = 'pupesoft';"
 
