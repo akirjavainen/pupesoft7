@@ -1,11 +1,11 @@
 # Pupesoft 7
 Suomalainen, avoimen lähdekoodin toiminnanohjausjärjestelmä PK-yrityksille. PHP 7 -yhteensopiva fork. UTF-8 kytketty käyttöön myös tietokannoille ja monia toimintoja muutettu sujuvammiksi. Virallinen asennusohje löytyy GitHubin [Wikistä](https://github.com/devlab-oy/pupesoft/wiki/Asennusohje "Pupesoft - Asennusohje"). Virallinen repository: https://github.com/devlab-oy/pupesoft/
 
-Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille, joille LAMP-ympäristö on tuttu jo entuudestaan.
+Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille, joille LAMP-ympäristö on jo entuudestaan tuttu.
 
 
 # Pika-asennusohje (minimaalinen asennus ilman Ruby on Rails/Pupenext-ympäristöä)
-1. Asenna Apache, MySQL/MariaDB (server), PHP, PHP-Apache, PHP-Curl, PHP-GD ja PHP-MySQL. Esimerkiksi Debian-pohjaisissa jakeluissa "apt install apache2 libapache2-mod-php mariadb-server php-gd php-mysql". Arch-pohjaisissa jakeluissa "pacman -Syu apache mariadb php php-apache php-gd".
+1. Asenna Apache, MySQL/MariaDB (server), PHP, PHP-Apache, PHP-GD ja PHP-MySQL. Esimerkiksi Debian-pohjaisissa jakeluissa "apt install apache2 libapache2-mod-php mariadb-server php-gd php-mysql". Arch-pohjaisissa jakeluissa "pacman -Syu apache mariadb php php-apache php-gd".
 
 2. Kytke palvelut käyttöön: "systemctl enable --now httpd" (tai apache2) && "systemctl enable --now mysqld"
 
