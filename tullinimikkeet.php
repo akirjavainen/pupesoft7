@@ -78,7 +78,7 @@ if ($tee == "muuta") {
     $query = "update tuote set tullinimike1='$uusitullinimike1', tullinimike2='$uusitullinimike2' where yhtio='$kukarow[yhtio]' and tullinimike1='$tullinimike1' $lisa";
     $result = pupe_query($query);
 
-    echo sprintf("<font class='message'>Päivitettiin %s tuotetta.</font><br><br>", mysqli_affected_rows($link));
+    echo sprintf("<font class='message'>Päivitettiin %s tuotetta.</font><br><br>", mysqli_affected_rows());
 
     $tullinimike1 = $uusitullinimike1;
     $tullinimike2 = $uusitullinimike2;
@@ -90,7 +90,7 @@ if ($tee == "muuta") {
 if ($tee == "synkronoi") {
 
   $ch  = curl_init();
-  curl_setopt($ch, CURLOPT_URL, "http://api.devlab.fi/referenssitullinimikkeet.sql");
+  curl_setopt($ch, CURLOPT_URL, "http://pupeapi.sprintit.fi/referenssitullinimikkeet.sql");
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
   curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -119,32 +119,18 @@ if ($tee == "synkronoi") {
   $query  = "DELETE FROM tullinimike";
   $result = pupe_query($query);
 
-  // Päivitetään tuotteet 2017 - 2018
+  // Päivitetään tuotteet 2018 - 2019
   $muunnosavaimet = array(
-    "19059060" => "19059070",
-    "19059060" => "19059080",
-    "19059090" => "19059070",
-    "19059090" => "19059080",
-    "29397900" => "29397910",
-    "29397900" => "29397990",
-    "32151110" => "32151100",
-    "32151190" => "32151100",
-    "32151910" => "32151900",
-    "32151990" => "32151900",
-    "36030010" => "36030020",
-    "36030010" => "36030030",
-    "36030090" => "36030040",
-    "36030090" => "36030050",
-    "36030090" => "36030060",
-    "36030090" => "36030080",
-    "38249992" => "38249956",
-    "38249992" => "38249957",
-    "38249992" => "38249992",
-    "84141010" => "84141015",
-    "84141020" => "84141015",
-    "85437090" => "85437070",
-    "85437090" => "85437090",
-    );
+    "03083010" => "03083080",
+    "03083090" => "03083080",
+    "27101251" => "27101250",
+    "27101259" => "27101250",
+    "76061220" => "76061219",
+    "76061292" => "76061211",
+    "84431331" => "84431332",
+    "84431335" => "84431332",
+    "84431339" => "84431334",
+  );
 
   echo t("Päivitetään muuttuneet tullinimikkeet tuotteille")."...<br>";
 

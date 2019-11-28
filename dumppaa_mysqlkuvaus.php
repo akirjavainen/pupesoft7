@@ -35,7 +35,7 @@ if (!$php_cli) echo "<font class='head'>".t("SQL-tietokantarakenne").":</font><h
 $ulos = array();
 
 // Jos ollaan annettu poikkeava MySQL portti hostnamessa, pitää se erotella komentorivityökalua varten
-if (strpos($dbhost, ":") !== false) {
+if (mb_strpos($dbhost, ":") !== false) {
   list($dbhost, $dbport) = explode(":", $dbhost);
 }
 else {

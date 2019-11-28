@@ -1148,7 +1148,7 @@ if ($tee == 'MONISTA') {
         case 'directdebitsiirtonumero':
           $values .= ", 0";
 
-          break;  
+          break;
         case 'toimaika':
           if (($kumpi == 'HYVITA' or $kumpi == 'REKLAMA' or $yhtiorow["tilausrivien_toimitettuaika"] == 'X') and $toim != 'OSTOTILAUS') {
             $values .= ", '{$monistarow[$fieldname]}'";
@@ -1231,6 +1231,14 @@ if ($tee == 'MONISTA') {
           }
           else {
             $values .= ", ''";
+          }
+          break;
+        case 'chn':
+          if ($monistarow[$fieldname] == '999' and $monistarow['mapvm'] != '0000-00-00') {
+            $values .= ", '".$asiakrow[$fieldname]."'";
+          }
+          else {
+            $values .= ", '".$monistarow[$fieldname]."'";
           }
           break;
         case 'tunnus':
@@ -1436,9 +1444,9 @@ if ($tee == 'MONISTA') {
       $kysely  = "INSERT into lasku ({$fields}) VALUES ({$values})";
       $insres  = pupe_query($kysely);
       $utunnus = mysqli_insert_id($GLOBALS["masterlink"]);
-      
-      if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MODIFIED, added
-      
+
+      if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MODIFIED, added JWIO ERP copy function
+
       $query = "SELECT *
                 FROM lasku
                 WHERE yhtio = '{$kukarow['yhtio']}'

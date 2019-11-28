@@ -1,8 +1,8 @@
 <?php
 
 // haetaan jotain tarpeellisia funktioita mukaan..
-if (include_once "inc/parametrit.inc");
-elseif (include_once "parametrit.inc");
+if (@include_once "inc/parametrit.inc");
+elseif (@include_once "parametrit.inc");
 else exit;
 
 if (($yhtiorow["kayttoliittyma"] == "" and $kukarow["kayttoliittyma"] == "") or $kukarow["kayttoliittyma"] == "C") {
@@ -25,7 +25,7 @@ if (($yhtiorow["kayttoliittyma"] == "" and $kukarow["kayttoliittyma"] == "") or 
     }
     unset($liite);
   }
-  elseif (file($yhtiorow["logo"])) {
+  elseif (@file($yhtiorow["logo"])) {
     $isizelogo = getimagesize($yhtiorow["logo"]);
   }
 
@@ -50,7 +50,7 @@ if (($yhtiorow["kayttoliittyma"] == "" and $kukarow["kayttoliittyma"] == "") or 
     $yhtio_nimi = "";
   }
   else {
-    $logo = "{$pupesoft_scheme}api.devlab.fi/pupesoft.png";
+    $logo = "{$pupesoft_scheme}pupeapi.sprintit.fi/pupesoft.png";
     $koko = "width='150'";
     $yhtio_nimi = "<font class='info'>$yhtiorow[nimi]</font><br>";
   }

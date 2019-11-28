@@ -108,7 +108,7 @@ if (isset($synkronoi) and count($syncyhtiot) > 1) {
 if ($kukarow['kuka'] == 'admin' and (isset($synkronoireferenssi) or isset($synkronoireferenssialapaivita)) and count($syncyhtiot) > 0) {
 
   $ch  = curl_init();
-  curl_setopt($ch, CURLOPT_URL, "http://api.devlab.fi/referenssivalikot.sql");
+  curl_setopt($ch, CURLOPT_URL, "http://pupeapi.sprintit.fi/referenssivalikot.sql");
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
   curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -313,7 +313,7 @@ if ($tee == "PAIVITAJARJETYS") {
                 and jarjestys2 = '$row[jarjestys2]'
                 and hidden     = '$row[hidden]'";
       $result = pupe_query($query);
-      $num1 = mysqli_affected_rows($link);
+      $num1 = mysqli_affected_rows();
     }
   }
 
@@ -386,7 +386,7 @@ if ($tee == "PAIVITA") {
                   and hidden     = '$row[hidden]'
                   and yhtio      in ($yht)";
         $result = pupe_query($query);
-        $num1 = mysqli_affected_rows($link);
+        $num1 = mysqli_affected_rows();
 
         echo "<font class='message'>$num1 ".t("riviä päivitetty")."!<br></font>";
       }
@@ -427,7 +427,7 @@ if ($tee == "PAIVITA") {
                     muutospvm     = now(),
                     muuttaja      = '{$kukarow['kuka']}'";
           $result = pupe_query($query);
-          $num = mysqli_affected_rows($link);
+          $num = mysqli_affected_rows();
 
           echo "<font class='message'>$num ".t("riviä lisätty")."!<br></font>";
         }
@@ -533,7 +533,7 @@ if ($tee == 'POISTA') {
               and jarjestys2 = '$row[jarjestys2]'
               and yhtio      in ($yht)";
     $result = pupe_query($query);
-    $num1 = mysqli_affected_rows($link);
+    $num1 = mysqli_affected_rows();
 
     foreach ($yarray as $yhtio) {
       // päiviteään kuka-tauluun mitkä käyttäjät on aktiivisia ja mitkä poistettuja
@@ -651,7 +651,7 @@ if ($tee == "") {
 
       if ($yhtio == "REFERENSSI") {
         $ch  = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://api.devlab.fi/referenssivalikot.sql");
+        curl_setopt($ch, CURLOPT_URL, "http://pupeapi.sprintit.fi/referenssivalikot.sql");
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

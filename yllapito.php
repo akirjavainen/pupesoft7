@@ -17,6 +17,80 @@ else {
 
 if (mb_strpos($_SERVER['SCRIPT_NAME'], "yllapito.php")  !== FALSE) {
   require "inc/parametrit.inc";
+}
+
+if ($toim == "tuote") {
+  if (!empty($_POST['ajax_toiminto']) and $_POST['ajax_toiminto'] == "hae_vapaa_tuoteno") {
+    $virheviesti = '';
+    $autom_wherelisa = '';
+    $autom_selectlisa = 'MAX(CAST(tuote.tuoteno AS UNSIGNED))';
+
+    if (!empty($kaatokoodi_tuotteen_tuotenumeron_alku)) {
+      $autom_wherelisa = "AND tuote.tuoteno LIKE '{$kaatokoodi_tuotteen_tuotenumeron_alku}%'";
+    }
+
+    $query = "SELECT IF({$autom_selectlisa} = 18446744073709551615, 'error', {$autom_selectlisa} + 1) AS seuraava_tuoteno
+                FROM tuote
+                WHERE tuote.yhtio = '{$kukarow['yhtio']}'
+                AND tuote.tuoteno REGEXP '[^0-9]' = 0
+                {$autom_wherelisa}";
+    $autom_tuoteno_res = pupe_query($query);
+    $autom_tuoteno_row = mysqli_fetch_assoc($autom_tuoteno_res);
+
+    if ($autom_tuoteno_row['seuraava_tuoteno'] == 'error') {
+      $result  = "<br /><font class='error'>";
+      $result .= t("Seuraava tuotenumero on liian suuri (isompi kuin %s)", "", "18446744073709551615");
+      $result .= "</font>";
+    }
+    else {
+      $result = $autom_tuoteno_row['seuraava_tuoteno'];
+    }
+
+    echo json_encode($result);
+
+    exit;
+  }
+
+  ?>
+  <script>
+
+    $(function() {
+      $('#etsi_vapaa_tuoteno').on('click', function(e) {
+        var tuoteno = document.getElementById("input_tuoteno");
+        tuoteno.value = '<?php echo t("Haetaan") ?>';
+
+        $.ajax({
+          async: false,
+          type: 'POST',
+          url: "yllapito.php",
+          data: {
+            no_head: 'yes',
+            ohje: 'off',
+            toim: "tuote",
+            ajax_toiminto: 'hae_vapaa_tuoteno'
+          }
+        }).done(function(json) {
+          var data = jQuery.parseJSON(json);
+          var tuoteno = document.getElementById("input_tuoteno");
+          var virhe = document.getElementById("tuoteno_virhe");
+
+          if (data.includes('error')) {
+            tuoteno.value = "";
+            virhe.innerHTML = data;
+          }
+          else {
+            tuoteno.value = data;
+            virhe.innerHTML = "";
+          }
+        });
+      });
+    });
+
+  </script>
+  <?php
+}
+
+if (mb_strpos($_SERVER['SCRIPT_NAME'], "yllapito.php")  !== FALSE) {
   echo "<script src='yllapito.js'></script>";
 }
 
@@ -325,7 +399,7 @@ if ($upd == 1) {
 
       $t[$i] = sprintf('%04d', $tvv[$i])."-".sprintf('%02d', $tkk[$i])."-".sprintf('%02d', $tpp[$i]);
 
-      if (!checkdate($tkk[$i], $tpp[$i], $tvv[$i]) and ($tkk[$i]!= 0 or $tpp[$i] != 0)) {
+      if (!@checkdate($tkk[$i], $tpp[$i], $tvv[$i]) and ($tkk[$i]!= 0 or $tpp[$i] != 0)) {
         $virhe[$i] = t("Virheellinen päivämäärä");
         $errori = 1;
       }
@@ -361,7 +435,7 @@ if ($upd == 1) {
     }
 
     if (function_exists($funktio)) {
-      $funktio($t, $i, $result, $tunnus, $virhe, $trow);
+      @$funktio($t, $i, $result, $tunnus, $virhe, $trow);
     }
 
     if (isset($virhe[$i]) and $virhe[$i] != "") {
@@ -464,7 +538,7 @@ if ($upd == 1) {
           if ($val > 0) {
             $delquery = " DELETE FROM liitetiedostot WHERE yhtio = '$kukarow[yhtio]' and liitos = 'Yllapito' and tunnus = '$val'";
             $delres = pupe_query($delquery);
-            if (mysqli_affected_rows($link) == 1) {
+            if (mysqli_affected_rows() == 1) {
               $t[$key] = "";
             }
           }
@@ -2336,7 +2410,7 @@ if ($tunnus > 0 or $uusi != 0 or $errori != '') {
   echo "<td class='back pnopad ptop'>";
 
   if ($errori == '' and $toim == "sarjanumeron_lisatiedot") {
-    include "inc/arviokortti.inc";
+    @include "inc/arviokortti.inc";
   }
 
   // Ylläpito.php:n formi kiinni vasta tässä

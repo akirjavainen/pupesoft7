@@ -8,11 +8,11 @@ $STATE_CRITICAL  = 2;
 $STATE_UNKNOWN   = 3;
 $STATE_DEPENDENT = 4;
 
-if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' or $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['SERVER_ADDR'] == $_SERVER['REMOTE_ADDR'] or $_SERVER['REMOTE_ADDR'] == '185.11.208.68') {
+if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' or $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['SERVER_ADDR'] == $_SERVER['REMOTE_ADDR'] or $_SERVER['REMOTE_ADDR'] == '95.217.2.12') {
 
   if ($_GET["tee"] == "MYSQL") {
     $link = mysqli_connect($dbhost, $dbuser, $dbpass) or die ("CRITICAL - mysqli_connect() failed $STATE_CRITICAL");
-    mysqli_select_db($link, $dbkanta) or die ("CRITICAL - mysqli_select_db() failed $STATE_CRITICAL");
+    mysqli_select_db($dbkanta) or die ("CRITICAL - mysqli_select_db() failed $STATE_CRITICAL");
 
     echo "OK - Mysql connection ok $STATE_OK";
     exit;
@@ -38,16 +38,16 @@ if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' or $_SERVER['REMOTE_ADDR'] == '::1' o
     foreach (${$slaveprefix."slavedb"} as $si => $devnull) {
       if (isset(${$slaveprefix."slavedb"}[$si]) and ${$slaveprefix."slavedb"}[$si] != "" and isset(${$slaveprefix."slaveuser"}[$si]) and ${$slaveprefix."slaveuser"}[$si] != "" and isset(${$slaveprefix."slavepass"}[$si]) and ${$slaveprefix."slavepass"}[$si] != "") {
         $link = mysqli_connect(${$slaveprefix."slavedb"}[$si], ${$slaveprefix."slaveuser"}[$si], ${$slaveprefix."slavepass"}[$si]) or die ("CRITICAL - mysqli_connect() failed on slave$si $STATE_CRITICAL");
-        mysqli_select_db($link, $dbkanta) or die ("CRITICAL - mysqli_select_db() failed on slave$si $STATE_CRITICAL");
+        mysqli_select_db($dbkanta) or die ("CRITICAL - mysqli_select_db() failed on slave$si $STATE_CRITICAL");
 
         $query = "SHOW /*!50000 GLOBAL */ VARIABLES like 'max_connections'";
-        $res = mysqli_query($link, $query) or die(mysqli_error());
+        $res = mysqli_query($query) or die(mysqli_error());
         $row = mysqli_fetch_assoc($res);
 
         $max_connections = (int) $row["Value"];
 
         $query = "SHOW /*!50000 GLOBAL */ STATUS like 'max_used_connections'";
-        $res = mysqli_query($link, $query) or die(mysqli_error());
+        $res = mysqli_query($query) or die(mysqli_error());
         $row = mysqli_fetch_assoc($res);
 
         $max_used_connections = (int) $row["Value"];
@@ -83,16 +83,16 @@ if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' or $_SERVER['REMOTE_ADDR'] == '::1' o
   if ($_GET["tee"] == "CONNECTION_USAGE") {
 
     $link = mysqli_connect($dbhost, $dbuser, $dbpass) or die ("CRITICAL - mysqli_connect() failed $STATE_CRITICAL");
-    mysqli_select_db($link, $dbkanta) or die ("CRITICAL - mysqli_select_db() failed $STATE_CRITICAL");
+    mysqli_select_db($dbkanta) or die ("CRITICAL - mysqli_select_db() failed $STATE_CRITICAL");
 
     $query = "SHOW /*!50000 GLOBAL */ VARIABLES like 'max_connections'";
-    $res = mysqli_query($link, $query) or die(mysqli_error());
+    $res = mysqli_query($query) or die(mysqli_error());
     $row = mysqli_fetch_assoc($res);
 
     $max_connections = (int) $row["Value"];
 
     $query = "SHOW /*!50000 GLOBAL */ STATUS like 'max_used_connections'";
-    $res = mysqli_query($link, $query) or die(mysqli_error());
+    $res = mysqli_query($query) or die(mysqli_error());
     $row = mysqli_fetch_assoc($res);
 
     $max_used_connections = (int) $row["Value"];
@@ -134,10 +134,10 @@ if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' or $_SERVER['REMOTE_ADDR'] == '::1' o
       if (isset(${$slaveprefix."slavedb"}[$si]) and ${$slaveprefix."slavedb"}[$si] != "" and isset(${$slaveprefix."slaveuser"}[$si]) and ${$slaveprefix."slaveuser"}[$si] != "" and isset(${$slaveprefix."slavepass"}[$si]) and ${$slaveprefix."slavepass"}[$si] != "") {
 
         $link = mysqli_connect(${$slaveprefix."slavedb"}[$si], ${$slaveprefix."slaveuser"}[$si], ${$slaveprefix."slavepass"}[$si]) or die ("CRITICAL - mysqli_connect() failed on slave$si $STATE_CRITICAL");
-        mysqli_select_db($link, $dbkanta) or die ("CRITICAL - mysqli_select_db() failed on slave$si $STATE_CRITICAL");
+        mysqli_select_db($dbkanta) or die ("CRITICAL - mysqli_select_db() failed on slave$si $STATE_CRITICAL");
 
         $query = "SHOW /*!50000 SLAVE */ STATUS";
-        $res = mysqli_query($link, $query) or die(mysqli_error());
+        $res = mysqli_query($query) or die(mysqli_error());
         $row = mysqli_fetch_assoc($res);
 
         if ($row["Slave_IO_Running"] != "Yes") {
@@ -245,10 +245,10 @@ if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' or $_SERVER['REMOTE_ADDR'] == '::1' o
       if (isset($haproxy[$si]) and $haproxy[$si] != "" and isset($haproxyuser[$si]) and $haproxyuser[$si] != "" and isset($haproxypass[$si]) and $haproxypass[$si] != "") {
 
         $link = mysqli_connect($haproxy[$si], $haproxyuser[$si], $haproxypass[$si]) or die ("CRITICAL - mysqli_connect() failed on HaProxy$si $STATE_CRITICAL");
-        mysqli_select_db($link, $dbkanta) or die ("CRITICAL - mysqli_select_db() failed on HaProxy$si $STATE_CRITICAL");
+        mysqli_select_db($dbkanta) or die ("CRITICAL - mysqli_select_db() failed on HaProxy$si $STATE_CRITICAL");
 
         $query = "SELECT 1+1 as summa";
-        $res = mysqli_query($link, $query) or die(mysqli_error());
+        $res = mysqli_query($query) or die(mysqli_error());
         $row = mysqli_fetch_assoc($res);
 
         // Nostetaan virhe jos tilanne on huolestuttava

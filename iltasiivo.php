@@ -170,14 +170,16 @@ $laskuri = 0;
 $query = "SELECT lasku.tunnus laskutunnus,
           lasku.tila,
           count(*) kaikki,
-          sum(if (tilausrivi.tyyppi='D' or tilausrivi.var='P', 1, 0)) dellatut
+          sum(if (tilausrivi.tyyppi='D' or tilausrivi.var='P', 1, 0)) dellatut,
+          asiakas.kerayserat keraysera
           FROM lasku
+          LEFT JOIN asiakas on asiakas.yhtio = lasku.yhtio and asiakas.tunnus = lasku.liitostunnus
           JOIN tilausrivi on tilausrivi.yhtio = lasku.yhtio and tilausrivi.otunnus = lasku.tunnus
           WHERE lasku.yhtio  = '$kukarow[yhtio]'
           AND lasku.tila     in ('N','E','L','G')
           AND lasku.alatila != 'X'
           GROUP BY 1,2
-          HAVING dellatut > 0 and kaikki = dellatut";
+          HAVING dellatut > 0 and kaikki = dellatut  and keraysera != 'H'";
 $result = pupe_query($query);
 
 while ($row = mysqli_fetch_assoc($result)) {
@@ -399,7 +401,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 ORDER BY tunnus DESC
                 LIMIT $poistetaankpl";
   pupe_query($poisquery);
-  $laskpois += mysqli_affected_rows($link);
+  $laskpois += mysqli_affected_rows();
 }
 
 if ($lasktuote > 0) {
@@ -412,8 +414,8 @@ $kukaquery = "UPDATE kuka
               AND extranet = ''";
 pupe_query($kukaquery);
 
-if (mysqli_affected_rows($link) > 0) {
-  $iltasiivo .= date("d.m.Y @ G:i:s").": Päivitettiin ".mysqli_affected_rows($link)." käyttäjän taso 3 --> 2\n";
+if (mysqli_affected_rows() > 0) {
+  $iltasiivo .= date("d.m.Y @ G:i:s").": Päivitettiin ".mysqli_affected_rows()." käyttäjän taso 3 --> 2\n";
 }
 
 // mitätöidään keskenolevia extranet-tilauksia, jos ne on liian vanhoja ja yhtiön parametri on päällä
@@ -498,7 +500,7 @@ if (table_exists('suorituskykyloki')) {
             AND luontiaika < date_sub(now(), INTERVAL 1 YEAR)";
   pupe_query($query);
 
-  $laskuri = mysqli_affected_rows($link);
+  $laskuri = mysqli_affected_rows();
   if ($laskuri > 0) $iltasiivo .= is_log("Poistettiin $laskuri riviä suorituskykylokista.");
 }
 
@@ -511,7 +513,7 @@ $query = "DELETE oikeu
           AND oikeu.profiili  = ''
           AND kuka.tunnus is null";
 pupe_query($query);
-$del = mysqli_affected_rows($link);
+$del = mysqli_affected_rows();
 
 $iltasiivo .= is_log("Poistettiin $del poistettujen käyttäjien käyttöoikeuksia.");
 
@@ -527,7 +529,7 @@ $query = "DELETE o1.*
           AND o1.kuka       != ''
           AND o2.tunnus is null";
 pupe_query($query);
-$del = mysqli_affected_rows($link);
+$del = mysqli_affected_rows();
 
 $iltasiivo .= is_log("Poistettiin $del poistettujen ohjelmien käyttöoikeuksia.");
 

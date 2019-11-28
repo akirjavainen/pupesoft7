@@ -501,7 +501,7 @@ if ($tee == '') {
 
   if (mysqli_num_rows($result) > 0) {
 
-    echo "<table width='1000'>";
+    echo "<table style='width: 100%; min-width: 600px;'>";
 
     while ($uutinen = mysqli_fetch_array($result)) {
 
@@ -536,7 +536,7 @@ if ($tee == '') {
           $kuva = "<img src='{$palvelin2}pics/facelift/pupe.gif' width='130'>";
         }
         else {
-          $kuva = "<img src='{$pupesoft_scheme}api.devlab.fi/pupesoft.gif' width='130'>";
+          $kuva = "<img src='{$pupesoft_scheme}pupeapi.sprintit.fi/pupesoft.gif' width='130'>";
         }
       }
 

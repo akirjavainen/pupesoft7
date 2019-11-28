@@ -3,10 +3,10 @@
 //* Tämä skripti käyttää slave-tietokantapalvelinta *//
 $useslave = 1;
 
-if (include "inc/connect.inc") {
+if (@include "inc/connect.inc") {
   require "inc/functions.inc";
 }
-elseif (include "connect.inc") {
+elseif (@include "connect.inc") {
   require "functions.inc";
 }
 else {
@@ -36,6 +36,22 @@ $liiterow = mysqli_fetch_assoc($liiteres);
 if ($kuka_check_row['yhtio'] != $liiterow['yhtio'] and $liiterow['liitos'] != 'kalenteri') {
   exit;
 }
+
+if ($liiterow['liitos'] == "hyvaksyttavat_dokumentit") {
+  // Onko käytäjällä oikeus nähdä tämä dokkari?
+  $query = "SELECT hd.tunnus
+            FROM hyvaksyttavat_dokumentit hd
+            JOIN hyvaksyttavat_dokumenttityypit hdt ON (hd.yhtio=hdt.yhtio and hd.tiedostotyyppi=hdt.tunnus)
+            JOIN hyvaksyttavat_dokumenttityypit_kayttajat hdk ON (hdk.yhtio=hdt.yhtio and hdk.doku_tyyppi_tunnus=hdt.tunnus and hdk.kuka='{$kuka_check_row['kuka']}')
+            WHERE hd.yhtio = '{$kuka_check_row['yhtio']}'
+            AND hd.tunnus = {$liiterow['liitostunnus']}";
+  $hvresult = pupe_query($query);
+
+  if (!mysqli_num_rows($hvresult)) {
+    exit;
+  }
+}
+
 
 $liiterow["selite"] = preg_replace("/[^a-zA-Z0-9]/", "", $liiterow["selite"]);
 
