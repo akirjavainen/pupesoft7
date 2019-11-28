@@ -112,7 +112,7 @@ if (!function_exists('tulosta_pullopanttitarra_pdf')) {
                   AND tuoteno  = '{$tilausrivi['tuoteno']}'";
         pupe_query($query);
 
-        if (mysqli_affected_rows() == 0) {
+        if (mysqli_affected_rows($link) == 0) {
           $query = "INSERT INTO laite
                   SET yhtio      = '{$kukarow['yhtio']}',
                       luontiaika = now(),

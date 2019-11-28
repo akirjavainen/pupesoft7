@@ -340,7 +340,7 @@ if ($tee != "" and $tee != "MUUOTAOSTIKKOA") {
               {$tilausrivilisa}";
     $result = pupe_query($query);
 
-    if (mysqli_affected_rows() > 0) {
+    if (mysqli_affected_rows($link) > 0) {
 
       echo "<font class='message'>".t("Toimitus vahvistettu")."</font><br><br>";
 
@@ -1150,7 +1150,7 @@ if ($tee != "" and $tee != "MUUOTAOSTIKKOA") {
                       AND tilausrivi.laskutettuaika = '0000-00-00'";
             pupe_query($query);
 
-            if (mysqli_affected_rows() > 0) {
+            if (mysqli_affected_rows($link) > 0) {
               echo "<font class='error'>".t("Myyntitilausriville päivitettiin määrät")."</font><br/><br/>";
             }
             else {

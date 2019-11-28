@@ -117,7 +117,7 @@ while (false !== ($file = readdir($handle))) {
               AND otsikkonro = '{$tilausnumero}'";
     pupe_query($query);
 
-    if (mysqli_affected_rows() == 0) {
+    if (mysqli_affected_rows($link) == 0) {
       pupesoft_log('logmaster_tracking_code', "Ei löydetty rahtikirjaa tilaukselle {$tilausnumero}");
       $rakir_loytyi = FALSE;
       continue;

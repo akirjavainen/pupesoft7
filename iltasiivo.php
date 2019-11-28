@@ -401,7 +401,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 ORDER BY tunnus DESC
                 LIMIT $poistetaankpl";
   pupe_query($poisquery);
-  $laskpois += mysqli_affected_rows();
+  $laskpois += mysqli_affected_rows($link);
 }
 
 if ($lasktuote > 0) {
@@ -414,8 +414,8 @@ $kukaquery = "UPDATE kuka
               AND extranet = ''";
 pupe_query($kukaquery);
 
-if (mysqli_affected_rows() > 0) {
-  $iltasiivo .= date("d.m.Y @ G:i:s").": Päivitettiin ".mysqli_affected_rows()." käyttäjän taso 3 --> 2\n";
+if (mysqli_affected_rows($link) > 0) {
+  $iltasiivo .= date("d.m.Y @ G:i:s").": Päivitettiin ".mysqli_affected_rows($link)." käyttäjän taso 3 --> 2\n";
 }
 
 // mitätöidään keskenolevia extranet-tilauksia, jos ne on liian vanhoja ja yhtiön parametri on päällä
@@ -500,7 +500,7 @@ if (table_exists('suorituskykyloki')) {
             AND luontiaika < date_sub(now(), INTERVAL 1 YEAR)";
   pupe_query($query);
 
-  $laskuri = mysqli_affected_rows();
+  $laskuri = mysqli_affected_rows($link);
   if ($laskuri > 0) $iltasiivo .= is_log("Poistettiin $laskuri riviä suorituskykylokista.");
 }
 
@@ -513,7 +513,7 @@ $query = "DELETE oikeu
           AND oikeu.profiili  = ''
           AND kuka.tunnus is null";
 pupe_query($query);
-$del = mysqli_affected_rows();
+$del = mysqli_affected_rows($link);
 
 $iltasiivo .= is_log("Poistettiin $del poistettujen käyttäjien käyttöoikeuksia.");
 
@@ -529,7 +529,7 @@ $query = "DELETE o1.*
           AND o1.kuka       != ''
           AND o2.tunnus is null";
 pupe_query($query);
-$del = mysqli_affected_rows();
+$del = mysqli_affected_rows($link);
 
 $iltasiivo .= is_log("Poistettiin $del poistettujen ohjelmien käyttöoikeuksia.");
 

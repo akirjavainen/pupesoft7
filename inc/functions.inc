@@ -1495,7 +1495,7 @@ if (!function_exists("vapauta_sarjanumerot")) {
         $query = "DELETE from sarjanumeroseuranta where yhtio='$kukarow[yhtio]' and tuoteno='$srow[tuoteno]' and ostorivitunnus='$srow[tunnus]' and myyntirivitunnus=0";
         pupe_query($query);
 
-        if (mysqli_affected_rows() == 0) {
+        if (mysqli_affected_rows($link) == 0) {
           // merkataan osorivitunnus nollaksi
           $query = "UPDATE sarjanumeroseuranta set ostorivitunnus=0 WHERE yhtio='$kukarow[yhtio]' and tuoteno='$srow[tuoteno]' and ostorivitunnus='$srow[tunnus]'";
           pupe_query($query);
@@ -3185,7 +3185,7 @@ if (!function_exists("synkronoi")) {
 
             $updres = pupe_query($syncquery." ".$syncquery2);
 
-            if (mysqli_affected_rows() > 0) {
+            if (mysqli_affected_rows($link) > 0) {
               $erot = "";
 
               if (count($override) > 0) {
@@ -13020,7 +13020,7 @@ if (!function_exists("lue_kurssit")) {
       // tämä valuutta on nyt päivitetty!
       $valuutat[] = $valuutta;
 
-      if (mysqli_affected_rows() != 0) {
+      if (mysqli_affected_rows($link) != 0) {
         echo "<font class='message'>Päivitettiin kurssi valuutalle $valuutta: ".round(1/$kurssi, 9)."</font><br>";
       }
 
@@ -23613,7 +23613,7 @@ if (!function_exists('paivita_tilausrivin_hylly')) {
 
     $presult = pupe_query($query);
 
-    return mysqli_affected_rows();
+    return mysqli_affected_rows($link);
   }
 }
 
@@ -23719,7 +23719,7 @@ if (!function_exists('paivita_oletuspaikka')) {
                 AND t.varattu   != '0'";
       $result = pupe_query($query);
 
-      $return["paivitetyt_ostorivit"] = mysqli_affected_rows();
+      $return["paivitetyt_ostorivit"] = mysqli_affected_rows($link);
 
       if ($yhtiorow['paivita_oletuspaikka'] == 'M') {
 
@@ -32493,7 +32493,7 @@ if (!function_exists('aseta_kukarow_kesken')) {
 
     $kukarow["kesken"] = $kesken;
 
-    if (mysqli_affected_rows() == 1) {
+    if (mysqli_affected_rows($link) == 1) {
       return true;
     }
 

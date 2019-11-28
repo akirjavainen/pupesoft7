@@ -1301,7 +1301,7 @@ if ($tee == 'VALMIS') {
             $result = pupe_query($query);
 
             // Jos pävitettiin saldoa, tehdään kirjanpito. Vaikka summa olisi nolla. Muuten jälkilaskenta ei osaa korjata tätä, jos tiliöintejä ei tehdä.
-            if (mysqli_affected_rows() > 0) {
+            if (mysqli_affected_rows($link) > 0) {
 
               // Päivämäärällä inventoitaessa laitetaan tämäpäivämäärä,
               // jos eri päivämäärä ei ole syötetty,

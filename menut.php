@@ -313,7 +313,7 @@ if ($tee == "PAIVITAJARJETYS") {
                 and jarjestys2 = '$row[jarjestys2]'
                 and hidden     = '$row[hidden]'";
       $result = pupe_query($query);
-      $num1 = mysqli_affected_rows();
+      $num1 = mysqli_affected_rows($link);
     }
   }
 
@@ -386,7 +386,7 @@ if ($tee == "PAIVITA") {
                   and hidden     = '$row[hidden]'
                   and yhtio      in ($yht)";
         $result = pupe_query($query);
-        $num1 = mysqli_affected_rows();
+        $num1 = mysqli_affected_rows($link);
 
         echo "<font class='message'>$num1 ".t("riviä päivitetty")."!<br></font>";
       }
@@ -427,7 +427,7 @@ if ($tee == "PAIVITA") {
                     muutospvm     = now(),
                     muuttaja      = '{$kukarow['kuka']}'";
           $result = pupe_query($query);
-          $num = mysqli_affected_rows();
+          $num = mysqli_affected_rows($link);
 
           echo "<font class='message'>$num ".t("riviä lisätty")."!<br></font>";
         }
@@ -533,7 +533,7 @@ if ($tee == 'POISTA') {
               and jarjestys2 = '$row[jarjestys2]'
               and yhtio      in ($yht)";
     $result = pupe_query($query);
-    $num1 = mysqli_affected_rows();
+    $num1 = mysqli_affected_rows($link);
 
     foreach ($yarray as $yhtio) {
       // päiviteään kuka-tauluun mitkä käyttäjät on aktiivisia ja mitkä poistettuja

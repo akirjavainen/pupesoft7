@@ -538,7 +538,7 @@ if ($upd == 1) {
           if ($val > 0) {
             $delquery = " DELETE FROM liitetiedostot WHERE yhtio = '$kukarow[yhtio]' and liitos = 'Yllapito' and tunnus = '$val'";
             $delres = pupe_query($delquery);
-            if (mysqli_affected_rows() == 1) {
+            if (mysqli_affected_rows($link) == 1) {
               $t[$key] = "";
             }
           }

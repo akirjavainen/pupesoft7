@@ -648,7 +648,7 @@ if ($tee == 'H') {
   $result = pupe_query($query);
 
   // Jotain meni pieleen
-  if (mysqli_affected_rows() != 1) {
+  if (mysqli_affected_rows($link) != 1) {
     echo "System error Debug --> $query<br>";
     require "inc/footer.inc";
     exit;
@@ -740,7 +740,7 @@ if ($tee == 'DP') {
                 and tila     = 'P'";
       $updresult = pupe_query($query);
 
-      if (mysqli_affected_rows() != 1) { // Jotain meni pieleen
+      if (mysqli_affected_rows($link) != 1) { // Jotain meni pieleen
         echo "System error Debug --> $query<br>";
 
         require "inc/footer.inc";
@@ -843,7 +843,7 @@ if ($tee == "NK" or $tee == "NT" or $tee == "NV") {
               and tila     = 'M'";
     $updresult = pupe_query($query);
 
-    if (mysqli_affected_rows() != 1) { // Jotain meni pieleen
+    if (mysqli_affected_rows($link) != 1) { // Jotain meni pieleen
       echo "System error Debug --> $query<br>";
 
       require "inc/footer.inc";

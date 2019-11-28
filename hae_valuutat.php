@@ -32,7 +32,7 @@ if ($xml !== FALSE) {
                 AND nimi    = '$valkoodi'";
       $result = pupe_query($query);
 
-      if (mysqli_affected_rows() != 0) {
+      if (mysqli_affected_rows($link) != 0) {
         echo "<td class='back'>".t("Kurssi päivitetty").".</td>";
       }
 

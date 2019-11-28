@@ -857,7 +857,7 @@ if ($from != '' and $rivitunnus != "" and $formista == "kylla") {
                 AND tuoteno  = '{$sarjarow['tuoteno']}'";
       $kverires = pupe_query($kveri);
 
-      if (mysqli_affected_rows() == 0) {
+      if (mysqli_affected_rows($link) == 0) {
         $kveri = "INSERT INTO laite
                   SET yhtio = '{$kukarow['yhtio']}',
                   luontiaika = now(),

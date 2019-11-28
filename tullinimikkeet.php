@@ -78,7 +78,7 @@ if ($tee == "muuta") {
     $query = "update tuote set tullinimike1='$uusitullinimike1', tullinimike2='$uusitullinimike2' where yhtio='$kukarow[yhtio]' and tullinimike1='$tullinimike1' $lisa";
     $result = pupe_query($query);
 
-    echo sprintf("<font class='message'>Päivitettiin %s tuotetta.</font><br><br>", mysqli_affected_rows());
+    echo sprintf("<font class='message'>Päivitettiin %s tuotetta.</font><br><br>", mysqli_affected_rows($link));
 
     $tullinimike1 = $uusitullinimike1;
     $tullinimike2 = $uusitullinimike2;

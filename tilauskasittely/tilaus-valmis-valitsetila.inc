@@ -432,7 +432,7 @@ elseif ($kerattavia > 0 and $kutsuja != 'keraa.php' and !$tilaus_toimitetuksi) {
     }
   }
   ///* Tähän mennään jos lähete vain siirretään tulostusjonoon *///
-  elseif (mysqli_affected_rows() > 0) {
+  elseif (mysqli_affected_rows($link) > 0) {
     $tilaus_valmis_message .= "<font class='message'>".sprintf(t("Tilaus %s siirretty tulostusjonoon"), $laskurow["tunnus"])."!</font><br><br>\n";
   }
 }
