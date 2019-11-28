@@ -33,7 +33,9 @@ Vaikka käytössä ei olekaan MS SQL -tietokanta, Pupesoft lukee mssql.charset-a
 
 
 # Latin1/ISO-8859-1 -tietokannan UTF-8 -konversio
-Mikäli kyseessä on vanha tietokanta, saattaa tietokantarakenteeseen joutua lisäämään puuttuvia sarakkeita tai muuntamaan tyyppejä. Asia menee kuitenkin laajuudessaan tämän geneerisen pikaohjeen ulkopuolelle. Kytke kaikki PHP:n virheilmoitukset päälle /etc/php-kansion alta löytyvästä php.ini-tiedostosta:
+Mikäli kyseessä on vanha tietokanta, saattaa tietokantarakenteeseen joutua lisäämään puuttuvia sarakkeita tai muuntamaan tyyppejä. Asia menee kuitenkin laajuudessaan tämän geneerisen pikaohjeen ulkopuolelle. Tämä työkalu on todettu hyväksi apuvälineeksi schemojen vertailussa: https://www.infoom.se/compare-mysql-online/
+
+Kytke kaikki PHP:n virheilmoitukset päälle /etc/php-kansion alta löytyvästä php.ini-tiedostosta:
 
 error_reporting = E_ALL, 
 display_errors = On, 
