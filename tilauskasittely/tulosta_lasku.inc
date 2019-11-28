@@ -271,7 +271,14 @@ if (!function_exists('alku')) {
 
     if ($laskutyyppi != 8) {
       $pdf_lasku->draw_text(310, $otsik[$rivi_ind], t("Viitenumero", $kieli), $page_lasku[$sivu], $pieni);
-      $pdf_lasku->draw_text(310, $arvo[$rivi_ind], $laskurow["viite"], $page_lasku[$sivu], $boldi);
+
+      // Näytetään tilausnumero viitteenä kun kyseessä on ulkomaille lähetettävä proformalasku
+      if ($toim == 'PROFORMA' and mb_strtoupper($laskurow["maa"] )!= mb_strtoupper($yhtiorow["maa"]) and $laskurow["viite"] == "") {
+        $pdf_lasku->draw_text(310, $arvo[$rivi_ind], $laskurow["tunnus"], $page_lasku[$sivu], $boldi);
+      }
+      else {
+        $pdf_lasku->draw_text(310, $arvo[$rivi_ind], $laskurow["viite"], $page_lasku[$sivu], $boldi);
+      }
       $rivi_ind++;
     }
 
@@ -944,6 +951,7 @@ if (!function_exists('rivi_lasku')) {
                 WHERE yhtio = '{$kukarow['yhtio']}'
                 AND tuoteno = '{$row['tuoteno']}'
                 AND ytunnus = '{$laskurow['ytunnus']}'
+                AND tyyppi  = ''
                 ORDER BY tunnus";
       $asiakaskommentti_res = pupe_query($query);
 
@@ -1990,7 +1998,7 @@ if (!function_exists('rivi_perhe')) {
 
 if (!function_exists('loppu')) {
   function loppu($laskurow, $asiakasrow, $kieli, $pdf_lasku, $toim, $thispage, $masrow, $sivu, $summa, $arvo, $page, $vientikala, $laskutyyppi, $vikasivu = "") {
-    global $yhtiorow, $kukarow;
+    global $yhtiorow, $kukarow, $pupe_root_polku;
 
     // Fonttimuuttujat
     extract(lasku_fontit($laskutyyppi));
@@ -2351,17 +2359,27 @@ if (!function_exists('loppu')) {
       }
     }
 
-    //Alimmat kolme laatikkoa, yhtiötietoja
+    // Alimmat kolme laatikkoa, yhtiötietoja
+    if (file_exists("{$pupe_root_polku}/pics/footer_logo.jpg")) {
+      $data = file_get_contents("{$pupe_root_polku}/pics/footer_logo.jpg", true);
+      $image = $pdf_lasku->jfif_embed($data);
+      $pdf_lasku->image_place($image, 25 + $tileja + $barcode_korkeus, 25, $thispage, array("scale" => 0.175));
+      $x = 80;
+    }
+    else {
+      $x = 30;
+    }
+
     $pdf_lasku->draw_rectangle(70 + $tileja + $barcode_korkeus, 20, 20 + $tileja + $barcode_korkeus, 580, $thispage, $rectparam);
     $pdf_lasku->draw_rectangle(70 + $tileja + $barcode_korkeus, 207, 20 + $tileja + $barcode_korkeus, 580, $thispage, $rectparam);
     $pdf_lasku->draw_rectangle(70 + $tileja + $barcode_korkeus, 394, 20 + $tileja + $barcode_korkeus, 580, $thispage, $rectparam);
 
-    $pdf_lasku->draw_text(30, 55 + $tileja + $barcode_korkeus, $y_nimi, $thispage, $pieni);
-    $pdf_lasku->draw_text(30, 45 + $tileja + $barcode_korkeus, $y_osoite, $thispage, $pieni);
-    $pdf_lasku->draw_text(30, 35 + $tileja + $barcode_korkeus, $y_postino."  ".$y_postitp, $thispage, $pieni);
+    $pdf_lasku->draw_text($x, 55 + $tileja + $barcode_korkeus, $y_nimi, $thispage, $pieni);
+    $pdf_lasku->draw_text($x, 45 + $tileja + $barcode_korkeus, $y_osoite, $thispage, $pieni);
+    $pdf_lasku->draw_text($x, 35 + $tileja + $barcode_korkeus, $y_postino."  ".$y_postitp, $thispage, $pieni);
 
     $maan_tiedot = hae_maa(array('maakoodi' => $y_maa));
-    $pdf_lasku->draw_text(30, 25 + $tileja + $barcode_korkeus, $maan_tiedot['nimi'], $thispage, $pieni);
+    $pdf_lasku->draw_text($x, 25 + $tileja + $barcode_korkeus, $maan_tiedot['nimi'], $thispage, $pieni);
 
     $pdf_lasku->draw_text(217, 55 + $tileja + $barcode_korkeus, t("Puhelin", $kieli).": $y_puhelin", $thispage, $pieni);
     $pdf_lasku->draw_text(217, 45 + $tileja + $barcode_korkeus, t("Sähköposti", $kieli).": $y_email", $thispage, $pieni);
@@ -2429,7 +2447,7 @@ if (!function_exists('loppu')) {
         $pdf_lasku->draw_text(270, 10, "Virhe viivakoodin luomisessa", $thispage, $boldi);
       }
 
-      unlink($filename);
+      system("rm -f $filename");
     }
   }
 }
@@ -2827,7 +2845,7 @@ if (!function_exists('alvierittely')) {
                 AND tilausnumero     != 0";
       $result = pupe_query($query);
 
-      if (mysqli_affected_rows($link) > 0) {
+      if (mysqli_affected_rows() > 0) {
         $pdf_lasku->draw_text(20, $kala, t("Maksupäätetapahtumat"), $thispage, $norm);
         $kala -= 10;
       }
@@ -3347,7 +3365,8 @@ if (!function_exists("tulosta_lasku")) {
       //Työnnetään tuo pdf vaan putkeen!
       echo file_get_contents($pdf_laskufilenimi);
     }
-    elseif ($tee == 'VERKKOLASKU_APIX' or $tee == 'VERKKOLASKU_PPG' or $tee == 'VERKKOLASKU_TALENOM' or $tee == 'VERKKOLASKU_ARVATO') {
+    elseif ($tee == 'VERKKOLASKU_APIX' or $tee == 'VERKKOLASKU_PPG' or $tee == 'VERKKOLASKU_TALENOM' or $tee == 'VERKKOLASKU_ARVATO'
+      or $tee == 'VERKKOLASKU_FITEK') {
       // Palautetaan laskunumero ja $pdf_laskufilenimi jotta apixkoodi saa sen zipattua jne.
       return $pdf_laskufilenimi;
     }

@@ -1,7 +1,7 @@
 <?php
 
 // Haetaan asiakkaan tiedot
-$query = "SELECT lahetteen_jarjestys, lahetteen_jarjestys_suunta, luokka, puhelin, if(asiakasnro!='', asiakasnro, ytunnus) asiakasnro, asiakasnro as asiakasnro_aito
+$query = "SELECT lahetteen_jarjestys, lahetteen_jarjestys_suunta, luokka, puhelin, if(asiakasnro!='', asiakasnro, ytunnus) asiakasnro, asiakasnro as asiakasnro_aito, asiakasviivakoodi
           FROM asiakas
           WHERE tunnus = '$laskurow[liitostunnus]'
           and yhtio    = '$kukarow[yhtio]'";
@@ -44,6 +44,9 @@ elseif ($naytatvale == 11) {
 }
 elseif ($naytatvale == 12) {
   $lahetetyyppi .= "tulosta_lahete_viivakoodi_ale1.inc";
+}
+elseif ($naytatvale == 14) {
+  $lahetetyyppi .= "tulosta_lahete_jt_mukaan_loppusummaan.inc";
 }
 else {
   $lahetetyyppi .= "tulosta_lahete.inc";
