@@ -10,13 +10,13 @@ else {
 }
 
 error_reporting(E_ERROR);
-ini_set("display_errors", 1);
+ini_set("display_errors", 1); // DEBUG
 ini_set("log_errors", 1);
 
 // Tsekataan ajetaanko Pupea Latin1- vai UTF-8-moodissa
 // (Ohjataan mssql.charset-muuttujalla php.ini-tiedostossa)
 if (!defined("PUPE_UNICODE")) {
-  if (get_cfg_var('mssql.charset') == "UTF-8" or include_once ".PUPE_UNICODE") {
+  if (get_cfg_var('mssql.charset') == "UTF-8" or @include_once ".PUPE_UNICODE") {
     define("PUPE_UNICODE", TRUE);
   }
   else {
@@ -276,28 +276,28 @@ unset($woo_config);
 
 unset($pupesoft_commandlinelog);
 
-$pupe_query_debug = 0; // MODIFIED DEBUG, changed to 1, inc/functions.inc shows errors at line 335 "Tietokantayhdeydessa virhe!"
+$pupe_query_debug = 0; // DEBUG
 $aika_debug_array = array();
 $quer_debug_array = array();
 
 require "salasanat.php";
 
 // haetaan jotain tarpeellisia funktioita mukaan..
-if (include_once "inc/functions.inc") {
+if (@include_once "inc/functions.inc") {
   // Pupeasennuksen root polku
   $pupe_root_polku = dirname(dirname(__FILE__));
 }
-elseif (include_once "functions.inc") {
+elseif (@include_once "functions.inc") {
   // Pupeasennuksen root polku
   $pupe_root_polku = dirname(__FILE__);
 }
 else exit;
 
-$link = mysqli_connect($dbhost, $dbuser, $dbpass) or die ("Tietokantapalvelimeen ei saada yhteyttä. Se on pois päältä tai käyttäjätietosi ovat virheelliset.");
+$link = @mysqli_connect($dbhost, $dbuser, $dbpass) or die ("Tietokantapalvelimeen ei saada yhteyttä. Se on pois päältä tai käyttäjätietosi ovat virheelliset.");
 mysqli_select_db($link, $dbkanta) or die ("Tietokantaa $dbkanta ei löydy palvelimelta $dbhost! (parametrit.inc)");
 $GLOBALS["link"] = $link;
-mysqli_set_charset($link, "latin1");
-mysqli_query($link, "set group_concat_max_len=1000000");
+mysqli_set_charset("utf8", $link);
+mysqli_query($link, "set collation_connection=\"utf8_unicode_ci\", collation_database=\"utf8_unicode_ci\", group_concat_max_len=1000000", $link);
 
 // pupesoft_cleanstring ALL THE COOKIES!!
 $_COOKIE = array_map("pupesoft_cleanstring", $_COOKIE);
@@ -447,8 +447,8 @@ elseif ($session == '' and $login != 'yes' and (!isset($verkkokauppa) or $verkko
     }
 
     if (isset($mobile) and $mobile and include_once "mobiili/login.php");
-    elseif (include_once "login.php");
-    elseif (include_once "login_extranet.php");
+    elseif (@include_once "login.php");
+    elseif (@include_once "login_extranet.php");
 
   }
 
@@ -512,6 +512,14 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
       }
       elseif ($naytetaanko_saldot == 'ei') {
         setcookie("naytetaanko_saldot", '', time()+60*60*24*90, "/");
+      }
+
+      // Näytetään viite/asiakkaan tilausnumero lisätietoja
+      if ($viitetiedot == 'kylla') {
+        setcookie("viitetiedot", $viitetiedot, time()+60*60*24*90, "/");
+      }
+      elseif ($viitetiedot == 'ei') {
+        setcookie("viitetiedot", '', time()+60*60*24*90, "/");
       }
     }
 
@@ -842,7 +850,6 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
 
         $(document).ready(function(){
           $('form').submit(function(){
-
             if (skippaa_tama_submitti) {
               skippaa_tama_submitti = true;
               return true;
@@ -854,7 +861,7 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
             }
 
             if (!submitattu) {
-              $(this).children('[type=\"submit\"]').each(function() {
+              $(this).find('[type=\"submit\"]').each(function() {
                 $(this).css('width', $(this).outerWidth()).val('Ladataan...');
               });
 
