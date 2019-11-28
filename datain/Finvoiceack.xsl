@@ -8,16 +8,16 @@
 <!-- Tekstit alkavat -->
 <!-- XSL-rivit suomeksi -->
 <xsl:variable name="txtFEEDBACK">VIRHEPALAUTE</xsl:variable>
-<xsl:variable name="txtErrorInXML">Finvoiceack xml-tietosis√§lt√∂ on tyhj√§ tai virheellinen.</xsl:variable>
+<xsl:variable name="txtErrorInXML">Finvoiceack xml-tietosis‰ltˆ on tyhj‰ tai virheellinen.</xsl:variable>
 <xsl:variable name="txtMessageId">Laskusanoman tunniste</xsl:variable>
 <xsl:variable name="txtTimestamp">Laskusanoman aikaleima</xsl:variable>
-<xsl:variable name="txtFromSender">Laskun l√§hett√§j√§n osoite</xsl:variable>
-<xsl:variable name="txtFromIntermediator">Laskun l√§hett√§j√§n v√§litt√§j√§</xsl:variable>
+<xsl:variable name="txtFromSender">Laskun l‰hett‰j‰n osoite</xsl:variable>
+<xsl:variable name="txtFromIntermediator">Laskun l‰hett‰j‰n v‰litt‰j‰</xsl:variable>
 <xsl:variable name="txtToReceiver">Laskun vastaanottajan osoite</xsl:variable>
-<xsl:variable name="txtToIntermediator">Laskun vastaanottajan v√§litt√§j√§</xsl:variable>
+<xsl:variable name="txtToIntermediator">Laskun vastaanottajan v‰litt‰j‰</xsl:variable>
 <xsl:variable name="txtReason">Virhekoodi ja selitys</xsl:variable>
 <!-- Tekstit loppuivat -->
-	<!-- K√§sitell√§√§n Finvoiceack. -->
+	<!-- K‰sitell‰‰n Finvoiceack. -->
 	<xsl:template match="/">
 		<html>
 			<head>

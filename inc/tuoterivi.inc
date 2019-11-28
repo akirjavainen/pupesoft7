@@ -43,7 +43,9 @@ if (mysqli_field_name($result, $i) == "tuoteno") {
   else {
 
     // Jos automaattinen tuotenumeron ehdotus on päällä...
-    if ($trow[$i] == '' and ($yhtiorow['seuraava_tuotenumero'] == 'K' or ($yhtiorow['seuraava_tuotenumero'] == 'O' and isset($tee_myos_tuotteen_toimittaja_liitos)))) {
+    $automaattinen_tuotenumerointi = ($yhtiorow['seuraava_tuotenumero'] == 'K' or ($yhtiorow['seuraava_tuotenumero'] == 'O' and isset($tee_myos_tuotteen_toimittaja_liitos)));
+
+    if ($trow[$i] == '' and $automaattinen_tuotenumerointi) {
       $virheviesti = '';
       $autom_wherelisa = '';
       $autom_selectlisa = 'MAX(CAST(tuote.tuoteno AS UNSIGNED))';
@@ -70,7 +72,19 @@ if (mysqli_field_name($result, $i) == "tuoteno") {
       }
     }
 
-    $ulos = "<td><input type = 'hidden' name = 'uusi' value = '$uusi'><input type = 'text' name = '$nimi' value = '$trow[$i]' size='$size' maxlength='$maxsize'>{$virheviesti}</td>";
+    if ($automaattinen_tuotenumerointi) {
+      $tuotenohaku = "<input type = 'button' name = 'etsi_vapaa_tuoteno' id = 'etsi_vapaa_tuoteno' value = '" . t("Etsi seuraava vapaa") . "'>";
+    }
+    else {
+      $tuotenohaku = "";
+    }
+
+    $ulos = "<td>
+               <input type = 'hidden' name = 'uusi' value = '$uusi'>
+               <input type = 'text' name = '$nimi' id = 'input_tuoteno' value = '$trow[$i]' size='$size' maxlength='$maxsize'>
+               {$tuotenohaku}
+               <div id = 'tuoteno_virhe'>{$virheviesti}</div>
+             </td>";
     $jatko=0;
 
     // Jos on uusi tuote niin kaikki lukot on auki
@@ -269,9 +283,15 @@ if (mysqli_field_name($result, $i) == "ei_saldoa") {
 
 if (mysqli_field_name($result, $i) == "kommentoitava") {
 
-  $sel = $sela = "";
-  if ($trow[$i] != '') {
-    $sel = "SELECTED";
+  $sela = $selb = $selc = $seld ="";
+  if ($trow[$i] == 'o') {
+    $selb = "SELECTED";
+  }
+  elseif ($trow[$i] == 'r') {
+    $selc = "SELECTED";
+  }
+  elseif ($trow[$i] == 'p') {
+    $seld = "SELECTED";
   }
   else {
     $sela = "SELECTED";
@@ -279,8 +299,9 @@ if (mysqli_field_name($result, $i) == "kommentoitava") {
 
   $ulos  = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">";
   $ulos .= "<option value = '' $sela>".t("Normaalikäsittely")."</option>";
-  $ulos .= "<option value = 'o' $sel>".t("Tuotteelle on annettava rivikommentti")."</option>";
-  $ulos .= "<option value = 'r' $sel>".t("Tuotteelle on annettava reklamaatiolla rivikommentti")."</option>";
+  $ulos .= "<option value = 'o' $selb>".t("Tuotteelle on annettava rivikommentti myynnissä")."</option>";
+  $ulos .= "<option value = 'p' $seld>".t("Tuotteelle on annettava rivikommentti myynnissä ja ostossa")."</option>";
+  $ulos .= "<option value = 'r' $selc>".t("Tuotteelle on annettava rivikommentti reklamaatiolla")."</option>";
   $ulos .= "</select></td>";
   $jatko = 0;
 }
@@ -338,6 +359,24 @@ if (mysqli_field_name($result, $i) == "automaattinen_sarjanumerointi") {
                <option value='2'{$sel["2"]}>" . t("Automaattinen sarjanumerointi kaavalla vuosi + 1000 alkava juokseva numero") . "</option>
              </select>
            </td>";
+
+  $jatko = 0;
+}
+
+if (mysqli_field_name($result, $i) == "pullopanttitarratulostus_kerayksessa") {
+  $sela = $selb = "";
+  
+  if ($trow[$i] == 'T') {
+    $selb = "SELECTED";
+  }
+  else {
+    $sela = "SELECTED";
+  }
+
+  $ulos  = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">";
+  $ulos .= "<option value = '' $sela>".t("Ei pullopanttitarrojen tulostusta")."</option>";
+  $ulos .= "<option value = 'T' $selb>".t("Pullopanttitarrat voi tulostaa keräyksessä")."</option>";
+  $ulos .= "</select></td>";
 
   $jatko = 0;
 }

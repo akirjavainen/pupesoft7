@@ -1,7 +1,7 @@
 <?php
 
-if (include_once "inc/functions.inc");
-elseif (include_once "functions.inc");
+if (@include_once "inc/functions.inc");
+elseif (@include_once "functions.inc");
 else exit;
 
 // Parametrit:
@@ -85,6 +85,14 @@ if ($palautus == "" and isset($ftpsucc) and $ftpsucc != "") {
 elseif ($palautus != "" and isset($ftpfail) and $ftpfail != "") {
   // Siirretään faili outboxiin odottamaan uutta yritystä jos siirto feilasi
   rename($ftpfile, $ftpfail."/".$filenimi);
+}
+
+// logia talteen
+if ($palautus == "") {
+  pupesoft_log('sftp_send', "Tiedoston '{$ftpfile}' lähetys palvelimelle '{$ftphost}' onnistui");
+}
+else {
+  pupesoft_log('sftp_send', "Tiedoston '{$ftpfile}' lähetys palvelimelle '{$ftphost}' epäonnistui: {$palautus}");
 }
 
 // jos siirto epäonnistuu ja faildirri ei oo setattu nin lähetetään maili

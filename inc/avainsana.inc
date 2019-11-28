@@ -52,3 +52,9 @@ $mysqlaliasarray['ASIAKASHINNASTO']['selite']         = "Käytetäänkö myyntih
 
 $mysqlaliasarray['TOIMTAPAVKN']['selite']           = "Toimitustavan nimi Pupesoftissa";
 $mysqlaliasarray['TOIMTAPAVKN']['selitetark']       = "Toimitustavan nimi verkkokaupassa";
+
+$mysqlaliasarray['MESSENGER_RYHMA']['selite']       = "Ryhmän nimi";
+$mysqlaliasarray['MESSENGER_RYHMA']['selitetark']   = "Käyttäjät";
+
+$mysqlaliasarray['VALM_FAKTA']['selitetark']        = "Fonttikoko";
+$mysqlaliasarray['VALM_FAKTA']['selitetark_2']      = "Rivikorkeus";

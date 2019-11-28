@@ -38,6 +38,7 @@ if ($fieldname == "verkkolasku_lah") {
   $sel9 = "";
   $selA = "";
   $selB = "";
+  $selC = "";
 
   if ($trow[$i] == 'iPost') {
     $sel3 = "selected";
@@ -69,6 +70,9 @@ if ($fieldname == "verkkolasku_lah") {
   elseif ($trow[$i] == 'arvato') {
     $selB = "selected";
   }
+  elseif ($trow[$i] == 'fitek') {
+    $selC = "selected";
+  }
   else {
     $sel1 = "selected";
   }
@@ -84,6 +88,7 @@ if ($fieldname == "verkkolasku_lah") {
   $ulos .= "<option value = 'sepa' $sel9>".t("SEPA-pankkiyhteys");
   $ulos .= "<option value = 'talenom' $selA>".t("Talenom Myyntilaskutuspalvelu");
   $ulos .= "<option value = 'arvato' $selB>".t("Arvato Laskutuspalvelu");
+  $ulos .= "<option value = 'fitek' $selC>".t("Fitek-verkkolaskut");
   $ulos .= "</select></td>";
 
   $jatko = 0;
@@ -894,10 +899,15 @@ if ($fieldname == "myynti_jt_huom") {
 
   $ulos = "<td><select name='{$nimi}' ".js_alasvetoMaxWidth($nimi, 400).">";
 
-  $sel = $trow[$i] == 'K' ? 'selected' : '';
+  $sel = array();
+  $apu = $trow[$i];
+  $sel[$apu] = "SELECTED";
+
+  //$sel = $trow[$i] == 'K' ? 'selected' : '';
 
   $ulos .= "<option value = ''>".t("Myyntitilauksella ei ilmoiteta käyttäjälle jos tuotetta on jo jälkitoimituksessa")."</option>";
-  $ulos .= "<option value = 'K' {$sel}>".t("Myyntitilauksella ilmoitetaan käyttäjälle jos tuotetta on jo jälkitoimituksessa")."</option>";
+  $ulos .= "<option value = 'K' $sel[K]>".t("Myyntitilauksella ilmoitetaan käyttäjälle jos tuotetta on jo jälkitoimituksessa")."</option>";
+  $ulos .= "<option value = 'T' $sel[T]>".t("Myyntitilauksella ilmoitetaan käyttäjälle jos tuotetta on tarjouksella")."</option>";
   $ulos .= "</select></td>";
 
   $jatko = 0;
@@ -2193,6 +2203,19 @@ if ($fieldname == "vientikiellon_ohitus") {
   $jatko = 0;
 }
 
+if ($fieldname == "vientitietojen_autosyotto") {
+
+  $ulos = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 400).">";
+
+  $sel1 = ($trow[$i] == "K") ? "selected" : "";
+
+  $ulos .= "<option value='' >".t("Myyntitilauksen vientitietoja ei kuitata automaattisesti syötetyiksi")."</option>";
+  $ulos .= "<option value='K' $sel1>".t("Myyntitilauksen vientitiedot kuitataan automaattisesti syötetyiksi")."</option>";
+  $ulos .= "</select></td>";
+
+  $jatko = 0;
+}
+
 if ($fieldname == "vienti_erittelyn_tulostus") {
 
   $ulos = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 400).">";
@@ -2633,6 +2656,21 @@ if ($fieldname == "myyntitilauksen_liitteet") {
 
   $ulos .= "<option value = ''>".t("Myyntitilaukselle ei saa liittää liitetiedostoja")."</option>";
   $ulos .= "<option value = 'K' $sel[K]>".t("Myyntitilaukselle saa liittää liitetiedostoja")."</option>";
+  $ulos .= "</select></td>";
+
+  $jatko = 0;
+}
+
+if ($fieldname == "asiakasmyyja_tilaukselle") {
+
+  $ulos = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 400).">";
+
+  $sel = array();
+  $apu = $trow[$i];
+  $sel[$apu] = "SELECTED";
+
+  $ulos .= "<option value = ''>".t("Käytetään ensisijaisesti tilauksen laatijaa myyjänä")."</option>";
+  $ulos .= "<option value = 'A' $sel[A]>".t("Käytetään ensisijaisesti asiakkaan myyjää myyjänä")."</option>";
   $ulos .= "</select></td>";
 
   $jatko = 0;
@@ -3405,10 +3443,12 @@ if ($fieldname == "extranet_tilaus_varaa_saldoa") {
 if ($fieldname == "extranet_nayta_saldo") {
   $ulos = "<td><select name='$nimi' " . js_alasvetoMaxWidth($nimi, 400) . ">";
 
-  $sel = $trow[$i] == 'Y' ? ' selected' : '';
+  $selY = $trow[$i] == 'Y' ? ' selected' : '';
+  $selX = $trow[$i] == 'X' ? ' selected' : '';
 
   $ulos .= "<option value = ''>" . t("Ei näytetä saldoa extranetissä");
-  $ulos .= "<option value = 'Y' $sel>" . t("Näytetään saldo extranetissä");
+  $ulos .= "<option value = 'Y' $selY>" . t("Näytetään saldo extranetin tuotehaussa");
+  $ulos .= "<option value = 'X' $selX>" . t("Näytetään saldo extranetissä");
   $ulos .= "</select></td>";
 
   $jatko = 0;
@@ -3583,6 +3623,7 @@ if ($fieldname == "saldovirhe_esto_laskutus") {
   $ulos .= "<option value = ''>".t("Ei estetä laskutusta")."</option>";
   $ulos .= "<option value = 'H' $sel[H]>".t("Mikäli laskutuksessa tuotteen varastosaldo vähenee negatiiviseksi, hylätään KAIKKI tilaukset, joilla on kyseistä tuotetta")."</option>";
   $ulos .= "<option value = 'K' $sel[K]>".t("Sallitaan tilauksien laskutus luontijärjestyksessä, kunnes tuotteen varastosaldo loppuu")."</option>";
+  $ulos .= "<option value = 'V' $sel[V]>".t("Sallitaan tilauksien laskutus luontijärjestyksessä, kunnes tuotteen varastosaldo loppuu valitusta varastosta")."</option>";
   $ulos .= "</select></td>";
 
   $jatko = 0;
@@ -4180,10 +4221,12 @@ if ($fieldname == 'oletusvarasto_tilaukselle') {
 if ($fieldname == 'siirtolistatyyppi') {
   $ulos = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 400).">";
 
-  $sel = $trow[$i] == 'A' ? ' selected' : '';
+  $selA = $trow[$i] == 'A' ? ' selected' : '';
+  $selB = $trow[$i] == 'B' ? ' selected' : '';
 
-  $ulos .= "<option value = ''>".t("Siirtolistalla ei näytetä tuotteen myyntihintaa")."</option>";
-  $ulos .= "<option value = 'A' {$sel}>".t("Siirtolistalla näytetään tuotteen myyntihinta")."</option>";
+  $ulos .= "<option value = ''>".t("Siirtolistalla ei näytetä tuotteiden hintoja")."</option>";
+  $ulos .= "<option value = 'A' {$selA}>".t("Siirtolistalla näytetään tuotteen myyntihinta")."</option>";
+  $ulos .= "<option value = 'B' {$selB}>".t("Siirtolistalla näytetään tuotteiden ostohintojen summa")."</option>";
   $ulos .= "</select></td>";
 
   $jatko = 0;
@@ -4538,7 +4581,7 @@ if ($fieldname == 'ennakkolasku_myyntitilaukselta') {
 
   $ulos .= "<option value = ''>".t("Myyntitilauksella ei voi tehdä ennakkolaskua pikanäppäimellä")."</option>";
   $ulos .= "<option value = 'A' {$sel['A']}>".t("Myyntitilauksella voi tehdä ennakkolaskun pikanäppäimellä")."</option>";
-  $ulos .= "<option value = 'B' {$sel['B']}>".t("Myyntitilauksella voi tehdä ennakkolaskun ja sisäisen ennakklaskun pikanäppäimellä")."</option>";
+  $ulos .= "<option value = 'B' {$sel['B']}>".t("Myyntitilauksella voi tehdä ennakkolaskun ja sisäisen ennakkolaskun pikanäppäimellä")."</option>";
   $ulos .= "</select></td>";
 
   $jatko = 0;
@@ -4767,6 +4810,7 @@ if ($fieldname == 'tilaukselle_mittatiedot') {
   $ulos .= "<option value = ''>".t("Myyntitilauksella, ostotilauksella sekä tarjouksella ei näytetä mittatietojen yhteenvetoa")."</option>";
   $ulos .= "<option value = 'M' {$sel['M']}>".t("Myyntitilauksella, ostotilauksella sekä tarjouksella näytetään mittatietojen yhteenveto")."</option>";
   $ulos .= "<option value = 'A' {$sel['A']}>".t("Myyntitilauksella, ostotilauksella sekä tarjouksella näytetään mittatietojen yhteenveto sekä asiakasosasto")."</option>";
+  $ulos .= "<option value = 'K' {$sel['K']}>".t("Myyntitilauksella, ostotilauksella sekä tarjouksella näytetään kappalemäärien yhteenveto")."</option>";
   $ulos .= "</select></td>";
 
   $jatko = 0;
