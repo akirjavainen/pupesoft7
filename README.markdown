@@ -11,11 +11,11 @@ Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille,
 
 3. Aja "mysql_secure_installation", poistaen anonyymit käyttäjät ja oletuskannat. Salli yhteydet vain localhostista. Sitten kytke PHP-moduli Apachen käyttöön ("a2enmod enable php7.3" tai muokkaamalla Apachen asetustiedostoja /etc/httpd- tai /etc/apache2-kansioissa). Muista kytkeä myös ainakin PHP-lisäosat "gd" ja "mysqli" käyttöön, esimerkiksi poistamalla kommenttimerkintä ";" php.ini-tiedostosta rivien "extension=gd" ja "extension=mysqli" alusta.
 
-4. MySQL:n/MariaDB:n oletusasetukset tavallisesti toimivat, mutta virallisessa asennusohjeessa on tietoa tietokantamoottorin lisäoptimoinnista (myös replikoinnista).
+4. MySQL:n/MariaDB:n oletusasetukset tavallisesti toimivat, mutta virallisessa asennusohjeessa on tietoa tietokantamoottorin lisäoptimoinnista (myös replikoinnista). Toinen hyvä tietolähde on Arch Linuxin Wiki MariaDB:stä: https://wiki.archlinux.org/index.php/MariaDB
 
 5. Muokkaa inc/salasanat.php-tiedostoon tietokannan käyttäjä ja salasana, tietokantapalvelimen osoitteeksi "localhost".
 
-6. Mikäli kyseessä on uusi asennus, perusta tietokanta ("mysql -uKÄYTTÄJÄ -pSALASANA", sitten "CREATE DATABASE pupesoft CHARACTER SET utf8 COLLATE utf8_unicode_ci;"). Aja referenssidata ja tietokantarakenne sisään ("mysql -uKÄYTTÄJÄ -pSALASANA pupesoft < alkudata_pupesoft7.sql").
+6. Mikäli kyseessä on uusi asennus, perusta tietokanta ("mysql -uKÄYTTÄJÄ -pSALASANA", sitten "CREATE DATABASE pupesoft CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"). Aja referenssidata ja tietokantarakenne sisään ("mysql -uKÄYTTÄJÄ -pSALASANA pupesoft < alkudata_pupesoft7.sql"). Voit myös ensin muuttaa tietokannoissa käytettävän yritystunnisteen komennolla "sed -i 's/demo/OMATUNNISTE/g' alkudata_pupesoft7.sql".
 
 7. Tietokannan käyttäjien/oikeuksien ja crontab-varmuuskopiointien asettamiseen löytyy ohjeita virallisesta asennusohjeesta.
 
@@ -28,6 +28,8 @@ memory_limit = 520M,
 mssql.charset = "UTF-8" ([MSSQL] alle)
 
 Vaikka käytössä ei olekaan MS SQL -tietokanta, Pupesoft lukee mssql.charset-asetusta.
+
+9. Kirjaudu Pupesoftiin oletustunnuksilla admin/1234.
 
 
 # Latin1/ISO-8859-1 -tietokannan UTF-8 -konversio

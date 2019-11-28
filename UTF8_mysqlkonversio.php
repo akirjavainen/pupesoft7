@@ -9,7 +9,7 @@ $starttime  = $timeparts[1].mb_substr($timeparts[0], 1);
 
 echo "\nSTART: $hname :$dbkanta\n";
 
-$sql = "ALTER DATABASE $dbkanta CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+$sql = "ALTER DATABASE $dbkanta CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;";
 pupe_query($sql);
 
 $query  = "SHOW TABLES FROM $dbkanta";
@@ -43,7 +43,7 @@ while ($tables = mysqli_fetch_row($tabresult)) {
           $nullornot = " NOT NULL";
         }
 
-        $sql .= "MODIFY `$fields[0]` $fields[1] CHARACTER SET utf8 COLLATE utf8_unicode_ci{$nullornot} DEFAULT '$fields[4]', ";
+        $sql .= "MODIFY `$fields[0]` $fields[1] CHARACTER SET utf8 COLLATE utf8mb4{$nullornot} DEFAULT '$fields[4]', ";
       }
     }
 
@@ -54,7 +54,7 @@ while ($tables = mysqli_fetch_row($tabresult)) {
       echo "$sql\n";
     }
 
-    $sql = "ALTER TABLE $tables[0] DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+    $sql = "ALTER TABLE $tables[0] DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;";
     pupe_query($sql);
 
     echo "$sql\n";
