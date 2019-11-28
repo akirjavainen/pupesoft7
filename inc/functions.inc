@@ -200,7 +200,7 @@ if (!function_exists("pupe_query")) {
     }
     else {
       if ($link == NULL) $link = $GLOBALS["link"];
-      $res = mysqli_query($link, $query) or pupe_error("pupe_query($query, ** RECEIVED NULL **)"); // TODO
+      $res = mysqli_query($link, $query) or pupe_error("pupe_query($query, " . mysqli_error($link) . ")"); // TODO
     }
 
     if (isset($GLOBALS["pupe_query_debug"]) and $GLOBALS["pupe_query_debug"] > 0) {
