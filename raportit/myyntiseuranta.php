@@ -316,6 +316,7 @@ if ($lopetus == "") {
   if ($asiakaskaynnit != '')    $asiakaskaynnitchk     = "CHECKED";
   if ($liitetiedostot != '')    $liitetiedostotchk    = "CHECKED";
   if ($alv_prosentit != '')    $alv_prosentitchk     = "CHECKED";
+  if ($label != '')             $labelchk              = "CHECKED";
   if ($ytun_laajattied != '')    $ytun_laajattiedchk    = "CHECKED";
   if ($ytun_yhteyshenk != '')    $ytun_yhteyshenkchk    = "CHECKED";
   if ($naytatoimtuoteno != '')  $naytatoimtuotenochk   = "CHECKED";
@@ -509,6 +510,12 @@ if ($lopetus == "") {
     <td class='back'><br></td>
     </tr>
     <tr><th valign='top'>", t("Tuotelista"), "<br>(", t("Rajaa näillä tuotteilla"), ")</th><td colspan='3'><textarea name='tuotteet_lista' rows='5' cols='35'>{$tuotteet_lista}</textarea></td></tr>
+
+    <tr><th valign='top'>", t("Tuotelista 2"),
+    "<br>(", t("Kaikkia annettuja tuotteita tulee löytyä"), ")</th><td colspan='3'><textarea name='tuotteet_lista2' rows='5' cols='35'>{$tuotteet_lista2}</textarea></td>
+
+    <td class='back'>", t("(Ei toimi jos listaat tuloksen tuotteittain)"), "</td>
+    </tr>
     <tr>
     <td class='back'><br></td>
     </tr>
@@ -774,6 +781,12 @@ if ($lopetus == "") {
   echo "</tr>";
 
   echo "<tr>";
+  echo "<th>".t('Näytä tilauksen luokittelu')."</th>";
+  echo "<td colspan='3'><input type='checkbox' name='label' {$labelchk} /></td>";
+  echo "<td class='back'>".t('(Toimii vain jos listaat tilauksittain)')."</td>";
+  echo "</tr>";
+
+  echo "<tr>";
   echo "<th>";
   echo t('Näytä kumulatiivinen myynti päivästä');
   echo "</th>";
@@ -960,7 +973,7 @@ if ((isset($aja_raportti) or isset($valitse_asiakas)) and count($_REQUEST) > 0) 
   $result = pupe_query($query);
   $row    = mysqli_fetch_assoc($result);
 
-  if ($row["ero"] > 3650 and $ajotapa != 'tilausauki') { // MODIFIED: 1 year to 10 years
+  if ($row["ero"] > 365 and $ajotapa != 'tilausauki') {
     echo "<font class='error'>", t("Jotta homma ei menisi liian hitaaksi, niin vuosi on pisin mahdollinen laskentaväli!"), "</font><br>";
     $tee = "";
   }
@@ -1093,6 +1106,7 @@ if ((isset($aja_raportti) or isset($valitse_asiakas)) and count($_REQUEST) > 0) 
     $maksuehto_join    = "";
     $toimtuoteno_join  = "";
     $maksupvm_join     = "";
+    $label_join        = "";
 
     // näitä käytetään queryssä
     $sel_osasto = "";
@@ -1656,6 +1670,15 @@ if ((isset($aja_raportti) or isset($valitse_asiakas)) and count($_REQUEST) > 0) 
       $muutgroups++;
     }
 
+    if ($label != "") {
+      // Näytetään laskulle tallennettu label
+      $label_join = "LEFT JOIN avainsana AS AV ON (AV.yhtio = lasku.yhtio AND AV.tunnus = lasku.label)";
+      $select .= "AV.selitetark luokittelu, ";
+
+      $gluku++;
+      $muutgroups++;
+    }
+
     if ($naytatoimtuoteno != "") {
       $group .= ",toim_tuoteno";
       $select .= "(  SELECT tuotteen_toimittajat.toim_tuoteno
@@ -1726,8 +1749,10 @@ if ((isset($aja_raportti) or isset($valitse_asiakas)) and count($_REQUEST) > 0) 
     }
 
     if (isset($tuotteet_lista) and $tuotteet_lista != '') {
+
       $tuotteet = explode("\n", $tuotteet_lista);
       $tuoterajaus = "";
+
       foreach ($tuotteet as $tuote) {
         if (trim($tuote) != '') {
           $tuoterajaus .= "'".trim($tuote)."',";
@@ -1736,6 +1761,62 @@ if ((isset($aja_raportti) or isset($valitse_asiakas)) and count($_REQUEST) > 0) 
 
       if ($tuoterajaus != "") {
         $lisa .= "and tuote.tuoteno in (".mb_substr($tuoterajaus, 0, -1).") ";
+      }
+    }
+
+    if (isset($tuotteet_lista2) and $tuotteet_lista2 != '') {
+
+      // ei voida groupata tuotteittain tässä keississä
+      if ($tuotegroups > 0) {
+        echo "<font class='error'>".t("VIRHE: Tulosta ei voi groupata tuotteilla kun käytetään tuotelista 2 rajausta")."!</font><br>";
+        #$tee = '';
+      }
+
+      $tuotteet = explode("\n", $tuotteet_lista2);
+      $tuotelista2_having = "";
+      $tuotelista2_rajaus = "";
+      $_i = 1;
+
+      if ($ajotapa == 'tilausjaaukiluonti' or $ajotapa == 'ennakot') {
+        $pvm_vertailu = "lasku.luontiaika >= '{$vva}-{$kka}-{$ppa} 00:00:00' and lasku.luontiaika <= '{$vvl}-{$kkl}-{$ppl} 23:59:59'";
+        $kpl_kentta = "if(tilausrivi.uusiotunnus = 0, tilausrivi.varattu+tilausrivi.jt, tilausrivi.kpl)";
+      }
+      elseif ($ajotapa == 'tilausjaauki') {
+        $pvm_vertailu1 = "lasku.luontiaika >= '{$vva}-{$kka}-{$ppa} 00:00:00' and lasku.luontiaika <= '{$vvl}-{$kkl}-{$ppl} 23:59:59' and tilausrivi.uusiotunnus = 0";
+        $kpl_kentta1 = "tilausrivi.varattu+tilausrivi.jt";
+        $pvm_vertailu2 = "tilausrivi.laskutettuaika >= '{$vva}-{$kka}-{$ppa}' and tilausrivi.laskutettuaika <= '{$vvl}-{$kkl}-{$ppl}'";
+        $kpl_kentta2 = "tilausrivi.kpl";
+      }
+      elseif ($ajotapa == 'tilausauki') {
+        $pvm_vertailu = "lasku.luontiaika >= '{$vva}-{$kka}-{$ppa} 00:00:00' and lasku.luontiaika <= '{$vvl}-{$kkl}-{$ppl} 23:59:59' and tilausrivi.uusiotunnus = 0";
+        $kpl_kentta = "tilausrivi.varattu+tilausrivi.jt";
+      }
+      else {
+        $pvm_vertailu = "tilausrivi.laskutettuaika >= '{$vva}-{$kka}-{$ppa}' and tilausrivi.laskutettuaika <= '{$vvl}-{$kkl}-{$ppl}'";
+        $kpl_kentta = "tilausrivi.kpl";
+      }
+
+      foreach ($tuotteet as $tuote) {
+        if (trim($tuote) != '') {
+          $tuote = trim($tuote);
+          
+          if ($ajotapa == 'tilausjaauki') {
+            $tuotelista2_select .= ", sum(if(tilausrivi.tuoteno = '{$tuote}' and {$pvm_vertailu1}, {$kpl_kentta1}, 0)) +
+            sum(if(tilausrivi.tuoteno = '{$tuote}' and {$pvm_vertailu2}, {$kpl_kentta2}, 0)) '{$tuote}'";
+            $tuotelista2_having .= "(sum(if(tilausrivi.tuoteno = '{$tuote}' and {$pvm_vertailu1}, {$kpl_kentta1}, 0)) +
+            sum(if(tilausrivi.tuoteno = '{$tuote}' and {$pvm_vertailu2}, {$kpl_kentta2}, 0))) > 0 and ";
+          }
+          else {
+            $tuotelista2_select .= ", sum(if(tilausrivi.tuoteno = '{$tuote}' and {$pvm_vertailu}, {$kpl_kentta}, 0)) '{$tuote}'";
+            $tuotelista2_having .= "sum(if(tilausrivi.tuoteno = '{$tuote}' and {$pvm_vertailu}, {$kpl_kentta}, 0)) > 0 and ";
+          }
+
+          $_i++;
+        }
+      }
+
+      if (!empty($tuotelista2_having)) {
+        $tuotelista2_having = " HAVING ".mb_substr($tuotelista2_having, 0, -5);
       }
     }
 
@@ -2485,6 +2566,7 @@ if ((isset($aja_raportti) or isset($valitse_asiakas)) and count($_REQUEST) > 0) 
       }
 
       $query .= $tilauslisa3;
+      $query .= $tuotelista2_select;
       $query .= "\nFROM lasku use index (yhtio_tila_tapvm)
             JOIN yhtio ON (yhtio.yhtio = lasku.yhtio)
             JOIN tilausrivi use index ({$index}) ON (tilausrivi.yhtio=lasku.yhtio and tilausrivi.{$ouusio}=lasku.tunnus and tilausrivi.tyyppi={$tyyppi})
@@ -2499,6 +2581,7 @@ if ((isset($aja_raportti) or isset($valitse_asiakas)) and count($_REQUEST) > 0) 
             {$toimtuoteno_join}
             {$lisa_parametri}
             {$maksupvm_join}
+            {$label_join}
             WHERE lasku.yhtio in ({$yhtio})
             and lasku.tila in ({$tila})";
 
@@ -2610,6 +2693,7 @@ if ((isset($aja_raportti) or isset($valitse_asiakas)) and count($_REQUEST) > 0) 
       $query .= "  {$myse_asiakasrajaus}
             {$lisa}
             GROUP BY {$group}
+            {$tuotelista2_having}
             ORDER BY {$order}";
 
       // ja sitten ajetaan itte query

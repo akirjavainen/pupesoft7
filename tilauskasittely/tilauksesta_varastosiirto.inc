@@ -44,6 +44,7 @@ if (!function_exists('kirjanpidollinen_varastosiirto')) {
 
     //Kirjanpidollisessa varastosiirrossa yhdellä myyntitilauksella voi olla vain 1 lähde-kohdevarasto kombinaatio.
     //Kombinaatio muodostuu Lähde: lasku.varasto kohde: lasku.yhtio_toimipaikka.varasto.first
+
     $toimipaikan_varastot = hae_yhtion_toimipaikan_varastot($myyntitilaus['yhtio_toimipaikka']);
 
     $lahde_ja_kohde_varasto_yhdistelma = array(
@@ -308,8 +309,10 @@ if (!function_exists('luo_varastosiirto')) {
   function luo_varastosiirto($lahdevarasto_tunnus, $kohdevaraston_tunnus, $toimitustapa_tunnus, $myyntitilaus_tunnus, $varastosiirtotyyppi = 'N') {
     global $kukarow, $yhtiorow;
 
-    $toimitustapa = hae_toimitustapa($toimitustapa_tunnus);
-    $toimitustapa = $toimitustapa['selite'];
+    if ($yhtiorow["asiakasvarasto"] == '') {
+      $toimitustapa = hae_toimitustapa($toimitustapa_tunnus);
+      $toimitustapa = $toimitustapa['selite'];
+    }
 
     $jatka        = 'joo';
     $tilausnumero = 0;

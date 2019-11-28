@@ -55,7 +55,7 @@ class pdffile {
   /* Constructor function: is automatically called when the
      * object is created.  Used to set up the environment
      */
-  public function __construct() {
+  function pdffile() {
     /* Per spec, obj 0 should always have a generation
          * number of 65535 and is always free
          */
@@ -107,10 +107,6 @@ class pdffile {
     $t['tmode'] = 0; // Text: fill
     $t['smode'] = 1; // Shapes: stroke
     $this->default = $t;
-  }
-
-  public function pdffile() {
-    self::__construct();
   }
 
   /******************************************************
@@ -1100,9 +1096,9 @@ class pdffile {
       }
     }
     if (strlen($text) > 0) {
-      return $text;
+      return array("text",$text);
     } else {
-      return $top;
+      return array("coordinate",$top);
     }
   }
 
@@ -1117,14 +1113,14 @@ class pdffile {
 
     $paras = explode("\n", $text);
     for ($i = 0; $i < count($paras); $i++) {
-      $over = $this->draw_one_paragraph($top,
+      list($value_type, $over) = $this->draw_one_paragraph($top,
         $left,
         $bottom,
         $right,
         $paras[$i],
         $page,
         $param);
-      if (is_string($over)) {
+      if ($value_type == "text") {
         break;
       }
       $top = $over;

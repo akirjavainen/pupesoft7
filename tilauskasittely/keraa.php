@@ -1245,6 +1245,8 @@ if ($tee == 'P') {
               if (mysqli_num_rows($monistares2) > 0) {
                 $monistarow2 = mysqli_fetch_assoc($monistares2);
 
+                $alunperin_puute = $rvar == 'P' ? '1' : '0';
+
                 $querys = "INSERT INTO tilausrivin_lisatiedot
                            SET yhtio        = '$kukarow[yhtio]',
                            positio                = '$monistarow2[positio]',
@@ -1252,6 +1254,7 @@ if ($tee == 'P') {
                            toimittajan_tunnus     = '$monistarow2[toimittajan_tunnus]',
                            ei_nayteta             = '$monistarow2[ei_nayteta]',
                            tilausrivitunnus       = '$lisatty_tun',
+                           alunperin_puute        = '{$alunperin_puute}',
                            erikoistoimitus_myynti = '$monistarow2[erikoistoimitus_myynti]',
                            vanha_otunnus          = '$monistarow2[vanha_otunnus]',
                            jarjestys              = '$monistarow2[jarjestys]',
@@ -2477,8 +2480,10 @@ if ($tee == 'P') {
                     $select_lisa
                     $sorttauskentta,
                     if (tuote.tuotetyyppi='K','2 Työt','1 Muut') tuotetyyppi,
-                    tuote.myynti_era
+                    tuote.myynti_era,
+                    tuote.mallitarkenne
                     FROM tilausrivi
+                    JOIN lasku ON tilausrivi.yhtio = lasku.yhtio and tilausrivi.otunnus = lasku.tunnus
                     LEFT JOIN tilausrivin_lisatiedot ON tilausrivi.yhtio = tilausrivin_lisatiedot.yhtio and tilausrivi.tunnus = tilausrivin_lisatiedot.tilausrivitunnus
                     JOIN tuote ON tilausrivi.yhtio = tuote.yhtio and tilausrivi.tuoteno = tuote.tuoteno
                     WHERE tilausrivi.otunnus  in ($tilausnumeroita_backup)
@@ -2504,6 +2509,11 @@ if ($tee == 'P') {
             if ($lava_referenssiluku >= lavakerayskapasiteetti) {
               $lavanumero++;
               $lava_referenssiluku=0;
+            }
+
+            // myynti_era = 1 / mallitarkenne = 400 poikkeus
+            if ((int) $row['myynti_era'] == 1 and (int) $row['mallitarkenne'] == 400) {
+              $row['myynti_era'] = 6;
             }
 
             $lavat[$lavanumero][$row['otunnus']] += round(($row['varattu']+$row['kpl'])/$row['myynti_era'], 2);
@@ -2535,7 +2545,7 @@ if ($tee == 'P') {
             'lavanumero'        => 0,
             'tilaukset'         => NULL,
             'tee'               => $tee,
-            'thispage'          => NULL,);
+            'firstpage'         => NULL,);
 
 
           foreach ($lavat as $lava => $tilaukset) {
@@ -4114,6 +4124,12 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
         $vakadrkpl  = $yhtiorow["oletus_lahetekpl"];
       }
 
+      // Lavakeräyksessä ei tarvita normaalia lähetettä eikä osoitelappua
+      if ($otsik_row['kerayserat'] == "H") {
+        $oslappkpl   = 0;
+        $lahetekpl   = 0;
+      }
+
       $spanni = 4;
 
       if ($yhtiorow['karayksesta_rahtikirjasyottoon'] != '') {
@@ -4400,6 +4416,34 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
       }
 
       echo "</form>";
+
+      $query = "SELECT tuote.tuoteno,
+	                tuote.pullopanttitarratulostus_kerayksessa
+                FROM tilausrivi
+	                JOIN tuote ON (tuote.yhtio = tilausrivi.yhtio AND tuote.tuoteno = tilausrivi.tuoteno)
+                WHERE tilausrivi.yhtio = '{$yhtiorow['yhtio']}'
+                AND tilausrivi.otunnus = '{$otsik_row['tunnus']}'";
+      $pullopantti_check_res = pupe_query($query);
+      $pullopantti_check = FALSE;
+
+      while ($pullopantti_check_row = mysqli_fetch_assoc($pullopantti_check_res)) {
+        if ($pullopantti_check_row['pullopanttitarratulostus_kerayksessa'] == 'T') {
+          $pullopantti_check = TRUE;
+          break;
+        }
+      }
+
+      if ($pullopantti_check) {
+        echo "<br>";
+        
+        js_openFormInNewWindow();
+
+        echo "<br><form id='tulostakopioform_{$otsik_row['tunnus']}' name='tulostakopioform_{$otsik_row['tunnus']}' method='post' action='{$palvelin2}tilauskasittely/tulostakopio.php' autocomplete='off'>
+              <input type='hidden' name='otunnus' value='{$otsik_row['tunnus']}'>
+              <input type='hidden' name='toim' value='PULLOPANTTITARRAT'>
+              <input type='hidden' name='tee' value='NAYTATILAUS'>
+              <input type='submit' value='".t("Pullopanttitarrat").": {$otsik_row['tunnus']}' onClick=\"js_openFormInNewWindow('tulostakopioform_{$otsik_row['tunnus']}', ''); return false;\"></form><br>";
+      }
 
       if ($otsik_row["tulostustapa"] != "X" and $otsik_row['nouto'] == '' and $yhtiorow['karayksesta_rahtikirjasyottoon'] == 'Y') {
         echo "<br><br><font class='message'>".t("Siirryt automaattisesti rahtikirjan syöttöön")."!</font>";

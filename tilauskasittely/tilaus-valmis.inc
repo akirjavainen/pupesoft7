@@ -227,6 +227,7 @@ if ((!isset($vapauta_tilaus_keraykseen) or !$vapauta_tilaus_keraykseen)
     $myyntikielto_res = pupe_query($query);
 
     echo "<font class='error'>", t("Tilaus laitetaan odottamaan, kunnes ennakkolaskut ovat maksettu"), ".</font><br/><br/>";
+
   }
 
   // Laitetaan lopetus tyhjäksi, niin ei refreshata ruutua jos tultiin muokkauksesta tms.
@@ -567,7 +568,7 @@ else {
               where yhtio  = '$kukarow[yhtio]'
               and otunnus  = '$laskurow[tunnus]'
               and keratty  = ''
-              and var      = 'J'
+              and var     != 'J'
               and tyyppi  != 'D'
               and varattu  > 0";
     $keres = pupe_query($query);

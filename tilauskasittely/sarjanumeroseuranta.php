@@ -857,7 +857,7 @@ if ($from != '' and $rivitunnus != "" and $formista == "kylla") {
                 AND tuoteno  = '{$sarjarow['tuoteno']}'";
       $kverires = pupe_query($kveri);
 
-      if (mysqli_affected_rows($link) == 0) {
+      if (mysqli_affected_rows() == 0) {
         $kveri = "INSERT INTO laite
                   SET yhtio = '{$kukarow['yhtio']}',
                   luontiaika = now(),
@@ -1636,7 +1636,7 @@ if ($rivirow["tyyppi"] != 'V') {
 
       echo "<tr><th>".t("Lisätieto")."</th><td><textarea rows='4' cols='27' name='lisatieto'>$lisatieto</textarea></td></tr>";
     }
-    elseif ($rivirow["sarjanumeroseuranta"] == "T") {
+    elseif ($rivirow["sarjanumeroseuranta"] == "T" and $rivirow["automaattinen_sarjanumerointi"] == 0) {
       echo "<br><table>";
       echo "<tr><th colspan='2'>".t("Lisää uusi sarjanumero")."</th></tr>";
       echo "<tr><th>".t("Sarjanumero")."</th><td><input type='text' size='30' name='sarjanumero' value='$sarjanumero'></td></tr>";
@@ -1828,54 +1828,3 @@ if (mb_strpos($_SERVER['SCRIPT_NAME'], "sarjanumeroseuranta.php")  !== FALSE) {
  * @return string Sarjanumero
  */
 
-
-function generoi_sarjanumero($tuote, $tunnuskentta = "") {
-  global $kukarow;
-
-  switch ($tuote["automaattinen_sarjanumerointi"]) {
-  case 1:
-    if (empty($tunnuskentta)) break;
-
-    $query = "SELECT max(substring(sarjanumero, position('-' IN sarjanumero) + 1) + 0) + 1 sarjanumero
-              FROM sarjanumeroseuranta
-              WHERE yhtio = '{$kukarow["yhtio"]}'
-              AND tuoteno = '{$tuote["tuoteno"]}'
-              AND {$tunnuskentta} = '{$tuote["tunnus"]}'";
-
-    $result = pupe_query($query);
-    $row    = mysqli_fetch_assoc($result);
-
-    $sarjanumero = $tuote["nimitys"];
-
-    if ($row["sarjanumero"] > 0) {
-      $sarjanumero = $sarjanumero . "-" . $row["sarjanumero"];
-    }
-    else {
-      $sarjanumero = $sarjanumero . "-1";
-    }
-
-    break;
-  case 2:
-    $query = "SELECT max(substring(sarjanumero, 6)) AS kuluvan_vuoden_suurin_numero
-              FROM sarjanumeroseuranta
-              WHERE yhtio = '{$kukarow["yhtio"]}'
-              AND substring(sarjanumero, 1, 4) = year(now())";
-
-    $result = pupe_query($query);
-    $row    = mysqli_fetch_assoc($result);
-
-    if ($row["kuluvan_vuoden_suurin_numero"]) {
-      $sarjanumero = date("Y") . "-" . ($row["kuluvan_vuoden_suurin_numero"] + 1);
-    }
-    else {
-      $sarjanumero = date("Y") . "-1000";
-    }
-
-    break;
-
-  default:
-    $sarjanumero = "";
-  }
-
-  return $sarjanumero;
-}

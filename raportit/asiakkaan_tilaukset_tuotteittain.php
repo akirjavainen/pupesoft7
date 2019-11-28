@@ -5,9 +5,7 @@ $useslave = 1;
 
 if (isset($_POST["tee"])) {
   if ($_POST["tee"] == 'lataa_tiedosto') $lataa_tiedosto=1;
-  if (isset($_POST["kaunisnimi"])) { // MODIFIED, BUG FIX
-	  if ($_POST["kaunisnimi"] != '') $_POST["kaunisnimi"] = str_replace("/", "", $_POST["kaunisnimi"]);
-  } // MODIFIED, BUG FIX
+  if ($_POST["kaunisnimi"] != '') $_POST["kaunisnimi"] = str_replace("/", "", $_POST["kaunisnimi"]);
 }
 
 require "../inc/parametrit.inc";
@@ -247,6 +245,8 @@ if ($ytunnus != '' or $tuoteno != '' or (int) $asiakasid > 0 or (int) $toimittaj
     $query = "SELECT distinct
               tilausrivi.tunnus,
               tilausrivi.otunnus tilaus,
+              lasku.viesti viite,
+              lasku.asiakkaan_tilausnumero astilno,
               lasku.laskunro,
               $asiakaslisa
               tilausrivi.tuoteno,
@@ -575,16 +575,16 @@ if ($ytunnus != '' or $tuoteno != '' or (int) $asiakasid > 0 or (int) $toimittaj
     }
     else {
       if ($asiakaslisa != "") {
-        $csp = 6;
+        $csp = 8;
       }
       else {
-        $csp = 3;
+        $csp = 5;
       }
     }
 
-    $csp2 = 2;
+    $csp2 = 3;
 
-    $loopattava_maara = $toim == 'OSTO' ? 1 : $yhtiorow['myynnin_alekentat'];
+    $loopattava_maara = $toim == 'OSTO' ? 2 : $yhtiorow['myynnin_alekentat'];
 
     for ($alepostfix = 1; $alepostfix <= $loopattava_maara; $alepostfix++) {
       if ($alepostfix > 1) {

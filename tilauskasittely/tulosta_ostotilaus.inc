@@ -61,18 +61,17 @@ else {
 
   require_once "pdflib/phppdflib.class.php";
 
-  if ($toim == 'OSTO')  {
+  if ($kieli == '') {
+
     $querykiel = "SELECT kieli FROM toimi WHERE yhtio = '$kukarow[yhtio]' and ytunnus = '$laskurow[ytunnus]'";
-  }
-  else {
-    $querykiel = "SELECT kieli FROM asiakas WHERE yhtio = '$kukarow[yhtio]' and ytunnus = '$laskurow[ytunnus]'";
-  }
-  $kielresult = pupe_query($querykiel);
-  $kielnum = mysqli_num_rows($kielresult);
-  $kielrow = mysqli_fetch_array($kielresult);
     
-  if ($kielrow['kieli'] != '') {
-    $kieli = mb_strtolower($kielrow['kieli']);
+    $kielresult = pupe_query($querykiel);
+    $kielnum = mysqli_num_rows($kielresult);
+    $kielrow = mysqli_fetch_array($kielresult);
+
+    if ($kielrow['kieli'] != '') {
+      $kieli = mb_strtolower($kielrow['kieli']);
+    }
   }
 
   $norm["height"]     = 10;
@@ -482,7 +481,8 @@ else {
         $pdf->draw_text(45, $kala, "(".$row["tuoteno"].")", $thispage, $norm);
       }
 
-      if ((isset($nimitykset) and $nimitykset != "") or (!isset($nimitykset) and $yhtiorow['ostotilaustyyppi'] == 'A') or $toim == "HAAMU") {
+      $nimitykset_tulostetaan = ((isset($nimitykset) and $nimitykset != "") or (!isset($nimitykset) and $yhtiorow['ostotilaustyyppi'] == 'A') or $toim == "HAAMU");
+      if ($nimitykset_tulostetaan) {
 
         //Käännetään nimitys
         $row['nimitys'] = t_tuotteen_avainsanat($row, 'nimitys', $kieli);
@@ -493,6 +493,20 @@ else {
         $kala = $kala - 15;
         $pdf->draw_text(45,  $kala, $row["nimitys"], $thispage, $norm);
         $lask++;
+      }
+
+      if (isset($varit) and $varit != "") {
+        //Käännetään väri
+        $row['vari'] = t_tuotteen_avainsana($row, 'parametri_vari', $kieli);
+
+        if (!$nimitykset_tulostetaan) {
+          $kala = $kala - 15;
+          $lask++;
+        }
+
+        list($ff_string, $ff_font) = pdf_fontfit($row["vari"], 110, $pdf, $pieni);
+        $oikpos = $pdf->mb_strlen($ff_string, $ff_font);
+        $pdf->draw_text(290-$oikpos, $kala, $ff_string, $thispage, $ff_font);
       }
 
       if (!empty($asiakkaiden_nimet)) {
@@ -802,6 +816,7 @@ else {
     'sivu'                      => 1,
     'tee'                       => $tee,
     'nimitykset'                => $nimitykset,
+    'varit'                     => $varit,
     'asiakkaiden_nimet'         => $asiakkaiden_nimet,
     'thispage'                  => NULL,
     'toim'                      => $toim,

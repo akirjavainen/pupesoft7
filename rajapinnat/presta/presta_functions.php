@@ -949,7 +949,7 @@ function presta_poista_ylimaaraiset_kuvat($sku, array $all_ids) {
             AND kayttotarkoitus = 'TK'
             {$selite_query}";
   $result = pupe_query($query);
-  $count = mysqli_affected_rows($link);
+  $count = mysqli_affected_rows();
 
   return $count;
 }

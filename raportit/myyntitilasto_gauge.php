@@ -12,8 +12,6 @@ if (!isset($naytetaan_tulos)) $naytetaan_tulos = '';
 
 if ($toim != "") {
 
-  if (!isset($naytetaan_luvut)) $naytetaan_luvut = 'eurolleen';
-
   $query = "SELECT selitetark, selitetark_2, selitetark_3
             FROM avainsana
             WHERE yhtio = '$kukarow[yhtio]'
@@ -218,7 +216,7 @@ $lopu = date("Y-m-d")." 23:59:59";
 
 $query = "SELECT
           round(sum(if(tilausrivi.laskutettu!='',tilausrivi.rivihinta,(tilausrivi.hinta*(tilausrivi.varattu+tilausrivi.jt))*{$query_ale_lisa}/if('{$yhtiorow['alv_kasittely']}'='',(1+tilausrivi.alv/100),1))), 0) AS 'tilatut_eurot',
-          round(sum(if(tilausrivi.laskutettu!='', tilausrivi.kate, (tilausrivi.hinta*(tilausrivi.varattu+tilausrivi.jt))*{$query_ale_lisa}/if('{$yhtiorow['alv_kasittely']}'='',(1+tilausrivi.alv/100),1)-(tuote.kehahin*(tilausrivi.varattu+tilausrivi.jt)))), 0) AS 'tilatut_kate',
+          round(sum(if(tilausrivi.laskutettu!='', tilausrivi.kate, (tilausrivi.hinta*(tilausrivi.varattu+tilausrivi.jt))*{$query_ale_lisa}/if('{$yhtiorow['alv_kasittely']}'='',(1+tilausrivi.alv/100),1)-(tuote.kehahin*((IF(tuote.epakurantti100pvm = '0000-00-00', IF(tuote.epakurantti75pvm = '0000-00-00', IF(tuote.epakurantti50pvm = '0000-00-00', IF(tuote.epakurantti25pvm = '0000-00-00', '100', '25'), '50'), '75'), '0,01'))/100)*(tilausrivi.varattu+tilausrivi.jt)))), 0) AS 'tilatut_kate',
           sum(if(tilausrivi.toimitettu!='', 1, 0)) AS 'toimitetut_rivit'
           FROM tilausrivi
           JOIN tuote ON (tuote.yhtio = tilausrivi.yhtio AND tuote.tuoteno = tilausrivi.tuoteno AND tuote.myynninseuranta = '')
@@ -375,7 +373,7 @@ if ($tee == 'laske') {
             kustannuspaikka.nimi AS kustannuspaikka,
             tuote.osasto,
             tuote.try,
-            sum(if(tilausrivi.laskutettu != '', tilausrivi.kate, (tilausrivi.hinta*(tilausrivi.varattu+tilausrivi.jt))*{$query_ale_lisa}/if('{$yhtiorow['alv_kasittely']}'='',(1+tilausrivi.alv/100),1)-(tuote.kehahin*(tilausrivi.varattu+tilausrivi.jt)))) AS 'tilatut_kate',
+            sum(if(tilausrivi.laskutettu != '', tilausrivi.kate, (tilausrivi.hinta*(tilausrivi.varattu+tilausrivi.jt))*{$query_ale_lisa}/if('{$yhtiorow['alv_kasittely']}'='',(1+tilausrivi.alv/100),1)-(tuote.kehahin*((IF(tuote.epakurantti100pvm = '0000-00-00', IF(tuote.epakurantti75pvm = '0000-00-00', IF(tuote.epakurantti50pvm = '0000-00-00', IF(tuote.epakurantti25pvm = '0000-00-00', '100', '25'), '50'), '75'), '0,01'))/100)*(tilausrivi.varattu+tilausrivi.jt)))) AS 'tilatut_kate',
             sum(if(tilausrivi.laskutettu != '', tilausrivi.rivihinta, (tilausrivi.hinta*(tilausrivi.varattu+tilausrivi.jt))*{$query_ale_lisa}/if('{$yhtiorow['alv_kasittely']}'='',(1+tilausrivi.alv/100),1))) AS tilatut_eurot,
             count(tilausrivi.tunnus) AS 'tilatut_rivit'
             FROM tilausrivi

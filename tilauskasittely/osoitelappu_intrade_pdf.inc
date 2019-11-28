@@ -227,7 +227,7 @@ else {
 
       $logoparam['scale'] = 102/282;
       $pdf->image_place($image, mm_pt(72), mm_pt(24), $firstpage, $logoparam);
-      unlink($nimi);
+      system("rm -f $nimi");
 
       $nimi = "/tmp/".md5(uniqid(rand(), true)).".jpg";
       //$sscc = chr(234).$sscc;
@@ -241,7 +241,7 @@ else {
 
       $logoparam['scale'] = 102/282;
       $pdf->image_place($image, mm_pt(40), mm_pt(22), $firstpage, $logoparam);
-      unlink($nimi);
+      system("rm -f $nimi");
     }
 
     $pdf->draw_text(mm_pt(22), mm_pt(65), "Asiakastilaus: ",  $firstpage, $norm);
@@ -256,7 +256,6 @@ else {
 
     // sitten aletaan piirtämään itse PDF sisältöä
     // ensin isot viivat kohilleen
-    $pdf->draw_rectangle(mm_pt(179), mm_pt(21.5), mm_pt(31), mm_pt(126.5), $firstpage, $rectparam);
 
     unset($data);
     if ( (int) $yhtiorow["lasku_logo"] > 0) {

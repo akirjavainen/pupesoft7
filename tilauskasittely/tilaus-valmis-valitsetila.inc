@@ -84,9 +84,9 @@ else {
   $ei_kerattavia += $rivirow["jteet"];
 }
 
-// jos yhtiö haluaa kerätä puuterivejä niin katotaan onko meillä pelkästään tilauksella jt/puuterivejä
+// jos yhtiö haluaa kerätä puuterivejä niin katotaan onko meillä pelkästään tilauksella jt/puuterivejä (HB tilaukset kerätään silti!)
 if ($yhtiorow["puute_jt_kerataanko"] != "" and $kutsuja != 'keraa.php') {
-  if ($rivirow["puutteet"] == $kerattavia and ($yhtiorow["puute_jt_kerataanko"] == "P" or $yhtiorow["puute_jt_kerataanko"] == "Q") and ($yhtiorow["kerataanko_jos_vain_puute_jt"] == "" or $yhtiorow["kerataanko_jos_vain_puute_jt"] == "J")) {
+  if ($rivirow["puutteet"] == $kerattavia and ($yhtiorow["puute_jt_kerataanko"] == "P" or $yhtiorow["puute_jt_kerataanko"] == "Q") and (($yhtiorow["kerataanko_jos_vain_puute_jt"] == "" and $laskurow["alatila"] != 'FF') or $yhtiorow["kerataanko_jos_vain_puute_jt"] == "J")) {
     // Meillä on pelkästään puutteita kerättävänä ja niitä ei tässä tapauksessa kerätä
     $ei_kerattavia += $rivirow["puutteet"];
     $kerattavia     -= $rivirow["puutteet"];
@@ -432,7 +432,7 @@ elseif ($kerattavia > 0 and $kutsuja != 'keraa.php' and !$tilaus_toimitetuksi) {
     }
   }
   ///* Tähän mennään jos lähete vain siirretään tulostusjonoon *///
-  elseif (mysqli_affected_rows($link) > 0) {
+  elseif (mysqli_affected_rows() > 0) {
     $tilaus_valmis_message .= "<font class='message'>".sprintf(t("Tilaus %s siirretty tulostusjonoon"), $laskurow["tunnus"])."!</font><br><br>\n";
   }
 }

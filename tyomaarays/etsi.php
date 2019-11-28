@@ -86,8 +86,8 @@ if ($tee == 'etsi' and !empty($hakusubmit)) {
   }
 
   if ($hakuteksti != '') {
-    $hakuehdot .= " AND ( lasku.nimi LIKE '%".$hakuteksti."%' ";
-    $hakuehdot .= " OR lasku.tunnus LIKE '%".$hakuteksti."%' ";
+    $hakuehdot .= " AND ( lasku.tunnus LIKE '%".$hakuteksti."%' ";
+    $hakuehdot .= " OR lasku.sisviesti2 LIKE '%".$hakuteksti."%' ";
     $hakuehdot .= " OR asiakas.asiakasnro LIKE '%".$hakuteksti."%' ";
 
     foreach ($tyom_kentat_array as $selite => $selitetark) {
@@ -211,7 +211,7 @@ echo "<td><input type='text' name='vvl' value='$vvl' size='5'></td>";
 echo "</tr>";
 
 echo "<tr>";
-echo "<th>".t("Hae kaikista kentistä").":</th>";
+echo "<th>".t("Hae kaikista kentistä (Ei Asiakas)").":</th>";
 echo "<td colspan='3'><input type='text' name='hakuteksti' size='35' value='{$hakuteksti}'></td>";
 echo "</tr>";
 
