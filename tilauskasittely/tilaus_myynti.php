@@ -5328,6 +5328,7 @@ if ($tee == '') {
   //Lisätään rivi tai jos ollaan muuttamassa toimitettavaksi (POISJTSTA) tai puutteeksi niin silloin vain päivitellään rivin tiedot ei olla poistettu riviä joten ei myöskään tarvi lisätä sitä uuestaan & jos ollaan perheellinen ja tehhään koko perheestä JT-rivejä
   if ((trim($tuoteno) != '' or is_array($tuoteno_array)) and ($kpl != '' or is_array($kpl_array)) and ($tila != "MUUTA" and $tila != "VARMUUTOS") and $ulos == '' and ($variaatio_tuoteno == "" or (is_array($kpl_array) and array_sum($kpl_array) != 0))) {
     if (!is_array($tuoteno_array) and trim($tuoteno) != "") {
+      $tuoteno_array = array(); // MODIFIED, added for PHP7 COMPATIBILITY
       $tuoteno_array[] = $tuoteno;
     }
 
