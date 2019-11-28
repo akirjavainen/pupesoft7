@@ -119,13 +119,15 @@ if (!function_exists("kopioi_tilaus")) {
       for ($i = 1; $i < mysqli_num_fields($lisatiedotres) - 1; $i++) {
         $field = mysqli_field_name($lisatiedotres, $i);
         $fields .= ", $field";
-
+	
+    if ($field != "tunnus") { // MODIFIED, added BUGFIX
         if ($field == 'otunnus') {
           $values .= ", '$utunnus'";
         }
         else {
           $values .= ", '$lisatiedotrow[$i]'";
         }
+    } // MODIFIED, added
       }
     }
 

@@ -697,6 +697,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
               case 'tilausrivilinkki':
               case 'luontiaika':
               case 'laatija':
+              case 'tunnus': // MODIFIED, added BUGFIX
                 $values .= "";
                 break;
               default:
@@ -786,7 +787,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
       $tilauksesta_myyntitilaus .= "<br><br>$linkkilisa<br>";
     }
 
-    if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MODIFIED, added JWIO ERP copy function
+    if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MODIFIED, added JWIO ERP copy function
     return $tilauksesta_myyntitilaus;
   }
 }
