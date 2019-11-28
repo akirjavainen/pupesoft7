@@ -192,6 +192,7 @@ CREATE TABLE `asiakas` (
   `lahetteen_jarjestys` char(1) NOT NULL DEFAULT '',
   `lahetteen_jarjestys_suunta` varchar(4) NOT NULL DEFAULT '',
   `koontilahete_kollitiedot` char(1) NOT NULL DEFAULT '',
+  `asiakasviivakoodi` char(1) NOT NULL DEFAULT '',
   `laskutyyppi` int(2) NOT NULL DEFAULT '0',
   `laskutusvkopv` int(1) NOT NULL DEFAULT '0',
   `maksusopimus_toimitus` char(1) NOT NULL DEFAULT '',
@@ -199,6 +200,7 @@ CREATE TABLE `asiakas` (
   `laskun_jarjestys_suunta` varchar(4) NOT NULL DEFAULT '',
   `extranet_tilaus_varaa_saldoa` varchar(3) NOT NULL DEFAULT '',
   `vienti` char(1) NOT NULL DEFAULT '',
+  `vientitietojen_autosyotto` char(1) NOT NULL DEFAULT '',
   `ketjutus` char(1) NOT NULL DEFAULT '',
   `koontilaskut_yhdistetaan` char(1) NOT NULL DEFAULT '',
   `luokka` varchar(50) NOT NULL DEFAULT '',
@@ -359,6 +361,7 @@ CREATE TABLE `asiakaskommentti` (
   `kommentti` text,
   `tuoteno` varchar(60) NOT NULL DEFAULT '',
   `ytunnus` varchar(15) NOT NULL DEFAULT '',
+  `tyyppi` char(1) NOT NULL DEFAULT '',
   `laatija` varchar(50) NOT NULL DEFAULT '',
   `luontiaika` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -475,7 +478,7 @@ CREATE TABLE `avainsana` (
   KEY `yhtio_laji_selitetark` (`yhtio`,`laji`,`selitetark`(100)),
   KEY `yhtio_laji_perhe_kieli` (`yhtio`,`laji`,`perhe`,`kieli`),
   KEY `yhtio_laji_selitetark3` (`yhtio`,`laji`,`selitetark_3`(100))
-) ENGINE=MyISAM AUTO_INCREMENT=15054 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=15056 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1021,7 +1024,7 @@ CREATE TABLE `git_paivitykset` (
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=380 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=420 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1074,6 +1077,81 @@ CREATE TABLE `hinnasto` (
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`),
   KEY `index_hinnasto_on_yhtion_toimipaikka_id` (`yhtion_toimipaikka_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `hyvaksyttavat_dokumentit`
+--
+
+DROP TABLE IF EXISTS `hyvaksyttavat_dokumentit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hyvaksyttavat_dokumentit` (
+  `tunnus` int(11) NOT NULL AUTO_INCREMENT,
+  `yhtio` varchar(5) NOT NULL DEFAULT '',
+  `nimi` varchar(150) NOT NULL DEFAULT '',
+  `kuvaus` tinytext,
+  `kommentit` tinytext,
+  `tiedostotyyppi` varchar(150) NOT NULL DEFAULT '',
+  `tila` varchar(2) NOT NULL DEFAULT '0',
+  `hyvak1` varchar(50) NOT NULL DEFAULT '',
+  `h1time` datetime NOT NULL,
+  `hyvak2` varchar(50) NOT NULL DEFAULT '',
+  `h2time` datetime NOT NULL,
+  `hyvak3` varchar(50) NOT NULL DEFAULT '',
+  `h3time` datetime NOT NULL,
+  `hyvak4` varchar(50) NOT NULL DEFAULT '',
+  `h4time` datetime NOT NULL,
+  `hyvak5` varchar(50) NOT NULL DEFAULT '',
+  `h5time` datetime NOT NULL,
+  `hyvaksyja_nyt` varchar(50) NOT NULL DEFAULT '',
+  `hyvaksynnanmuutos` varchar(1) NOT NULL DEFAULT '',
+  `laatija` varchar(50) NOT NULL DEFAULT '',
+  `luontiaika` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `muuttaja` varchar(50) NOT NULL DEFAULT '',
+  `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`tunnus`),
+  KEY `yhtio_tila` (`yhtio`,`tila`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `hyvaksyttavat_dokumenttityypit`
+--
+
+DROP TABLE IF EXISTS `hyvaksyttavat_dokumenttityypit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hyvaksyttavat_dokumenttityypit` (
+  `tunnus` int(11) NOT NULL AUTO_INCREMENT,
+  `yhtio` varchar(5) NOT NULL DEFAULT '',
+  `tyyppi` varchar(150) NOT NULL DEFAULT '',
+  `laatija` varchar(50) NOT NULL DEFAULT '',
+  `luontiaika` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `muuttaja` varchar(50) NOT NULL DEFAULT '',
+  `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`tunnus`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `hyvaksyttavat_dokumenttityypit_kayttajat`
+--
+
+DROP TABLE IF EXISTS `hyvaksyttavat_dokumenttityypit_kayttajat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hyvaksyttavat_dokumenttityypit_kayttajat` (
+  `tunnus` int(11) NOT NULL AUTO_INCREMENT,
+  `yhtio` varchar(5) NOT NULL DEFAULT '',
+  `doku_tyyppi_tunnus` int(11) NOT NULL DEFAULT '0',
+  `kuka` varchar(50) NOT NULL DEFAULT '',
+  `laatija` varchar(50) NOT NULL DEFAULT '',
+  `luontiaika` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `muuttaja` varchar(50) NOT NULL DEFAULT '',
+  `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`tunnus`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1901,6 +1979,7 @@ CREATE TABLE `lasku` (
   `jakelu` varchar(30) NOT NULL DEFAULT '',
   `kuljetus` varchar(150) NOT NULL DEFAULT '',
   `maksuteksti` varchar(30) NOT NULL DEFAULT '',
+  `valmistuksen_lisatiedot` text,
   `mainosteksti` text,
   `muutospvm` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
@@ -2134,6 +2213,7 @@ CREATE TABLE `liitetiedostot` (
   `image_bits` int(5) NOT NULL DEFAULT '0',
   `image_channels` int(5) NOT NULL DEFAULT '0',
   `kayttotarkoitus` varchar(150) NOT NULL DEFAULT '',
+  `external_id` varchar(25) NOT NULL DEFAULT '',
   `jarjestys` int(11) NOT NULL DEFAULT '0',
   `laatija` varchar(50) NOT NULL DEFAULT '',
   `luontiaika` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -2312,6 +2392,7 @@ CREATE TABLE `messenger` (
   `yhtio` varchar(5) NOT NULL DEFAULT '',
   `kuka` varchar(50) NOT NULL DEFAULT '',
   `vastaanottaja` varchar(50) NOT NULL DEFAULT '',
+  `ryhma` varchar(50) NOT NULL DEFAULT '',
   `viesti` text,
   `status` char(1) NOT NULL DEFAULT '',
   `luontiaika` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -2380,7 +2461,27 @@ CREATE TABLE `oikeu` (
   KEY `sovellus_index` (`yhtio`,`kuka`,`sovellus`),
   KEY `menut_index` (`yhtio`,`sovellus`,`nimi`,`alanimi`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=62630 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=63754 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ostorivien_vahvistus`
+--
+
+DROP TABLE IF EXISTS `ostorivien_vahvistus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ostorivien_vahvistus` (
+  `tunnus` int(11) NOT NULL AUTO_INCREMENT,
+  `yhtio` varchar(5) NOT NULL DEFAULT '',
+  `tilausrivin_tunnus` int(11) NOT NULL DEFAULT '0',
+  `vahvistettu` varchar(1) NOT NULL DEFAULT '0',
+  `vahvistettuaika` datetime NOT NULL,
+  `laatija` varchar(50) NOT NULL DEFAULT '',
+  `luontiaika` datetime NOT NULL,
+  PRIMARY KEY (`tunnus`),
+  KEY `yhtio_rivitunnus` (`yhtio`,`tilausrivin_tunnus`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2904,7 +3005,7 @@ CREATE TABLE `sarjanumeroseuranta` (
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8 */ ;
 /*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_swedish_ci */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
@@ -2919,7 +3020,7 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8 */ ;
 /*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_swedish_ci */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
@@ -3035,7 +3136,7 @@ CREATE TABLE `suorituskykyloki` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_luontiaika` (`yhtio`,`luontiaika`),
   KEY `yhtio_skripti_luontiaika` (`yhtio`,`skripti`,`luontiaika`)
-) ENGINE=MyISAM AUTO_INCREMENT=123 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=218 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3233,7 +3334,7 @@ CREATE TABLE `tapahtuma` (
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8 */ ;
 /*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_swedish_ci */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
@@ -3248,7 +3349,7 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8 */ ;
 /*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_swedish_ci */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
@@ -3415,7 +3516,7 @@ CREATE TABLE `tilausrivi` (
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8 */ ;
 /*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_swedish_ci */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
@@ -3430,7 +3531,7 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8 */ ;
 /*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_swedish_ci */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
@@ -3721,6 +3822,7 @@ CREATE TABLE `toimi` (
   `yhteyshenkilo` varchar(35) NOT NULL DEFAULT '',
   `kieli` char(2) NOT NULL DEFAULT '',
   `fakta` text,
+  `vapaa_teksti` text NOT NULL,
   `pankki_haltija` varchar(60) NOT NULL DEFAULT '',
   `tilinumero` varchar(14) NOT NULL DEFAULT '',
   `pankki1` varchar(35) NOT NULL DEFAULT '',
@@ -4052,7 +4154,7 @@ CREATE TABLE `tullinimike` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `tullinimike_cn` (`cn`)
-) ENGINE=MyISAM AUTO_INCREMENT=412145 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=424529 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4096,6 +4198,7 @@ CREATE TABLE `tuote` (
   `hinnastoon` char(1) NOT NULL DEFAULT '',
   `sarjanumeroseuranta` char(1) NOT NULL DEFAULT '',
   `automaattinen_sarjanumerointi` tinyint(4) NOT NULL DEFAULT '0',
+  `pullopanttitarratulostus_kerayksessa` varchar(12) NOT NULL DEFAULT '',
   `suoratoimitus` char(1) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT '',
   `yksin_kerailyalustalle` char(1) NOT NULL DEFAULT '',
@@ -4126,7 +4229,7 @@ CREATE TABLE `tuote` (
   `varmuus_varasto` decimal(12,2) NOT NULL DEFAULT '0.00',
   `tilausmaara` decimal(12,2) NOT NULL DEFAULT '0.00',
   `ostoehdotus` char(1) NOT NULL DEFAULT '',
-  `tahtituote` varchar(5) NOT NULL DEFAULT '',
+  `tahtituote` varchar(15) NOT NULL DEFAULT '',
   `tarrakerroin` decimal(5,2) NOT NULL DEFAULT '0.00',
   `tarrakpl` decimal(4,0) NOT NULL DEFAULT '0',
   `myynti_era` decimal(12,2) NOT NULL DEFAULT '0.00',
@@ -4171,7 +4274,7 @@ CREATE TABLE `tuote` (
   KEY `yhtio_tuotetyyppi_status` (`yhtio`,`tuotetyyppi`,`status`),
   FULLTEXT KEY `tuoteno` (`tuoteno`),
   FULLTEXT KEY `nimitys` (`nimitys`)
-) ENGINE=MyISAM AUTO_INCREMENT=710196 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=710405 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4237,7 +4340,7 @@ CREATE TABLE `tuotepaikat` (
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8 */ ;
 /*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_swedish_ci */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
@@ -4252,7 +4355,7 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8 */ ;
 /*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_swedish_ci */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
@@ -4684,7 +4787,7 @@ CREATE TABLE `valuu_historia` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `kotivaluutta_valkoodi_kurssipvm` (`kotivaluutta`,`valuutta`,`kurssipvm`)
-) ENGINE=MyISAM AUTO_INCREMENT=57345 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=71937 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4957,6 +5060,7 @@ CREATE TABLE `yhtio` (
   `pyoristys` varchar(6) NOT NULL DEFAULT '',
   `varasto` varchar(6) NOT NULL DEFAULT '',
   `raaka_ainevarasto` varchar(6) NOT NULL DEFAULT '',
+  `ennakkolaskun_asiakasvarasto` varchar(6) NOT NULL DEFAULT '',
   `varastonmuutos` varchar(6) NOT NULL DEFAULT '',
   `raaka_ainevarastonmuutos` varchar(6) NOT NULL DEFAULT '',
   `varastonmuutos_valmistuksesta` varchar(6) NOT NULL DEFAULT '',
@@ -5038,6 +5142,7 @@ CREATE TABLE `yhtion_parametrit` (
   `changelog_email` varchar(100) NOT NULL DEFAULT '',
   `hyvaksyttavia_tilauksia_email` varchar(100) NOT NULL DEFAULT '',
   `ostotilaus_email` varchar(100) NOT NULL DEFAULT '',
+  `hyvaksyttavat_extranet_email` varchar(255) NOT NULL DEFAULT '',
   `alert_varasto_kayttajat` varchar(100) NOT NULL DEFAULT '',
   `verkkolasku_lah` varchar(10) NOT NULL DEFAULT '',
   `finvoice_versio` varchar(1) NOT NULL DEFAULT '',
@@ -5247,6 +5352,7 @@ CREATE TABLE `yhtion_parametrit` (
   `vienti_erittelyn_tulostus` char(1) NOT NULL DEFAULT '',
   `vientierittelyn_painot` varchar(1) NOT NULL DEFAULT '',
   `vientikiellon_ohitus` char(1) NOT NULL DEFAULT '',
+  `vientitietojen_autosyotto` varchar(1) NOT NULL DEFAULT '',
   `oletus_lahetekpl` int(11) NOT NULL DEFAULT '0',
   `oletus_lahetekpl_siirtolista` int(2) NOT NULL DEFAULT '1',
   `oletus_laskukpl_toimitatilaus` int(2) NOT NULL DEFAULT '1',
@@ -5264,6 +5370,7 @@ CREATE TABLE `yhtion_parametrit` (
   `myyntitilaus_tarjoukseksi` char(1) NOT NULL DEFAULT '',
   `myyntitilauksen_liitteet` char(1) NOT NULL DEFAULT '',
   `myyntitilauksen_toimipaikka` char(1) NOT NULL DEFAULT '',
+  `asiakasmyyja_tilaukselle` varchar(1) NOT NULL DEFAULT '',
   `varastopaikan_lippu` char(1) NOT NULL DEFAULT '',
   `varastopaikkojen_maarittely` char(1) NOT NULL DEFAULT '',
   `varastontunniste` char(1) NOT NULL DEFAULT '',
@@ -5370,6 +5477,7 @@ CREATE TABLE `yhtion_parametrit` (
   `ei_alennuksia_lapsituotteille` char(1) NOT NULL DEFAULT '',
   `epakurantoinnin_myyntihintaleikkuri` char(1) NOT NULL DEFAULT '',
   `ennakkolaskun_tyyppi` char(1) NOT NULL DEFAULT '',
+  `asiakasvarasto` varchar(5) NOT NULL DEFAULT '',
   `maksusopimus_toimitus` char(1) NOT NULL DEFAULT '',
   `ennakkolasku_myyntitilaukselta` varchar(1) NOT NULL DEFAULT '',
   `matkalaskun_tarkastus` char(1) NOT NULL DEFAULT '',
@@ -5530,4 +5638,4 @@ CREATE TABLE `yriti` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-14 10:00:02
+-- Dump completed on 2019-11-28 10:00:01
