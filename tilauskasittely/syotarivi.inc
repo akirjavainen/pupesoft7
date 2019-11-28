@@ -955,12 +955,18 @@ elseif (!$variaaritorivi and $kukarow["extranet"] != '') {
   echo "<input type='hidden' name='myy_sarjatunnus' value='{$myy_sarjatunnus}'>";
 
   echo "<table>
-      <tr>$jarjlisa
-        <th align='left'>".t("Tuotenumero")."</th>
-        <th align='left'>".t("Määrä")."</th>
-        <td valign='top' class='back'></td>
-      </tr>
-    <tr>$jarjlisa";
+      <tr>$jarjlisa";
+
+  echo "  <th align='left'>".t("Tuotenumero")."</th>
+      <th align='left'>".t("Määrä")."</th>";
+
+  if (isset($extranet_alennukset) and $extranet_alennukset == 'JOO') {
+    for ($alepostfix = 1; $alepostfix <= 1; $alepostfix++) {
+      echo "<th align='left'>".t("Ale")."{$alepostfix}</th>";
+    }
+  }
+
+  echo"<tr>$jarjlisa";
 
   echo "<input type='hidden' name='var' value='$var'>";
 
@@ -979,23 +985,33 @@ elseif (!$variaaritorivi and $kukarow["extranet"] != '') {
   else {
     echo "<td valign='top'>$ulos</td>";
   }
-  // MODIFIED, added button id (butAddProduct) on next row:
-  echo "  <td valign='top'><input type='text' name='kpl' size='5' maxlength='13' value='$kpl'></td>
+
+  echo "  <td valign='top'><input type='text' name='kpl' size='5' maxlength='13' value='$kpl'></td>";
+
+  if (isset($extranet_alennukset) and $extranet_alennukset == 'JOO') {
+    for ($alepostfix = 1; $alepostfix <= 1; $alepostfix++) {
+      echo "<td align='top'><input type='text' name='ale{$alepostfix}' size='5' maxlength='6' value='", ${'ale'.$alepostfix}, "' </td>";
+    }
+    $_th_lisa = "<th></th>";
+    $_td_lisa = "<td></td>";
+  }
+// MODIFIED, added button id (butAddProduct) on next row:
+  echo "
       <td valign='top' class='back'><input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'></td>
       <td valign='top' class='back'><input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'> <font class='error'>$varaosavirhe</font></td>
     </tr>";
 
-  echo "<tr colspan='4'><th colspan='2'>".t("Toimitusaika")."</th></tr>";
+  echo "<tr colspan='4'><th colspan='2'>".t("Toimitusaika")."</th>{$_th_lisa}</tr>";
   echo "<tr>";
   echo "<td valign='top' colspan='2'>";
   echo "<input type='text' size='3' name='toimppa' value='$toimppa'>";
   echo "<input type='text' size='3' name='toimkka' value='$toimkka'>";
   echo "<input type='text' size='5' name='toimvva' value='$toimvva'>";
-  echo "</td></tr>";
+  echo "</td>{$_td_lisa}</tr>";
 
-  echo "<tr>$jarjlisa<th colspan='2'>".t("Rivikommentti").":</th></tr>";
+  echo "<tr>$jarjlisa<th colspan='2'>".t("Rivikommentti").":</th>{$_th_lisa}</tr>";
   echo "<tr>$jarjlisa<td valign='top' colspan='2'><textarea name='kommentti' cols='30' rows='2' wrap='soft'>$kommentti</textarea>";
-  echo "</td></tr></table></form>";
+  echo "</td>{$_td_lisa}</tr></table></form>";
 }
 
 // Kursorinohjausta
