@@ -244,7 +244,7 @@ if (!function_exists("tulosta_lavakeraystarrat_tec")) {
     file_put_contents($filenimi, $tarrat);
 
     $line = exec("$komento $filenimi");
-    #system("rm -f $filenimi");
+    //unlink($filenimi);
 
     echo t("Lavakeräystarrat tulostuu")."...<br>";
     #echo "<pre>$tarrat</pre><br><br>";

@@ -934,7 +934,7 @@ if ($tee == 'NAYTATILAUS' or !empty($komento["Purkulista"]) or !empty($komento["
           $apukala -= 33; // 23
 
           $pdf->image_place($image, $apukala, 21, $firstpage);
-          system("rm -f $nimi");
+	  unlink($nimi);
           $kala -= 15;
         }
       }

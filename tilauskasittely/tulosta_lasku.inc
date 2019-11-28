@@ -2447,7 +2447,7 @@ if (!function_exists('loppu')) {
         $pdf_lasku->draw_text(270, 10, "Virhe viivakoodin luomisessa", $thispage, $boldi);
       }
 
-      system("rm -f $filename");
+      unlink($filename);
     }
   }
 }

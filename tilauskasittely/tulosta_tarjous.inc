@@ -555,7 +555,7 @@ if (!function_exists('alku_tarjous')) {
       $image = $pdf_tarjous->jfif_embed($data);
       $pdf_tarjous->image_place($image, 805, 440, $page_tarjous[$sivu]);
 
-      system("rm -f $nimi");
+      unlink($nimi);
     }
 
     return array($page_tarjous, $sivu, $kala);
@@ -637,7 +637,7 @@ if (!function_exists('uusi_sivu_tarjous')) {
         $image = $pdf_tarjous->jfif_embed($data);
         $pdf_tarjous->image_place($image, 805, 440, $page_tarjous);
 
-        system("rm -f $nimi");
+	unlink($nimi);
       }
     }
 

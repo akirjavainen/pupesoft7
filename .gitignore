@@ -3,5 +3,6 @@ datain/lue-data*
 datain/magento-order*
 datain/presta-order*
 dataout/*
+.idea
 pics/logo.png
 pupenext

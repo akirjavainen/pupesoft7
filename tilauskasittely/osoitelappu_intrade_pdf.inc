@@ -227,7 +227,7 @@ else {
 
       $logoparam['scale'] = 102/282;
       $pdf->image_place($image, mm_pt(72), mm_pt(24), $firstpage, $logoparam);
-      system("rm -f $nimi");
+      unlink($nimi);
 
       $nimi = "/tmp/".md5(uniqid(rand(), true)).".jpg";
       //$sscc = chr(234).$sscc;
@@ -241,7 +241,7 @@ else {
 
       $logoparam['scale'] = 102/282;
       $pdf->image_place($image, mm_pt(40), mm_pt(22), $firstpage, $logoparam);
-      system("rm -f $nimi");
+      unlink($nimi);
     }
 
     $pdf->draw_text(mm_pt(22), mm_pt(65), "Asiakastilaus: ",  $firstpage, $norm);

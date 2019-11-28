@@ -110,7 +110,7 @@ for ($tulostuskpl=1; $tulostuskpl<=$tulostakolli; $tulostuskpl++) {
 
     $logoparam['scale'] = 122/282;
     $pdf->image_place($image, 275, 30, $firstpage, $logoparam);
-    system("rm -f $nimi");
+    unlink($nimi);
 
     // postin koodiksi
     $nimi = "/tmp/".md5(uniqid(rand(), true)).".jpg";
@@ -125,7 +125,7 @@ for ($tulostuskpl=1; $tulostuskpl<=$tulostakolli; $tulostuskpl++) {
 
     $logoparam['scale'] = 122/282;
     $pdf->image_place($image, 540, 255, $firstpage, $logoparam);
-    system("rm -f $nimi");
+    unlink($nimi);
   }
 
   // sitten aletaan piirtämään itse PDF sisältöä

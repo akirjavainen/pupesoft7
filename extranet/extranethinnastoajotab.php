@@ -90,7 +90,7 @@ if ($tee != '') {
   $cmd = "cd /tmp/;/usr/bin/zip "."$zipname $filenimi";
   $palautus = exec($cmd);
 
-  system("cd /tmp/;rm -f ".$filenimi);
+  unlink("/tmp/" . $filenimi);
 
   $filename = "/tmp/"."$zipname";
   $handle = fopen($filename, "r");

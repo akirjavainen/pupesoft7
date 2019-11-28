@@ -254,7 +254,7 @@ if (!function_exists('alku_valm')) {
         $image = $pdf->jfif_embed($data);
         $pdf->image_place($image, 805, 440, $thispage);
 
-        system("rm -f $nimi");
+        unlink($nimi);
       }
 
       rivi_otsikot_valm($thispage);
@@ -405,7 +405,7 @@ if (!function_exists('uusi_sivu_valm')) {
       $image = $pdf->jfif_embed($data);
       $pdf->image_place($image, 805, 440, $thispage);
 
-      system("rm -f $nimi");
+      unlink($nimi);
     }
 
     $kala = $pohja-30;

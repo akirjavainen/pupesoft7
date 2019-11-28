@@ -49,5 +49,6 @@ else {
 
   fclose($handle);
 
-  shell_exec("rm -f $msgfile1 $msgfile2");
+  unlink($msgfile1);
+  unlink($msgfile2);
 }
