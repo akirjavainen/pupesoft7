@@ -1102,7 +1102,7 @@ if (!function_exists('tarjous_rivi_custom')) {
 }
 
 if (!function_exists('loppu_tarjous')) {
-  function loppu_tarjous($pdf_tarjous, $laskurow, $kieli, $page_tarjous, $sivu, $tots, $total_uudet=0, $total_vanhat=0, $verolliset_verottomat_hinnat = '', $total_brutto = 0, $kala=0, $vikanrivin_sivu=0, $naytetaanko_rivihinta) {
+  function loppu_tarjous($pdf_tarjous, $laskurow, $kieli, $page_tarjous, $sivu, $tots, $total_uudet=0, $total_vanhat=0, $verolliset_verottomat_hinnat = '', $total_brutto = 0, $kala=0, $vikanrivin_sivu=0, $naytetaanko_rivihinta = '') {
     global $kukarow, $yhtiorow, $boldi, $pieni, $norm, $rectparam, $kaanteinen_verotus;
 
     // yhtiötiedot
@@ -1668,7 +1668,7 @@ if (!function_exists('tulosta_tarjous')) {
 
       // Jos on paljon rivejä tehdään uusi otsikko...
       if ($kala <= 80) {
-        list($page_tarjous, $sivu) = loppu_tarjous($pdf_tarjous, $laskurow, $kieli, $page_tarjous, $sivu, 0, $verolliset_verottomat_hinnat, 0, 0, 0, $naytetaanko_rivihinta);
+        list($page_tarjous, $sivu) = loppu_tarjous($pdf_tarjous, $laskurow, $kieli, $page_tarjous, $sivu, 0, 0, 0, $verolliset_verottomat_hinnat, 0, 0, 0, $naytetaanko_rivihinta);
 
         $sivu++;
 
