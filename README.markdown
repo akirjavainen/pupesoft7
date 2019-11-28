@@ -15,7 +15,7 @@ Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille,
 
 5. Muokkaa inc/salasanat.php-tiedostoon tietokannan käyttäjä ja salasana, tietokantapalvelimen osoitteeksi "localhost".
 
-6. Mikäli kyseessä on uusi asennus, perusta tietokanta ("mysql -uKÄYTTÄJÄ -pSALASANA", sitten "CREATE DATABASE pupesoft CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"). Aja referenssidata ja tietokantarakenne sisään ("mysql -uKÄYTTÄJÄ -pSALASANA pupesoft < alkudata_pupesoft7.sql"). Voit myös ensin muuttaa tietokannoissa käytettävän yritystunnisteen komennolla "sed -i 's/demo/OMATUNNISTE/g' alkudata_pupesoft7.sql".
+6. Mikäli kyseessä on uusi asennus, perusta tietokanta ("mysql -uKÄYTTÄJÄ -pSALASANA", sitten "CREATE DATABASE pupesoft CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;" (tai "utf8mb4_unicode_ci" vanhemmalla tietokantamoottorilla). Aja referenssidata ja tietokantarakenne sisään ("mysql -uKÄYTTÄJÄ -pSALASANA pupesoft < alkudata_pupesoft7.sql"). Voit myös ensin muuttaa tietokannoissa käytettävän yritystunnisteen komennolla "sed -i 's/demo/OMATUNNISTE/g' alkudata_pupesoft7.sql".
 
 7. Tietokannan käyttäjien/oikeuksien ja crontab-varmuuskopiointien asettamiseen löytyy ohjeita virallisesta asennusohjeesta.
 
