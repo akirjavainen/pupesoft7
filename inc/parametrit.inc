@@ -296,7 +296,7 @@ else exit;
 $link = @mysqli_connect($dbhost, $dbuser, $dbpass) or die ("Tietokantapalvelimeen ei saada yhteyttä. Se on pois päältä tai käyttäjätietosi ovat virheelliset.");
 mysqli_select_db($link, $dbkanta) or die ("Tietokantaa $dbkanta ei löydy palvelimelta $dbhost! (parametrit.inc)");
 $GLOBALS["link"] = $link;
-mysqli_set_charset("utf8", $link);
+mysqli_set_charset($link, "utf8");
 mysqli_query($link, "set collation_connection=\"utf8_unicode_ci\", collation_database=\"utf8_unicode_ci\", group_concat_max_len=1000000", $link);
 
 // pupesoft_cleanstring ALL THE COOKIES!!
