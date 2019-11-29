@@ -1,6 +1,6 @@
 <?php
 
-// Kutsutaanko CLI:stä
+// Kutsutaanko CLI:stÃ¤
 $php_cli = FALSE;
 
 if (php_sapi_name() == 'cli') {
@@ -34,7 +34,7 @@ if (!$php_cli) echo "<font class='head'>".t("SQL-tietokantarakenne").":</font><h
 
 $ulos = array();
 
-// Jos ollaan annettu poikkeava MySQL portti hostnamessa, pitää se erotella komentorivityökalua varten
+// Jos ollaan annettu poikkeava MySQL portti hostnamessa, pitÃ¤Ã¤ se erotella komentorivityÃ¶kalua varten
 if (mb_strpos($dbhost, ":") !== false) {
   list($dbhost, $dbport) = explode(":", $dbhost);
 }
@@ -55,7 +55,7 @@ else {
 
 exec("$mysql_dump_path --user=$dbuser --host=$dbhost --port=$dbport --password=$dbpass --no-data $dbkanta", $ulos);
 
-if (!$toot = fopen("/tmp/".$tmpfilenimi, "w")) die("Filen /tmp/$tmpfilenimi luonti epäonnistui!");
+if (!$toot = fopen("/tmp/".$tmpfilenimi, "w")) die("Filen /tmp/$tmpfilenimi luonti epÃ¤onnistui!");
 
 foreach ($ulos as $print) {
   // poistetaan mysql-sarakkeen kommentti koska se kaataa sqlupdate-ohjelman
@@ -66,7 +66,7 @@ foreach ($ulos as $print) {
 
 $curlfile = "/tmp/".$tmpfilenimi;
 
-// Löytyykö alttereita?
+// LÃ¶ytyykÃ¶ alttereita?
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "http://pupeapi.sprintit.fi/sqlupdate.php");
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -89,7 +89,7 @@ curl_close($ch);
 
 $alterit = trim($result);
 
-// Löytyykö custom updateja?
+// LÃ¶ytyykÃ¶ custom updateja?
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "http://pupeapi.sprintit.fi/sqlupdate.sql");
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -107,10 +107,10 @@ curl_close($ch);
 
 $updatet = trim($result);
 
-// Yhdistetään
+// YhdistetÃ¤Ã¤n
 $result = $alterit."\n".$updatet;
 
-// Poistetaan vielä tuplaspacet jos sellasia on
+// Poistetaan vielÃ¤ tuplaspacet jos sellasia on
 $result = trim(preg_replace("/ {2,}/", " ", $result));
 
 if ($php_cli and $result != "") {

@@ -192,7 +192,7 @@ if ($aja=='run') {
 
   if (mysqli_num_rows($kores) > 0) {
 
-    $elmazip = mb_substr(substr($elma, 0, -4).".zip", 11);
+    $elmazip = mb_substr(mb_substr($elma, 0, -4).".zip", 11);
     $cmd = "/usr/bin/zip -j /tmp/$elmazip $elma";
     $palautus = exec($cmd);
 

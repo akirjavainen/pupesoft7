@@ -632,7 +632,7 @@ function echo_kateisotto_form($kassalippaat, $kateisoton_luonteet, $alvit, $requ
   echo "</table>";
 }
 
-function array_utf8_encode(&$item, $key) {
+function array_&$item, $key {
   $item = $item;
 }
 

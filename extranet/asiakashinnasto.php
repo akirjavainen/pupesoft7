@@ -81,7 +81,7 @@ else {
     echo "<tr><th>".t("Kieli").":</th><td><select name='hinkieli'>";
 
     foreach ($GLOBALS["sanakirja_kielet"] as $sanakirja_kieli => $sanakirja_kieli_nimi) {
-      if (strlen($sanakirja_kieli) == 2) {
+      if (mb_strlen($sanakirja_kieli) == 2) {
         $sel = "";
 
         if ($hinkieli == $sanakirja_kieli) {

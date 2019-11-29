@@ -2,132 +2,132 @@
 <!-- V. 28.2.2011 19:41 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" version="4.01" doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
-	<!-- InvoiceDetails/DefinitionDetails -tietojen tulostuspaikan valinta: 1=ylˆs, 2=alas-->
+	<!-- InvoiceDetails/DefinitionDetails -tietojen tulostuspaikan valinta: 1=yl√∂s, 2=alas-->
 	<xsl:variable name="InvoiceDetails_DefinitionDetails_paikka" select="1"/>
 	<!-- Tekstit alkavat -->
 	<xsl:variable name="txtINVOICE">LASKU</xsl:variable>
 	<xsl:variable name="txtCREDITNOTE">HYVITYSLASKU</xsl:variable>
 	<xsl:variable name="txtCOPY">KOPIO</xsl:variable>
-	<xsl:variable name="txtSeller">Myyj‰</xsl:variable>
+	<xsl:variable name="txtSeller">Myyj√§</xsl:variable>
 	<xsl:variable name="txtTaxCode">Y-tunnus</xsl:variable>
 	<xsl:variable name="txtBuyerOrganisationName">Ostaja</xsl:variable>
 	<xsl:variable name="txtInvoiceRecipientContact">Laskun vastaanottajan yhteystiedot</xsl:variable>
-	<xsl:variable name="txtInvoiceDate">Laskun p‰iv‰ys</xsl:variable>
+	<xsl:variable name="txtInvoiceDate">Laskun p√§iv√§ys</xsl:variable>
 	<xsl:variable name="txtInvoiceNumber">Laskun numero</xsl:variable>
-	<xsl:variable name="txtSellerReferenceIdentifier">Myyj‰n viite</xsl:variable>
+	<xsl:variable name="txtSellerReferenceIdentifier">Myyj√§n viite</xsl:variable>
 	<xsl:variable name="txtOrderIdentifier">Tilaus / sopimus</xsl:variable>
 	<xsl:variable name="txtAgreement">Sopimus</xsl:variable>
-	<xsl:variable name="txtAgreementDate">Sopimusp‰iv‰</xsl:variable>
+	<xsl:variable name="txtAgreementDate">Sopimusp√§iv√§</xsl:variable>
 	<xsl:variable name="txtBuyerPartyIdentifier">Ostajan tunnus</xsl:variable>
-	<xsl:variable name="txtInvoiceDueDate">Maksun er‰p‰iv‰</xsl:variable>
-	<xsl:variable name="txtEpiInstructedAmount">Maksun m‰‰r‰</xsl:variable>
+	<xsl:variable name="txtInvoiceDueDate">Maksun er√§p√§iv√§</xsl:variable>
+	<xsl:variable name="txtEpiInstructedAmount">Maksun m√§√§r√§</xsl:variable>
 	<xsl:variable name="txtEpiAccountID">Maksun saajan tili</xsl:variable>
 	<xsl:variable name="txtEpiNameAddressDetails">Maksun saajan nimi</xsl:variable>
 	<xsl:variable name="txtEpiRemittanceInfoIdentifier">Viitenumero</xsl:variable>
 	<xsl:variable name="txtPaymentStatusCode">Maksun tilanne</xsl:variable>
 	<xsl:variable name="txtPaymentMethodText">Maksutapa</xsl:variable>
 	<xsl:variable name="txtPaymentTermsFreeText">Maksuehto</xsl:variable>
-	<xsl:variable name="txtPaymentOverDueFineDetails">Viiv‰stystiedot</xsl:variable>
-	<xsl:variable name="txtPaymentOverDueFinePercent">Viiv‰styskorko</xsl:variable>
+	<xsl:variable name="txtPaymentOverDueFineDetails">Viiv√§stystiedot</xsl:variable>
+	<xsl:variable name="txtPaymentOverDueFinePercent">Viiv√§styskorko</xsl:variable>
 	<xsl:variable name="txtDeliveryParty">Toimitusosoite</xsl:variable>
-	<xsl:variable name="txtDeliveryDate">Toimitusp‰iv‰</xsl:variable>
+	<xsl:variable name="txtDeliveryDate">Toimitusp√§iv√§</xsl:variable>
 	<xsl:variable name="txtDeliveryPeriodDetails">Toimitusjakso</xsl:variable>
 	<xsl:variable name="txtDeliveryMethod">Toimitustapa</xsl:variable>
 	<xsl:variable name="txtDeliveryTerms">Toimitusehdot</xsl:variable>
 	<xsl:variable name="txtTerminalAddress">Terminaaliosoite</xsl:variable>
 	<xsl:variable name="txtWaybillIdentifier">Rahtikirjan viite</xsl:variable>
-	<xsl:variable name="txtWaybillMaker">Rahtikirjan tekij‰</xsl:variable>
+	<xsl:variable name="txtWaybillMaker">Rahtikirjan tekij√§</xsl:variable>
 	<xsl:variable name="txtPaymentStatusNotPaid">Maksettava</xsl:variable>
 	<xsl:variable name="txtPaymentStatusPartlyPaid">Osa maksettu</xsl:variable>
 	<xsl:variable name="txtPaymentStatusPaid">Maksettu</xsl:variable>
 	<xsl:variable name="txtArticleName">Tuote/palvelu</xsl:variable>
 	<xsl:variable name="txtRowIdentifier">Tilausviite</xsl:variable>
-	<xsl:variable name="txtRowIdentifierDate">Tilausp‰iv‰</xsl:variable>
+	<xsl:variable name="txtRowIdentifierDate">Tilausp√§iv√§</xsl:variable>
 	<xsl:variable name="txtArticleIdentifier">Tuotetunnus</xsl:variable>
 	<xsl:variable name="txtBuyerArticleIdentifier">Ostajan tuotenro</xsl:variable>
 	<xsl:variable name="txtRowQuotationIdentifier">Tarjousviite</xsl:variable>
-	<xsl:variable name="txtDeliveredQuantity">Toimitettu m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtOrderedQuantity">Tilattu m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtConfirmedQuantity">Vahvistettu m‰‰r‰</xsl:variable>
+	<xsl:variable name="txtDeliveredQuantity">Toimitettu m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtOrderedQuantity">Tilattu m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtConfirmedQuantity">Vahvistettu m√§√§r√§</xsl:variable>
 	<xsl:variable name="txtUnitPriceAmount">Veroton a-hinta</xsl:variable>
 	<xsl:variable name="txtUnitPriceVatIncludedAmount">Verollinen a-hinta</xsl:variable>
 	<xsl:variable name="txtRowDeliveryDates">Toimituspvm (jakso)</xsl:variable>
 	<xsl:variable name="txtRowDeliveryIdentifier">Toimitusviite</xsl:variable>
 	<xsl:variable name="txtRowDiscount">Alennus</xsl:variable>
 	<xsl:variable name="txtVat">Alv</xsl:variable>
-	<xsl:variable name="txtVatAmount">Alv-m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtVatExcludedAmount">Veroton m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtRowAmount">Yhteens‰</xsl:variable>
-	<xsl:variable name="txtINVOICETOTAL">LASKU YHTEENSƒ</xsl:variable>
+	<xsl:variable name="txtVatAmount">Alv-m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtVatExcludedAmount">Veroton m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtRowAmount">Yhteens√§</xsl:variable>
+	<xsl:variable name="txtINVOICETOTAL">LASKU YHTEENS√Ñ</xsl:variable>
 	<xsl:variable name="txtVatSpecification">ALV-erittely</xsl:variable>
-	<xsl:variable name="txtShortProposedAccountIdentifier">Tiliˆintiehdotus (lyhyt)</xsl:variable>
-	<xsl:variable name="txtNormalProposedAccountIdentifier">Tiliˆintiehdotus (norm)</xsl:variable>
+	<xsl:variable name="txtShortProposedAccountIdentifier">Tili√∂intiehdotus (lyhyt)</xsl:variable>
+	<xsl:variable name="txtNormalProposedAccountIdentifier">Tili√∂intiehdotus (norm)</xsl:variable>
 	<xsl:variable name="txtAccountDimension">Kustannuspaikka</xsl:variable>
 	<xsl:variable name="txtVirtualBankBarcode">Virtuaaliviivakoodi</xsl:variable>
 	<xsl:variable name="txtPartialPaymentDetails">Osamaksun tiedot</xsl:variable>
-	<xsl:variable name="txtPaidAmount">Maksettu m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtUnPaidAmount">Maksamaton m‰‰r‰</xsl:variable>
+	<xsl:variable name="txtPaidAmount">Maksettu m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtUnPaidAmount">Maksamaton m√§√§r√§</xsl:variable>
 	<xsl:variable name="txtInterestPercent">Korkokanta</xsl:variable>
 	<xsl:variable name="txtProsessingCostsAmount">Toimitusmaksu</xsl:variable>
-	<xsl:variable name="txtPartialPaymentDueDate">Osamaksun er‰p‰iv‰</xsl:variable>
-	<xsl:variable name="txtVatIncludedAmount">Verollinen m‰‰r‰</xsl:variable>
+	<xsl:variable name="txtPartialPaymentDueDate">Osamaksun er√§p√§iv√§</xsl:variable>
+	<xsl:variable name="txtVatIncludedAmount">Verollinen m√§√§r√§</xsl:variable>
 	<xsl:variable name="txtPartialPaymentReferenceIdentifier">Osamaksun viitenro</xsl:variable>
 	<xsl:variable name="txtPhoneNumber">Puhelin</xsl:variable>
 	<xsl:variable name="txtFaxNumber">Faksi</xsl:variable>
 	<xsl:variable name="txtWebaddressIdentifier">WWW-osoite</xsl:variable>
-	<xsl:variable name="txtEmailaddressIdentifier">S‰hkˆposti</xsl:variable>
+	<xsl:variable name="txtEmailaddressIdentifier">S√§hk√∂posti</xsl:variable>
 	<xsl:variable name="txtHomeTownName">Kotipaikka</xsl:variable>
 	<xsl:variable name="txtEur">euroa</xsl:variable>
 	<xsl:variable name="txtLink">Linkki</xsl:variable>
 	<xsl:variable name="txtAgreementIdentifier">Sopimusviite</xsl:variable>
-	<xsl:variable name="txtProposedAccountIdentifier">Tiliˆintiehdotus</xsl:variable>
+	<xsl:variable name="txtProposedAccountIdentifier">Tili√∂intiehdotus</xsl:variable>
 	<xsl:variable name="txtEpiBfiIdentifier">Pankin Bic-tunnus</xsl:variable>
 	<xsl:variable name="txtDeliverer">Toimittaja</xsl:variable>
 	<xsl:variable name="txtManufacturer">Valmistaja</xsl:variable>
 	<xsl:variable name="txtInvoiceRecipientAddress">Laskutusosoite</xsl:variable>
-	<xsl:variable name="txtCashDiscountDate">Kassa-alennusp‰iv‰</xsl:variable>
+	<xsl:variable name="txtCashDiscountDate">Kassa-alennusp√§iv√§</xsl:variable>
 	<xsl:variable name="txtCashDiscountPercent">Kassa-alennusprosentti</xsl:variable>
-	<xsl:variable name="txtCashDiscountAmount">Kassa-alennuksen m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtInvoiceSender">Laskun l‰hett‰j‰</xsl:variable>
+	<xsl:variable name="txtCashDiscountAmount">Kassa-alennuksen m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtInvoiceSender">Laskun l√§hett√§j√§</xsl:variable>
 	<xsl:variable name="txtOriginalInvoice">Alkup. laskun numero</xsl:variable>
 	<xsl:variable name="txtPriceListIdentifier">Hinnaston viite</xsl:variable>
-	<xsl:variable name="txtRequestOfQuotationIdentifier">Tarjouspyynnˆn viite</xsl:variable>
+	<xsl:variable name="txtRequestOfQuotationIdentifier">Tarjouspyynn√∂n viite</xsl:variable>
 	<xsl:variable name="txtDeliveryInfo">Toimitustiedot</xsl:variable>
 	<xsl:variable name="txtInvoicingPeriod">Laskutuskausi</xsl:variable>
 	<xsl:variable name="txtOrdererName">Tilaajan nimi</xsl:variable>
 	<xsl:variable name="txtAgreementType">Sopimuksen tyyppi</xsl:variable>
-	<xsl:variable name="txtBuyersSellerId">Ostajan myyj‰viite</xsl:variable>
+	<xsl:variable name="txtBuyersSellerId">Ostajan myyj√§viite</xsl:variable>
 	<xsl:variable name="txtSellersBuyerId">Asiakastunnus</xsl:variable>
 	<xsl:variable name="txtBuyerReference">Ostajan viite</xsl:variable>
 	<xsl:variable name="txtNotificationId">Ilmoitustunnus</xsl:variable>
-	<xsl:variable name="txtNotificationDate">Ilmoituksen p‰iv‰ys</xsl:variable>
-	<xsl:variable name="txtRegNumberId">Rekisterˆintitunnus</xsl:variable>
+	<xsl:variable name="txtNotificationDate">Ilmoituksen p√§iv√§ys</xsl:variable>
+	<xsl:variable name="txtRegNumberId">Rekister√∂intitunnus</xsl:variable>
 	<xsl:variable name="txtProjectRefId">Projektin tunnus</xsl:variable>
 	<xsl:variable name="txtCreditLimit">Luottolimiitti</xsl:variable>
 	<xsl:variable name="txtCreditInterest">Luottokorko</xsl:variable>
-	<xsl:variable name="txtOperationLimit">Luoton k‰yttˆraja</xsl:variable>
+	<xsl:variable name="txtOperationLimit">Luoton k√§ytt√∂raja</xsl:variable>
 	<xsl:variable name="txtCashDiscountExlVat">Alviton kassa-alennus</xsl:variable>
 	<xsl:variable name="txtCashDiscountVat">Kassa-alennuksen alv</xsl:variable>
-	<xsl:variable name="txtFactoringPartyName">Rahoitusyhtiˆn nimi</xsl:variable>
-	<xsl:variable name="txtFactoringPartyId">Rahoitusyhtiˆn tunnus</xsl:variable>
+	<xsl:variable name="txtFactoringPartyName">Rahoitusyhti√∂n nimi</xsl:variable>
+	<xsl:variable name="txtFactoringPartyId">Rahoitusyhti√∂n tunnus</xsl:variable>
 	<xsl:variable name="txtFactoringFreeText">Siirtolauseke</xsl:variable>
-	<xsl:variable name="txtSalesPersonName">Myyj‰n nimi</xsl:variable>
+	<xsl:variable name="txtSalesPersonName">Myyj√§n nimi</xsl:variable>
 	<xsl:variable name="txtAnyPartyIdentifier">Tunnus</xsl:variable>
 	<xsl:variable name="txtAnyPartyOrgName">Nimi</xsl:variable>
 	<xsl:variable name="txtAnyPartyOrgDep">Osasto</xsl:variable>
-	<xsl:variable name="txtAnyPartyOrgUnit">Organisaatioyksikkˆ</xsl:variable>
+	<xsl:variable name="txtAnyPartyOrgUnit">Organisaatioyksikk√∂</xsl:variable>
 	<xsl:variable name="txtSiteCode">Osapuolitunnus</xsl:variable>
 	<xsl:variable name="txtAddress">Osoite</xsl:variable>
 	<xsl:variable name="txtAveragePrice">Keskihinta</xsl:variable>
-	<xsl:variable name="txtArticleGroupIdentifier">Tuoteryhm‰</xsl:variable>
+	<xsl:variable name="txtArticleGroupIdentifier">Tuoteryhm√§</xsl:variable>
 	<xsl:variable name="txtEanCode">EAN-koodi</xsl:variable>
 	<xsl:variable name="txtRegistrationNumberId">Rekisteritunnus</xsl:variable>
 	<xsl:variable name="txtSerialNumberId">Sarjanumero</xsl:variable>
-	<xsl:variable name="txtRowActionCode">Teht‰v‰koodi</xsl:variable>
+	<xsl:variable name="txtRowActionCode">Teht√§v√§koodi</xsl:variable>
 	<xsl:variable name="txtClearanceId">Tullausviite</xsl:variable>
-	<xsl:variable name="txtDeliveryNoteId">L‰hetysluettelon tunnus</xsl:variable>
+	<xsl:variable name="txtDeliveryNoteId">L√§hetysluettelon tunnus</xsl:variable>
 	<xsl:variable name="txtPlaceOfDischarge">Purkupaikka</xsl:variable>
-	<xsl:variable name="txtFinalDestination">M‰‰r‰np‰‰</xsl:variable>
+	<xsl:variable name="txtFinalDestination">M√§√§r√§np√§√§</xsl:variable>
 	<xsl:variable name="txtManufacturerArticleId">Valm. tuotetunnus</xsl:variable>
 	<xsl:variable name="txtManufacturerOrderId">Valm. tilausviite</xsl:variable>
 	<xsl:variable name="txtPackageLength">Pakkauksen pituus</xsl:variable>
@@ -136,45 +136,45 @@
 	<xsl:variable name="txtPackageWeight">Pakkauksen paino</xsl:variable>
 	<xsl:variable name="txtPackageNetWeight">Nettopaino</xsl:variable>
 	<xsl:variable name="txtPackageVolume">Pakkauksen tilavuus</xsl:variable>
-	<xsl:variable name="txtTransportCarriageQuantity">Lavam‰‰r‰</xsl:variable>
+	<xsl:variable name="txtTransportCarriageQuantity">Lavam√§√§r√§</xsl:variable>
 	<xsl:variable name="txtDiscounts">Alennukset</xsl:variable>
 	<xsl:variable name="txtInvoiceRow">laskurivi</xsl:variable>
-	<xsl:variable name="txtRounding">Pyˆristys</xsl:variable>
+	<xsl:variable name="txtRounding">Py√∂ristys</xsl:variable>
 	<xsl:variable name="txtExchangeRate">Kurssi</xsl:variable>
-	<xsl:variable name="txtOtherCurrency">Alkuper‰inen m‰‰r‰</xsl:variable>
+	<xsl:variable name="txtOtherCurrency">Alkuper√§inen m√§√§r√§</xsl:variable>
 	<xsl:variable name="txtShipmentOrg">Tavarantoimittaja</xsl:variable>
-	<xsl:variable name="txtReducedAmount">Alennettu maksun m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtOfferedQuantity">Tarjottu m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtPostDeliveredQuantity">J‰lkitoimitettu m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtInvoicedQuantity">Laskutettu m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtRowUsedQuantity">Kulutettu m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtRowPreviousMeterReadingDate">Edellinen mittariluentap‰iv‰</xsl:variable>
-	<xsl:variable name="txtRowLatestMeterReadingDate">Viimeisin mittariluentap‰iv‰</xsl:variable>
-	<xsl:variable name="txtRowCalculatedQuantity">Laskettu m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtOriginalInvoiceIdentifier">Alkuper‰isen laskun numero</xsl:variable>
-	<xsl:variable name="txtOriginalInvoiceDate">Alkuper‰isen laskun p‰iv‰ys</xsl:variable>
-	<xsl:variable name="txtOriginalDueDate">Alkuper‰inen er‰p‰iv‰</xsl:variable>
-	<xsl:variable name="txtOriginalInvoiceTotalAmount">Alkuper‰inen maksettava m‰‰r‰</xsl:variable>
-	<xsl:variable name="txtOriginalEpiRemittanceInfoIdentifier">Alkuper‰isen laskun viite</xsl:variable>
-	<xsl:variable name="txtPaidDate">Maksup‰iv‰</xsl:variable>
-	<xsl:variable name="txtCollectionDate">Perint‰p‰iv‰</xsl:variable>
-	<xsl:variable name="txtCollectionQuantity">Perint‰kerrat</xsl:variable>
-	<xsl:variable name="txtCollectionChargeAmount">Perint‰kulut</xsl:variable>
+	<xsl:variable name="txtReducedAmount">Alennettu maksun m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtOfferedQuantity">Tarjottu m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtPostDeliveredQuantity">J√§lkitoimitettu m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtInvoicedQuantity">Laskutettu m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtRowUsedQuantity">Kulutettu m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtRowPreviousMeterReadingDate">Edellinen mittariluentap√§iv√§</xsl:variable>
+	<xsl:variable name="txtRowLatestMeterReadingDate">Viimeisin mittariluentap√§iv√§</xsl:variable>
+	<xsl:variable name="txtRowCalculatedQuantity">Laskettu m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtOriginalInvoiceIdentifier">Alkuper√§isen laskun numero</xsl:variable>
+	<xsl:variable name="txtOriginalInvoiceDate">Alkuper√§isen laskun p√§iv√§ys</xsl:variable>
+	<xsl:variable name="txtOriginalDueDate">Alkuper√§inen er√§p√§iv√§</xsl:variable>
+	<xsl:variable name="txtOriginalInvoiceTotalAmount">Alkuper√§inen maksettava m√§√§r√§</xsl:variable>
+	<xsl:variable name="txtOriginalEpiRemittanceInfoIdentifier">Alkuper√§isen laskun viite</xsl:variable>
+	<xsl:variable name="txtPaidDate">Maksup√§iv√§</xsl:variable>
+	<xsl:variable name="txtCollectionDate">Perint√§p√§iv√§</xsl:variable>
+	<xsl:variable name="txtCollectionQuantity">Perint√§kerrat</xsl:variable>
+	<xsl:variable name="txtCollectionChargeAmount">Perint√§kulut</xsl:variable>
 	<xsl:variable name="txtInterestRate">Ylityskorko</xsl:variable>
-	<xsl:variable name="txtInterestStartDate">Koron alkup‰iv‰</xsl:variable>
-	<xsl:variable name="txtInterestEndDate">Koron loppup‰iv‰</xsl:variable>
+	<xsl:variable name="txtInterestStartDate">Koron alkup√§iv√§</xsl:variable>
+	<xsl:variable name="txtInterestEndDate">Koron loppup√§iv√§</xsl:variable>
 	<xsl:variable name="txtInterestPeriodText">Korkojakso</xsl:variable>
-	<xsl:variable name="txtInterestDateNumber">Korkop‰ivien lkm</xsl:variable>
-	<xsl:variable name="txtInterestChargeAmount">Koron m‰‰r‰</xsl:variable>
+	<xsl:variable name="txtInterestDateNumber">Korkop√§ivien lkm</xsl:variable>
+	<xsl:variable name="txtInterestChargeAmount">Koron m√§√§r√§</xsl:variable>
 	<xsl:variable name="txtInterestChargeVatAmount">Koron alv</xsl:variable>
 	<xsl:variable name="txtControllerIdentifier">Tarkastajan tunnus</xsl:variable>
 	<xsl:variable name="txtControllerName">Tarkastajan nimi</xsl:variable>
-	<xsl:variable name="txtControlDate">Tarkastusp‰iv‰</xsl:variable>
+	<xsl:variable name="txtControlDate">Tarkastusp√§iv√§</xsl:variable>
 	<xsl:variable name="txtContact">Yhteystiedot</xsl:variable>
 	<xsl:variable name="txtFreeText">Viestit</xsl:variable>
 	<xsl:variable name="txtVatCode_AB">Marginaalivero</xsl:variable>
-	<xsl:variable name="txtVatCode_AE">K‰‰nnetty ALV</xsl:variable>
-	<xsl:variable name="txtVatCode_E">Yhteisˆmyynti</xsl:variable>
+	<xsl:variable name="txtVatCode_AE">K√§√§nnetty ALV</xsl:variable>
+	<xsl:variable name="txtVatCode_E">Yhteis√∂myynti</xsl:variable>
 	<xsl:variable name="txtVatCode_G">Veroton myynti ulkomaille (kolmannet maat)</xsl:variable>
 	<xsl:variable name="txtVatCode_O">Veroton palvelu</xsl:variable>
 	<xsl:variable name="txtVatCode_S">Normaali veroprosentti</xsl:variable>
@@ -1279,7 +1279,7 @@
 						</xsl:for-each>
 					</div>
 				</xsl:if>
-				<!-- Loppuun tulostetaan myyj‰n yhteys- ja muita tietoja. -->
+				<!-- Loppuun tulostetaan myyj√§n yhteys- ja muita tietoja. -->
 				<xsl:variable name="sellerDetailsClass">
 					sellerDetails<xsl:if test="($countSFT != 0) and ($countAPD = 0) and ($countPPD = 0)"><xsl:text> afterSpecificationDetails</xsl:text></xsl:if>
 				</xsl:variable>
@@ -1406,7 +1406,7 @@
 			</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
-	<!-- Template, joka tulostaa yhden tai kahden p‰iv‰yksen aikajakson. -->
+	<!-- Template, joka tulostaa yhden tai kahden p√§iv√§yksen aikajakson. -->
 	<xsl:template name="OutputDatePeriod">
 		<xsl:param name="theDate"/>
 		<xsl:param name="theStartDate"/>
@@ -1430,7 +1430,7 @@
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
-	<!-- Template, joka tulostaa p‰iv‰m‰‰ri‰. -->
+	<!-- Template, joka tulostaa p√§iv√§m√§√§ri√§. -->
 	<xsl:template name="OutputDate">
 		<xsl:param name="theDate"/>
 		<xsl:variable name="strDate" select="string($theDate)"/>
@@ -1465,7 +1465,7 @@
 			</xsl:if>
 		</xsl:if>
 	</xsl:template>
-	<!-- Template, joka tulostaa tilinumeroita (IBAN ryhmiteltyn‰ ja muut sellaisenaan). -->
+	<!-- Template, joka tulostaa tilinumeroita (IBAN ryhmiteltyn√§ ja muut sellaisenaan). -->
 	<xsl:template name="OutputEpiAccountID">
 		<xsl:param name="theAccount"/>
 		<xsl:variable name="strAccount" select="string($theAccount)"/>
@@ -1528,7 +1528,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- Template, joka tulostaa rahasumman rahayksikˆn kera. -->
+	<!-- Template, joka tulostaa rahasumman rahayksik√∂n kera. -->
 	<xsl:template name="OutputAmount">
 		<xsl:param name="theAmount"/>
 		<xsl:param name="suppressCurrency"/>
@@ -1588,7 +1588,7 @@
 			<xsl:with-param name="txtText2NotAlone" select="'1'"/>
 		</xsl:call-template>
 	</xsl:template>
-	<!-- Template, joka osaa muokata s‰hkˆpostiosoitetta -->
+	<!-- Template, joka osaa muokata s√§hk√∂postiosoitetta -->
 	<xsl:template name="FormatEmail">
 		<xsl:param name="email"/>
 		<xsl:variable name="email_lc" select="translate($email,'MAILTO','mailto')"/>
@@ -1607,7 +1607,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- Template, joka osaa tulostaa s‰hkˆpostiosoitteen linkkin‰. -->
+	<!-- Template, joka osaa tulostaa s√§hk√∂postiosoitteen linkkin√§. -->
 	<xsl:template name="OutputEmail">
 		<xsl:param name="email_a"/>
 		<xsl:param name="email_d"/>
@@ -1641,7 +1641,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- Template, joka osaa tulostaa webbisivun linkkin‰. -->
+	<!-- Template, joka osaa tulostaa webbisivun linkkin√§. -->
 	<xsl:template name="OutputLink">
 		<xsl:param name="link_a"/>
 		<xsl:param name="text"/>
@@ -1658,7 +1658,7 @@
 			</xsl:choose>
 		</xsl:element>
 	</xsl:template>
-	<!-- Template, joka osaa tulostaa tekstin nelj‰n merkin ryhmin‰. -->
+	<!-- Template, joka osaa tulostaa tekstin nelj√§n merkin ryhmin√§. -->
 	<xsl:template name="OutputGrouped4">
 		<xsl:param name="theText"/>
 		<xsl:param name="isFirst"/>
@@ -1675,7 +1675,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- Template, joka osaa tulostaa blankottoman ja etunollattoman viitenumeron ryhmiteltyn‰. -->
+	<!-- Template, joka osaa tulostaa blankottoman ja etunollattoman viitenumeron ryhmiteltyn√§. -->
 	<xsl:template name="OutputEpiRemittanceInfoIdentifierGrouped">
 		<xsl:param name="erii"/>
 		<xsl:param name="isFirst"/>
@@ -2403,7 +2403,7 @@
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
-	<!-- Template, joka tulostaa dataa sis‰lt‰v‰n DIVin. -->
+	<!-- Template, joka tulostaa dataa sis√§lt√§v√§n DIVin. -->
 	<xsl:template name="OutputDataDiv">
 		<xsl:param name="theData"/>
 		<xsl:if test="string-length(normalize-space($theData)) != 0">
