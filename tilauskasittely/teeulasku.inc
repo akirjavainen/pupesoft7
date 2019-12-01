@@ -370,9 +370,11 @@ for ($teeulasku_i=1; $teeulasku_i < mysqli_num_fields($laskusplitres)-1; $teeula
 
   $fieldname = mysqli_field_name($laskusplitres, $teeulasku_i);
 
-  $fields .= ", ".$fieldname;
+  if ($fieldname != "tunnus") $fields .= ", ".$fieldname; // MODIFIED, added BUGFIX
 
   switch ($fieldname) {
+  case 'tunnus': // MODIFIED, added BUGFIX
+    break; // MODIFIED, added BUGFIX
   case 'arvo':
     $values .= ", '$arvo'";
     break;
