@@ -1547,9 +1547,11 @@ if ($tee == 'MONISTA') {
         // Ei monisteta tunnusta
         for ($i = 1; $i < mysqli_num_fields($monistalisres) - 1; $i++) {
           $fieldname = mysqli_field_name($monistalisres, $i);
-          $fields .= ", ".$fieldname;
+          if ($fieldname != "tunnus") $fields .= ", ".$fieldname; // MODIFIED, added BUGFIX
 
           switch ($fieldname) {
+          case 'tunnus': // MODIFIED, added BUGFIX
+            break; // MODIFIED, added BUGFIX
           case 'otunnus':
             $values .= ", '{$utunnus}'";
             break;
