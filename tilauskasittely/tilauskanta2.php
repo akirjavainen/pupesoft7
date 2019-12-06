@@ -23,13 +23,13 @@ if ($tee == 'aja' and $atoimvko != '' and ($ltoimvko == '' or $ltoimvko >= $atoi
   $DAY_ARRAY = array(1 => t("Ma"), t("Ti"), t("Ke"), t("To"), t("Pe"), t("La"), t("Su"));
 
   if ($atoimvko < $nyviikko) {
-    $aaika = "+".(52 - $nyviikko) + $atoimvko;
+    $aaika = "+" . ((52 - $nyviikko) + $atoimvko); // MODIFIED, PHP 7.4 FIX
   }
   elseif ($atoimvko == $nyviikko) {
     $aaika = "this";
   }
   else {
-    $aaika = "+".$atoimvko - $nyviikko;
+    $aaika = "+" . ($atoimvko - $nyviikko); // MODIFIED, PHP 7.4 FIX
   }
 
   //echo "aaika $aaika<br>";
@@ -43,13 +43,13 @@ if ($tee == 'aja' and $atoimvko != '' and ($ltoimvko == '' or $ltoimvko >= $atoi
   }
   else {
     if ($ltoimvko < $nyviikko) {
-      $laika = "+".(52 - $nyviikko) + $ltoimvko;
+      $laika = "+" . ((52 - $nyviikko) + $ltoimvko); // MODIFIED, PHP 7.4 FIX
     }
     elseif ($ltoimvko == $nyviikko) {
       $laika = "this";
     }
     else {
-      $laika = "+".$ltoimvko - $nyviikko;
+      $laika = "+" . ($ltoimvko - $nyviikko); // MODIFIED, PHP 7.4 FIX
     }
 
     $loppuaika = date("Y-m-d", strtotime("Sunday", strtotime("$laika weeks")));

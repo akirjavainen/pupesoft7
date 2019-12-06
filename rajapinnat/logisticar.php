@@ -745,7 +745,7 @@ function myynti($limit = '') {
     case 'G':
       // kirjoitetaan fileen vain avoimia siirtolistoja eli toimitettu pitää olla tyhjää
       if ($trow['toimitettu'] != '') {
-        continue;
+        break;
       }
 
       // laji 3 = saapuva tilaus
