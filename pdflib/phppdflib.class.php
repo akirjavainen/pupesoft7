@@ -55,7 +55,7 @@ class pdffile {
   /* Constructor function: is automatically called when the
      * object is created.  Used to set up the environment
      */
-  function pdffile() {
+  public function __construct() {
     /* Per spec, obj 0 should always have a generation
          * number of 65535 and is always free
          */

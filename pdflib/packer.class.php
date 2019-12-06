@@ -277,7 +277,7 @@ class packer {
 class field {
   var $l, $r, $t, $b;     // left, right, top, bottom
 
-  function field($x1, $x2, $y1, $y2) {
+  public function __construct($x1, $x2, $y1, $y2) {
     if ($x1 < $x2) {
       $this->l = $x1;
       $this->r = $x2;
