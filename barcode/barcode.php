@@ -85,7 +85,7 @@ class BarcodeObject {
   var $mImg, $mFont;
   var $mError;
 
-  function BarcodeObject($Width = BCD_DEFAULT_Width, $Height = BCD_DEFAULT_HEIGHT, $Style = BCD_DEFAULT_STYLE) {
+  public function BarcodeObject($Width = BCD_DEFAULT_Width, $Height = BCD_DEFAULT_HEIGHT, $Style = BCD_DEFAULT_STYLE) {
     $this->mWidth   = $Width;
     $this->mHeight  = $Height;
     $this->mStyle   = $Style;

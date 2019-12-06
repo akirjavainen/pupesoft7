@@ -33,7 +33,7 @@ Contact author at: barcode@mribti.com
 
 class C39Object extends BarcodeObject {
   var $mCharSet, $mChars;
-  function C39Object($Width, $Height, $Style, $Value) {
+  public function __construct($Width, $Height, $Style, $Value) {
     $this->BarcodeObject($Width, $Height, $Style);
     $this->mValue   = $Value;
     $this->mChars   = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";

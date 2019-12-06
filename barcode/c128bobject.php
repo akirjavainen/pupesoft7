@@ -33,7 +33,7 @@ Contact author at: barcode@mribti.com
 
 class C128BObject extends BarcodeObject {
   var $mCharSet, $mChars;
-  function C128BObject($Width, $Height, $Style, $Value) {
+  public function __construct($Width, $Height, $Style, $Value) {
     $this->BarcodeObject($Width, $Height, $Style);
     $this->mValue   = $Value;
     $this->mChars   = " !\"#$%&'()*+´-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{ }~";

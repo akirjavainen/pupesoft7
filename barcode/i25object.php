@@ -32,7 +32,7 @@ Contact author at: barcode@mribti.com
 
 class I25Object extends BarcodeObject {
   var $mCharSet;
-  function I25Object($Width, $Height, $Style, $Value) {
+  public function __construct($Width, $Height, $Style, $Value) {
     $this->BarcodeObject($Width, $Height, $Style);
     $this->mValue   = $Value;
     $this->mCharSet = array
