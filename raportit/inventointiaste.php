@@ -1714,6 +1714,6 @@ function echo_tallennus_formi($xls_filename) {
   echo "<br/>";
 }
 
-function array_&$item, $key {
+function array_utf8_encode(&$item, $key) {
   $item = $item;
 }
