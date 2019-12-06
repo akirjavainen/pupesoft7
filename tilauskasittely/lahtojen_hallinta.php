@@ -1066,7 +1066,7 @@ return return_data;
 
       while ($kirow = mysqli_fetch_assoc($kires)) {
 
-        $sel = (isset($rakirsyotto_laskutulostin) and $rakirsyotto_laskutulostin == $kirow['tunnus']) ? " SELECTED" : ($kirow["tunnus"] == $default_printer_row["printteri7"]) ? " SELECTED" : "";
+        $sel = (isset($rakirsyotto_laskutulostin) and $rakirsyotto_laskutulostin == $kirow['tunnus']) ? " SELECTED" : (($kirow["tunnus"] == $default_printer_row["printteri7"]) ? " SELECTED" : "");
 
         echo "<option value='{$kirow['tunnus']}'{$sel}>{$kirow['kirjoitin']}</option>";
       }
