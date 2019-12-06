@@ -65,7 +65,7 @@ function ftp_rmfiles($ftp_stream, $directory, $nodel = "", $nodelpict = "") {
 
     $split = preg_split('[ ]', $current, 9, PREG_SPLIT_NO_EMPTY);
     $entry = $split[8];
-    $isdir = ($split[0]{0} === 'd') ? true : false;
+    $isdir = ($split[0][0] === 'd') ? true : false;
 
     if ($entry === '.' || $entry === '..') {
       continue;

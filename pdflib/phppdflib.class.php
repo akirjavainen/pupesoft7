@@ -1012,7 +1012,7 @@ class pdffile {
       $width = 0;
       $len = strlen($string);
       for ($i = 0; $i < $len; $i++) {
-        $ord = ord($string{$i});
+        $ord = ord($string[$i]);
         if (isset($this->widths[$font][$ord])) {
           $width += $this->widths[$font][$ord];
         } else {
@@ -1344,7 +1344,7 @@ class pdffile {
   function _int_val($string) {
     $r = 0;
     for ($i = 0; $i < strlen($string); $i ++ ) {
-      $r += ord($string{$i}) * pow(256, strlen($string) - $i -1);
+      $r += ord($string[$i]) * pow(256, strlen($string) - $i -1);
     }
     return $r;
   }

@@ -1207,7 +1207,7 @@ for ($i=0; $i<=$count; $i++) {
   if (isset($haku[$i]) and mb_strlen($haku[$i]) > 0) {
 
     // @-merkki eteen, tarkka haku
-    if ($haku[$i]{0} == "@") {
+    if ($haku[$i][0] == "@") {
       $tarkkahaku = TRUE;
       $hakuehto = " = '".mb_substr($haku[$i], 1)."' ";
     }

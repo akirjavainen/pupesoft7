@@ -250,14 +250,14 @@ class import {
         $d1 = $target['stream']->d;
         $instring = false; $d = ''; $ct = '';
         for ($i = 0; $i < mb_strlen($d1); $i++) {
-          $c = $d1{$i};
+          $c = $d1[$i];
           if ($instring) {
             if ($c === ')') {
               $d .= $c;
               $instring = false;
             } else {
               if ($c === '\\') {
-                if ($d1{$i + 1} === ')') {
+                if ($d1[$i + 1] === ')') {
                   $d .= '\)';
                   $i ++;
                 } else {
@@ -632,7 +632,7 @@ class import {
             $r[$l] = $state[0];
             $state = array();
           }
-        } elseif (mb_substr($w, 0, 1) == '(' && $w{mb_strlen($w) - 1} == ')') {
+        } elseif (mb_substr($w, 0, 1) == '(' && $w[mb_strlen($w) - 1] == ')') {
           // We've got a string
           echo "Assigning string value '$w' to [$l]<br>\n";
           $r[$l] = $w;
@@ -669,11 +669,11 @@ class import {
         $length = (int)$meta['/Length'];
       }
       echo "Stream should be {$length}<br>\n";
-      if ($d->d{$d->l} === "\x0a") {
+      if ($d->d[$d->l] === "\x0a") {
         $start = $d->l + 1;
       } else {
-        if ($d->d{$d->l} === "\x0d") {
-          if ($d->d{$d->l + 1} === "\x0a") {
+        if ($d->d[$d->l] === "\x0d") {
+          if ($d->d[$d->l + 1] === "\x0a") {
             $start = $d->l +2;
           } else {
             echo "Data after keyword 'stream' is corrupt<br>\n";
@@ -888,7 +888,7 @@ class StreamHandler {
   // Returns current byte (character)
   function cc($l = false) {
     if ($l === false) $l = $this->l;
-    return $this->d{$l};
+    return $this->d[$l];
   }
 
   function next() {

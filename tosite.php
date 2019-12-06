@@ -418,7 +418,7 @@ if ($tee == 'I') {
 
           $isummanumeric = preg_replace("/[^0-9\.]/", "", $isumma[$i]);
 
-          if ($isumma[$i]{0} == '-') {
+          if ($isumma[$i][0] == '-') {
             $isumma[$i] = sprintf("%.2f", round(-1 * ($turvasumma_valuutassa * ($isummanumeric/100)), 2));
           }
           else {
