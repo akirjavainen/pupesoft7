@@ -36,6 +36,7 @@ if (isset($_REQUEST['ajax_popup'])) {
 if (@include "../inc/parametrit.inc");
 elseif (@include "parametrit.inc");
 else exit;
+include("../../raportit/javascript/jspupesoft2.js"); // MODIFIED, added
 
 if (@include "rajapinnat/logmaster/logmaster-functions.php");
 elseif (@include "logmaster-functions.php");

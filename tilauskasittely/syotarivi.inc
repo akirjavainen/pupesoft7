@@ -164,7 +164,7 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
     </tr>";
 
 // MODIFIED, added links to JWIO ERP:
-if (file_exists("../hinnasto")) {
+if (file_exists("../../hinnasto")) {
 	echo "<tr><td>";
 	echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 	echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
@@ -507,14 +507,17 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
   echo "<input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'> <font class='error'>$varaosavirhe</font></td></tr>"; // MODIFIED, added button id (butAddProduct)
 
   echo "<tr>$jarjlisa";
-echo "<tr><td>"; // MODIFIED, added
-echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>"; // MODIFIED, added
-echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || "; // MODIFIED, added
-echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>"; // MODIFIED, added
-echo "</td>"; // MODIFIED: added
-                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 0.9; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 0.9;\">Hinta -10 %</a></td>"; // MODIFIED: added
-                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.1; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.1;\">Hinta +10 %</a></td>"; // MODIFIED: added
-                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.25; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.25;\">Hinta +25 %</a></td></tr>"; // MODIFIED: added
+  if (file_exists("../../hinnasto")) { // MODIFIED, added links to JWIO ERP
+	echo "<tr><td>";
+	echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
+	echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
+	echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
+	echo "</td>";
+	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 0.9; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 0.9;\">Hinta -10 %</a></td>";
+	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.1; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.1;\">Hinta +10 %</a></td>";
+	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.25; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.25;\">Hinta +25 %</a></td>";
+	echo "<td id=\"tdM2\"></td></tr>";
+  }
   if ($tila == "LISAAKERTARESEPTIIN" or $tila == "LISAAISAKERTARESEPTIIN" or $tila == "LISAARESEPTIIN") {
     echo "<th></th>";
   }
@@ -658,7 +661,7 @@ echo "</td>"; // MODIFIED: added
         <th colspan='{$nrospanni}' align='left'>".t("Tuotteen nimitys")."</th>
         </tr>
       <tr>$jarjlisa
-        <td valign='top' colspan='{$nrospanni}'><input type='text' maxlength='100' size='75' name='tuotenimitys' value = '$tuotenimitys'></td>";
+        <td valign='top' colspan='{$nrospanni}'><input type='text' maxlength='100' size='75' name='tuotenimitys' id='tuotenimitys' value = '$tuotenimitys' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value);'></td>"; // MODIFIED, added
   }
 
   echo "<td valign='top' class='back'><input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'>";
