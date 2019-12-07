@@ -516,7 +516,9 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
 	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 0.9; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 0.9;\">Hinta -10 %</a></td>";
 	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.1; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.1;\">Hinta +10 %</a></td>";
 	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.25; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.25;\">Hinta +25 %</a></td>";
-	echo "<td id=\"tdM2\"></td></tr>";
+	echo "<td id=\"tdM2\"></td>";
+	echo "<td id=\"tdPostalCode\">" . $laskurow['toim_postino'] . "</td>";
+	echo "</tr>";
   }
   if ($tila == "LISAAKERTARESEPTIIN" or $tila == "LISAAISAKERTARESEPTIIN" or $tila == "LISAARESEPTIIN") {
     echo "<th></th>";
