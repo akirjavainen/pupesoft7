@@ -3295,8 +3295,10 @@ if (mysqli_num_rows($result) != 0) {
 
       echo "<input type='submit' class='{$_class}' name='$aputoim1' value='$lisa1' $button_disabled>";
       echo "</form>";
-      echo "<a href='/pupesoft/tilauskasittely/keraa.php?id=" . $row['tunnus'] . "'> (K)</a>"; // MODIFIED, added
-      echo "<a href='/toimitusvahvistus/index.php?nonavi=1&default_order=" . $row['tunnus'] . "'> (R)</a>"; // MODIFIED, added
+      if ($toim != "TARJOUS") { // MODIFIED, added
+        echo "<a href='/pupesoft/tilauskasittely/keraa.php?id=" . $row['tunnus'] . "'> (K)</a>"; // MODIFIED, added
+        echo "<a href='/toimitusvahvistus/index.php?nonavi=1&default_order=" . $row['tunnus'] . "'> (R)</a>"; // MODIFIED, added
+      }
       echo "</td>";
 
       if (((($whiletoim == "TARJOUS" or $whiletoim == "TARJOUSSUPER") and $deletarjous)
