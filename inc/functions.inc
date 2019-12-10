@@ -6581,7 +6581,7 @@ if (!function_exists("alehinta")) {
 
         $palauta = trim($palauta);
 
-        if (mb_substr($palauta, 0, 3) == 'ale' and is_numeric($palauta{mb_strlen($palauta) - 1})) {
+        if (mb_substr($palauta, 0, 3) == 'ale' and is_numeric($palauta[mb_strlen($palauta) - 1])) { // MODIFIED, fix DEPRECATED
           extract($ale);
         }
 
@@ -12465,10 +12465,10 @@ if (!function_exists("t_maanimi")) {
     if (mysqli_num_rows($result) > 0) {
       $row = mysqli_fetch_assoc($result);
 
-      $maa_txt = $row{"haettu"};
+      $maa_txt = $row["haettu"]; // MODIFIED, fix DEPRECATED
 
       if ($maa_txt == "") {
-        $maa_txt = $row{"fi"};
+        $maa_txt = $row["fi"]; // MODIFIED, fix DEPRECATED
       }
 
       $maat[$maa] = mb_substr($maa_txt, 5);
@@ -14073,11 +14073,11 @@ if (!function_exists("tarkista_iban")) {
 
     // Muutetaan kirjaimet numeroiksi (A = 10, B = 11, C = 12, jne...)
     for ($i = 0; $i < $pituus; $i++) {
-      if (is_numeric($chk_tilinumero{$i})) {
-        $chk_tilinumeronumeric .= $chk_tilinumero{$i};
+      if (is_numeric($chk_tilinumero[$i])) { // MODIFIED, fix DEPRECATED
+        $chk_tilinumeronumeric .= $chk_tilinumero[$i]; // MODIFIED, fix DEPRECATED
       }
       else {
-        $chk_tilinumeronumeric .= ord($chk_tilinumero{$i}) - 55;
+        $chk_tilinumeronumeric .= ord($chk_tilinumero[$i]) - 55; // MODIFIED, fix DEPRECATED
       }
     }
 
@@ -14089,7 +14089,7 @@ if (!function_exists("tarkista_iban")) {
     $pituus = mb_strlen($chk_tilinumeronumeric);
 
     for ($i = 0; $i < $pituus; $i++) {
-      $numero = (int) $chk_tilinumeronumeric{$i};
+      $numero = (int) $chk_tilinumeronumeric[$i]; // MODIFIED, fix DEPRECATED
       $mod = (($mod * 10) + $numero) % 97;
     }
 
@@ -14300,7 +14300,7 @@ if (!function_exists("generoi_rfviite")) {
     $pituus = mb_strlen($rf_viite);
 
     for ($i = 0; $i < $pituus; $i++) {
-      $numero = (int) $rf_viite{$i};
+      $numero = (int) $rf_viite[$i]; // MODIFIED, fix DEPRECATED
       $mod = (($mod * 10) + $numero) % 97;
     }
 
@@ -14325,11 +14325,11 @@ if (!function_exists("tarkista_rfviite")) {
 
     // Muutetaan kirjaimet numeroiksi (A = 10, B = 11, C = 12, jne...)
     for ($i = 0; $i < $pituus; $i++) {
-      if (is_numeric($chk_viite{$i})) {
-        $chk_viitenumeric .= $chk_viite{$i};
+      if (is_numeric($chk_viite[$i])) { // MODIFIED, fix DEPRECATED
+        $chk_viitenumeric .= $chk_viite[$i]; // MODIFIED, fix DEPRECATED
       }
       else {
-        $chk_viitenumeric .= ord($chk_viite{$i}) - 55;
+        $chk_viitenumeric .= ord($chk_viite[$i]) - 55; // MODIFIED, fix DEPRECATED
       }
     }
 
@@ -14341,7 +14341,7 @@ if (!function_exists("tarkista_rfviite")) {
     $pituus = mb_strlen($chk_viitenumeric);
 
     for ($i = 0; $i < $pituus; $i++) {
-      $numero = (int) $chk_viitenumeric{$i};
+      $numero = (int) $chk_viitenumeric[$i]; // MODIFIED, fix DEPRECATED
       $mod = (($mod * 10) + $numero) % 97;
     }
 
@@ -21646,7 +21646,7 @@ if (!function_exists("pupeFileReader")) {
         $luku   = 0;
 
         for ($r = 0; $r < mb_strlen($string); $r++) {
-          $luku += (ord($string{$r})-64) * pow(26, $r);
+          $luku += (ord($string[$r])-64) * pow(26, $r); // MODIFIED, fix DEPRECATED
         }
 
         return $luku-1;
@@ -23904,7 +23904,7 @@ if (!function_exists('tarkiste')) {
 
     // loopataan luvut oikeelta vasemmalle
     for ($i = 16; $i >= 0; $i--) {
-      $summa += $kerroin * (ord($sscc{$i})-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet )
+      $summa += $kerroin * (ord($sscc[$i])-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet ) // MODIFIED, fix DEPRECATED
       $kerroin = 4 - $kerroin; // kerroin on vuorotellen 3 tai 1
     }
 
@@ -26624,7 +26624,7 @@ if (!function_exists("lisaa_rivi")) {
     $rekisterinumero    = (!empty($parametrit['rekisterinumero']))    ? $parametrit['rekisterinumero'] : '';     // rekisterinumero
 
     for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
-      $ale_temp = str_replace(',', '.', $parametrit{'ale'.$alepostfix});
+      $ale_temp = str_replace(',', '.', $parametrit['ale'.$alepostfix]); // MODIFIED, fix DEPRECATED
       ${'ale'.$alepostfix} = (!empty($ale_temp)) ? $ale_temp : "";
     }
 
@@ -35308,7 +35308,7 @@ if (!function_exists('sscc_tarkiste')) {
 
     // loopataan luvut oikeelta vasemmalle
     for ($i = 16; $i >= 0; $i--) {
-      $summa += $kerroin * (ord($sscc{$i})-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet )
+      $summa += $kerroin * (ord($sscc[$i])-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet ) // MODIFIED, fix DEPRECATED
       $kerroin = 4 - $kerroin; // kerroin on vuorotellen 3 tai 1
     }
 
