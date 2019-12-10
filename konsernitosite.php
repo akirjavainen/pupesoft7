@@ -39,7 +39,7 @@ if ($tee == 'I') {
     $filesize = $_FILES['userfile']['size'];
     $filename = $_FILES['userfile']['name'];
 
-    $data = sanitize_string(file_get_contents($_FILES['userfile']['tmp_name']));
+    $data = mysqli_real_escape_string($GLOBALS["link"], file_get_contents($_FILES['userfile']['tmp_name']));
 
     // lisätään kuva
     $query = "INSERT INTO liitetiedostot set
