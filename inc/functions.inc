@@ -9253,7 +9253,7 @@ if (!function_exists('tallenna_liite')) {
       return false;
     }
 
-    $data     = sanitize_string(file_get_contents($file["tmp_name"]));
+    $data     = mysqli_real_escape_string($GLOBALS["link"], file_get_contents($file["tmp_name"])); // MODIFIED, fixed DEPRECATED
     $filename   = preg_replace("/[^A-Z0-9\.#_\-%]/i", "", $file["name"]);
     $filetype  = sanitize_string($file["type"]);
     $filesize  = sanitize_string($file["size"]);
@@ -13905,7 +13905,7 @@ if (!function_exists('liita_tilaus_laskun_liitetiedostoksi')) {
 
           if (mb_strpos($editilaus_laskulle_data, "OSTOTIL.OT_NRO:".$laskun_asiakkaan_tilausnumero) !== FALSE) {
 
-            $data  = sanitize_string($editilaus_laskulle_data);
+            $data = mysqli_real_escape_string($GLOBALS["link"], $editilaus_laskulle_data); // MODIFIED, fixed DEPRECATED
 
             $query = "INSERT INTO liitetiedostot SET
                       yhtio           = '$kukarow[yhtio]',
