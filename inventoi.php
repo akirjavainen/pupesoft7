@@ -1,11 +1,11 @@
 <?php
 
-if (mb_strpos($_SERVER['SCRIPT_NAME'], "inventoi.php") !== FALSE) {
+if (strpos($_SERVER['SCRIPT_NAME'], "inventoi.php") !== FALSE) {
   require "inc/parametrit.inc";
 
   if (!empty($_POST['ajax_toiminto']) and $_POST['ajax_toiminto'] == 'hae_inventointiselite') {
 
-    $_selite = sanitize_string($_POST['selite']);
+    $_selite = sanitize_string(utf8_decode($_POST['selite']));
 
     echo t_avainsana("INVEN_LAJI", '', " and avainsana.selite = '{$_selite}'", '', '', "selitetark_4");
     exit;
@@ -28,7 +28,7 @@ if (!isset($jarjestys)) {
 
 $validi_kasinsyotetty_inventointipaivamaara = 0;
 
-if (mb_stripos($toim, "oletusvarasto") !== FALSE) {
+if (stripos($toim, "oletusvarasto") !== FALSE) {
   if ($kukarow['oletus_varasto'] == 0) {
     echo "<font class='error'>", t("Oletusvarastoa ei ole asetettu käyttäjälle"), ".</font><br />";
 
@@ -44,7 +44,7 @@ else {
   $oletusvarasto_chk = 0;
 }
 
-if (mb_stripos($toim, "paivamaara") !== FALSE) {
+if (stripos($toim, "paivamaara") !== FALSE) {
   $paivamaaran_kasisyotto = "JOO";
 }
 else {
@@ -52,7 +52,7 @@ else {
 }
 
 // Kevyt tuloutusprosessi
-if (mb_substr($toim, 0, 4) == "OSTO") {
+if (substr($toim, 0, 4) == "OSTO") {
   $paivamaaran_kasisyotto = "";
   $laaja_inventointilista = FALSE;
   $lista = "";
@@ -66,7 +66,7 @@ if ($livesearch_tee == "TUOTEHAKU") {
 // Enaboidaan ajax kikkare
 enable_ajax();
 
-if (mb_strpos($_SERVER['SCRIPT_NAME'], "inventoi.php") !== FALSE) {
+if (strpos($_SERVER['SCRIPT_NAME'], "inventoi.php") !== FALSE) {
 
   $koko_url = $_SERVER['SCRIPT_NAME'].'?'.$_SERVER['QUERY_STRING'];
 
@@ -101,7 +101,7 @@ if (mb_strpos($_SERVER['SCRIPT_NAME'], "inventoi.php") !== FALSE) {
   }
 }
 
-if (mb_substr($toim, 0, 4) == "OSTO") {
+if (substr($toim, 0, 4) == "OSTO") {
   echo "<font class='head'>".t("Tavaran tuloutus")."</font><hr>";
 }
 elseif ($mobiili != "YES") {
@@ -135,8 +135,8 @@ if ($rivimaara == '') {
 if ($tee == "LUELISTA") {
   if (is_uploaded_file($_FILES['listafile']['tmp_name']) === TRUE) {
     $path_parts = pathinfo($_FILES['listafile']['name']);
-    $name  = mb_strtoupper($path_parts['filename']);
-    $ext  = mb_strtoupper($path_parts['extension']);
+    $name  = strtoupper($path_parts['filename']);
+    $ext  = strtoupper($path_parts['extension']);
 
     if ($_FILES['listafile']['size'] == 0) {
       die ("<font class='error'><br>".t("Tiedosto on tyhjä")."!</font>");
@@ -220,8 +220,8 @@ if ($tee == "FILE") {
   if (is_uploaded_file($_FILES['userfile']['tmp_name']) === TRUE) {
 
     $path_parts = pathinfo($_FILES['userfile']['name']);
-    $name  = mb_strtoupper($path_parts['filename']);
-    $ext  = mb_strtoupper($path_parts['extension']);
+    $name  = strtoupper($path_parts['filename']);
+    $ext  = strtoupper($path_parts['extension']);
 
     if ($_FILES['userfile']['size']==0) {
       die ("<font class='error'><br>".t("Tiedosto on tyhjä")."!</font>");
@@ -250,7 +250,7 @@ if ($tee == "FILE") {
       $lisaselite  = sanitize_string(trim($excelrivit[$excei][3]));
       $inven_laji = "";
 
-      if (mb_strpos($lisaselite, "/") !== FALSE) {
+      if (strpos($lisaselite, "/") !== FALSE) {
         list($inven_laji, $lisaselite) = explode("/", $lisaselite);
         $inven_laji = trim($inven_laji);
         $lisaselite = trim($lisaselite);
@@ -365,7 +365,7 @@ if ($tee == "EROLISTA" and $lista != '' and $komento["Inventointierolista"] != '
   $ots .= sprintf('%-5.5s', t("Yks."));
   $ots .= sprintf('%-10.10s', t("Poikkeama"));
   $ots .= sprintf('%-8.8s', t("Poik.EUR"));
-  $ots .= sprintf('%-5.5s', mb_str_pad("#", 5, " ", STR_PAD_LEFT));
+  $ots .= sprintf('%-5.5s', str_pad("#", 5, " ", STR_PAD_LEFT));
 
   $ots .= "\n";
   $ots .= "__________________________________________________________________________________";
@@ -415,7 +415,7 @@ if ($tee == "EROLISTA" and $lista != '' and $komento["Inventointierolista"] != '
     $prn .= sprintf('%-9.7s', $_poikkeama);
     $prn .= sprintf('%-8.6s', round($_poikkeama_eur, 1));
 
-    $prn .= sprintf('%-5.5s', mb_str_pad($row['rivinro'], 5, " ", STR_PAD_LEFT));
+    $prn .= sprintf('%-5.5s', str_pad($row['rivinro'], 5, " ", STR_PAD_LEFT));
 
     $prn .= "\n";
     $prn .= "____________________________________________________________________________";
@@ -587,7 +587,7 @@ if ($tee == 'VALMIS') {
         $lisaselite = $selis[$i];
       }
 
-      if (mb_substr($toim, 0, 4) == "OSTO") {
+      if (substr($toim, 0, 4) == "OSTO") {
 
         $kpl = (float) preg_replace("/[^0-9\.]/", "", $kpl);
         $ostohinta = str_replace(",", ".", $ostohinnat[$i]);
@@ -636,7 +636,7 @@ if ($tee == 'VALMIS') {
           }
         }
 
-        if ($tuote_row['sarjanumeroseuranta'] != '' and !is_array($sarjanumero_kaikki[$i]) and !is_array($eranumero_kaikki[$i]) and (mb_substr($kpl, 0, 1) == '+' or mb_substr($kpl, 0, 1) == '-' or (float) $kpl != 0)) {
+        if ($tuote_row['sarjanumeroseuranta'] != '' and $tuote_row['sarjanumeroseuranta'] != 'T' and !is_array($sarjanumero_kaikki[$i]) and !is_array($eranumero_kaikki[$i]) and (substr($kpl, 0, 1) == '+' or substr($kpl, 0, 1) == '-' or (float) $kpl != 0)) {
           echo "<font class='error'>".t("VIRHE: Et valinnut yhtään sarja- tai eränumeroa").": $tuoteno!</font><br>";
           $virhe = 1;
         }
@@ -721,23 +721,23 @@ if ($tee == 'VALMIS') {
         }
 
         //Sarjanumerot
-        if ($tuote_row["sarjanumeroseuranta"] == "S" and is_array($sarjanumero_kaikki[$i]) and mb_substr($kpl, 0, 1) != '+' and mb_substr($kpl, 0, 1) != '-' and (int) $kpl != count($sarjanumero_kaikki[$i]) and ($onko_uusia > 0 or $hyllyssa[$i] < $kpl)) {
+        if ($tuote_row["sarjanumeroseuranta"] == "S" and is_array($sarjanumero_kaikki[$i]) and substr($kpl, 0, 1) != '+' and substr($kpl, 0, 1) != '-' and (int) $kpl != count($sarjanumero_kaikki[$i]) and ($onko_uusia > 0 or $hyllyssa[$i] < $kpl)) {
           echo "<font class='error'>".t("VIRHE: Sarjanumeroita ei voi lisätä kuin relatiivisella määrällä")."! (+1)</font><br>";
           $virhe = 1;
         }
-        elseif ($tuote_row["sarjanumeroseuranta"] == "S" and mb_substr($kpl, 0, 1) == '+' and is_array($sarjanumero_kaikki[$i]) and count($sarjanumero_valitut[$i]) != (int) mb_substr($kpl, 1)) {
+        elseif ($tuote_row["sarjanumeroseuranta"] == "S" and substr($kpl, 0, 1) == '+' and is_array($sarjanumero_kaikki[$i]) and count($sarjanumero_valitut[$i]) != (int) substr($kpl, 1)) {
           echo "<font class='error'>".t("VIRHE: Sarjanumeroiden määrä on oltava sama kuin laskettu syötetty määrä")."! $tuoteno $kpl</font><br>";
           $virhe = 1;
         }
-        elseif (mb_substr($kpl, 0, 1) == '+' and is_array($sarjanumero_kaikki[$i]) and $onko_vanhoja > 0) {
+        elseif (substr($kpl, 0, 1) == '+' and is_array($sarjanumero_kaikki[$i]) and $onko_vanhoja > 0) {
           echo "<font class='error'>".t("VIRHE: Et voi lisätä kuin uusia sarjanumeroita relatiivisella määrällä")."! $tuoteno $kpl</font><br>";
           $virhe = 1;
         }
-        elseif (mb_substr($kpl, 0, 1) == '-' and is_array($sarjanumero_kaikki[$i]) and count($sarjanumero_valitut[$i]) != (int) mb_substr($kpl, 1)) {
+        elseif ($tuote_row['sarjanumeroseuranta'] != 'T' and substr($kpl, 0, 1) == '-' and is_array($sarjanumero_kaikki[$i]) and count($sarjanumero_valitut[$i]) != (int) substr($kpl, 1)) {
           echo "<font class='error'>".t("VIRHE: Sarjanumeroiden määrä on oltava sama kuin laskettu syötetty määrä")."! $tuoteno $kpl</font><br>";
           $virhe = 1;
         }
-        elseif (mb_substr($kpl, 0, 1) != '-' and mb_substr($kpl, 0, 1) != '+' and is_array($sarjanumero_kaikki[$i]) and count($sarjanumero_valitut[$i]) != (int) $kpl) {
+        elseif ($tuote_row['sarjanumeroseuranta'] != 'T' and substr($kpl, 0, 1) != '-' and substr($kpl, 0, 1) != '+' and is_array($sarjanumero_kaikki[$i]) and count($sarjanumero_valitut[$i]) != (int) $kpl) {
           echo "<font class='error'>".t("VIRHE: Sarjanumeroiden määrä on oltava sama kuin laskettu syötetty määrä")."! $tuoteno $kpl</font><br>";
           $virhe = 1;
         }
@@ -751,13 +751,13 @@ if ($tee == 'VALMIS') {
             foreach ($eranumero_valitut[$i] as $enro => $ekpl) {
               $ekpl = str_replace(",", ".", $ekpl);
 
-              if ($ekpl != '' and (mb_substr($ekpl, 0, 1) == '+' or mb_substr($ekpl, 0, 1) == '-' or !is_numeric($ekpl))) {
+              if ($ekpl != '' and (substr($ekpl, 0, 1) == '+' or substr($ekpl, 0, 1) == '-' or !is_numeric($ekpl))) {
                 echo "<font class='error'>".t("VIRHE: Erien määrät oltava absoluuttisia arvoja")."!</font><br>";
                 $virhe = 1;
                 break;
               }
 
-              if ((mb_substr($kpl, 0, 1) == '+' or mb_substr($kpl, 0, 1) == '-') and (float) $ekpl == 0 and $ekpl != '' and $onko_uusia == 0) {
+              if ((substr($kpl, 0, 1) == '+' or substr($kpl, 0, 1) == '-') and (float) $ekpl == 0 and $ekpl != '' and $onko_uusia == 0) {
                 echo "<font class='error'>".t("VIRHE: Et voi nollata erää, jos olet syöttänyt relatiivisen määrän")."!</font><br>";
                 $virhe = 1;
                 break;
@@ -791,19 +791,19 @@ if ($tee == 'VALMIS') {
 
             $erasyotetyt = round($erasyotetyt, 2);
 
-            if (is_array($eranumero_kaikki[$i]) and mb_substr($kpl, 0, 1) != '+' and mb_substr($kpl, 0, 1) != '-' and $onko_uusia > 0) {
+            if (is_array($eranumero_kaikki[$i]) and substr($kpl, 0, 1) != '+' and substr($kpl, 0, 1) != '-' and $onko_uusia > 0) {
               echo "<font class='error'>".t("VIRHE: Eränumeroita ei voi lisätä kuin relatiivisella määrällä")."! (+1)</font><br>";
               $virhe = 1;
             }
-            elseif (mb_substr($kpl, 0, 1) == '+' and is_array($eranumero_kaikki[$i]) and $erasyotetyt != mb_substr($kpl, 1)) {
+            elseif (substr($kpl, 0, 1) == '+' and is_array($eranumero_kaikki[$i]) and $erasyotetyt != substr($kpl, 1)) {
               echo "<font class='error'>".t("VIRHE: Eränumeroiden määrä on oltava sama kuin laskettu syötetty määrä")."! $tuoteno $kpl</font><br>";
               $virhe = 1;
             }
-            elseif (mb_substr($kpl, 0, 1) == '-' and is_array($eranumero_kaikki[$i]) and $erasyotetyt != mb_substr($kpl, 1)) {
+            elseif (substr($kpl, 0, 1) == '-' and is_array($eranumero_kaikki[$i]) and $erasyotetyt != substr($kpl, 1)) {
               echo "<font class='error'>".t("VIRHE: Eränumeroiden määrä on oltava sama kuin laskettu syötetty määrä")."! $tuoteno $kpl</font><br>";
               $virhe = 1;
             }
-            elseif (mb_substr($kpl, 0, 1) != '-' and mb_substr($kpl, 0, 1) != '+' and is_array($eranumero_kaikki[$i]) and $erasyotetyt != $kpl) {
+            elseif (substr($kpl, 0, 1) != '-' and substr($kpl, 0, 1) != '+' and is_array($eranumero_kaikki[$i]) and $erasyotetyt != $kpl) {
               echo "<font class='error'>".t("VIRHE: Eränumeroiden määrä on oltava sama kuin laskettu syötetty määrä")."! $tuoteno $kpl</font><br>";
               $virhe = 1;
             }
@@ -837,10 +837,10 @@ if ($tee == 'VALMIS') {
         if (mysqli_num_rows($result) == 0 and $virhe != 1) {
 
           if ($yhtiorow['kerayserat'] == 'K') {
-            $hyllyalue = mb_strtoupper($hyllyalue);
-            $hyllynro  = mb_strtoupper($hyllynro);
-            $hyllyvali = mb_strtoupper($hyllyvali);
-            $hyllytaso = mb_strtoupper($hyllytaso);
+            $hyllyalue = strtoupper($hyllyalue);
+            $hyllynro  = strtoupper($hyllynro);
+            $hyllyvali = strtoupper($hyllyvali);
+            $hyllytaso = strtoupper($hyllytaso);
 
             if (!tarkista_varaston_hyllypaikka($hyllyalue, $hyllynro, $hyllyvali, $hyllytaso)) {
               echo "<font class='error'>".t("VIRHE: Varastopaikkaa ei ole olemassa")."! $tuoteno $hyllyalue-$hyllynro-$hyllyvali-$hyllytaso</font><br>";
@@ -989,14 +989,14 @@ if ($tee == 'VALMIS') {
               }
             }
 
-            if (mb_substr($kpl, 0, 1) == '+') {
-              $kpl = mb_substr($kpl, 1);
+            if (substr($kpl, 0, 1) == '+') {
+              $kpl = substr($kpl, 1);
               $skp = $kpl;
               $kpl = $row['saldo'] + $kpl;
 
             }
-            elseif (mb_substr($kpl, 0, 1) == '-') {
-              $kpl = mb_substr($kpl, 1);
+            elseif (substr($kpl, 0, 1) == '-') {
+              $kpl = substr($kpl, 1);
               $skp = $kpl*-1;
               $kpl = $row['saldo'] - $kpl;
             }
@@ -1162,7 +1162,7 @@ if ($tee == 'VALMIS') {
               }
             }
 
-            $_selitelisa = (mb_stripos($lisaselite, t("Inv.lista")." {$lista}") === FALSE);
+            $_selitelisa = (stripos($lisaselite, t("Inv.lista")." {$lista}") === FALSE);
 
             if ($laaja_inventointilista and $_selitelisa) {
 
@@ -1173,7 +1173,7 @@ if ($tee == 'VALMIS') {
               $lisaselite .=  t("Inv.lista")." {$lista}";
             }
 
-            if (mb_substr($toim, 0, 4) == "OSTO") {
+            if (substr($toim, 0, 4) == "OSTO") {
 
               $query = "SELECT *, if (jarjestys = 0, 9999, jarjestys) sorttaus
                         FROM tuotteen_toimittajat
@@ -1598,7 +1598,7 @@ if ($tee == 'VALMIS') {
 
           if ($fileesta == "ON") {
 
-            if (mb_substr($toim, 0, 4) == "OSTO") {
+            if (substr($toim, 0, 4) == "OSTO") {
               $_laji = t("tuloutettu");
             }
             else {
@@ -1690,7 +1690,7 @@ if ($tee == 'VALMIS') {
       $tapresult = pupe_query($query);
       $taptrow = mysqli_fetch_assoc($tapresult);
 
-      if (!empty($taptrow['selite']) and mb_strpos($taptrow['selite'], t("täsmäsi")) === false) {
+      if (!empty($taptrow['selite']) and strpos($taptrow['selite'], t("täsmäsi")) === false) {
 
         $_loytyyko = true;
 
@@ -2043,7 +2043,7 @@ if ($tee == 'INVENTOI') {
 
   echo "<table>";
 
-  if (mb_substr($toim, 0, 4) != "OSTO") {
+  if (substr($toim, 0, 4) != "OSTO") {
     echo "<tr><td colspan='7' class='back'>".t("Syötä joko hyllyssä oleva määrä, tai lisättävä määrä + etuliitteellä, tai vähennettävä määrä - etuliitteellä")."</td></tr>";
   }
 
@@ -2055,7 +2055,7 @@ if ($tee == 'INVENTOI') {
 
   echo "<th>".t("Tuoteno")."</th><th>".t("Nimitys")."</th><th>".t("Varastopaikka")."</th><th>".t("Inventointiaika")."</th><th>".t("Varastosaldo")."</th><th>".t("Ennpois")."/".t("Kerätty")."</th><th>".t("Hyllyssä")."</th>";
 
-  if (mb_substr($toim, 0, 4) == "OSTO") {
+  if (substr($toim, 0, 4) == "OSTO") {
     echo "<th>".t("Tuloutettava määrä")."</th>";
     echo "<th>".t("Ostohinta")."</th>";
     echo "<th>".t("Toimittaja")."</th>";
@@ -2283,7 +2283,7 @@ if ($tee == 'INVENTOI') {
 
       echo "<td valign='top'><input type='text' size='7' name='maara[$tuoterow[tptunnus]]' id='maara_$tuoterow[tptunnus]' value='".$maara[$tuoterow["tptunnus"]]."'></td>";
 
-      if (mb_substr($toim, 0, 4) == "OSTO") {
+      if (substr($toim, 0, 4) == "OSTO") {
 
         $query = "SELECT tuotteen_toimittajat.*, if (tuotteen_toimittajat.jarjestys = 0, 9999, tuotteen_toimittajat.jarjestys) sorttaus, toimi.nimi toimittajannimi
                   FROM tuotteen_toimittajat
@@ -2319,7 +2319,7 @@ if ($tee == 'INVENTOI') {
       }
 
       if (in_array($tuoterow["sarjanumeroseuranta"], array("S", "T", "V"))) {
-        echo "<td valign='top' class='back'>".t("Tuote on sarjanumeroseurannassa").". ".t("Inventoidaan varastosaldoa")."!</td>";
+        echo "<td valign='top' class='back'>".t("Tuote on sarjanumeroseurannassa").". ".t("Inventoidaan varastosaldoa")."!<br><font class='error'>".t("Huom: Mikäli sarjanumeroita on olemassa ja ne halutaan säilyttää niin niiden tulee olla valittuna!")."</font></td>";
       }
       elseif (in_array($tuoterow["sarjanumeroseuranta"], array("E", "F", "G"))) {
         echo "<td valign='top' class='back'>".t("Tuote on eränumeroseurannassa").". ".t("Inventoidaan varastosaldoa")."!</td>";
@@ -2401,7 +2401,7 @@ if ($tee == 'INVENTOI') {
       echo "</td>";
 
       if (in_array($tuoterow["sarjanumeroseuranta"], array("S", "T", "V"))) {
-        echo "<td valign='top' class='back'>".t("Tuote on sarjanumeroseurannassa").". ".t("Inventoidaan varastosaldoa")."!</td>";
+        echo "<td valign='top' class='back'>".t("Tuote on sarjanumeroseurannassa").". ".t("Inventoidaan varastosaldoa")."!<br><font class='error'>".t("Huom: Mikäli sarjanumeroita on olemassa ja ne halutaan säilyttää niin niiden tulee olla valittuna!")."</font></td>";
       }
       elseif (in_array($tuoterow["sarjanumeroseuranta"], array("E", "F", "G"))) {
         echo "<td valign='top' class='back'>".t("Tuote on eränumeroseurannassa").". ".t("Inventoidaan varastosaldoa")."!</td>";
@@ -2462,7 +2462,7 @@ if ($tee == 'INVENTOI') {
     echo "</select></td></tr>";
   }
 
-  if (mb_substr($toim, 0, 4) != "OSTO") {
+  if (substr($toim, 0, 4) != "OSTO") {
     echo "<tr><th>".t("Syötä inventointiselite:")."</th>";
     echo "<td><input type='text' size='50' id='lisaselite' name='lisaselite' value='$lisaselite'></td></tr>";
   }
@@ -2488,7 +2488,7 @@ if ($tee == 'INVENTOI') {
     if ($lista != "" and mysqli_num_rows($saldoresult) == $rivimaara) {
       echo "<input type='submit' name='next' value='".t("Inventoi/Seuraava sivu")."'>";
     }
-    elseif (mb_substr($toim, 0, 4) == "OSTO") {
+    elseif (substr($toim, 0, 4) == "OSTO") {
       echo "<input type='submit' name='valmis' value='".t("Tulouta")."'>";
     }
     else {
@@ -2617,7 +2617,7 @@ if ($tee == '') {
 
   echo "<tr><th>".t("EAN-koodi:")."</th><td><input type='text' size='15' id='ean_koodi' name='ean_koodi'></td></tr>";
 
-  if (mb_substr($toim, 0, 4) != "OSTO") {
+  if (substr($toim, 0, 4) != "OSTO") {
     echo "<tr><th>".t("Inventointilistan numero:")."</th><td><input type='text' size='6' name='lista'></td>";
     echo "<td class='back'><input type='submit' value='".t("Inventoi")."'></td>";
   }
@@ -2630,7 +2630,7 @@ if ($tee == '') {
   echo "</form>";
   echo "<br><br>";
 
-  if (mb_substr($toim, 0, 4) == "OSTO") {
+  if (substr($toim, 0, 4) == "OSTO") {
     echo "<br><br><font class='head'>".t("Tulouta tiedostosta")."</font><hr>";
   }
   else {
