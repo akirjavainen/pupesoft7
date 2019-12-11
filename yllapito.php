@@ -200,19 +200,19 @@ $al_lisa_defaultit .= $tunnus == '' ? " and (nakyvyys != '' or selitetark_4 != '
 // pikkuhäkki, ettei rikota css kenttää
 if (isset($_POST["toim"]) and $_POST["toim"] == "yhtion_parametrit") {
   if (isset($apucss)) {
-    $t[$cssi] = sanitize_string($apucss);
+    $t[$cssi] = mysqli_real_escape_string($GLOBALS["link"], $apucss);
   }
   if (isset($apucssclassic)) {
-    $t[$css_classici] = sanitize_string($apucssclassic);
+    $t[$css_classici] = mysqli_real_escape_string($GLOBALS["link"], $apucssclassic);
   }
   if (isset($apucssextranet)) {
-    $t[$css_extraneti] = sanitize_string($apucssextranet);
+    $t[$css_extraneti] = mysqli_real_escape_string($GLOBALS["link"], $apucssextranet);
   }
   if (isset($apucssverkkokauppa)) {
-    $t[$css_verkkokauppai] = sanitize_string($apucssverkkokauppa);
+    $t[$css_verkkokauppai] = mysqli_real_escape_string($GLOBALS["link"], $apucssverkkokauppa);
   }
   if (isset($apuwebseuranta)) {
-    $t[$web_seurantai] = sanitize_string($apuwebseuranta);
+    $t[$web_seurantai] = mysqli_real_escape_string($GLOBALS["link"], $apuwebseuranta);
   }
 }
 
@@ -1093,7 +1093,7 @@ if ($upd == 1) {
 }
 
 if ($errori != '' and $_POST["toim"] == "yhtion_parametrit") {
-  // jos tuli virhe, niin laitetaan takaisin css:t ilman sanitize_stringiä
+  // jos tuli virhe, niin laitetaan takaisin css:t ilman mysqli_real_escape_stringiä
   if (isset($apucss)) {
     $t[$cssi] = $apucss;
   }
