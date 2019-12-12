@@ -218,9 +218,9 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
     $result = pupe_query($query);
 
     if (mysqli_num_rows($result) > 0) {
-      $tuotenumerot = mysqli_result($result, 0);
+      $tuotenumerot = mysqli_fetch_array($result, 0);
       if (trim($tuotenumerot) != '') {
-        $tuotenumerot = mysqli_result($result, 0);
+        $tuotenumerot = mysqli_fetch_array($result, 0);
         $lisa_haku_toimi = " and tuote.tuoteno in ($tuotenumerot) ";
         $lisa .= " and tuote.tuoteno in ($tuotenumerot) ";
       }

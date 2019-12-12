@@ -1311,7 +1311,7 @@ function hae_asiakastunnus($tunnukset) {
   $result = pupe_query($query);
 
   if (mysqli_num_rows($result) > 0) {
-    $tunnus = mysqli_result($result, 0);
+    $tunnus = mysqli_fetch_array($result, 0);
     if ($tunnus != '') return $tunnus;
   }
   return false;

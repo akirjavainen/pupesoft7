@@ -134,14 +134,14 @@ else {
                   WHERE yhtio = '{$kukarow['yhtio']}'
                   AND laji    = 'hinnastoryhmittely'";
     $tarkistu1 = pupe_query($tarkistu1);
-    $tarkistu1 = mysqli_result($tarkistu1, 0);
+    $tarkistu1 = mysqli_fetch_array($tarkistu1, 0);
 
     $tarkistu2 = "SELECT count(tunnus)
                   FROM avainsana
                   WHERE yhtio = '{$kukarow['yhtio']}'
                   AND laji    = 'THR'";
     $tarkistu2 = pupe_query($tarkistu2);
-    $tarkistu2 = mysqli_result($tarkistu2, 0);
+    $tarkistu2 = mysqli_fetch_array($tarkistu2, 0);
 
     if ($tarkistu1 > 0 and $tarkistu2 > 0) {
       echo "<tr><th>".t("Esitystapa").":</th><td><select name='ryhmittely'>";

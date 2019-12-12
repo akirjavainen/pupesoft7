@@ -71,12 +71,12 @@ if (!function_exists("asiakastarkista")) {
 
         if (mysqli_num_rows($res) > 0) {
           if ($alias_set != "PROSPEKTI") {
-            $t['luottoraja'] = mysqli_result($res, 0);
+            $t['luottoraja'] = mysqli_fetch_array($res, 0);
           }
           elseif ($asiak_laji == "" and $alias_set == "PROSPEKTI") {
             // Päivitetään prospektien luottoraja,
             // mutta vasta kun tehdään prospektista normiasiakas
-            $_luottoraja = mysqli_result($res, 0);
+            $_luottoraja = mysqli_fetch_array($res, 0);
             $qry = "UPDATE asiakas
                     SET luottoraja = '{$_luottoraja}'
                     WHERE yhtio = '{$kukarow['yhtio']}'
