@@ -426,7 +426,7 @@ if (!function_exists('alku_kerayslista')) {
 			}
 
 			if (trim($laskurow['viesti']) != '') {
-				$komm .= "\n".t("Tilausviite", $kieli).":###".$laskurow['viesti'];
+				$komm .= "\n".t("Tilausviite", $kieli).":     ###".$laskurow['viesti'];
 			}
 
 			if (trim($laskurow['comments']) != '') {

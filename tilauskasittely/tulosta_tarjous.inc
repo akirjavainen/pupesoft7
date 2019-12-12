@@ -397,12 +397,12 @@ if (!function_exists('alku_tarjous')) {
       }
 
       if (trim($laskurow['tilausyhteyshenkilo']) != '') {
-        $komm .= "\n".t("Tilausyhteyshenkilö", $kieli).":###".$laskurow['tilausyhteyshenkilo'];
+        $komm .= "\n".t("Tilausyhteyshenkilö", $kieli).":         ###".$laskurow['tilausyhteyshenkilo'];
       }
     }
     else {
       if (trim($laskurow['tilausyhteyshenkilo']) != '') {
-        $komm .= "\n".t("Tarjousyhteyshenkilö", $kieli).":###".$laskurow['tilausyhteyshenkilo'];
+        $komm .= "\n".t("Tarjousyhteyshenkilö", $kieli).":         ###".$laskurow['tilausyhteyshenkilo'];
       }
 
       if (trim($laskurow['asiakkaan_tilausnumero']) != '') {
