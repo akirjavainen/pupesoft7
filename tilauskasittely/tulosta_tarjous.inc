@@ -376,8 +376,8 @@ if (!function_exists('alku_tarjous')) {
 
       $pdf_tarjous->draw_text(310, 687, t("Maksuehto", $kieli),  $page_tarjous[$sivu], $pieni);
       $pdf_tarjous->draw_text(310, 677, $laskurow["maksuehto"],  $page_tarjous[$sivu], $norm);
-      $pdf_tarjous->draw_text(310, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
-      $pdf_tarjous->draw_text(310, 610, t("Kätisyys ikkunoissa sisältäpäin ja ovissa ulkoapäin katsottuna", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
+      $pdf_tarjous->draw_text(295, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
+      $pdf_tarjous->draw_text(295, 610, t("Kätisyys ikkunoissa sisältäpäin ja ovissa ulkoapäin", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
 
     }
 
@@ -1482,18 +1482,18 @@ if (!function_exists('loppu_tarjous')) {
       $pdf_tarjous->draw_text(30, 25, $y_maa,      $page_tarjous[$sivu], $pieni);
 
       $pdf_tarjous->draw_text(217, 55, t("Puhelin", $kieli).":",      $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(257, 55, $y_puhelin,            $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(217, 45, t("Fax", $kieli).":",      $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(257, 45, $y_fax,              $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(217, 35, t("Sähköposti", $kieli).":",    $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(257, 35, $y_email,              $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(217, 25, t("Web", $kieli).":",        $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(257, 25, $y_www,              $page_tarjous[$sivu], $pieni);
+      $pdf_tarjous->draw_text(270, 55, $y_puhelin,            $page_tarjous[$sivu], $pieni);
+      //$pdf_tarjous->draw_text(217, 45, t("Fax", $kieli).":",      $page_tarjous[$sivu], $pieni); // MODIFIED, commented out
+      //$pdf_tarjous->draw_text(270, 45, $y_fax,              $page_tarjous[$sivu], $pieni); // MODIFIED, commented out
+      $pdf_tarjous->draw_text(217, 45, t("Sähköposti", $kieli).":",    $page_tarjous[$sivu], $pieni);
+      $pdf_tarjous->draw_text(270, 45, $y_email,              $page_tarjous[$sivu], $pieni);
+      $pdf_tarjous->draw_text(217, 35, t("Web", $kieli).":",        $page_tarjous[$sivu], $pieni);
+      $pdf_tarjous->draw_text(270, 35, $y_www,              $page_tarjous[$sivu], $pieni);
 
       $pdf_tarjous->draw_text(404, 55, t("Y-tunnus", $kieli).":",      $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(444, 55, tulosta_ytunnus($y_vatnumero, $y_maa, $laskurow["vienti"]), $page_tarjous[$sivu], $pieni);
+      $pdf_tarjous->draw_text(457, 55, tulosta_ytunnus($y_vatnumero, $y_maa, $laskurow["vienti"]), $page_tarjous[$sivu], $pieni);
       $pdf_tarjous->draw_text(404, 45, t("Kotipaikka", $kieli).":",    $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(444, 45, $y_kotipaikka,            $page_tarjous[$sivu], $pieni);
+      $pdf_tarjous->draw_text(457, 45, $y_kotipaikka,            $page_tarjous[$sivu], $pieni);
       $pdf_tarjous->draw_text(404, 35, t("Alv.rek", $kieli),        $page_tarjous[$sivu], $pieni);
       $pdf_tarjous->draw_text(404, 25, $y_iban." / ".$y_swift,      $page_tarjous[$sivu], $pieni);
     }
@@ -1833,7 +1833,7 @@ if (!function_exists('loppu_tarjous')) {
         $pdf_tarjous->draw_text(30, $kuha, $myyrow["nimi"], $page_tarjous[$sivu], $boldi);
         $pdf_tarjous->draw_text(217, $kuha, t("Puh", $kieli) . ": " . $myyrow['puhno'],
           $page_tarjous[$sivu], $boldi);
-        $pdf_tarjous->draw_text(404, $kuha, "Email: $myyrow[eposti]", $page_tarjous[$sivu],
+        $pdf_tarjous->draw_text(404, $kuha, "E-mail: $myyrow[eposti]", $page_tarjous[$sivu],
           $boldi);
       }
       else {
@@ -1859,7 +1859,7 @@ if (!function_exists('loppu_tarjous')) {
           $pdf_tarjous->draw_text(30,  $kuha,  t("Tarjoamme teille ylläolevan tarjouksen kohteet hintaan:", $kieli),   $page_tarjous[$sivu], $boldi);
 
           $oikpos = $pdf_tarjous->mb_strlen(sprintf("%.2f", $total_tarjous)." ".$laskurow["valkoodi"], $boldi);
-          $pdf_tarjous->draw_text(575-$oikpos, $kuha, sprintf("%.2f", $total_tarjous)." ".$laskurow["valkoodi"], $page_tarjous[$sivu], $boldi);
+          $pdf_tarjous->draw_text(560-$oikpos, $kuha, sprintf("%.2f", $total_tarjous)." ".$laskurow["valkoodi"], $page_tarjous[$sivu], $boldi);
         }
 
         if ($kuha-165 <= 80) {
@@ -1914,7 +1914,7 @@ if (!function_exists('loppu_tarjous')) {
 
           if ($yhtiorow["tarjoustyyppi"] != 3) {
             $pdf_tarjous->draw_text(30, $kuha - 36,
-              t("Tavarat ovat %s:n omaisuutta kunnes ne ovat " .
+              t("Tavarat ovat %s:n omaisuutta kunnes ne on " .
                 "kokonaisuudessaan maksettu.", $kieli, $yhtiorow["nimi"]),
               $page_tarjous[$sivu], $norm);
 
@@ -2002,15 +2002,15 @@ if (!function_exists('loppu_tarjous')) {
           $pdf_tarjous->draw_text(30, $kuha - 80, $myyrow["nimi"], $page_tarjous[$sivu], $boldi);
           $pdf_tarjous->draw_text(30, $kuha - 93, t("Puh", $kieli) . ": " . $myyrow['puhno'],
             $page_tarjous[$sivu], $boldi);
-          $pdf_tarjous->draw_text(30, $kuha - 106, "Email: $myyrow[eposti]", $page_tarjous[$sivu],
+          $pdf_tarjous->draw_text(30, $kuha - 106, "E-mail: $myyrow[eposti]", $page_tarjous[$sivu],
             $boldi);
         }
         else {
           $pdf_tarjous->draw_text(30, $kuha - 93, $myyrow["nimi"], $page_tarjous[$sivu], $boldi);
-          $pdf_tarjous->draw_text(217, $kuha - 93, t("Puh", $kieli) . ": " . $myyrow['puhno'],
+          $pdf_tarjous->draw_text(185, $kuha - 93, t("Puh", $kieli) . ": " . $myyrow['puhno'],
             $page_tarjous[$sivu], $boldi);
-          $pdf_tarjous->draw_text(404, $kuha - 93, "Email: $myyrow[eposti]", $page_tarjous[$sivu],
-            $boldi);
+          $pdf_tarjous->draw_text(350, $kuha - 93, "E-mail: $myyrow[eposti]", $page_tarjous[$sivu],
+            $boldi); // MODIFIED, moved texts left
         }
 
         if ($yhtiorow['lomakkeiden_allekirjoitus'] == 'X') {

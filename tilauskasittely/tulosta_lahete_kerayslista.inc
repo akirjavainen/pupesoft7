@@ -727,7 +727,7 @@ if (!function_exists('rivi_otsikot_kerayslista')) {
 			$pdf->draw_text(25,  $kala+15, "#",									$thispage, $norm);
 			$pdf->draw_text(45,  $kala+15, t("Paikka", $kieli),					$thispage, $norm);
 			$pdf->draw_text(125, $kala+15, t("Tuotenumero/Tuotenimi", $kieli),	$thispage, $norm);
-			$pdf->draw_text(330, $kala+15, t("Toimittajan tuoteno", $kieli),	$thispage, $norm);
+			$pdf->draw_text(330, $kala+15, t("Toim. tuoteno", $kieli),	$thispage, $norm);
 			$pdf->draw_text(425, $kala+15, t("Hyllyssä", $kieli),				$thispage, $norm);
 			$pdf->draw_text(473, $kala+15, t("Tilattu", $kieli),				$thispage, $norm);
 			$pdf->draw_text(530, $kala+15, t("Toimitus", $kieli),				$thispage, $norm);
@@ -1246,18 +1246,18 @@ if (!function_exists('loppu_kerayslista')) {
 			$pdf->draw_text(30, 25, $y_maa,			$thispage, $pieni);
 
 			$pdf->draw_text(217, 55, t("Puhelin", $kieli).":",			$thispage, $pieni);
-			$pdf->draw_text(257, 55, $y_puhelin,						$thispage, $pieni);
-			$pdf->draw_text(217, 45, t("Telefax", $kieli).":",			$thispage, $pieni);
-			$pdf->draw_text(257, 45, $y_fax,							$thispage, $pieni);
-			$pdf->draw_text(217, 35, t("Sähköposti", $kieli).":",		$thispage, $pieni);
-			$pdf->draw_text(257, 35, $y_email,							$thispage, $pieni);
-			$pdf->draw_text(217, 25, t("Web", $kieli).":",				$thispage, $pieni);
-			$pdf->draw_text(257, 25, $y_www,							$thispage, $pieni);
+			$pdf->draw_text(270, 55, $y_puhelin,						$thispage, $pieni);
+			//$pdf->draw_text(217, 45, t("Telefax", $kieli).":",			$thispage, $pieni); // MODIFIED, commented out
+			//$pdf->draw_text(270, 45, $y_fax,							$thispage, $pieni); // MODIFIED, commented out
+			$pdf->draw_text(217, 45, t("Sähköposti", $kieli).":",		$thispage, $pieni);
+			$pdf->draw_text(270, 45, $y_email,							$thispage, $pieni);
+			$pdf->draw_text(217, 35, t("Web", $kieli).":",				$thispage, $pieni);
+			$pdf->draw_text(270, 35, $y_www,							$thispage, $pieni);
 
 			$pdf->draw_text(404, 55, t("Y-tunnus", $kieli).":",			$thispage, $pieni);
-			$pdf->draw_text(444, 55, tulosta_ytunnus($y_vatnumero, $y_maa, $laskurow["vienti"]), $thispage, $pieni);
+			$pdf->draw_text(457, 55, tulosta_ytunnus($y_vatnumero, $y_maa, $laskurow["vienti"]), $thispage, $pieni);
 			$pdf->draw_text(404, 45, t("Kotipaikka", $kieli).":",		$thispage, $pieni);
-			$pdf->draw_text(444, 45, $y_kotipaikka,		$thispage, $pieni);
+			$pdf->draw_text(457, 45, $y_kotipaikka,		$thispage, $pieni);
 
 			if ($tots != 1) {
 				$pdf->draw_text(530, 72, t("Jatkuu", $kieli)."...", 	$thispage, $norm);

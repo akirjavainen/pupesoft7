@@ -14,7 +14,7 @@ if ($kieli == '') {
   $kieli = mb_strtolower($kielrow['kieli']);
 }
 
-$norm["height"] = 10;
+$norm["height"] = 9;
 $norm["font"] = "Times-Roman";
 
 $pieni["height"] = 8;
@@ -529,15 +529,15 @@ if (!function_exists('alku_lahete')) {
           and $base_lahetetyyppi == "tulosta_lahete_hae_hinnat.inc")) {
 
         if (($laskurow['alv'] > 0 and $yhtiorow['alv_kasittely'] == '') or mb_strpos($lahetetyyppi, "_verollinen") !== FALSE) {
-          $pdf->draw_text(310, 640, t("Hinnat sisältävät arvonlisäveron", $kieli).".", $thispage, $boldi);
+          $pdf->draw_text(290, 640, t("Hinnat sisältävät arvonlisäveron", $kieli).".", $thispage, $boldi);
         }
         else {
-          $pdf->draw_text(310, 640, t("Hinnat eivät sisällä arvonlisäveroa", $kieli).".",  $thispage, $boldi);
+          $pdf->draw_text(290, 640, t("Hinnat eivät sisällä arvonlisäveroa", $kieli).".",  $thispage, $boldi); // MODIFIED, moved text left
         }
       }
     }
-        $pdf->draw_text(310, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli).".", $thispage, $boldi); // MODIFIED, added
-        $pdf->draw_text(310, 606, t("Kätisyys ikkunoissa sisältäpäin ja ovissa ulkoapäin katsottuna", $kieli).".", $thispage, $boldi); // MODIFIED,
+        $pdf->draw_text(290, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli).".", $thispage, $boldi); // MODIFIED, added
+        $pdf->draw_text(290, 606, t("Kätisyys ikkunoissa sisältäpäin ja ovissa ulkoapäin", $kieli).".", $thispage, $boldi); // MODIFIED,
 
     $komm = "";
 
@@ -3684,11 +3684,11 @@ if (!function_exists('loppu_lahete')) {
       $pdf->draw_text($x, 25, $maan_tiedot['nimi'], $thispage, $pieni);
 
       $pdf->draw_text(217, 55, t("Puhelin", $kieli).":", $thispage, $pieni);
-      $pdf->draw_text(257, 55, $y_puhelin, $thispage, $pieni);
+      $pdf->draw_text(270, 55, $y_puhelin, $thispage, $pieni);
       $pdf->draw_text(217, 45, t("Sähköposti", $kieli).":", $thispage, $pieni);
-      $pdf->draw_text(257, 45, $y_email, $thispage, $pieni);
+      $pdf->draw_text(270, 45, $y_email, $thispage, $pieni);
       $pdf->draw_text(217, 35, t("Web", $kieli).":", $thispage, $pieni);
-      $pdf->draw_text(257, 35, $y_www, $thispage, $pieni);
+      $pdf->draw_text(270, 35, $y_www, $thispage, $pieni);
 
       $piilota_tiedot = (isset($lahete_piilota_ytunnus_toimipaikka));
       $piilota_tiedot = ($piilota_tiedot and in_array($laskurow["yhtio_toimipaikka"], $lahete_piilota_ytunnus_toimipaikka));
@@ -3698,14 +3698,14 @@ if (!function_exists('loppu_lahete')) {
         $pdf->draw_text(404, 55, t("Y-tunnus", $kieli).":", $thispage, $pieni);
 
         if ($yhtiorow["maa"] == 'EE') {
-          $pdf->draw_text(444, 55, tulosta_ytunnus($yhtiorow["ytunnus"], $yhtiorow["maa"], $laskurow["vienti"]), $thispage, $pieni);
+          $pdf->draw_text(457, 55, tulosta_ytunnus($yhtiorow["ytunnus"], $yhtiorow["maa"], $laskurow["vienti"]), $thispage, $pieni);
         }
         else {
-          $pdf->draw_text(444, 55, tulosta_ytunnus($y_vatnumero, $y_maa, $laskurow["vienti"]), $thispage, $pieni);
+          $pdf->draw_text(457, 55, tulosta_ytunnus($y_vatnumero, $y_maa, $laskurow["vienti"]), $thispage, $pieni);
         }
 
         $pdf->draw_text(404, 45, t("Kotipaikka", $kieli).":", $thispage, $pieni);
-        $pdf->draw_text(444, 45, $y_kotipaikka, $thispage, $pieni);
+        $pdf->draw_text(457, 45, $y_kotipaikka, $thispage, $pieni);
         $pdf->draw_text(404, 35, t("Alv.rek", $kieli), $thispage, $pieni);
       }
     }
@@ -3868,13 +3868,13 @@ if (!function_exists('loppu_lahete')) {
         //if (($laskurow['alv'] > 0 and $yhtiorow["alv_kasittely"] == '') or mb_strpos($lahetetyyppi, "_verollinen")) { // MODIFIED, commented out
           $pdf->draw_text(410, 72, t("Yhteensä verollinen", $kieli).":", $thispage, $norm);
           $oikpos = $pdf->mb_strlen(sprintf("%.2f", $summa)." ".$laskurow["valkoodi"], $norm);
-          $pdf->draw_text(575-$oikpos, 72, sprintf("%.2f", $summa)." ".$laskurow["valkoodi"], $thispage, $norm);
+          $pdf->draw_text(565-$oikpos, 72, sprintf("%.2f", $summa)." ".$laskurow["valkoodi"], $thispage, $norm);
         //} // MODIFIED, commented out
         // Verottomat hinnat
         //else { // MODIFIED, commented out
           $pdf->draw_text(410, 82, t("Yhteensä veroton", $kieli).":", $thispage, $norm); // MODIFIED, changed line number
           $oikpos = $pdf->mb_strlen(sprintf("%.2f", $arvo)." ".$laskurow["valkoodi"], $norm);
-          $pdf->draw_text(575-$oikpos, 82, sprintf("%.2f", $arvo)." ".$laskurow["valkoodi"], $thispage, $norm); // MODIFIED, changed line number
+          $pdf->draw_text(565-$oikpos, 82, sprintf("%.2f", $arvo)." ".$laskurow["valkoodi"], $thispage, $norm); // MODIFIED, changed line number
         //} // MODIFIED, commented out
       }
     }
