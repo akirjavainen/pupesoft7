@@ -1243,7 +1243,7 @@ if (!function_exists('loppu_kerayslista')) {
 			$pdf->draw_text(30, 55, $y_nimi,		$thispage, $pieni);
 			$pdf->draw_text(30, 45, $y_osoite,		$thispage, $pieni);
 			$pdf->draw_text(30, 35, $y_postino."  ".$y_postitp,	$thispage, $pieni);
-			$pdf->draw_text(30, 25, $y_maa,			$thispage, $pieni);
+			$pdf->draw_text(30, 25, $yhtiorow['maa'],			$thispage, $pieni);
 
 			$pdf->draw_text(217, 55, t("Puhelin", $kieli).":",			$thispage, $pieni);
 			$pdf->draw_text(270, 55, $y_puhelin,						$thispage, $pieni);

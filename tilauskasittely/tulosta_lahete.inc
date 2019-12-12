@@ -3681,7 +3681,7 @@ if (!function_exists('loppu_lahete')) {
       $pdf->draw_text($x, 55, $y_nimi, $thispage, $pieni);
       $pdf->draw_text($x, 45, $y_osoite, $thispage, $pieni);
       $pdf->draw_text($x, 35, "{$y_postino}  {$y_postitp}", $thispage, $pieni);
-      $pdf->draw_text($x, 25, $maan_tiedot['nimi'], $thispage, $pieni);
+      $pdf->draw_text($x, 25, $yhtiorow['maa'], $thispage, $pieni);
 
       $pdf->draw_text(217, 55, t("Puhelin", $kieli).":", $thispage, $pieni);
       $pdf->draw_text(270, 55, $y_puhelin, $thispage, $pieni);
