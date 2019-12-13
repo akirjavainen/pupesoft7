@@ -1311,12 +1311,9 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
 	  <td valign='top'><a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tilrow[tunnukset]&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tilrow[tunnukset_ruudulle]</a></td>
           <td valign='top'>$tilrow[ytunnus]<br><a href='/raportit/nimihaku.php?search=$tilrow[nimi]'>$tilrow[nimi]</a> $tilrow[nimitark]</td>
           <td valign='top'>$tilrow[tilauksia]<br>$tilrow[riveja]
-          <a href='/raportit/ehtokorjaus.php?order=$tilrow[tunnukset_ruudulle]'> (E)</a>
-          <a href='/pupesoft/tilauskasittely/tilaus_myynti.php?tilausnumero=$tilrow[tunnukset_ruudulle]&mista=muokkaatilaus&toim=RIVISYOTTO'> (M)</a>
-          <a href='/toimitusvahvistus/index.php?nonavi=1&default_order=$tilrow[tunnukset_ruudulle]'> (R)</a></td>
           <td valign='top' align='right' nowrap>$tilrow[arvo]</td>
 <td valign='top'>$tilrow[meh]<br>$tilrow[toimitustapa]</td>
-          <td valign='top'>$teksti<br>$toimitusselite</td>
+          <td valign='top'>$teksti<br>$toimitusselite<br><font color='red'>$tilrow[sisviesti2]</font></td>
           <td valign='top'>".t($alatila)."</td>";
 
       echo "  <td class='back' valign='top'>
@@ -1326,7 +1323,11 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
           <input type='hidden' name='tunnukset' value='$tilrow[tunnukset]'>
           <input type='submit' name='tila' value='".t("Valitse")."'>
           </form>
- <td class='' style='background-color: #E2E2E2;'><a href='/raportit/sopimusalennus.php?order=$tilrow[tunnukset]'><input type='submit' name='sopimusalennus' value='Ale-%'></a> <b>$tilrow[sisviesti2]</b>
+ <td class='' style='background-color: #E2E2E2;'>
+ <a href='/raportit/sopimusalennus.php?order=$tilrow[tunnukset]'><input type='submit' name='sopimusalennus' value='Ale-%'></a>
+ <a href='/pupesoft/tilauskasittely/tilaus_myynti.php?tilausnumero=$tilrow[tunnukset_ruudulle]&mista=muokkaatilaus&toim=RIVISYOTTO'><input type='submit' name='muokkaa' value='Muokkaa'></a>
+ <a href='/raportit/ehtokorjaus.php?order=$tilrow[tunnukset_ruudulle]'><input type='submit' name='ehtokorjaus' value='Ehtokorjaus'></a>
+ <a href='/toimitusvahvistus/index.php?nonavi=1&default_order=$tilrow[tunnukset_ruudulle]'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a></td>
           </td>
           </tr>";
 
