@@ -1321,7 +1321,7 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
           <input type='hidden' name='tee' value='VALITSE'>
           <input type='hidden' name='toim' value='$toim'>
           <input type='hidden' name='tunnukset' value='$tilrow[tunnukset]'>
-          <input type='submit' name='tila' value='".t("Valitse")."'>
+          <input type='submit' name='tila' value='".t("Laskuta")."'>
           </form>
  <td class='' style='background-color: #E2E2E2;'>
  <a href='/raportit/sopimusalennus.php?order=$tilrow[tunnukset]'><input type='submit' name='sopimusalennus' value='Ale-%'></a>

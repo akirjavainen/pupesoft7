@@ -3296,8 +3296,8 @@ if (mysqli_num_rows($result) != 0) {
       echo "<input type='submit' class='{$_class}' name='$aputoim1' value='$lisa1' $button_disabled>";
       echo "</form>";
       if ($toim != "TARJOUS") { // MODIFIED, added
-        echo "<a href='/pupesoft/tilauskasittely/keraa.php?id=" . $row['tunnus'] . "'> (K)</a>"; // MODIFIED, added
-        echo "<a href='/toimitusvahvistus/index.php?nonavi=1&default_order=" . $row['tunnus'] . "'> (R)</a>"; // MODIFIED, added
+        echo " <a href='/pupesoft/tilauskasittely/keraa.php?id=" . $row['tunnus'] . "'><input type='submit' name='keraa' value='Kerää'></a>"; // MODIFIED, added
+        if (file_exists("../toimitusvahvistus")) echo " <a href='/toimitusvahvistus/index.php?nonavi=1&default_order=" . $row['tunnus'] . "'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a>"; // MODIFIED, added
       }
       echo "</td>";
 
