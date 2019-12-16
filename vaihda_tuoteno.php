@@ -331,6 +331,7 @@ if ($error == 0 and $tee == "file") {
   while ($rivi = fgets($file)) {
     // luetaan rivi tiedostosta..
     $rivi = explode("\t", pupesoft_cleanstring($rivi));
+    if (!isset($rivi[1])) $rivi[1] = ''; // MODIFIED, added BUGFIX
 
     if (trim($rivi[0]) != '' and trim($rivi[1]) != '') {
 
