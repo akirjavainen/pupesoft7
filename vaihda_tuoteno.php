@@ -781,7 +781,7 @@ if ($tee == "" and $php_cli === false) {
       <tr>
         <th>".t("Valitse vanhan tuotteen status")."</th>
         <td><select name='status'>";
-  echo product_status_options($vrow["selite"]);
+  if (isset($vrow)) echo product_status_options($vrow["selite"]); // MODIFIED, added BUGFIX
   echo "</select></td>";
   echo "</tr>";
 
