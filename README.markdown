@@ -51,5 +51,5 @@ Konversion jälkeen Pupesoftissa kannattaa käydä mahdollisimman monen modulin 
 "SELECT default_character_set_name FROM information_schema.SCHEMATA WHERE schema_name = 'pupesoft';"
 
 
-2019/11/28
+2019/12/18
 
