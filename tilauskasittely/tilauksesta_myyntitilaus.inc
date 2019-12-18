@@ -260,9 +260,12 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
 
       for ($i=1; $i < mysqli_num_fields($monistares2)-1; $i++) { // Ei monisteta tunnusta
 
-        $fields .= ", ".mysqli_field_name($monistares2, $i);
+	$field = mysqli_field_name($monistares2, $i); // MODIFIED, added BUGFIX
+        if ($field != 'tunnus') $fields .= ", " . $field; // MODIFIED, added BUGFIX
 
         switch (mysqli_field_name($monistares2, $i)) {
+	case 'tunnus': // MODIFIED, added BUGFIX
+	  break; // MODIFIED, added BUGFIX
         case 'otunnus':
           $values .= ", '$utunnus'";
           $pvalues .= ", '$ptunnus'";
