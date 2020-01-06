@@ -20,7 +20,7 @@
  */
 
 function draw_center_aligned($pdf, $firstpage, $text, $font, $y) {
-  $lpos = (204-$pdf->mb_strlen($text, $font)) / 2;
+  $lpos = (204-$pdf->strlen($text, $font)) / 2;
   $pdf->draw_text($lpos, $y, $text, $firstpage, $font);
 }
 
@@ -71,7 +71,7 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
   $asiakkaan_kieli      = $lasku["asiakkaan_kieli"];
 
   // Arvojen asettelu spritfillä ja muu asettelu
-  $yhteensa_left = 32 - mb_strlen($lasku["valkoodi"]);
+  $yhteensa_left = 32 - strlen($lasku["valkoodi"]);
   $yhteensa      = sprintf("%{$yhteensa_left}.{$yhteensa_left}s", $yhteensa);
 
   if ($pyoristys) {
@@ -152,8 +152,26 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
     draw_center_aligned($pdf, $firstpage, "Y-tunnus: {$yhtion_ytunnus}", $norm, $kala);
     $kala-=10;
 
-    draw_center_aligned($pdf, $firstpage, "Puh. {$yhtion_puhelinnumero}", $norm, $kala);
-    $kala-=10;
+    $yht_tieto = "";
+    $yht_tieto_parametri = t_avainsana("KUITTI_YHTTIETO", '', '', '', '', "selite");
+    if ($yht_tieto_parametri == "kuka_email_puh") {
+      if (!empty($kukarow['eposti'])) {
+        $yht_tieto = t("E-mail") . ": " . $kukarow['eposti'];
+      }
+
+      if (!empty($kukarow['puhno'])) {
+        draw_center_aligned($pdf, $firstpage, "Puh. " . $kukarow['puhno'], $norm, $kala);
+        $kala-=10;
+      }
+    }
+    else {
+      $yht_tieto = "Puh. {$yhtion_puhelinnumero}";
+    }
+
+    if (!empty($yht_tieto)) {
+      draw_center_aligned($pdf, $firstpage, $yht_tieto, $norm, $kala);
+      $kala-=10;
+    }
 
     if ($header_teksti) {
       draw_center_aligned($pdf, $firstpage, "{$header_teksti}", $norm, $kala);
@@ -177,7 +195,7 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
         $pdf->draw_text(110, $kala, "-".(float) $tilausrivi['aleyhteensa']."%", $firstpage, $norm);
       }
 
-      $oikpos = $pdf->mb_strlen($tilausrivi['rivihinta_verollinen'], $norm);
+      $oikpos = $pdf->strlen($tilausrivi['rivihinta_verollinen'], $norm);
       $pdf->draw_text(200-$oikpos, $kala, $tilausrivi['rivihinta_verollinen'], $firstpage, $norm);
       $kala-=15;
     }
@@ -188,18 +206,18 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
 
     $pdf->draw_text(0, $kala, "YHTEENSÄ, {$lasku["valkoodi"]}", $firstpage, $norm);
 
-    $oikpos = $pdf->mb_strlen(trim($yhteensa), $norm);
+    $oikpos = $pdf->strlen(trim($yhteensa), $norm);
     $pdf->draw_text(200-$oikpos, $kala, trim($yhteensa), $firstpage, $norm);
     $kala-=10;
 
     if ($pyoristys) {
       $pdf->draw_text(0, $kala, "PYÖRISTYS", $firstpage, $norm);
-      $oikpos = $pdf->mb_strlen(trim($pyoristys), $norm);
+      $oikpos = $pdf->strlen(trim($pyoristys), $norm);
       $pdf->draw_text(200-$oikpos, $kala, trim($pyoristys), $firstpage, $norm);
       $kala-=10;
 
       $pdf->draw_text(0, $kala, "LOPPUSUMMA", $firstpage, $norm);
-      $oikpos = $pdf->mb_strlen(trim($loppusumma), $norm);
+      $oikpos = $pdf->strlen(trim($loppusumma), $norm);
       $pdf->draw_text(200-$oikpos, $kala, trim($loppusumma), $firstpage, $norm);
       $kala-=10;
     }
@@ -207,7 +225,7 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
     // Maksutapaerottelu
     if ($maksupaatesumma != 0) {
       $pdf->draw_text(0, $kala, t("KORTTI"), $firstpage, $norm);
-      $oikpos = $pdf->mb_strlen(trim($maksupaatesumma), $norm);
+      $oikpos = $pdf->strlen(trim($maksupaatesumma), $norm);
       $pdf->draw_text(200-$oikpos, $kala, trim($maksupaatesumma), $firstpage, $norm);
       $kala-=10;
     }
@@ -222,7 +240,7 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
           if ($maksutavat_ja_summat[0] != 0) {
             $_summa = sprintf("%34.34s", $maksutavat_ja_summat[0]);
             $pdf->draw_text(0, $kala, t("KÄTEINEN"), $firstpage, $norm);
-            $oikpos = $pdf->mb_strlen(trim($_summa), $norm);
+            $oikpos = $pdf->strlen(trim($_summa), $norm);
             $pdf->draw_text(200-$oikpos, $kala, trim($_summa), $firstpage, $norm);
             $kala-=10;
           }
@@ -230,7 +248,7 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
           if ($maksutavat_ja_summat[1] != 0) {
             $_summa = sprintf("%34.34s", $maksutavat_ja_summat[1]);
             $pdf->draw_text(0, $kala, t("LUOTTOKORTTI"), $firstpage, $norm);
-            $oikpos = $pdf->mb_strlen(trim($_summa), $norm);
+            $oikpos = $pdf->strlen(trim($_summa), $norm);
             $pdf->draw_text(200-$oikpos, $kala, trim($_summa), $firstpage, $norm);
             $kala-=10;
           }
@@ -238,7 +256,7 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
           if ($maksutavat_ja_summat[2] != 0) {
             $_summa = sprintf("%34.34s", $maksutavat_ja_summat[2]);
             $pdf->draw_text(0, $kala, t("PANKKIKORTTI"), $firstpage, $norm);
-            $oikpos = $pdf->mb_strlen(trim($_summa), $norm);
+            $oikpos = $pdf->strlen(trim($_summa), $norm);
             $pdf->draw_text(200-$oikpos, $kala, trim($_summa), $firstpage, $norm);
             $kala-=10;
           }
@@ -246,14 +264,14 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
       }
       else {
         $pdf->draw_text(0, $kala, t("KÄTEINEN"), $firstpage, $norm);
-        $oikpos = $pdf->mb_strlen(trim($kateinen), $norm);
+        $oikpos = $pdf->strlen(trim($kateinen), $norm);
         $pdf->draw_text(200-$oikpos, $kala, trim($kateinen), $firstpage, $norm);
         $kala-=10;
       }
 
       if (isset($takaisin)) {
         $pdf->draw_text(0, $kala, t("TAKAISIN"), $firstpage, $norm);
-        $oikpos = $pdf->mb_strlen(trim($takaisin), $norm);
+        $oikpos = $pdf->strlen(trim($takaisin), $norm);
         $pdf->draw_text(200-$oikpos, $kala, trim($takaisin), $firstpage, $norm);
         $kala-=10;
       }
@@ -273,7 +291,7 @@ function tulosta_asiakkaan_kuitti($laskunro, $tulostimen_tunnus, $params = array
       $pdf->draw_text(60, $kala, trim($verorivi['netto']), $firstpage, $norm);
       $pdf->draw_text(110, $kala, trim($verorivi['vero']), $firstpage, $norm);
 
-      $oikpos = $pdf->mb_strlen(trim($verorivi['brutto']), $norm);
+      $oikpos = $pdf->strlen(trim($verorivi['brutto']), $norm);
       $pdf->draw_text(200-$oikpos, $kala, trim($verorivi['brutto']), $firstpage, $norm);
       $kala-=10;
     }
@@ -629,7 +647,7 @@ function summat($lasku) {
   $summa                = $lasku["summa"];
 
   $ehto1 = $valkoodi != '';
-  $ehto2 = trim(mb_strtoupper($valkoodi)) != trim(mb_strtoupper($yhtiorow["valkoodi"]));
+  $ehto2 = trim(strtoupper($valkoodi)) != trim(strtoupper($yhtiorow["valkoodi"]));
 
   if ($ehto1 and $ehto2) {
     if ($kassa_ale != '') {
@@ -670,7 +688,7 @@ function summat($lasku) {
     }
   }
 
-  if ($valkoodi != '' and trim(mb_strtoupper($valkoodi)) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+  if ($valkoodi != '' and trim(strtoupper($valkoodi)) != trim(strtoupper($yhtiorow["valkoodi"]))) {
     $loppusumma = $summa_valuutassa;
   }
   else {
