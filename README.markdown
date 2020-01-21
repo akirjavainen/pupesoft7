@@ -37,7 +37,7 @@ Mikäli kyseessä on vanha tietokanta, saattaa tietokantarakenteeseen joutua lis
 
 Kytke kaikki PHP:n virheilmoitukset päälle /etc/php-kansion alta löytyvästä php.ini-tiedostosta:
 
-error_reporting = E_ALL, 
+error_reporting = E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED, 
 display_errors = On, 
 display_startup_errors = On, 
 log_errors = On
