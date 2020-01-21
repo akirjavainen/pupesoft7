@@ -5,7 +5,7 @@ Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille,
 
 
 # Pika-asennusohje (minimaalinen asennus ilman Ruby on Rails/Pupenext-ympäristöä)
-1. Asenna Apache, MySQL/MariaDB (server), PHP, PHP-Apache, PHP-GD ja PHP-MySQL. Esimerkiksi Debian-pohjaisissa jakeluissa "apt install apache2 libapache2-mod-php mariadb-server php-gd php-mysql". Arch-pohjaisissa jakeluissa "pacman -Syu apache mariadb php php-apache php-gd".
+1. Asenna Apache, MySQL/MariaDB (server), PHP, PHP-Apache, PHP-GD ja PHP-MySQL. Esimerkiksi Debian-pohjaisissa jakeluissa "apt install a2ps apache2 libapache2-mod-php mariadb-server php-gd php-mbstring php-mysql recode". Arch-pohjaisissa jakeluissa "pacman -Syu a2ps apache mariadb php php-apache php-gd recode" ja AUR-pakettivarastoista paketti libiconv (mbstring löytyy jo valmiiksi php-paketista). Pupesoftin muut riippuvuudet on listattu tarkemmin virallisessa asennusohjeessa.
 
 2. Kytke palvelut käyttöön: "systemctl enable --now httpd" (tai apache2) ja "systemctl enable --now mysqld"
 
@@ -49,7 +49,4 @@ Vanhan latin1/ISO-8859-1 -tietokannan konvertointiin UTF-8 -merkistöön on mont
 Konversion jälkeen Pupesoftissa kannattaa käydä mahdollisimman monen modulin puolella ja tarkistaa, että "ääkköset" näkyvät oikein. Muussa tapauksessa palautetaan varmuuskopio ja kokeilla toista tapaa. Myös Pupesoftin omaa konversioskriptiä UTF8_mysqlkonversio.php voi testata (UTF8_konversio.php on jo ajettu tähän koodiin). Tietokannan oletusmerkistön voi tarkistaa SQL-kyselyllä:
 
 "SELECT default_character_set_name FROM information_schema.SCHEMATA WHERE schema_name = 'pupesoft';"
-
-
-2019/12/18
 
