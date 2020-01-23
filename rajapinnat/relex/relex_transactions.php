@@ -45,14 +45,14 @@ if (isset($argv[2]) and $argv[2] != '') {
     }
   }
   else {
-    if (mb_strpos($argv[2], "-") !== FALSE) {
+    if (strpos($argv[2], "-") !== FALSE) {
       list($y, $m, $d) = explode("-", $argv[2]);
       if (is_numeric($y) and is_numeric($m) and is_numeric($d) and checkdate($m, $d, $y)) {
         $ajopaiva = $argv[2];
       }
     }
 
-    if (mb_strtoupper($argv[2]) == 'WEEKLY') {
+    if (strtoupper($argv[2]) == 'WEEKLY') {
       $weekly_ajo = TRUE;
     }
     else {
@@ -96,6 +96,8 @@ if (!$fp = fopen($filepath, 'w+')) {
 $header  = "date;location;product;clean_product;type;quantity;value;sales_purchase_price;reference;order_row;order_type;partner_code";
 
 if ($extra_laskutiedot) $header .= ";profit;invoicenumber;rownumber;shipped;ordernumber";
+
+$header .= ";sale1";
 
 $header .= "\n";
 
@@ -177,7 +179,8 @@ $query = "(SELECT
            lasku.laskunro,
            tilausrivi.tunnus AS rivinro,
            if (tilausrivi.tyyppi = 'O', tilausrivi.laskutettuaika, tilausrivi.toimitettuaika) AS toimitettuaika,
-           tilausrivi.otunnus
+           tilausrivi.otunnus,
+           tilausrivi.ale1
            FROM tapahtuma
            JOIN tuote ON (tuote.yhtio = tapahtuma.yhtio
              AND tuote.tuoteno     = tapahtuma.tuoteno
@@ -214,7 +217,8 @@ $query = "(SELECT
            lasku.laskunro,
            tilausrivi.tunnus AS rivinro,
            tilausrivi.toimitettuaika,
-           tilausrivi.otunnus
+           tilausrivi.otunnus,
+           tilausrivi.ale1
            FROM tilausrivi
            JOIN tuote ON (tuote.yhtio = tilausrivi.yhtio
              AND tuote.tuoteno     = tilausrivi.tuoteno
@@ -264,7 +268,7 @@ foreach ($relex_transactions as $row) {
   $arvo = abs(round($row['kplhinta']*$row['kpl'], 2));
 
   // Määritellään transaktiotyyppi
-  switch (mb_strtolower($row['laji'])) {
+  switch (strtolower($row['laji'])) {
   case 'tulo':
     $type    = "DELIVERY";
     $partner = $row['liitostunnus'];
@@ -366,6 +370,8 @@ foreach ($relex_transactions as $row) {
     $rivi .= ";{$row['toimitettuaika']}";
     $rivi .= ";{$row['otunnus']}";
   }
+
+  $rivi .= ";{$row['ale1']}";
 
   $rivi .= "\n";
 
