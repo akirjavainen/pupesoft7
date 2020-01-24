@@ -1,7 +1,7 @@
 <?php
 
 define('SEPA_ENVIRONMENT', 'production');
-define('SEPA_ADDRESS'    , 'https://sepa.ahkio.com/api');
+define('SEPA_ADDRESS'    , 'https://sepa.ahkio.com');
 
 // Käyttöliittymän funktiot
 
