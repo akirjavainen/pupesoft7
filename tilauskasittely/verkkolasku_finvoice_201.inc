@@ -137,8 +137,9 @@ if (!function_exists('finvoice_otsik')) {
         $tulos_ulos .= "<font class='error'>".t("Asiakkaalta puuttuu verkkotunnus, lasku menee tulostuspalveluun.")." $lasrow[nimi] $lasrow[laskunro]</font><br>\r\n<br>\r\n";
       }
 
-      //   Tehdään SOAP, paitsi jos halutaan vain katsoa ruudulla
-      if ($nosoap == "") {
+      // Tehdään SOAP, paitsi jos halutaan vain katsoa ruudulla
+      // EDI-laskuille ei tarvita SOAP-kehystä
+      if ($nosoap == "" and $lasrow["chn"] != "113") {
         fputs($tootfinvoice, "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:eb=\"http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd\">\r\n");
         fputs($tootfinvoice, "<SOAP-ENV:Header>\r\n");
         fputs($tootfinvoice, "<eb:MessageHeader xmlns:eb=\"http://www.oasis-open.org/committees/ebxml-msg/schema/msg-header-2_0.xsd\" SOAP-ENV:mustUnderstand=\"1\" eb:version=\"2.0\">\r\n");

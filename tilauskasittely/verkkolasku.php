@@ -2272,7 +2272,7 @@ else {
             $lasrow['chn_orig'] = $lasrow['chn'];
 
             //HUOM: Tässä kaikki sallitut verkkopuolen chn:ät
-            if (!in_array($lasrow['chn'], array("100", "010", "001", "020", "111", "112"))) {
+            if (!in_array($lasrow['chn'], array("100", "010", "001", "020", "111", "112", "113"))) {
               //Paperi by default
               $lasrow['chn'] = "100";
             }
