@@ -1,5 +1,5 @@
 # Pupesoft 7
-Suomalainen, avoimen lähdekoodin toiminnanohjausjärjestelmä PK-yrityksille. PHP 7 -yhteensopiva fork. UTF-8 kytketty käyttöön myös tietokannoille ja monia toimintoja muutettu sujuvammiksi. Virallinen asennusohje löytyy GitHubin [Wikistä](https://github.com/devlab-oy/pupesoft/wiki/Asennusohje "Pupesoft - Asennusohje"). Virallinen repository: https://github.com/devlab-oy/pupesoft/
+Suomalainen, avoimen lähdekoodin toiminnanohjausjärjestelmä PK-yrityksille. PHP 7.4 -yhteensopiva fork. UTF-8 kytketty käyttöön myös tietokannoille ja monia toimintoja muutettu sujuvammiksi. Virallinen asennusohje löytyy GitHubin [Wikistä](https://github.com/devlab-oy/pupesoft/wiki/Asennusohje "Pupesoft - Asennusohje"). Virallinen repository: https://github.com/devlab-oy/pupesoft/
 
 Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille, joille LAMP-ympäristö on jo entuudestaan tuttu.
 
