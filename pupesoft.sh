@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Pupesoft asennuksen tiedot
-POLKU="/var/www/html/pupesoft/"
+POLKU="/var/www/pupesoft/"
 
 # Pupesoft varmistuksen tiedot
 BACKUPDIR="/backup/pupe-backup"
