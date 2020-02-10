@@ -5,11 +5,11 @@ Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille,
 
 
 # Pika-asennusohje (minimaalinen asennus ilman Ruby on Rails/Pupenext-ympäristöä)
-1. Asenna Apache, MySQL/MariaDB (server), PHP, PHP-Apache, PHP-GD ja PHP-MySQL. Esimerkiksi Debian-pohjaisissa jakeluissa "apt install a2ps apache2 libapache2-mod-php mariadb-server php-curl php-gd php-mbstring php-mysql recode". Arch-pohjaisissa jakeluissa "pacman -Syu a2ps apache mariadb php php-apache php-gd recode" ja AUR-pakettivarastoista paketti libiconv (curl ja mbstring löytyvät jo valmiiksi PHP-paketista). Pupesoftin muut riippuvuudet on listattu tarkemmin virallisessa asennusohjeessa.
+1. Asenna Apache, MySQL/MariaDB (server), PHP, PHP-Apache, PHP-GD ja PHP-MySQL. Esimerkiksi Debian-pohjaisissa jakeluissa "apt install a2ps apache2 libapache2-mod-php mariadb-server php-curl php-gd php-mbstring php-mcrypt php-mysql recode". Arch-pohjaisissa jakeluissa "pacman -Syu a2ps apache mariadb mcrypt php php-apache php-gd recode" ja AUR-pakettivarastoista paketti libiconv (curl ja mbstring löytyvät jo valmiiksi PHP-paketista). Pupesoftin muut riippuvuudet on listattu tarkemmin virallisessa asennusohjeessa.
 
 2. Kytke palvelut käyttöön: "systemctl enable --now httpd" (tai apache2) ja "systemctl enable --now mysqld"
 
-3. Aja "mysql_secure_installation", poistaen anonyymit käyttäjät ja oletuskannat. Salli yhteydet vain localhostista. Sitten kytke PHP-moduli Apachen käyttöön ("a2enmod enable php7.3" tai muokkaamalla Apachen asetustiedostoja /etc/httpd- tai /etc/apache2-kansioissa). Muista kytkeä myös ainakin PHP-lisäosat "gd" ja "mysqli" käyttöön, esimerkiksi poistamalla kommenttimerkintä ";" php.ini-tiedostosta rivien "extension=gd" ja "extension=mysqli" alusta.
+3. Aja "mysql_secure_installation", poistaen anonyymit käyttäjät ja oletuskannat. Salli yhteydet vain localhostista. Sitten kytke PHP-moduli Apachen käyttöön ("a2enmod enable php7.3" tai muokkaamalla Apachen asetustiedostoja /etc/httpd- tai /etc/apache2-kansioissa). Muista kytkeä myös ainakin PHP-lisäosat "gd" ja "mysqli" käyttöön, esimerkiksi poistamalla kommenttimerkintä ";" php.ini-tiedostosta rivien "extension=gd" ja "extension=mysqli" alusta. Pankkiyhteyksille myös mcrypt vaaditaan.
 
 4. MySQL:n/MariaDB:n oletusasetukset tavallisesti toimivat, mutta virallisessa asennusohjeessa on tietoa tietokantamoottorin lisäoptimoinnista (myös replikoinnista). Toinen hyvä tietolähde on Arch Linuxin Wiki MariaDB:stä: https://wiki.archlinux.org/index.php/MariaDB
 
