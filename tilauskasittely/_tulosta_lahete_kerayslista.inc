@@ -4,7 +4,7 @@
 function getSerialForOrder($order)
 {
 	$notfound = "Etsi tilausnumerolla";
-	include "/net/etc/php/login_keskus.php";
+	include "/var/www/config/login_jwio.php";
 
 	$db = mysqli_connect(DATABASE_SERVER, DATABASE_USERNAME, DATABASE_PASSWORD);
 	mysqli_select_db($db, "Tuotanto");
