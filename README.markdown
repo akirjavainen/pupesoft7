@@ -5,7 +5,7 @@ Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille,
 
 
 # Pika-asennusohje (minimaalinen asennus ilman Ruby on Rails/Pupenext-ympäristöä)
-1. Asenna Apache, MySQL/MariaDB (server), PHP, PHP-Apache, PHP-GD ja PHP-MySQL. Esimerkiksi Debian-pohjaisissa jakeluissa "apt install a2ps apache2 libapache2-mod-php mariadb-server php-curl php-gd php-mbstring php-mcrypt php-mysql recode". Arch-pohjaisissa jakeluissa "pacman -Syu a2ps apache mariadb mcrypt php php-apache php-gd recode" ja AUR-pakettivarastoista paketti libiconv (curl ja mbstring löytyvät jo valmiiksi PHP-paketista). Pupesoftin muut riippuvuudet on listattu tarkemmin virallisessa asennusohjeessa.
+1. Asenna Apache, MySQL/MariaDB (server), PHP, PHP-Apache, PHP-GD ja PHP-MySQL. Esimerkiksi Debian-pohjaisissa jakeluissa "apt install a2ps apache2 libapache2-mod-php mariadb-server php-curl php-gd php-mbstring php-mcrypt php-mysql recode". Arch-pohjaisissa jakeluissa "pacman -Syu a2ps apache mariadb mcrypt php php-apache php-gd recode", AUR-pakettivarastoista paketti libiconv (curl ja mbstring löytyvät jo valmiiksi PHP-paketista) ja PHP-lisäosa "pecl install mcrypt". Pupesoftin muut riippuvuudet on listattu tarkemmin virallisessa asennusohjeessa.
 
 2. Kytke palvelut käyttöön: "systemctl enable --now httpd" (tai apache2) ja "systemctl enable --now mysqld"
 

@@ -436,6 +436,11 @@ if ($tee == "luo" and $pin != '') {
   );
 
   $tunnukset_pankista = sepa_get_certificate($params);
+  echo "<pre>";
+  echo $signing_private_key . "\n\n\n";
+  echo $tunnukset_pankista["own_signing_certificate"] . "\n";
+  echo "</pre>";
+
 
   if (!$tunnukset_pankista) {
     virhe("Sertifikaatin hakeminen epäonnistui, tarkista PIN-koodi ja asiakastunnus");
