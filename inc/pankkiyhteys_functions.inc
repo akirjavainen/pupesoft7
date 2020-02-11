@@ -141,7 +141,7 @@ function filelist_table($array, $type) {
     $_status = $tiedosto["status"];
 
     // Ruksataan, jos tiedosto on uusi ja tehdään selkokielisempi
-    if (mb_strtolower($_status) == 'new') {
+    if (strtolower($_status) == 'new') {
       $_chk = "checked";
       $_status = t("Uusi");
     }
@@ -1338,8 +1338,8 @@ function hae_tilin_saldo($params) {
   if ($pankkiyhteys['hae_saldo'] != 1) return false;
   if ($pankkiyhteys['bic'] != 'OKOYFIHH') return false;
 
-  $konttorinumero = mb_substr($pankkiyhteys['tilino'], 0, 6);
-  $tilinumero     = mb_substr($pankkiyhteys['tilino'], -8);
+  $konttorinumero = substr($pankkiyhteys['tilino'], 0, 6);
+  $tilinumero     = substr($pankkiyhteys['tilino'], -8);
 
   $params["file_type"]     = "TP1 1SS";
   $params["maksuaineisto"] = base64_encode("$\$TP1 1SS {$konttorinumero} {$tilinumero} X");
@@ -1352,23 +1352,23 @@ function hae_tilin_saldo($params) {
   $saldo_vastaus = base64_decode($saldo_vastaus);
 
   $saldo_kentat = array(
-    "tietueen_jarjestysnumero"  => mb_substr($saldo_vastaus, 0, 1),
-    "vastaustyyppi"             => mb_substr($saldo_vastaus, 1, 1),
-    "varalla"                   => mb_substr($saldo_vastaus, 2, 3),
-    "tapahtumakonttorin_numero" => mb_substr($saldo_vastaus, 5, 6),
-    "paatenumero"               => mb_substr($saldo_vastaus, 11, 2),
-    "tapahtumanumero"           => mb_substr($saldo_vastaus, 13, 4),
-    "tilinomistajan_nimi"       => mb_substr($saldo_vastaus, 17, 15),
-    "konttorinumero"            => mb_substr($saldo_vastaus, 32, 6),
-    "tilinumero"                => mb_substr($saldo_vastaus, 38, 8),
-    "paivamaara"                => mb_substr($saldo_vastaus, 46, 6),
-    "saldo"                     => mb_substr($saldo_vastaus, 52, 11),
-    "saldon_etumerkki"          => mb_substr($saldo_vastaus, 63, 1),
-    "luottoraja"                => mb_substr($saldo_vastaus, 64, 11),
-    "luottorajan_etumerkki"     => mb_substr($saldo_vastaus, 75, 1),
-    "nostovara"                 => mb_substr($saldo_vastaus, 76, 11),
-    "nostovaran_etumerkki"      => mb_substr($saldo_vastaus, 87, 1),
-    "rahayksikon_koodi"         => mb_substr($saldo_vastaus, 88, 1),
+    "tietueen_jarjestysnumero"  => substr($saldo_vastaus, 0, 1),
+    "vastaustyyppi"             => substr($saldo_vastaus, 1, 1),
+    "varalla"                   => substr($saldo_vastaus, 2, 3),
+    "tapahtumakonttorin_numero" => substr($saldo_vastaus, 5, 6),
+    "paatenumero"               => substr($saldo_vastaus, 11, 2),
+    "tapahtumanumero"           => substr($saldo_vastaus, 13, 4),
+    "tilinomistajan_nimi"       => substr($saldo_vastaus, 17, 15),
+    "konttorinumero"            => substr($saldo_vastaus, 32, 6),
+    "tilinumero"                => substr($saldo_vastaus, 38, 8),
+    "paivamaara"                => substr($saldo_vastaus, 46, 6),
+    "saldo"                     => substr($saldo_vastaus, 52, 11),
+    "saldon_etumerkki"          => substr($saldo_vastaus, 63, 1),
+    "luottoraja"                => substr($saldo_vastaus, 64, 11),
+    "luottorajan_etumerkki"     => substr($saldo_vastaus, 75, 1),
+    "nostovara"                 => substr($saldo_vastaus, 76, 11),
+    "nostovaran_etumerkki"      => substr($saldo_vastaus, 87, 1),
+    "rahayksikon_koodi"         => substr($saldo_vastaus, 88, 1),
   );
 
   return array(
