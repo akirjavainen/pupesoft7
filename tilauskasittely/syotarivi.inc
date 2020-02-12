@@ -569,7 +569,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
   echo "<th colspan='".($nrospanni-$nrospanni_vah)."' align='left'>".t("Rivikommentti")."</th>";
 
   if ($yhtiorow['rivinumero_syotto'] != '') {
-    echo "<th align='left'>".t("<a href='#' onclick='fixRowNumbering(\"{$yhtiorow['yhtio']}\", \"{$laskurow['tunnus']}\");'>Rivinro</a>")."</th>"; // MODIFIED, made as link for fixRowNumbering()
+    echo "<th align='left'><a href='#' onclick='fixRowNumbering(\"{$yhtiorow['yhtio']}\", \"{$laskurow['tunnus']}\");'>" . t("Rivinro") . "</a></th>"; // MODIFIED, made as link for fixRowNumbering()
   }
 
   echo "<td valign='top' class='back'></td></tr>";
