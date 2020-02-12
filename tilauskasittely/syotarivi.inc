@@ -165,7 +165,7 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
 
 // MODIFIED, added links to JWIO ERP:
 if (file_exists("../../hinnasto")) {
-	echo "<tr><td>";
+	echo "<tr><td colspan='2'>";
 	echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 	echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
 	echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
@@ -508,7 +508,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
 
   echo "<tr>$jarjlisa";
   if (file_exists("../../hinnasto")) { // MODIFIED, added links to JWIO ERP
-	echo "<tr><td>";
+	echo "<tr><td colspan='2'>";
 	echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 	echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
 	echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";

@@ -1234,8 +1234,8 @@ if (in_array($jarjesta, array("moveUp", "moveDown")) and $rivitunnus > 0) {
   else {
     $tunnarit = $kukarow["kesken"];
   }
-
-  $query = "SELECT jarjestys, tunnus
+  // MODIFIED, added tilausrivitunnus in next query:
+  $query = "SELECT jarjestys, tunnus, tilausrivitunnus 
             FROM tilausrivin_lisatiedot
             WHERE yhtio          = '$kukarow[yhtio]'
             and tilausrivitunnus = '$rivitunnus'";
@@ -1250,8 +1250,8 @@ if (in_array($jarjesta, array("moveUp", "moveDown")) and $rivitunnus > 0) {
     $ehto = "and jarjestys>$aburow[jarjestys]";
     $j = "asc";
   }
-
-  $query = "SELECT jarjestys, tilausrivin_lisatiedot.tunnus
+  // MODIFIED, added tilausrivitunnus in next query:
+  $query = "SELECT jarjestys, tilausrivitunnus, tilausrivin_lisatiedot.tunnus
             FROM tilausrivi
             JOIN tilausrivin_lisatiedot ON tilausrivin_lisatiedot.yhtio=tilausrivi.yhtio and tilausrivin_lisatiedot.tilausrivitunnus=tilausrivi.tunnus $ehto
              WHERE tilausrivi.yhtio  = '$kukarow[yhtio]'
@@ -1270,6 +1270,12 @@ if (in_array($jarjesta, array("moveUp", "moveDown")) and $rivitunnus > 0) {
 
     $query = "UPDATE tilausrivin_lisatiedot SET jarjestys = '$aburow[jarjestys]' WHERE yhtio = '$kukarow[yhtio]' and tunnus='$kohderow[tunnus]'";
     $updres=pupe_query($query);
+
+    $query = "UPDATE tilausrivi SET tilaajanrivinro = '$kohderow[jarjestys]' WHERE yhtio = '$kukarow[yhtio]' and tunnus='$aburow[tilausrivitunnus]'"; // MODIFIED, added
+    $updres=pupe_query($query); // MODIFIED, added
+
+    $query = "UPDATE tilausrivi SET tilaajanrivinro = '$aburow[jarjestys]' WHERE yhtio = '$kukarow[yhtio]' and tunnus='$kohderow[tilausrivitunnus]'"; // MODIFIED, added
+    $updres=pupe_query($query); // MODIFIED, added
   }
   else {
     echo "<font class='error'>".t("VIRHE: riviä ei voi siirtää!")."</font><br>";
@@ -7714,6 +7720,7 @@ if ($tee == '') {
         // normirivit tai jos tuoteperheitä ei pidetä yhdessä, näytetään lapsille rivinumerot
         elseif ($row["perheid"] == 0 and $row["perheid2"] == 0 or ($tilauksen_jarjestys != '0' and $tilauksen_jarjestys != '1' and $tilauksen_jarjestys != '4' and $tilauksen_jarjestys != '5' and $tilauksen_jarjestys != '8') or (($tilauksen_jarjestys == '0' or $tilauksen_jarjestys == '4') and $erikoistuote_tuoteperhe[$row['perheid']] == $row['sorttauskentta'] and $tuoteperhe_kayty != $row['perheid'])) {
 
+          //$echorivino = "<a href='#' onclick='moveRowUpOrDown(\"{$row['yhtio']}\", \"{$row['otunnus']}\", \"{$row['nimitys']}\", \"{$row['tunnus']}\", true);'>&#x2191;</a> $rivino <a href='#' onclick='moveRowUpOrDown(\"{$row['yhtio']}\", \"{$row['otunnus']}\", \"{$row['nimitys']}\", \"{$row['tunnus']}\", false);'>&#x2193;</a>"; // MODIFIED, added move up/down links
           $echorivino = $rivino;
 
           if ($yhtiorow['rivinumero_syotto'] != '') {
