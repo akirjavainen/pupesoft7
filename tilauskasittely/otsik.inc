@@ -3681,7 +3681,7 @@ if ($tila == "" and !isset($jatka)) {
     }
 
     echo "</td>";
-    echo "<td>".t("tilausvahvistus")." + ".t("keräyslista")." + ".t("valmistus")." + ".t("työmääräys")." + ".t("lähete")." + ".t("lasku")."</td></tr>";
+    echo "<td>".t("tilausvahvistus")." + ".t("keräyslista")." + ".t("valmistus")." + ".t("työmääräys")." + ".t("lähete")." + ".t("lasku"). "</td></tr>";
 
     echo "<tr><td>".t("Asiakkaan tilausnumero").":</td><td colspan = '1'><input type='text' size='43' name='asiakkaan_tilausnumero' value='$srow[asiakkaan_tilausnumero]'><td>".t("tilausvahvistus")." + ".t("keräyslista")." + ".t("valmistus")." + ".t("työmääräys")." + ".t("lähete")." + ".t("lasku")."</td></tr>";
 
@@ -3699,7 +3699,14 @@ if ($tila == "" and !isset($jatka)) {
 
     echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Email toimitukseen").":</td><td><input type='text' size='43' name='temail' id='temail' onfocusout=\"copyTextField('temail', 'viesti');\" value='$srow[toim_email]'</td><td>".t("toimitusvahvistus").$_vahvistusviesti_asiakkaalle."</td></tr>"; // MODIFIED, added id and JavaScript
 
-    echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Kommentti")." 1:</td><td><textarea name='comments'   rows='2' cols='40'>$srow[comments]</textarea></td><td>".t("tilausvahvistus")." + ".t("keräyslista")." + ".t("valmistus")." + ".t("työmääräys")." + ".t("lähete")." + ".t("tarjous")."</td></tr>";
+    echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Kommentti")." 1:</td><td><textarea name='comments' id='comments'   rows='2' cols='40'>$srow[comments]</textarea></td><td>".t("tilausvahvistus")." + ".t("keräyslista")." + ".t("valmistus")." + ".t("työmääräys")." + ".t("lähete")." + ".t("tarjous") 
+	    . "<br><br>Vakiotekstit: " 
+	    . "<a href='#' onclick='addCommentText(\"Testiteksti 1.\"); return false;'>Teksti 1</a> "
+	    . "<a href='#' onclick='addCommentText(\"Testiteksti 2.\"); return false;'>Teksti 2</a> "
+	    . "<a href='#' onclick='addCommentText(\"Testiteksti 3.\"); return false;'>Teksti 3</a> "
+	    . "<a href='#' onclick='addCommentText(\"Testiteksti 4.\"); return false;'>Teksti 4</a> "
+	    . "<a href='#' onclick='addCommentText(\"Testiteksti 5.\"); return false;'>Teksti 5</a> "
+	    . "</td></tr>"; // MODIFIED, added id & links
 
     echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Kommentti")." 2:</td><td><textarea name='sisviesti2' rows='2' cols='40'>$srow[sisviesti2]</textarea></td><td>".t("keräyslista")." + ".t("valmistus")."</td></tr>";
     echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Kommentti")." 3:</td><td><textarea name='sisviesti1' rows='2' cols='40'>$srow[sisviesti1]</textarea></td><td>".t("lasku")."</td></tr>";
