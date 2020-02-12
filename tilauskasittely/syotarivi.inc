@@ -568,7 +568,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
     $nrospanni_vah += 3;
   }
 
-  echo "<th colspan='".($nrospanni-$nrospanni_vah)."' align='left'>".t("Rivikommentti")."</th>";
+  echo "<th colspan='".($nrospanni-$nrospanni_vah+1)."' align='left'>".t("Rivikommentti")."</th>"; // MODIFIED, BUGFIX: colspan + 1
 
   if ($yhtiorow['rivinumero_syotto'] != '') {
     echo "<th align='left'><a href='#' onclick='fixRowNumbering(\"{$yhtiorow['yhtio']}\", \"{$laskurow['tunnus']}\", \"$toim\");'>" . t("Rivinro") . "</a></th>"; // MODIFIED, made as link for fixRowNumbering()
