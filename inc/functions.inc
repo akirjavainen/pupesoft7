@@ -31183,7 +31183,7 @@ if (!function_exists('osatoimitus')) {
 
     // Tarjouksia ei oletuksena osatoimiteta
     $_osatoimitus_oletus = (
-      (in_array($toim, array("TARJOUS", "EXTTARJOUS", "PROJEKTI")) or $oletus["osatoimitus"] != "")
+      (in_array($toim, array("EXTTARJOUS", "PROJEKTI")) or $oletus["osatoimitus"] != "") // MODIFIED: removed "TARJOUS"
       and $kukarow["kesken"] == 0
     );
 

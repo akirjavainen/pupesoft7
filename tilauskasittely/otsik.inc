@@ -1857,7 +1857,7 @@ if ($tila == "" and !isset($jatka)) {
 
     $sel = array("K" => "", "V" => "");
 
-    if ($apu_rahdinmaksaja == "") $apu_rahdinmaksaja = "V";
+    if ($apu_rahdinmaksaja == "") $apu_rahdinmaksaja = "K"; // MODIFIED: V -> K
     $sel[$apu_rahdinmaksaja] = "selected";
 
     $oikea_sarake[$oikea] = "<td>".t("Rahtisopimus").":</td>
