@@ -546,7 +546,7 @@ if ($fieldname == "kerayspoikkeama") {
 if ($fieldname == "toimitusehto") {
   $kires = t_avainsana("TOIMEHTO");
 
-  $ulos = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">";
+  $ulos = "<td class='ctlHighlight'><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">"; // MODIFIED, highlighted
   $ulos .= "<option value=''>".t("Ei oletustoimitusehtoa")."</option>";
 
   while ($kirow = mysqli_fetch_array($kires)) {
