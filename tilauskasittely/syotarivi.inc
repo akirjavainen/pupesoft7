@@ -427,7 +427,8 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
 
   if ($kukarow['hinnat'] == 0) {
     $siemenluku = mb_strlen((int) $hinta) > 5 ? mb_strlen((int) $hinta) : 5;
-$bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.24; document.getElementById('hinta').value = netto;\">/<input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='bruttohinta' id='bruttohinta' value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.80645161; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MODIFIED
+    $disabled_text = defined("NO_PRICE_WITH_VAT") ? "disabled" : ""; // MODIFIED, added
+$bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.24; document.getElementById('hinta').value = netto;\">/<input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='bruttohinta' id='bruttohinta' $disabled_text value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.80645161; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MODIFIED
 
     //echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' value='$hinta'></td>"; // MODIFIED, removed
   }
@@ -518,6 +519,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
 	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.25; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.25;\">Hinta +25 %</a></td>";
 	echo "<td id=\"tdM2\"></td>";
 	echo "<td id=\"tdPostalCode\">" . $laskurow['toim_postino'] . "</td>";
+	echo "<td id=\"Kaukoputki\"><a href=\"https://www.kaukokiito.fi/fi/kaukoputki\" target=\"_blank\">Kaukoputki</a></td>";
 	echo "</tr>";
   }
   if ($tila == "LISAAKERTARESEPTIIN" or $tila == "LISAAISAKERTARESEPTIIN" or $tila == "LISAARESEPTIIN") {
