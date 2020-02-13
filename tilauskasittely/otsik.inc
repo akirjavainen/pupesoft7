@@ -1857,7 +1857,7 @@ if ($tila == "" and !isset($jatka)) {
 
     $sel = array("K" => "", "V" => "");
 
-    if ($apu_rahdinmaksaja == "") $apu_rahdinmaksaja = "K"; // MODIFIED: V -> K
+    if ($apu_rahdinmaksaja == "") $apu_rahdinmaksaja = "V";
     $sel[$apu_rahdinmaksaja] = "selected";
 
     $oikea_sarake[$oikea] = "<td>".t("Rahtisopimus").":</td>
@@ -2046,7 +2046,7 @@ if ($tila == "" and !isset($jatka)) {
         $naytetaanko_pdf_sel = "";
       }
       else {
-        $naytetaanko_pdf_sel = "checked='CHECKED'";
+        $naytetaanko_pdf_sel = ""; // MODIFIED from "checked='CHECKED'"
       }
 
       $vasen_sarake[$vasen] .= t("Näytetäänkö tarjouksella")."<input type='checkbox' name='naytetaanko_tarjouksella' $naytetaanko_pdf_sel /><br/>";
