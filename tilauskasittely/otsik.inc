@@ -3699,12 +3699,12 @@ if ($tila == "" and !isset($jatka)) {
 
     echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Email toimitukseen").":</td><td><input type='text' size='43' name='temail' id='temail' onfocusout=\"copyTextField('temail', 'viesti');\" value='$srow[toim_email]'</td><td>".t("toimitusvahvistus").$_vahvistusviesti_asiakkaalle."</td></tr>"; // MODIFIED, added id and JavaScript
 
-    echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Kommentti")." 1:</td><td><textarea name='comments' id='comments'   rows='2' cols='40'>$srow[comments]</textarea></td><td>".t("tilausvahvistus")." + ".t("keräyslista")." + ".t("valmistus")." + ".t("työmääräys")." + ".t("lähete")." + ".t("tarjous") 
+    echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Kommentti")." 1:</td><td><textarea name='comments' id='comments'   rows='10' cols='50'>$srow[comments]</textarea></td><td>".t("tilausvahvistus")." + ".t("keräyslista")." + ".t("valmistus")." + ".t("työmääräys")." + ".t("lähete")." + ".t("tarjous") 
 	    . "<br><br>Vakiotekstit: " 
-	    . "<a href='#' onclick='addCommentText(\"Testiteksti 1.\"); return false;'>Teksti 1</a> "
-	    . "<a href='#' onclick='addCommentText(\"Testiteksti 2.\"); return false;'>Teksti 2</a> "
-	    . "<a href='#' onclick='addCommentText(\"Testiteksti 3.\"); return false;'>Teksti 3</a> "
-	    . "<a href='#' onclick='addCommentText(\"Testiteksti 4.\"); return false;'>Teksti 4</a> "
+	    . "<a href='#' onclick='addCommentText(\"Toimitusaika 4 viikkoa tilauksesta (välimyyntivarauksin).\"); return false;'>Toimitusaika</a> "
+	    . "<a href='#' onclick='addCommentText(\"Karmileveys 170 mm.\"); return false;'>Karmileveys</a> "
+	    . "<a href='#' onclick='addCommentText(\"Sävy valkoinen peittomaalattu NCS S 0502-Y.\"); return false;'>Valkoinen</a> "
+	    . "<a href='#' onclick='addCommentText(\"U-arvo alle 1 W/m2K (lämpimät asuinrakennukset).\"); return false;'>U-arvo</a> "
 	    . "<a href='#' onclick='addCommentText(\"Testiteksti 5.\"); return false;'>Teksti 5</a> "
 	    . "</td></tr>"; // MODIFIED, added id & links
 
