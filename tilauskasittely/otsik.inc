@@ -3708,6 +3708,7 @@ if ($tila == "" and !isset($jatka)) {
 	    . "<a href='#' onclick='addCommentText(\"U-arvo alle 1 W/m2K (lämpimät asuinrakennukset).\"); return false;'>U-arvo</a> "
 	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta.\"); return false;'>Asennus</a> "
 	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta tai sähkötyötä.\"); return false;'>SPI-asennus</a> "
+	    . "<a href='#' onclick='addCommentText(\"Asennusreikien poraus.\"); return false;'>Karmireiät</a> "
 	    . "</td></tr>";
     } else {
 	    $vakiotekstit = "";
