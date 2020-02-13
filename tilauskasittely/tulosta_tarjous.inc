@@ -17,6 +17,8 @@ $querykiel = "SELECT kieli FROM asiakas WHERE yhtio = '$kukarow[yhtio]' and ytun
 $kielresult = pupe_query($querykiel);
 $kielrow = mysqli_fetch_array($kielresult);
 
+if (strlen($verolliset_verottomat_hinnat) === 0) $verolliset_verottomat_hinnat = "verolliset";
+
 if ($kielrow['kieli'] != '') {
   $kieli = mb_strtolower($kielrow['kieli']);
 }
