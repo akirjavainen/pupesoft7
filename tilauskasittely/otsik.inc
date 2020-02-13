@@ -3706,7 +3706,8 @@ if ($tila == "" and !isset($jatka)) {
 	    . "<a href='#' onclick='addCommentText(\"Karmileveys 170 mm.\"); return false;'>Karmileveys</a> "
 	    . "<a href='#' onclick='addCommentText(\"Sävy valkoinen peittomaalattu NCS S 0502-Y.\"); return false;'>Valkoinen</a> "
 	    . "<a href='#' onclick='addCommentText(\"U-arvo alle 1 W/m2K (lämpimät asuinrakennukset).\"); return false;'>U-arvo</a> "
-	    . "<a href='#' onclick='addCommentText(\"Testiteksti 5.\"); return false;'>Teksti 5</a> "
+	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta.\"); return false;'>Asennus</a> "
+	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta tai sähkötyötä.\"); return false;'>SPI-asennus</a> "
 	    . "</td></tr>";
     } else {
 	    $vakiotekstit = "";
