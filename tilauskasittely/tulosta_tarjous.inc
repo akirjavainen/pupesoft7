@@ -5,6 +5,7 @@ if (@include_once "pdflib/phppdflib.class.php") {
 else {
   include_once "phppdflib.class.php";
 }
+if (file_exists("../../common")) include_once("../../common/pupesoft.php"); // MODIFIED, added
 
 // jos php-gd on installoitu niin loidataab barcode library
 if (in_array("gd", get_loaded_extensions())) {
@@ -40,6 +41,7 @@ $iso["font"]           = "Helvetica-Bold";
 
 $rectparam["width"]    = 0.3;
 $rivinkorkeus          = 15;
+
 
 //muutamat funktiot...
 if (!function_exists('alku_tarjous')) {
@@ -560,6 +562,7 @@ if (!function_exists('alku_tarjous')) {
       unlink($nimi);
     }
 
+    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(565, 825, getDateTimeChecksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
     return array($page_tarjous, $sivu, $kala);
   }
 }
@@ -2034,6 +2037,7 @@ if (!function_exists('loppu_tarjous')) {
       }
     }
 
+    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(565, 12, getDateTimeChecksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
     return array($page_tarjous, $sivu);
   }
 }
@@ -2331,6 +2335,7 @@ if (!function_exists('tulosta_tarjous')) {
     else {
       for ($pp=1; $pp<=count($page_tarjous); $pp++) {
         $pdf_tarjous->draw_text(330, 803, "$pp / $sivu", $page_tarjous[$pp], $norm);
+	if (file_exists("../../raportit")) $pdf_tarjous->draw_text(565, 825, getModifiedChecksum($laskurow['muutospvm']), $page_tarjous[$pp], $pieni); // MODIFIED, added
       }
     }
 
