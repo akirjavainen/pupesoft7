@@ -18,7 +18,8 @@ $querykiel = "SELECT kieli FROM asiakas WHERE yhtio = '$kukarow[yhtio]' and ytun
 $kielresult = pupe_query($querykiel);
 $kielrow = mysqli_fetch_array($kielresult);
 
-if (strlen($verolliset_verottomat_hinnat) === 0) $verolliset_verottomat_hinnat = "verolliset";
+if (strlen($verolliset_verottomat_hinnat) === 0) $verolliset_verottomat_hinnat = "verolliset"; // MODIFIED, added
+$naytetaanko_tuoteno = "ei"; // MODIFIED, added
 
 if ($kielrow['kieli'] != '') {
   $kieli = mb_strtolower($kielrow['kieli']);
@@ -721,7 +722,8 @@ if (!function_exists('tarjous_rivi_otsikot')) {
         $pdf_tarjous->draw_text(450, $kala+15, t("Määrä", $kieli),      $page_tarjous, $norm);
       }
       else {
-        $pdf_tarjous->draw_text(330, $kala+15, t("Määrä", $kieli),      $page_tarjous, $norm);
+        if ($naytetaanko_rivihinta == "ei_rivihintaa") { $qty_column_pos = 537; } else { $qty_column_pos = 330; } // MODIFIED, added
+        $pdf_tarjous->draw_text($qty_column_pos, $kala+15, t("Määrä", $kieli),      $page_tarjous, $norm); // MODIFIED, pos
 
         if ($yhtiorow["tarjoustyyppi"] == 4) {
           $pdf_tarjous->draw_text(380, $kala + 15, t("Hinta / Yksikkö", $kieli), $page_tarjous, $norm);
