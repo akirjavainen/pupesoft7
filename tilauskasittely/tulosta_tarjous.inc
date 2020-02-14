@@ -1223,7 +1223,7 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
     }
 
     if ($row["kommentti"] != '' and $yhtiorow['tarjoustyyppi'] != 5) {
-      $pohja = $pdf_tarjous->draw_paragraph($kala+$norm["height"]+2, 45, 60, 480, $row["kommentti"], $page_tarjous[$sivu], $norm);
+      $pohja = $pdf_tarjous->draw_paragraph($kala+$norm["height"]+2, 45, 60, 330, $row["kommentti"], $page_tarjous[$sivu], $norm); // MODIFIED, paragraph width 480 -> 330
       if (is_numeric($pohja)) {
         $kala = $pohja - $rivinkorkeus;
       }
