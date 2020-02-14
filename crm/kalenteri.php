@@ -57,7 +57,7 @@ if (isset($kalen)) {
   foreach ($kalen as $tama) {
     $valitut .= "$tama,";
   }
-  $valitut = mb_substr($valitut, 0, -1); // Viimeinen pilkku poistetaan
+  $valitut = substr($valitut, 0, -1); // Viimeinen pilkku poistetaan
 }
 else {
   if (!isset($valitut)) {
@@ -83,7 +83,7 @@ if (trim($konserni) != '') {
   while ($row = mysqli_fetch_assoc($result)) {
     $konsernit .= " '".$row["yhtio"]."' ,";
   }
-  $konsernit = " and kalenteri.yhtio in (".mb_substr($konsernit, 0, -1).") ";
+  $konsernit = " and kalenteri.yhtio in (".substr($konsernit, 0, -1).") ";
   $kons = 1;
 }
 else {
@@ -347,8 +347,8 @@ if ($tee == "SYOTA") {
     $kello      = $irow["kello"];
     $lkello     = $irow["lkello"];
 
-    list($year, $kuu, $paiva) = explode("-", mb_substr($irow["pvmalku"], 0, 10));
-    list($lyear, $lkuu, $lpaiva) = explode("-", mb_substr($irow["pvmloppu"], 0, 10));
+    list($year, $kuu, $paiva) = explode("-", substr($irow["pvmalku"], 0, 10));
+    list($lyear, $lkuu, $lpaiva) = explode("-", substr($irow["pvmloppu"], 0, 10));
 
     $asyhtio    = $irow["yhtio"];
     $kenelle    = $irow["kuka"];
@@ -370,7 +370,10 @@ if ($tee == "SYOTA") {
     <script type='text/javascript'>
       function paivita_loppukello () {
         alku = $('#alkukello option:selected').val();
-        $('#loppukello').val(alku).change();
+        loppu = $('#loppukello option:selected').val();
+        
+        if (loppu < alku)
+          $('#loppukello').val(alku).change();
       }
     </script>
 
@@ -407,28 +410,26 @@ if ($tee == "SYOTA") {
     $kello = "08:00";
   }
 
-  $loophh = "{$AIKA_ARRAY[0]}";
-  $loopmm = "{$aikavali}";
-
   list($whlopt, $whlopm) = explode(":", $AIKA_ARRAY[count($AIKA_ARRAY)-1]);
   $whileloppu = sprintf("%02d", $whlopt+1);
 
   if ($whileloppu >= 24) $whileloppu = sprintf("%02d", $whileloppu-24);
 
   $whileloppu = $whileloppu.":".$whlopm;
+
   $loopdate = "";
-
+  $loophh = substr($AIKA_ARRAY[0], 0, 2);
+  $loopmm = substr($AIKA_ARRAY[0], 3, 2);
   while ($loopdate != $whileloppu) {
-    $loopdate = date("H:i", mktime($loophh, $loopmm+$aikavali, 0));
-    $loophh   = date("H",   mktime($loophh, $loopmm+$aikavali, 0));
-    $loopmm   = date("i",   mktime($loophh, $loopmm+$aikavali, 0));
-
-    $sel = '';
-    if ($loopdate == mb_substr($kello, 0, 5)) {
-      $sel = "SELECTED";
-    }
-
+    $loopdate = date("H:i", mktime($loophh, $loopmm, 0));
+    $sel = $loopdate == $kello ? " SELECTED" : "";
     $lisays .= "<option value='$loopdate' $sel>$loopdate</option>";
+
+    $loopmm += $aikavali;
+    while ($loopmm >= 60) {
+      $loopmm -= 60;
+      $loophh++;
+    }
   }
 
   $lisays .= "</select> ";
@@ -445,22 +446,24 @@ if ($tee == "SYOTA") {
   $loopmm = "{$aikavali}";
 
   if (empty($lkello)) {
-    $lkello = date("H:i", strtotime('+{$aikavali} minutes', strtotime($kello)));
+    $loppuhh = substr($kello, 0, 2);
+    $loppumm = substr($kello, 3, 2);
+    $lkello = date("H:i", mktime($loppuhh, $loppumm + $aikavali, 0));
   }
 
   $loopdate = "";
-
+  $loophh = substr($AIKA_ARRAY[0], 0, 2);
+  $loopmm = substr($AIKA_ARRAY[0], 3, 2) + $aikavali;
   while ($loopdate != $whileloppu) {
-    $loophh   = date("H", mktime($loophh, $loopmm+$aikavali, 0));
-    $loopmm   = date("i", mktime($loophh, $loopmm+$aikavali, 0));
-    $loopdate = date("H:i", mktime($loophh, $loopmm+$aikavali, 0));
-
-    $sel = '';
-    if ($loopdate == mb_substr($lkello, 0, 5)) {
-      $sel = "SELECTED";
-    }
-
+    $loopdate = date("H:i", mktime($loophh, $loopmm, 0));
+    $sel = $loopdate == $lkello ? " SELECTED" : "";
     $lisays .= "<option value='$loopdate' $sel>$loopdate</option>";
+
+    $loopmm += $aikavali;
+    while ($loopmm >= 60) {
+      $loopmm -= 60;
+      $loophh++;
+    }
   }
 
   $sel = (!empty($kokopaiva)) ? "SELECTED" : "";
@@ -835,7 +838,7 @@ if (!empty($viikkonakyma)) {
   for ($vpaiva = 0; $vpaiva < 7; $vpaiva++) {
     $vppaiva = $paiva+$vpaiva;
     $vpdate = date("j.n", mktime(0, 0, 0, $kuu, $vppaiva, $year));
-    $url = js_openUrlNewWindow("{$palvelin2}crm/kalenteri.php?valitut=".urlencode($valitut)."&kenelle=".urlencode($kenelle)."&tee=SYOTA&year=$year&kuu=$kuu&paiva=$vppaiva&konserni=$konserni&toim=$toim&tyomaarays=$tyomaarays", mb_substr($DAY_ARRAY[$vpaiva+1], 0, 2)." $vpdate", NULL, 550, 550);
+    $url = js_openUrlNewWindow("{$palvelin2}crm/kalenteri.php?valitut=".urlencode($valitut)."&kenelle=".urlencode($kenelle)."&tee=SYOTA&year=$year&kuu=$kuu&paiva=$vppaiva&konserni=$konserni&toim=$toim&tyomaarays=$tyomaarays", substr($DAY_ARRAY[$vpaiva+1], 0, 2)." $vpdate", NULL, 550, 550);
 
     echo "<td style='text-align: center;' colspan='$max'>$url</td>";
   }
@@ -1077,7 +1080,7 @@ function piirra_kalenteripaiva($year, $kuu, $paiva, $aikasarake = TRUE, $aikaval
 
       if ($row['nimi'] != '') {
         list($enim, $snim) = explode(" ", $row['nimi']);
-        $kukanimi  = $ko.$enim." ".mb_substr($snim, 0, 1).".";
+        $kukanimi  = $ko.$enim." ".substr($snim, 0, 1).".";
       }
       elseif ($row['kuka'] != '') {
         $kukanimi  = $ko.$row['kuka']." ";
@@ -1087,7 +1090,7 @@ function piirra_kalenteripaiva($year, $kuu, $paiva, $aikasarake = TRUE, $aikaval
       }
 
       // Vanhoja kalenteritapahtumia ei saa enää muuttaa
-      list($rvv, $rkk, $rpp) = explode("-", mb_substr($row["pvmloppu"], 0, 10));
+      list($rvv, $rkk, $rpp) = explode("-", substr($row["pvmloppu"], 0, 10));
 
       $kaleloppu  = (int) date('Ymd', mktime(0, 0, 0, $rkk, $rpp, $rvv));
       $aikanyt   = (int) date('Ymd', mktime(0, 0, 0, date('m'), date('d'), date('Y')));
