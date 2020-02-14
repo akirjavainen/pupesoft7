@@ -562,7 +562,8 @@ if (!function_exists('alku_tarjous')) {
       unlink($nimi);
     }
 
-    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(565, 825, getDateTimeChecksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
+    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 825, getDateTimeChecksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
+    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, getModifiedChecksum($laskurow['muutospvm']), $page_tarjous[$sivu], $pieni); // MODIFIED, added
     return array($page_tarjous, $sivu, $kala);
   }
 }
@@ -2037,7 +2038,7 @@ if (!function_exists('loppu_tarjous')) {
       }
     }
 
-    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(565, 12, getDateTimeChecksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
+    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 12, getDateTimeChecksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
     return array($page_tarjous, $sivu);
   }
 }
@@ -2335,7 +2336,7 @@ if (!function_exists('tulosta_tarjous')) {
     else {
       for ($pp=1; $pp<=count($page_tarjous); $pp++) {
         $pdf_tarjous->draw_text(330, 803, "$pp / $sivu", $page_tarjous[$pp], $norm);
-	if (file_exists("../../raportit")) $pdf_tarjous->draw_text(565, 825, getModifiedChecksum($laskurow['muutospvm']), $page_tarjous[$pp], $pieni); // MODIFIED, added
+	if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, getModifiedChecksum($laskurow['muutospvm']), $page_tarjous[$pp], $pieni); // MODIFIED, added
       }
     }
 
@@ -2446,7 +2447,8 @@ if (!function_exists('alvierittely')) {
       $alvrivihinta += $arow["rivihinta"];
       $veron_maara += $arow['alvrivihinta'];
 
-      $pdf_tarjous->draw_text(350, $kala, t("Arvonlisävero", $kieli)." (".sprintf('%.2f', $arow["rivihinta"])."): ", $page_tarjous[$sivu], $boldi);
+      //$pdf_tarjous->draw_text(350, $kala, t("Arvonlisävero", $kieli)." (".sprintf('%.2f', $arow["rivihinta"])."): ", $page_tarjous[$sivu], $boldi);
+      $pdf_tarjous->draw_text(350, $kala, t("Arvonlisävero", $kieli).": ", $page_tarjous[$sivu], $boldi); // MODIFIED, price removed
       $oikpos = $pdf_tarjous->mb_strlen(sprintf('%.2f', $arow["alvrivihinta"]), $boldi);
       $pdf_tarjous->draw_text(540-$oikpos, $kala, sprintf('%.2f', $arow["alvrivihinta"]), $page_tarjous[$sivu], $boldi);
 
