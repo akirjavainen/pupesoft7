@@ -7,7 +7,7 @@ function getSerialForOrder($order)
 	include "/var/www/config/login_jwio.php";
 
 	$db = mysqli_connect(DATABASE_SERVER, DATABASE_USERNAME, DATABASE_PASSWORD);
-	mysqli_select_db($db, "Tuotanto");
+	mysqli_select_db($db, "jwio_employees");
 
 	$result = mysqli_query($db, "SELECT serial FROM Sarjat WHERE singleorder='$order';");
 	mysqli_select_db($db, "pupesoft");
