@@ -1230,7 +1230,8 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
     }
 
     if ($row["kommentti"] != '' and $yhtiorow['tarjoustyyppi'] != 5) {
-      $pohja = $pdf_tarjous->draw_paragraph($kala+$norm["height"]+2, 45, 60, 430, $row["kommentti"], $page_tarjous[$sivu], $norm); // MODIFIED, paragraph width 480 -> 430
+      if ($naytetaanko_rivihinta == "ei_rivihintaa") { $para_width = 430; } else { $para_width = 330; } // MODIFIED, added
+      $pohja = $pdf_tarjous->draw_paragraph($kala+$norm["height"]+2, 45, 60, $para_width, $row["kommentti"], $page_tarjous[$sivu], $norm); // MODIFIED, paragraph width from original 480
       if (is_numeric($pohja)) {
         $kala = $pohja - $rivinkorkeus;
       }
