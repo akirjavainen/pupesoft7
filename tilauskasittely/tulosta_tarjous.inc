@@ -1123,7 +1123,8 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
     }
     else {
       $oikpos = $pdf_tarjous->mb_strlen($row["varattu"], $norm);
-      $pdf_tarjous->draw_text(355-$oikpos, $kala, $row["varattu"], $page_tarjous[$sivu], $norm);
+      if ($naytetaanko_rivihinta == "ei_rivihintaa") { $qty_column_pos = 562; } else { $qty_column_pos = 355; } // MODIFIED, added
+      $pdf_tarjous->draw_text($qty_column_pos-$oikpos, $kala, $row["varattu"], $page_tarjous[$sivu], $norm); // MODIFIED
     }
 
     if ($naytetaanko_rivihinta != 'kokonaan_ilman_hintoja') {
@@ -1229,7 +1230,7 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
     }
 
     if ($row["kommentti"] != '' and $yhtiorow['tarjoustyyppi'] != 5) {
-      $pohja = $pdf_tarjous->draw_paragraph($kala+$norm["height"]+2, 45, 60, 330, $row["kommentti"], $page_tarjous[$sivu], $norm); // MODIFIED, paragraph width 480 -> 330
+      $pohja = $pdf_tarjous->draw_paragraph($kala+$norm["height"]+2, 45, 60, 430, $row["kommentti"], $page_tarjous[$sivu], $norm); // MODIFIED, paragraph width 480 -> 430
       if (is_numeric($pohja)) {
         $kala = $pohja - $rivinkorkeus;
       }
