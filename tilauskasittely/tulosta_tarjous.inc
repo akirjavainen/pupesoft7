@@ -1870,10 +1870,10 @@ if (!function_exists('loppu_tarjous')) {
         if ($naytetaanko_rivihinta != 'kokonaan_ilman_hintoja' and
           $naytetaanko_yhteissummarivi != "E"
         ) {
-          $pdf_tarjous->draw_text(30,  $kuha,  t("Tarjoamme teille ylläolevan tarjouksen kohteet hintaan:", $kieli),   $page_tarjous[$sivu], $boldi);
+          //$pdf_tarjous->draw_text(30,  $kuha,  t("Tarjoamme teille ylläolevan tarjouksen kohteet hintaan:", $kieli),   $page_tarjous[$sivu], $boldi); // MODIFIED, commented out
 
-          $oikpos = $pdf_tarjous->mb_strlen(sprintf("%.2f", $total_tarjous)." ".$laskurow["valkoodi"], $boldi);
-          $pdf_tarjous->draw_text(560-$oikpos, $kuha, sprintf("%.2f", $total_tarjous)." ".$laskurow["valkoodi"], $page_tarjous[$sivu], $boldi);
+          //$oikpos = $pdf_tarjous->mb_strlen(sprintf("%.2f", $total_tarjous)." ".$laskurow["valkoodi"], $boldi); // MODIFIED, commented out
+          //$pdf_tarjous->draw_text(560-$oikpos, $kuha, sprintf("%.2f", $total_tarjous)." ".$laskurow["valkoodi"], $page_tarjous[$sivu], $boldi); // MODIFIED, commented out
         }
 
         if ($kuha-165 <= 80) {
