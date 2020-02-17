@@ -59,6 +59,7 @@ if (!function_exists('finvoice_otsik')) {
       break;
     case 'ITELFIHH':
     case 'E204503':
+    case '003708599126':
       $tulostuspalvelu  = "TULOSTUSPALVELU";
       break;
     default:
