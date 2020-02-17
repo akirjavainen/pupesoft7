@@ -18,7 +18,7 @@ $querykiel = "SELECT kieli FROM asiakas WHERE yhtio = '$kukarow[yhtio]' and ytun
 $kielresult = pupe_query($querykiel);
 $kielrow = mysqli_fetch_array($kielresult);
 
-if (strlen($verolliset_verottomat_hinnat) === 0) $verolliset_verottomat_hinnat = "verolliset"; // MODIFIED, added
+if (strlen($verolliset_verottomat_hinnat) === 0) $verolliset_verottomat_hinnat = "verottomat"; // MODIFIED, added
 $naytetaanko_tuoteno = "ei"; // MODIFIED, added
 
 if ($kielrow['kieli'] != '') {
@@ -735,7 +735,7 @@ if (!function_exists('tarjous_rivi_otsikot')) {
       }
 
       if (!in_array($yhtiorow["tarjoustyyppi"], array(2, 4))) {
-        if ($naytetaanko_rivihinta != "ei_rivihintaa") $pdf_tarjous->draw_text(498, $kala + 15, t("Alv", $kieli), $page_tarjous, $norm); // MODIFIED, BUGFIX
+        if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") $pdf_tarjous->draw_text(498, $kala + 15, t("Alv", $kieli), $page_tarjous, $norm); // MODIFIED, BUGFIX
       }
 
       if (trim($naytetaanko_rivihinta) == '') {
@@ -1174,7 +1174,7 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
         $pdf_tarjous->draw_text(500, $kala, t("M.V.", $kieli), $page_tarjous[$sivu], $norm);
       }
       else {
-        if ($naytetaanko_rivihinta != "ei_rivihintaa") $pdf_tarjous->draw_text(500, $kala, ($row["alv"]*1)."%", $page_tarjous[$sivu], $norm); // MODIFIED, BUGFIX
+        if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") $pdf_tarjous->draw_text(500, $kala, ($row["alv"]*1)."%", $page_tarjous[$sivu], $norm); // MODIFIED, BUGFIX
       }
     }
 
@@ -2493,6 +2493,11 @@ if (!function_exists('alvierittely')) {
 
     $pdf_tarjous->draw_text(550, $varakala, $laskurow["valkoodi"], $page_tarjous[$sivu], $boldi);
 
+    if ($yhtiorow['tarjoustyyppi'] == 0 and trim($verolliset_verottomat_hinnat) == 'verottomat') { // MODIFIED, added
+      if ($yhtiorow['alv_kasittely'] != '' and $yhtiorow['tarjouksen_alv_kasittely'] == '') { // MODIFIED, added
+        $total_tarjous += $veron_maara; // MODIFIED, added
+      } // MODIFIED, added
+    }
     if ($yhtiorow['tarjoustyyppi'] == 1 or $yhtiorow['tarjoustyyppi'] == 5) {
 
       if ($yhtiorow['tarjoustyyppi'] == 1) $kala -= 20;
