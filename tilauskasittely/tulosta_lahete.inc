@@ -537,7 +537,7 @@ if (!function_exists('alku_lahete')) {
       }
     }
         $pdf->draw_text(290, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli).".", $thispage, $boldi); // MODIFIED, added
-        $pdf->draw_text(290, 606, t("Kätisyys ikkunoissa sisältäpäin ja ovissa ulkoapäin", $kieli).".", $thispage, $boldi); // MODIFIED,
+        //$pdf->draw_text(290, 606, t("Kätisyys ikkunoissa sisältäpäin ja ovissa ulkoapäin", $kieli).".", $thispage, $boldi); // MODIFIED, added
 
     $komm = "";
 
