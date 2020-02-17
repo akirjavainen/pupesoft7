@@ -407,16 +407,16 @@ while ($row = mysqli_fetch_assoc($result)) {
 if ($lasktuote > 0) {
   $iltasiivo .= is_log("Poistettiin $lasktuote tuotteelta yhteensä $laskpois duplikaattia toimittajaa");
 }
+// MODIFIED, commented out:
+//$kukaquery = "UPDATE kuka
+//              SET taso = '2'
+//              WHERE taso   = '3'
+//              AND extranet = ''";
+//pupe_query($kukaquery);
 
-$kukaquery = "UPDATE kuka
-              SET taso = '2'
-              WHERE taso   = '3'
-              AND extranet = ''";
-pupe_query($kukaquery);
-
-if (mysqli_affected_rows($link) > 0) {
-  $iltasiivo .= date("d.m.Y @ G:i:s").": Päivitettiin ".mysqli_affected_rows($link)." käyttäjän taso 3 --> 2\n";
-}
+//if (mysqli_affected_rows($link) > 0) {
+//  $iltasiivo .= date("d.m.Y @ G:i:s").": Päivitettiin ".mysqli_affected_rows($link)." käyttäjän taso 3 --> 2\n";
+//}
 
 // mitätöidään keskenolevia extranet-tilauksia, jos ne on liian vanhoja ja yhtiön parametri on päällä
 if ($yhtiorow['iltasiivo_mitatoi_ext_tilauksia'] != '') {
