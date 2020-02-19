@@ -1,4 +1,5 @@
 <?php
+include("../../raportit/includes/phpupesoft.php"); // MODIFIED, added
 
 if (!empty($_REQUEST["naytetaan_kate"])) {
   setcookie("katteen_nayttaminen", $_REQUEST["naytetaan_kate"]);
@@ -8183,7 +8184,9 @@ if ($tee == '') {
           echo "<td $class align='left'>$_myytavissa</td>";
         }
 
-        if ($kukarow['extranet'] == '' and $tuotekyslinkki != "") {
+	if ($kukarow['extranet'] == '' and $tuotekyslinkki != "") {
+	  $shippingtext = "";
+          if ($row["tuoteno"] == "RAHTI" && file_exists("../../raportit")) $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>" . calculateSquareCubic($row["nimitys"], $row["tilkpl"]) . "</font>";
           echo "<td $class>
                   <a href='{$palvelin2}$tuotekyslinkki?".$tuotekyslinkkilisa."tee=Z&tuoteno=".urlencode($row["tuoteno"])."&toim_kutsu=$toim&lopetus=$tilmyy_lopetus//from=LASKUTATILAUS'
                      class='tooltip'
@@ -8195,7 +8198,7 @@ if ($tee == '') {
                        "&keskihinta={$row["kehahin"]}" .
                        "&valuutta={$laskurow["valkoodi"]}" .
                        "&varasto={$laskurow["varasto"]}" .
-                       "&vanhatunnus={$laskurow["vanhatunnus"]}'>$row[tuoteno]</a>";
+                       "&vanhatunnus={$laskurow["vanhatunnus"]}'>$row[tuoteno]</a>$shippingtext"; // MODIFIED, RAHTI
         }
         else {
           echo "<td $class>$row[tuoteno]";
