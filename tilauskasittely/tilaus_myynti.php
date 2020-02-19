@@ -10103,7 +10103,7 @@ if ($tee == '') {
             if ($toim == 'TARJOUS' and !empty($yhtiorow['salli_jyvitys_tarjouksella'])) {
               // MODIFIED, added postal code on next line:
 	      $total_m3 = (isset($total_m3)) ? "$total_m3 m<sup>3</sup>" : "";
-              echo "  <th colspan='5'>" . $laskurow['toim_postino'] . " " . $laskurow['toim_postitp'] . " $total_m3</font><br>".t("Pyöristä katetta").":</th>
+              echo "  <th colspan='5'><font color='green' style='font-weight: bold;'>" . $laskurow['toim_postino'] . " " . $laskurow['toim_postitp'] . " $total_m3</font><br>".t("Pyöristä katetta").":</th>
                   <td class='spec'>
                   <form name='pyorista' method='post' action='{$palvelin2}{$tilauskaslisa}tilaus_myynti.php' autocomplete='off'>
                       <input type='hidden' name='tilausnumero' value='$tilausnumero'>
