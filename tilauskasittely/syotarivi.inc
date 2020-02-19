@@ -111,8 +111,8 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
     echo "<td valign='top'>$ulos</td>";
   }
 
-  echo "  <td valign='top'><input type='text' name='kpl' size='5' maxlength='13' value='$kpl'></td>
-      <td valign='top'><input type='text' name='var' size='2' maxlength='1' value='$var'></td>";
+  echo "  <td valign='top'><input type='text' name='kpl' id='kpl' size='5' maxlength='13' value='$kpl'></td>
+      <td valign='top'><input type='text' name='var' size='2' maxlength='1' value='$var'></td>"; // MODIFIED, added id
 
   if ($kukarow['hinnat'] == 0) {
     $siemenluku = mb_strlen((int) $hinta) > 5 ? mb_strlen((int) $hinta) : 5;
@@ -390,7 +390,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
     echo "<td valign='top'>$ulos</td>";
   }
 
-  echo "<td valign='top'><input type='text' size='5' name='kpl' maxlength='13' value='$kpl'></td>";
+  echo "<td valign='top'><input type='text' size='5' name='kpl' id='kpl' maxlength='13' value='$kpl' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value);'></td>"; // MODIFIED, added id & cubic/square meter calculation
 
   $selh = $selj = $selp = $selo = "";
 
@@ -665,7 +665,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
         <th colspan='{$nrospanni}' align='left'>".t("Tuotteen nimitys")."</th>
         </tr>
       <tr>$jarjlisa
-        <td valign='top' colspan='{$nrospanni}'><input type='text' maxlength='100' size='75' name='tuotenimitys' id='tuotenimitys' value = '$tuotenimitys' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value);'></td>"; // MODIFIED, added
+        <td valign='top' colspan='{$nrospanni}'><input type='text' maxlength='100' size='75' name='tuotenimitys' id='tuotenimitys' value = '$tuotenimitys' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value);'></td>"; // MODIFIED, added
   }
 
   echo "<td valign='top' class='back'><input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'>";
@@ -759,7 +759,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "SIIRTOLIS
     echo "<td valign='top'>$ulos</td>";
   }
 
-  echo "<td valign='top'><input type='text' size='5' name='kpl' maxlength='13' value='$kpl'></td>";
+  echo "<td valign='top'><input type='text' size='5' name='kpl' id='kpl' maxlength='13' value='$kpl'></td>"; // MODIFIED, added id
 
   if ($toim == "VALMISTAVARASTOON" and $yhtiorow['valmistuksien_kasittely'] == 'Y') {
     echo "<td>";
