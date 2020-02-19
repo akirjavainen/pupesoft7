@@ -57,7 +57,7 @@ elseif ($type == '3' or ($type == 'S' and
 
   if ($yritirow["yhtio"] == "") {
     echo "<font class='error'>Tilille $account ei löytynyt yritystä.</font><br>\n";
-    exit("");
+    exit(""); // MODIFIED, BUGFIX
   }
   else {
     // Setataan kukarow-yhtiö
@@ -73,7 +73,7 @@ elseif ($type == '3' or ($type == 'S' and
 
     if (mysqli_num_rows($valresult) != 1) {
       echo "<font class='error'> Valuuttaa '$yritirow[valkoodi]' ei löytynyt!</font><br>\n";
-      exit("");
+      exit(""); // MODIFIED, BUGFIX
     }
     else {
       $valrow = mysqli_fetch_assoc($valresult);
@@ -88,7 +88,7 @@ elseif ($type == '3' or ($type == 'S' and
 
     if ($valrow["valkoodi"] == '') {
       echo "<font class='error'> Yhtiöllä ei ole valuuttaa!</font><br>\n";
-      exit("");
+      exit(""); // MODIFIED, BUGFIX
     }
     else {
       $valkoodi = $valrow["valkoodi"];
