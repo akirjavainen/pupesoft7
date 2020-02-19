@@ -1,5 +1,5 @@
 <?php
-include("../../raportit/includes/phpupesoft.php"); // MODIFIED, added
+include("../../raportit/includes/phpupesoft2.php"); // MODIFIED, added
 
 if (!empty($_REQUEST["naytetaan_kate"])) {
   setcookie("katteen_nayttaminen", $_REQUEST["naytetaan_kate"]);
@@ -8185,8 +8185,12 @@ if ($tee == '') {
         }
 
 	if ($kukarow['extranet'] == '' and $tuotekyslinkki != "") {
-	  $shippingtext = "";
-          if ($row["tuoteno"] == "RAHTI" && file_exists("../../raportit")) $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>" . calculateSquareCubic($row["nimitys"], $row["tilkpl"]) . "</font>";
+	  $shippingtext = ""; // MODIFIED, added
+	  if ($row["tuoteno"] == "RAHTI" && file_exists("../../raportit")) { // MODIFIED, added
+		  $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>" . calculateSquareCubic($row["nimitys"], $row["tilkpl"], true) . "</font>"; // MODIFIED, added
+		  if (!isset($total_m3)) $total_m3 = 0;
+		  $total_m3 += calculateSquareCubic($row["nimitys"], $row["tilkpl"], false);
+          } // MODIFIED, added
           echo "<td $class>
                   <a href='{$palvelin2}$tuotekyslinkki?".$tuotekyslinkkilisa."tee=Z&tuoteno=".urlencode($row["tuoteno"])."&toim_kutsu=$toim&lopetus=$tilmyy_lopetus//from=LASKUTATILAUS'
                      class='tooltip'
@@ -10128,8 +10132,9 @@ if ($tee == '') {
                   $align = "align='right'";
                 }
               }
-
-              echo "  <th colspan='5' id='pyoristysOtsikko'>".t($pyoristys_otsikko).":</th>
+              // MODIFIED, added postal code on next line:
+	      $total_m3 = (isset($total_m3)) ? "$total_m3 m<sup>3</sup>" : "";
+              echo "  <th colspan='5' id='pyoristysOtsikko'><font color='green' style='font-weight: bold;'>" . $laskurow['toim_postino'] . " " . $laskurow['toim_postitp'] . " $total_m3</font><br>".t($pyoristys_otsikko).":</th>
                   <td id='pyoristysSarake' class='spec' {$align}>
                   <form name='pyorista' method='post' action='{$palvelin2}{$tilauskaslisa}tilaus_myynti.php' autocomplete='off'>
                       <input type='hidden' name='tilausnumero' value='$tilausnumero'>
