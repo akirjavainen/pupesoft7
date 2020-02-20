@@ -19,7 +19,7 @@ $kielresult = pupe_query($querykiel);
 $kielrow = mysqli_fetch_array($kielresult);
 
 if (strlen($verolliset_verottomat_hinnat) === 0) $verolliset_verottomat_hinnat = "verottomat"; // MODIFIED, added
-$naytetaanko_tuoteno = "ei"; // MODIFIED, added
+//$naytetaanko_tuoteno = "ei"; // MODIFIED, added
 
 if ($kielrow['kieli'] != '') {
   $kieli = mb_strtolower($kielrow['kieli']);
