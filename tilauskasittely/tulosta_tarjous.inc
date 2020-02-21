@@ -387,6 +387,9 @@ if (!function_exists('alku_tarjous')) {
     }
 
     $komm = "";
+    $puh = ""; // MODIFIED, added
+    if (file_exists("../../common")) $puh = getOrderContactPhone($GLOBALS["masterlink"], $laskurow['yhtio'], $laskurow['ytunnus'], $laskurow['tilausyhteyshenkilo']); // MODIFIED, added
+    if (strlen($puh) > 0) $puh = " " . $puh; // MODIFIED, added
 
     if ($kaanteinen_verotus) {
       $komm .= t("AVL 8c §", $kieli).":###".wordwrap(str_replace("\n", "\n###", t_avainsana("KAANTALVVIESTI", $kieli, "", "", "", "selitetark_2")), 90, "\n###")."\n";
@@ -402,12 +405,12 @@ if (!function_exists('alku_tarjous')) {
       }
 
       if (trim($laskurow['tilausyhteyshenkilo']) != '') {
-        $komm .= "\n".t("Tilausyhteyshenkilö", $kieli).":         ###".$laskurow['tilausyhteyshenkilo'];
+        $komm .= "\n".t("Tilausyhteyshenkilö", $kieli).":         ###".$laskurow['tilausyhteyshenkilo'] . $puh; // MODIFIED, phone added
       }
     }
     else {
       if (trim($laskurow['tilausyhteyshenkilo']) != '') {
-        $komm .= "\n".t("Tarjousyhteyshenkilö", $kieli).":         ###".$laskurow['tilausyhteyshenkilo'];
+        $komm .= "\n".t("Tarjousyhteyshenkilö", $kieli).":         ###".$laskurow['tilausyhteyshenkilo'] . $puh; // MODIFIED, phone added
       }
 
       if (trim($laskurow['asiakkaan_tilausnumero']) != '') {
