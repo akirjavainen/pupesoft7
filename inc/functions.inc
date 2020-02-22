@@ -193,13 +193,14 @@ if (!function_exists("pupe_query")) {
       $res = mysqli_query($link, $query, $link) or pupe_error($query);
     }
     elseif (isset($GLOBALS["pupe_masterdb"]) and $GLOBALS["pupe_masterdb"] > 0) {
-      $res = mysqli_query($link, $query, $GLOBALS["masterlink"]) or pupe_error($query);
+      if ($link == NULL) $link = $GLOBALS["link"]; // MODIFIED, added for PHP 7 compatibility
+      $res = mysqli_query($link, $query) or pupe_error($query);
     }
     elseif (isset($GLOBALS["pupe_slavedb"]) and $GLOBALS["pupe_slavedb"] > 0) {
       $res = mysqli_query($link, $query, $GLOBALS["slavelink"]) or pupe_error($query);
     }
     else {
-      if ($link == NULL) $link = $GLOBALS["link"];
+      if ($link == NULL) $link = $GLOBALS["link"]; // MODIFIED, added for PHP 7 compatibility
       $res = mysqli_query($link, $query) or pupe_error("pupe_query($query, " . mysqli_error($link) . ")");
     }
 
