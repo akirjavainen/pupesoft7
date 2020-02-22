@@ -785,6 +785,12 @@ if (!function_exists('rivi_tarjous')) {
       // Tilaajan rivinumero
       if ($row["tilaajanrivinro"] != 0) {
         $row["kommentti"] .= "\n".t("Rivinumero", $kieli).": ".$row["tilaajanrivinro"].". ";
+
+	// MODIFIED, added line draw before product number:
+        $x[0] = 25;
+        $x[1] = 575;
+        $y[0] = $y[1] = $kala + ($rivinkorkeus / 1.5);
+        $pdf_tarjous->draw_line($x, $y, $page_tarjous[$sivu]);
       }
 
       $askomquery = "SELECT *
