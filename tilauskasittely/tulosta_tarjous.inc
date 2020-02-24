@@ -5,7 +5,10 @@ if (@include_once "pdflib/phppdflib.class.php") {
 else {
   include_once "phppdflib.class.php";
 }
-if (file_exists("../../common")) include_once("../../common/pupesoft.php"); // MODIFIED, added
+if (file_exists("../../common")) { // MODIFIED, added
+	include_once("../../common/pupesoft.php"); // MODIFIED, added
+	include_once("../../common/functions-pupesoft.php"); // MODIFIED, added
+}
 
 // jos php-gd on installoitu niin loidataab barcode library
 if (in_array("gd", get_loaded_extensions())) {
