@@ -8186,6 +8186,8 @@ if ($tee == '') {
 
 	if ($kukarow['extranet'] == '' and $tuotekyslinkki != "") {
 	  $shippingtext = ""; // MODIFIED, added
+          if (!isset($total_qty)) $total_qty = 0; // MODIFIED, added
+	  $total_qty += $row["tilkpl"]; // MODIFIED, added
 	  if ($row["tuoteno"] == "RAHTI" && file_exists("../../raportit")) { // MODIFIED, added
 		  $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>" . calculateSquareCubic($row["nimitys"], $row["tilkpl"], true) . "</font>"; // MODIFIED, added
 		  if (!isset($total_m3)) $total_m3 = 0;
@@ -10101,9 +10103,10 @@ if ($tee == '') {
 
           if ($toim != "PROJEKTI" and $sallijyvitys) {
             if ($toim == 'TARJOUS' and !empty($yhtiorow['salli_jyvitys_tarjouksella'])) {
-              // MODIFIED, added postal code on next line:
+              // MODIFIED, added postal code and total qty on next line:
+	      $total_qty = (isset($total_qty)) ? "Yhteensä: $total_qty kpl" : "";
 	      $total_m3 = (isset($total_m3)) ? "$total_m3 m<sup>3</sup>" : "";
-              echo "  <th colspan='5'><font color='green' style='font-weight: bold;'>" . $laskurow['toim_postino'] . " " . $laskurow['toim_postitp'] . " $total_m3</font><br>".t("Pyöristä katetta").":</th>
+              echo "  <th colspan='5'><font color='green' style='font-weight: bold;'>" . $laskurow['toim_postino'] . " " . $laskurow['toim_postitp'] . " $total_m3</font><br>$total_qty<br>".t("Pyöristä katetta").":</th>
                   <td class='spec'>
                   <form name='pyorista' method='post' action='{$palvelin2}{$tilauskaslisa}tilaus_myynti.php' autocomplete='off'>
                       <input type='hidden' name='tilausnumero' value='$tilausnumero'>
@@ -10134,9 +10137,10 @@ if ($tee == '') {
                   $align = "align='right'";
                 }
               }
-              // MODIFIED, added postal code on next line:
+              // MODIFIED, added postal code and total qty on next line:
+	      $total_qty = (isset($total_qty)) ? "Yhteens&auml;: $total_qty kpl" : "";
 	      $total_m3 = (isset($total_m3)) ? "$total_m3 m<sup>3</sup>" : "";
-              echo "  <th colspan='5' id='pyoristysOtsikko'><font color='green' style='font-weight: bold;'>" . $laskurow['toim_postino'] . " " . $laskurow['toim_postitp'] . " $total_m3</font><br>".t($pyoristys_otsikko).":</th>
+              echo "  <th colspan='5' id='pyoristysOtsikko'><font color='green' style='font-weight: bold;'>" . $laskurow['toim_postino'] . " " . $laskurow['toim_postitp'] . " $total_m3</font><br>$total_qty<br>".t($pyoristys_otsikko).":</th>
                   <td id='pyoristysSarake' class='spec' {$align}>
                   <form name='pyorista' method='post' action='{$palvelin2}{$tilauskaslisa}tilaus_myynti.php' autocomplete='off'>
                       <input type='hidden' name='tilausnumero' value='$tilausnumero'>
