@@ -1192,7 +1192,7 @@ if ($tee == "ETSILASKU") {
         echo "<br>$row[laskunro]";
       }
       echo "</$ero>";
-      echo "<$ero valign='top'>", tarkistahetu($row['ytunnus']), "<br>$row[nimi]<br>$row[nimitark]</$ero>";
+      echo "<$ero valign='top'>", tarkistahetu($row['ytunnus']), "<br>$row[nimi]<br>$row[nimitark]<br>" . $row["viesti"] . "</$ero>";
 
       if ($toim == "LAVAKERAYSTARRA" or $toim == "LAVATARRA" or $toim == "LAVAKERAYSLISTA") {
         echo "<$ero valign='top'>$row[toimitustapa]</$ero>";
