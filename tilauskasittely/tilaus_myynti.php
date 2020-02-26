@@ -5619,7 +5619,7 @@ if ($tee == '') {
         $trow["alv"] = $laskurow["alv"];
       }
 
-      if ($tuoteno != '' and $kpl != 0) {
+      if ($tuoteno != '') { // MODIFIED, removed "and $kpl != 0" to allow 0 kpl
         require 'lisaarivi.inc';
       }
 

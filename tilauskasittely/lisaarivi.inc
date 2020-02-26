@@ -852,7 +852,7 @@ if ($laskurow["toim_maa"] != "" and $laskurow["tila"] != 'V') {
 }
 
 //Tutkitaan onko tämä hyvitysrivi
-if ((float) $kpl < 0 and trim($var) == "") {
+if ((float) $kpl <= 0 and trim($var) == "") { // MODIFIED, < to <= to allow 0 kpl
   //Laitetaan varriksi Y jotta ei tarvitse mennä myyntihaaraan
   $var = "Y";
 }
@@ -3578,7 +3578,7 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
                 {$tlisatied_lisa2}
                 {$jt_manual_lisa}";
 
-      if ($trow["sarjanumeroseuranta"] == "S" and $kpl < 0) {
+      if ($trow["sarjanumeroseuranta"] == "S" and $kpl <= 0) { // MODIFIED, < to <= to allow 0 kpl
         $query .= " , osto_vai_hyvitys='O' ";
       }
 
