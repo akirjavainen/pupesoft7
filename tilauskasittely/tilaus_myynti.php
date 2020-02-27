@@ -7545,11 +7545,11 @@ if ($tee == '') {
                   <input type='hidden' id='rivi_$rivino' name='jarjesta' value='$rivino'>";
 
           if (($rivino > 1 and $yhtiorow["tilauksen_jarjestys_suunta"] == "ASC") or ($rivino < $rivilaskuri and $yhtiorow["tilauksen_jarjestys_suunta"] == "DESC")) {
-            $buttonit .= "  <a href='#' onClick=\"getElementById('rivi_$rivino').value='moveUp'; document.forms['siirra_$rivino'].submit();\"><img src='".$palvelin2."pics/lullacons/arrow-single-up-green.png' height = '10' width = '10'></a><br>";
+            $buttonit .= "  <a href='#' onClick=\"getElementById('rivi_$rivino').value='moveUp'; document.forms['siirra_$rivino'].submit();\"><img src='".$palvelin2."pics/lullacons/arrow-single-up-green.png' height = '20' width = '20'></a><br>";
           }
 
           if (($rivilaskuri > $rivino and $yhtiorow["tilauksen_jarjestys_suunta"] == "ASC") or ($rivino > 1 and $yhtiorow["tilauksen_jarjestys_suunta"] == "DESC")) {
-            $buttonit .= "  <a href='#' onClick=\"getElementById('rivi_$rivino').value='moveDown'; document.forms['siirra_$rivino'].submit();\"><img src='".$palvelin2."pics/lullacons/arrow-single-down-red.png' height = '10' width = '10'></a>";
+            $buttonit .= "  <a href='#' onClick=\"getElementById('rivi_$rivino').value='moveDown'; document.forms['siirra_$rivino'].submit();\"><img src='".$palvelin2."pics/lullacons/arrow-single-down-red.png' height = '20' width = '20'></a>";
           }
 
           $buttonit .= "</form></div>";
