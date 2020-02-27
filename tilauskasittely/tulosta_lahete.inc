@@ -3,6 +3,11 @@
 if (@include_once "pdflib/phppdflib.class.php");
 else include_once "phppdflib.class.php";
 
+if (file_exists("../../common")) { // MODIFIED, added
+	include_once("../../common/pupesoft.php"); // MODIFIED, added
+	include_once("../../common/functions-pupesoft.php"); // MODIFIED, added
+}
+
 if ($kieli == '') {
   $querykiel = "SELECT kieli
                 FROM asiakas
@@ -540,13 +545,16 @@ if (!function_exists('alku_lahete')) {
         //$pdf->draw_text(290, 606, t("Kätisyys ikkunoissa sisältäpäin ja ovissa ulkoapäin", $kieli).".", $thispage, $boldi); // MODIFIED, added
 
     $komm = "";
+    $puh = ""; // MODIFIED, added
+    if (file_exists("../../common")) $puh = getOrderContactPhone($GLOBALS["masterlink"], $laskurow['yhtio'], $laskurow['ytunnus'], $laskurow['tilausyhteyshenkilo']); // MODIFIED, added
+    if (strlen($puh) > 0) $puh = " " . $puh; // MODIFIED, added
 
     if ($base_lahetetyyppi == "tulosta_lahete_custom.inc") {
       if (trim($laskurow['viesti']) != '') {
         $komm .= "\n".t("Tilausviite", $kieli)."###".$laskurow['viesti'];
       }
       if (trim($laskurow['tilausyhteyshenkilo']) != '') {
-        $komm .= "\n".t("Tilausyhteyshenkilö", $kieli).":###".$laskurow['tilausyhteyshenkilo'];
+        $komm .= "\n".t("Tilausyhteyshenkilö", $kieli).":###".$laskurow['tilausyhteyshenkilo'] . $puh; // MODIFIED, phone added
       }
       if (trim($laskurow['comments']) != '') {
         $komm .= "\n".t("Kommentti", $kieli).":###".wordwrap(str_replace("\n", "\n###", $laskurow['comments']), 90, "\n###");
@@ -554,7 +562,7 @@ if (!function_exists('alku_lahete')) {
     }
     else {
       if (trim($laskurow['tilausyhteyshenkilo']) != '') {
-        $komm .= "\n".t("Tilaaja", $kieli).":###".$laskurow['tilausyhteyshenkilo'];
+        $komm .= "\n".t("Tilaaja", $kieli).":###".$laskurow['tilausyhteyshenkilo'] . $puh;
       }
 
       if (trim($laskurow['asiakkaan_tilausnumero']) != '') {
