@@ -3710,6 +3710,7 @@ if ($tila == "" and !isset($jatka)) {
 	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta tai sähkötyötä.\"); return false;'>SPI-asennus</a> "
 	    . "<a href='#' onclick='addCommentText(\"Asennusreikien poraus.\"); return false;'>Karmireiät</a> "
 	    . "<a href='#' onclick='addCommentText(\"Raaka-aineena sormijatkettu mänty.\"); return false;'>Raaka-aine</a> "
+	    . "<a href='#' onclick='addCommentText(\"Paloikkunoilla ei tyyppihyväksyntää tai koepolttotuloksia.\\nTilaajan tulee hakea rakenteelle hyväksyntä ennen valmistuksen aloittamista.\"); return false;'>Palolasit</a> "
 	    . "</td></tr>";
     } else {
 	    $vakiotekstit = "";
