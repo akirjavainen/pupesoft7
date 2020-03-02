@@ -8188,11 +8188,18 @@ if ($tee == '') {
 	  $shippingtext = ""; // MODIFIED, added
           if (!isset($total_qty)) $total_qty = 0; // MODIFIED, added
 	  $total_qty += $row["tilkpl"]; // MODIFIED, added
-	  if ($row["tuoteno"] == "RAHTI" && file_exists("../../raportit")) { // MODIFIED, added
-		  $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>" . calculateSquareCubic($row["nimitys"], $row["tilkpl"], true) . "</font>"; // MODIFIED, added
+
+	  if (file_exists("../../raportit")) {
+	    if ($row["tuoteno"] == "RAHTI") { // MODIFIED, added
+	  	  $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>" . calculateSquareCubic($row["nimitys"], $row["tilkpl"], true) . "</font>"; // MODIFIED, added
 		  if (!isset($total_m3)) $total_m3 = 0;
 		  $total_m3 += calculateSquareCubic($row["nimitys"], $row["tilkpl"], false);
-          } // MODIFIED, added
+            } else { // MODIFIED, added
+		  $imagelink = getImageLink((int)$laskurow["tunnus"], (int)$row["tunnus"]);
+	  	  if (strlen($imagelink) > 0) $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>$imagelink</font>"; // MODIFIED, added
+            }
+	  }
+	  
           echo "<td $class>
                   <a href='{$palvelin2}$tuotekyslinkki?".$tuotekyslinkkilisa."tee=Z&tuoteno=".urlencode($row["tuoteno"])."&toim_kutsu=$toim&lopetus=$tilmyy_lopetus//from=LASKUTATILAUS'
                      class='tooltip'
