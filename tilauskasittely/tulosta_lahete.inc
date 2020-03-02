@@ -124,6 +124,7 @@ if (!function_exists('alku_lahete')) {
     }
 
     if ($tyyppi == "TILAUSVAHVISTUS") {
+      if (file_exists("../../raportit")) $pdf->draw_text(560, 820, getModifiedChecksum($laskurow['muutospvm']), $thispage, $pieni); // MODIFIED, added
       if ($base_lahetetyyppi == "tulosta_lahete_custom.inc") {
         $otsikko_len = $pdf->mb_strlen(t("TILAUSVAHVISTUS", $kieli), $iso);
         $pdf->draw_text((595 / 2) - ($otsikko_len / 2), 760, t("TILAUSVAHVISTUS", $kieli),     $thispage, $iso);
@@ -1475,7 +1476,7 @@ if (!function_exists('rivi_lahete')) {
                   and tilausrivi.tyyppi  != 'V'
                   AND tilausrivi.tyyppi  != 'D'
                   and tilausrivi.var     != 'O'
-                  ORDER BY tilausrivi.tunnus";
+                  ORDER BY tunnus ASC";
         $perheresult = pupe_query($query);
 
         if (mysqli_num_rows($perheresult) > 1) {
