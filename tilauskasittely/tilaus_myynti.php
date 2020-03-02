@@ -8188,6 +8188,7 @@ if ($tee == '') {
 	  $shippingtext = ""; // MODIFIED, added
           if (!isset($total_qty)) $total_qty = 0; // MODIFIED, added
 	  $total_qty += $row["tilkpl"]; // MODIFIED, added
+	  $tuoteno_text = $row["tuoteno"];
 
 	  if (file_exists("../../raportit")) {
 	    if ($row["tuoteno"] == "RAHTI") { // MODIFIED, added
@@ -8195,8 +8196,10 @@ if ($tee == '') {
 		  if (!isset($total_m3)) $total_m3 = 0;
 		  $total_m3 += calculateSquareCubic($row["nimitys"], $row["tilkpl"], false);
             } else { // MODIFIED, added
-		  $imagelink = getImageLink((int)$laskurow["tunnus"], (int)$row["tunnus"]);
-	  	  if (strlen($imagelink) > 0) $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>$imagelink</font>"; // MODIFIED, added
+		  $imagelink = getImageLink((int)$laskurow["tunnus"], (int)$row["tunnus"], true);
+		  $imagelink = file_get_contents($imagelink); // Uncomment to show link instead of image
+	  	  if (strlen($imagelink) > 0) $shippingtext = "<font color='green' style='font-weight: bold;'>$imagelink</font>"; // MODIFIED, added
+		  $tuoteno_text = "";
             }
 	  }
 	  
@@ -8211,7 +8214,7 @@ if ($tee == '') {
                        "&keskihinta={$row["kehahin"]}" .
                        "&valuutta={$laskurow["valkoodi"]}" .
                        "&varasto={$laskurow["varasto"]}" .
-                       "&vanhatunnus={$laskurow["vanhatunnus"]}'>$row[tuoteno]</a>$shippingtext"; // MODIFIED, RAHTI
+                       "&vanhatunnus={$laskurow["vanhatunnus"]}'>$tuoteno_text</a>$shippingtext"; // MODIFIED, RAHTI
         }
         else {
           echo "<td $class>$row[tuoteno]";
