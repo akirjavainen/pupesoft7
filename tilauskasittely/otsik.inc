@@ -3703,7 +3703,7 @@ if ($tila == "" and !isset($jatka)) {
     if (file_exists("../../raportit")) {
 	    $vakiotekstit = "<br><br>Vakiotekstit: " 
 	    . "<a href='#' onclick='addCommentText(\"Toimitusaika 4 viikkoa tilauksesta (välimyyntivarauksin).\"); return false;'>Toimitusaika</a> "
-	    . "<a href='#' onclick='addCommentText(\"Karmileveys 170 mm.\"); return false;'>Karmileveys</a> "
+	    . "<a href='#' onclick='addCommentText(\"Karmileveys 92 mm.\"); return false;'>Karmileveys</a> "
 	    . "<a href='#' onclick='addCommentText(\"Sävy valkoinen peittomaalattu NCS S 0502-Y.\"); return false;'>Valkoinen</a> "
 	    . "<a href='#' onclick='addCommentText(\"U-arvo alle 1 W/m2K (lämpimät asuinrakennukset).\"); return false;'>U-arvo</a> "
 	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta.\"); return false;'>Asennus</a> "
