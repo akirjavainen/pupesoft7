@@ -1539,7 +1539,7 @@ if (!function_exists('loppu_tarjous')) {
 
     if ($tots == 1) {
 
-      if ($yhtiorow['tarjoustyyppi'] == 0) { // MODIFIED, added
+      if ($yhtiorow['tarjoustyyppi'] == 0 && $naytetaanko_rivihinta != 'kokonaan_ilman_hintoja' && $naytetaanko_yhteissummarivi != 'E') { // MODIFIED, added
 		    list($page_tarjous, $sivu, $kala) = alvierittely($pdf_tarjous, $page_tarjous, $sivu, $laskurow, $total_tarjous, '', $verolliset_verottomat_hinnat, $kala);
 		    $kala -= 36;
       }
