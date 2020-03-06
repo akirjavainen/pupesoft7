@@ -1258,7 +1258,7 @@ if (!function_exists("apix_invoice_put_file")) {
               and alatila = 'X'
               and laskunro ='$apix_invoicenum'";
     $chnres = pupe_query($query);
-    $chnrow = mysql_fetch_assoc($chnres);
+    $chnrow = mysqli_fetch_assoc($chnres);
 
     if ($chnrow['chn'] == '113') {
       $software = "SprintItEDI";
