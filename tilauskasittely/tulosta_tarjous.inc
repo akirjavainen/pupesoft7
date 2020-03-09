@@ -391,7 +391,7 @@ if (!function_exists('alku_tarjous')) {
 
     $komm = "";
     $puh = ""; // MODIFIED, added
-    if (file_exists("../../common")) $puh = getOrderContactPhone($GLOBALS["masterlink"], $laskurow['yhtio'], $laskurow['ytunnus'], $laskurow['tilausyhteyshenkilo']); // MODIFIED, added
+    if (file_exists("../../common")) $puh = get_order_contact_person_phone_number($GLOBALS["masterlink"], $laskurow['yhtio'], $laskurow['ytunnus'], $laskurow['tilausyhteyshenkilo']); // MODIFIED, added
     if (strlen($puh) > 0) $puh = " " . $puh; // MODIFIED, added
 
     if ($kaanteinen_verotus) {
@@ -569,8 +569,8 @@ if (!function_exists('alku_tarjous')) {
       unlink($nimi);
     }
 
-    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 825, getDateTimeChecksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
-    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, getModifiedChecksum($laskurow['muutospvm']), $page_tarjous[$sivu], $pieni); // MODIFIED, added
+    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 825, get_datetime_checksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
+    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, get_modified_checksum($laskurow['muutospvm']), $page_tarjous[$sivu], $pieni); // MODIFIED, added
     return array($page_tarjous, $sivu, $kala);
   }
 }
@@ -2054,7 +2054,7 @@ if (!function_exists('loppu_tarjous')) {
       }
     }
 
-    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 12, getDateTimeChecksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
+    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 12, get_datetime_checksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
     return array($page_tarjous, $sivu);
   }
 }
@@ -2352,7 +2352,7 @@ if (!function_exists('tulosta_tarjous')) {
     else {
       for ($pp=1; $pp<=count($page_tarjous); $pp++) {
         $pdf_tarjous->draw_text(330, 803, "$pp / $sivu", $page_tarjous[$pp], $norm);
-	if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, getModifiedChecksum($laskurow['muutospvm']), $page_tarjous[$pp], $pieni); // MODIFIED, added
+	if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, get_modified_checksum($laskurow['muutospvm']), $page_tarjous[$pp], $pieni); // MODIFIED, added
       }
     }
 

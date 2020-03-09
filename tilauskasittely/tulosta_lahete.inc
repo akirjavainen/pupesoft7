@@ -124,7 +124,7 @@ if (!function_exists('alku_lahete')) {
     }
 
     if ($tyyppi == "TILAUSVAHVISTUS") {
-      if (file_exists("../../raportit")) $pdf->draw_text(560, 820, getModifiedChecksum($laskurow['muutospvm']), $thispage, $pieni); // MODIFIED, added
+      if (file_exists("../../raportit")) $pdf->draw_text(560, 820, get_modified_checksum($laskurow['muutospvm']), $thispage, $pieni); // MODIFIED, added
       if ($base_lahetetyyppi == "tulosta_lahete_custom.inc") {
         $otsikko_len = $pdf->mb_strlen(t("TILAUSVAHVISTUS", $kieli), $iso);
         $pdf->draw_text((595 / 2) - ($otsikko_len / 2), 760, t("TILAUSVAHVISTUS", $kieli),     $thispage, $iso);
@@ -547,7 +547,7 @@ if (!function_exists('alku_lahete')) {
 
     $komm = "";
     $puh = ""; // MODIFIED, added
-    if (file_exists("../../common")) $puh = getOrderContactPhone($GLOBALS["masterlink"], $laskurow['yhtio'], $laskurow['ytunnus'], $laskurow['tilausyhteyshenkilo']); // MODIFIED, added
+    if (file_exists("../../common")) $puh = get_order_contact_person_phone_number($GLOBALS["masterlink"], $laskurow['yhtio'], $laskurow['ytunnus'], $laskurow['tilausyhteyshenkilo']); // MODIFIED, added
     if (strlen($puh) > 0) $puh = " " . $puh; // MODIFIED, added
 
     if ($base_lahetetyyppi == "tulosta_lahete_custom.inc") {
