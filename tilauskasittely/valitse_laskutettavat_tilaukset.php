@@ -565,7 +565,7 @@ if ($tee == "VALITSE") {
         echo "<td><input type='checkbox' name='tunnus[$row[tunnus]]' value='$row[tunnus]' {$checked}></td>";
       }
 
-      echo "<td><a href='$PHP_SELF?tee=NAYTATILAUS&toim=$toim&tunnukset=$tunnukset&tunnus=$row[tunnus]'>$row[tunnus]</a></td>";
+      echo "<td><a href='$PHP_SELF?tee=NAYTATILAUS&toim=$toim&tunnukset=$tunnukset&tunnus=$row[tunnus]'>$row[tunnus]<br>$row[viesti]</a></td>"; // MODIFIED, added $row[viesti]
 
       // jos veroton summa on nolla ja verollinen summa on myös hyvin lähellä nollaa
       // niin tehdään nollalasku
@@ -1362,7 +1362,7 @@ require "inc/footer.inc";
 
 function hae_tilaukset_result($query_ale_lisa, $tunnukset, $alatilat, $vientilisa) {
   global $kukarow, $yhtiorow;
-
+  // MODIFIED, added lasku.viesti on next line:
   $query = "SELECT
             if (lasku.ketjutus = '', '', if (lasku.vanhatunnus > 0, lasku.vanhatunnus, lasku.tunnus)) ketjutuskentta,
             if ((((asiakas.koontilaskut_yhdistetaan = '' and ('{$yhtiorow['koontilaskut_yhdistetaan']}' = 'U' or '{$yhtiorow['koontilaskut_yhdistetaan']}' = 'V')) or asiakas.koontilaskut_yhdistetaan = 'U') and lasku.tilaustyyppi in ('R','U')), 1, 0) reklamaatiot_lasku,
@@ -1399,6 +1399,7 @@ function hae_tilaukset_result($query_ale_lisa, $tunnukset, $alatilat, $vientilis
             lasku.verkkotunnus,
             lasku.erikoisale,
             lasku.hinta,
+            lasku.viesti, 
             round(sum(tilausrivi.hinta / if('$yhtiorow[alv_kasittely]'  = '' and tilausrivi.alv < 500, (1+tilausrivi.alv/100), 1) * (tilausrivi.varattu+tilausrivi.jt) * {$query_ale_lisa}),2) arvo,
             round(sum(tilausrivi.hinta * if('$yhtiorow[alv_kasittely]' != '' and tilausrivi.alv < 500, (1+tilausrivi.alv/100), 1) * (tilausrivi.varattu+tilausrivi.jt) * {$query_ale_lisa}),2) summa
             FROM lasku use index (tila_index)
