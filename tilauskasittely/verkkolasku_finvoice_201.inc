@@ -65,9 +65,6 @@ if (!function_exists('finvoice_otsik')) {
     case 'ITELFIHH':
       $tulostuspalvelu  = "TULOSTUSPALVELU";
       break;
-    case 'FITEK':
-        $tulostuspalvelu  = "PRINT";
-        break;
     case '003703575029':
         $tulostuspalvelu  = "TULOSTUSPALVELU";
         break;
@@ -85,11 +82,11 @@ if (!function_exists('finvoice_otsik')) {
         $receiverpartyid = $lasrow["verkkotunnus"];
         $receiverintermediator = "003710948874";
       }
-      elseif (mb_strpos($lasrow["verkkotunnus"], "@") !== FALSE) {
+      elseif (strpos($lasrow["verkkotunnus"], "@") !== FALSE) {
         list($receiverpartyid, $receiverintermediator) = explode("@", $lasrow["verkkotunnus"]);
 
         // Verkkotunnus voi olla sähköpostiosoite:
-        if (($yhtiorow["verkkolasku_lah"] == "ppg" or $yhtiorow["verkkolasku_lah"] == "arvato" or $yhtiorow["verkkolasku_lah"] == "trustpoint") and mb_strpos($receiverintermediator, ".") !== FALSE) {
+        if (($yhtiorow["verkkolasku_lah"] == "ppg" or $yhtiorow["verkkolasku_lah"] == "arvato" or $yhtiorow["verkkolasku_lah"] == "trustpoint") and strpos($receiverintermediator, ".") !== FALSE) {
           $receiverpartyid = $lasrow["verkkotunnus"];
           $receiverintermediator = "EMAIL";
         }
@@ -368,7 +365,7 @@ if (!function_exists('finvoice_otsik')) {
 
       $laskutusosoitetiedot = array();
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "karhu.php") === FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "karhu.php") === FALSE) {
         $laskosoiteeri = "";
 
         if ($yhtiorow["verkkolasku_lah"] != "trustpoint") {
@@ -394,7 +391,7 @@ if (!function_exists('finvoice_otsik')) {
           $laskutusosoitetiedot = mysqli_fetch_assoc($tarkres);
         }
       }
-      elseif (mb_strpos($_SERVER['SCRIPT_NAME'], "karhu.php") !== FALSE
+      elseif (strpos($_SERVER['SCRIPT_NAME'], "karhu.php") !== FALSE
         and ($asiakasrow["maksukehotuksen_osoitetiedot"] == 'B' or ($asiakasrow["maksukehotuksen_osoitetiedot"] == '' and $yhtiorow["maksukehotuksen_osoitetiedot"] == 'K'))
         and $asiakasrow["laskutus_nimi"] != '') {
 
@@ -411,7 +408,7 @@ if (!function_exists('finvoice_otsik')) {
         xml_add("InvoiceRecipientPartyIdentifier", tulosta_ytunnus($lasrow['ytunnus'], $lasrow['maa'], ""), $tootfinvoice, 35);
 
         $laskutus_nimitieto = trim($laskutusosoitetiedot["laskutus_nimi"]." ".$laskutusosoitetiedot["laskutus_nimitark"]);
-        $laskutus_nimitieto_array = mb_str_split($laskutus_nimitieto, 35); // MODIFIED, BUGFIX, 3rd parameter "2" was in conflict with php-mbstring
+        $laskutus_nimitieto_array = mb_str_split($laskutus_nimitieto, 35, 2);
 
         foreach ($laskutus_nimitieto_array as $laskutus_nimi_osa) {
           xml_add("InvoiceRecipientOrganisationName", $laskutus_nimi_osa, $tootfinvoice, 35, 2);
@@ -443,7 +440,7 @@ if (!function_exists('finvoice_otsik')) {
       }
 
       $asiakas_nimitieto = trim($lasrow['nimi']." ".$lasrow['nimitark']);
-      $asiakas_nimitieto_array = mb_str_split($asiakas_nimitieto, $nimikenpit); // MODIFIED, BUGFIX, 3rd parameter "2" was in conflict with php-mbstring
+      $asiakas_nimitieto_array = mb_str_split($asiakas_nimitieto, $nimikenpit, 2);
 
       foreach ($asiakas_nimitieto_array as $asiakas_nimi_osa) {
         xml_add("BuyerOrganisationName", $asiakas_nimi_osa, $tootfinvoice, $nimikenpit, 2);
@@ -506,14 +503,14 @@ if (!function_exists('finvoice_otsik')) {
           fputs($tootfinvoice, "<BuyerCommunicationDetails>\r\n");
           xml_add("BuyerEmailaddressIdentifier", $asiakasrow[$BuyerEmailaddressIdentifier_avainsana_kentta], $tootfinvoice, 35);
           fputs($tootfinvoice, "</BuyerCommunicationDetails>\r\n");
-        } 
-      } 
+        }
+      }
 
       fputs($tootfinvoice, "<DeliveryPartyDetails>\r\n");
       xml_add("DeliveryPartyIdentifier", tulosta_ytunnus($lasrow['ytunnus'], $lasrow['maa'], ""), $tootfinvoice, 35);
 
       $asiakas_toimnimitieto = trim($lasrow['toim_nimi']." ".$lasrow['toim_nimitark']);
-      $asiakas_toimnimitieto_array = mb_str_split($asiakas_toimnimitieto, 35); // MODIFIED, BUGFIX, 3rd parameter "2" was in conflict with php-mbstring
+      $asiakas_toimnimitieto_array = mb_str_split($asiakas_toimnimitieto, 35, 2);
 
       foreach ($asiakas_toimnimitieto_array as $asiakas_toimnimi_osa) {
         xml_add("DeliveryOrganisationName", $asiakas_toimnimi_osa, $tootfinvoice, 35, 2);
@@ -562,19 +559,19 @@ if (!function_exists('finvoice_otsik')) {
       xml_add("OriginCode", "Original", $tootfinvoice);
       xml_add("InvoiceNumber", $lasrow['laskunro'], $tootfinvoice, 20, 1);
       xml_add("InvoiceDate Format=\"CCYYMMDD\"", vlas_dateconv($lasrow['tapvm']), $tootfinvoice);
-      xml_add("SellerReferenceIdentifier", mb_substr($lasrow['tilausnumerot'], 0, 35), $tootfinvoice, 35);
+      xml_add("SellerReferenceIdentifier", substr($lasrow['tilausnumerot'], 0, 35), $tootfinvoice, 35);
 
       $sellersbuyeridentifier_avainsana_where = "AND selite = '{$yhtiorow["verkkolasku_lah"]}' AND selitetark = 'SellersBuyerIdentifier'";
       $sellersbuyeridentifier_avainsana_kentta = t_avainsana("VERKLASKKENTSIS", "", $sellersbuyeridentifier_avainsana_where, "", "", "selitetark_2");
 
       if ($yhtiorow["verkkolasku_lah"] == "talenom" or $yhtiorow["verkkolasku_lah"] == "arvato" or $sellersbuyeridentifier_avainsana_kentta == "asiakasnro") {
-        xml_add("SellersBuyerIdentifier", mb_substr($asiakasrow["asiakasnro"], 0, 35), $tootfinvoice, 35);
+        xml_add("SellersBuyerIdentifier", substr($asiakasrow["asiakasnro"], 0, 35), $tootfinvoice, 35);
       }
       elseif (trim($lasrow['asiakkaan_tilausnumero']) != "") {
-        xml_add("SellersBuyerIdentifier", mb_substr($lasrow['asiakkaan_tilausnumero'], 0, 35), $tootfinvoice, 35);
+        xml_add("SellersBuyerIdentifier", substr($lasrow['asiakkaan_tilausnumero'], 0, 35), $tootfinvoice, 35);
       }
       else {
-        xml_add("SellersBuyerIdentifier", mb_substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);
+        xml_add("SellersBuyerIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);
       }
 
       $orderidentifier_avainsana_where = "AND selite = '{$yhtiorow["verkkolasku_lah"]}' AND selitetark = 'OrderIdentifier'";
@@ -584,19 +581,19 @@ if (!function_exists('finvoice_otsik')) {
         xml_add("OrderIdentifier", "", $tootfinvoice, 35);
       }
       elseif (trim($lasrow['asiakkaan_tilausnumero']) != "") {
-        xml_add("OrderIdentifier", mb_substr($lasrow['asiakkaan_tilausnumero'], 0, 35), $tootfinvoice, 35);
+        xml_add("OrderIdentifier", substr($lasrow['asiakkaan_tilausnumero'], 0, 35), $tootfinvoice, 35);
       }
       else {
-        xml_add("OrderIdentifier", mb_substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);
+        xml_add("OrderIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);
       }
 
-      xml_add("AgreementIdentifier", mb_substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);
+      xml_add("AgreementIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);
 
       xml_add("InvoiceTotalVatExcludedAmount AmountCurrencyIdentifier=\"$lasrow[valkoodi]\"", pp($lasrow['arvo'], 2), $tootfinvoice);
       xml_add("InvoiceTotalVatAmount AmountCurrencyIdentifier=\"$lasrow[valkoodi]\"", pp(($lasrow['summa']-$lasrow['arvo']), 2), $tootfinvoice);
       xml_add("InvoiceTotalVatIncludedAmount AmountCurrencyIdentifier=\"$lasrow[valkoodi]\"", pp($lasrow['summa'], 2), $tootfinvoice);
     }
-    elseif ($silent == "" or mb_strpos($_SERVER['SCRIPT_NAME'], "valitse_laskutettavat_tilaukset.php") !== FALSE  or mb_strpos($_SERVER['SCRIPT_NAME'], "uudelleenluo_laskuaineisto.php") !== FALSE) {
+    elseif ($silent == "" or strpos($_SERVER['SCRIPT_NAME'], "valitse_laskutettavat_tilaukset.php") !== FALSE  or strpos($_SERVER['SCRIPT_NAME'], "uudelleenluo_laskuaineisto.php") !== FALSE) {
       if ($senderpartyid == "" or $senderintermediator == "") {
         $tulos_ulos .= t("Finvoiceaineistoa ei voitu luoda. Yhtiolta puuttuu finvoice_senderpartyid tai finvoice_senderintermediator tunnus. Tulosta lasku manuaalisesti!")." ".$lasrow["laskunro"]."<br>\r\n<br>\r\n";
       }
@@ -724,7 +721,7 @@ if (!function_exists('finvoice_rivi')) {
         xml_add("RowIdentifier", $tilrow['tilaajanrivinro'], $tootfinvoice, 35);
       }
 
-      if ((int) str_replace("-", "", mb_substr($tilrow['tilauspaiva'], 0, 10)) < (int) str_replace("-", "", mb_substr($tilrow['toimitettuaika'], 0, 10))) {
+      if ((int) str_replace("-", "", substr($tilrow['tilauspaiva'], 0, 10)) < (int) str_replace("-", "", substr($tilrow['toimitettuaika'], 0, 10))) {
         xml_add("RowIdentifierDate Format=\"CCYYMMDD\"", vlas_dateconv($tilrow['tilauspaiva']), $tootfinvoice);
       }
 
@@ -800,11 +797,11 @@ if (!function_exists('finvoice_row_freetext')) {
             $kentta = $al_row["selite"];
 
             if (((!is_numeric($tyomrow[$kentta]) and trim($tyomrow[$kentta]) != '') or (is_numeric($tyomrow[$kentta]) and $tyomrow[$kentta] != 0)) and trim($tyomrow[$kentta]) != '0000-00-00') {
-              if (mb_strtoupper($al_row["selitetark_2"]) == "TEXT") {
+              if (strtoupper($al_row["selitetark_2"]) == "TEXT") {
                 $lisakomm .= "|$al_row[selitetark]: ".$tyomrow[$kentta];
               }
               else {
-                if (mb_strtoupper($al_row["selitetark_2"]) == "DATE") {
+                if (strtoupper($al_row["selitetark_2"]) == "DATE") {
                   $tyomrow[$kentta] = tv1dateconv($tyomrow[$kentta]);
                 }
                 elseif ($kentta == "suorittaja") {

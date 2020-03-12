@@ -41,7 +41,7 @@ if ($yhtiorow['kerayserat'] == 'K' and $yhtiorow['siirtolistan_tulostustapa'] ==
   $siirtolistat_kerataan_myos = true;
 }
 
-if (mb_strpos($_SERVER['SCRIPT_NAME'], "tulosta_keraysera.php") === FALSE) {
+if (strpos($_SERVER['SCRIPT_NAME'], "tulosta_keraysera.php") === FALSE) {
   $query = "LOCK TABLE
             lasku WRITE";
   pupe_query($query);
@@ -134,7 +134,7 @@ if ((int) $chk_row["ok"] == (int) $chk_row["kaikki"] and (int) $chk_row["ok"] !=
     }
   }
 
-  if (mb_strpos($_SERVER['SCRIPT_NAME'], "tulosta_keraysera.php") === FALSE) {
+  if (strpos($_SERVER['SCRIPT_NAME'], "tulosta_keraysera.php") === FALSE) {
     // poistetaan lukot
     $query = "UNLOCK TABLES";
     pupe_query($query);
@@ -729,14 +729,14 @@ if ((int) $chk_row["ok"] == (int) $chk_row["kaikki"] and (int) $chk_row["ok"] !=
     }
   }
 
-  if ($valittu_tulostin == "-88") {
+  if (!empty($valittu_tulostin) and $valittu_tulostin == "-88") {
     echo "<br>";
   }
 }
 else {
   echo "<font class='error'>".t("VIRHE: Lähete/Keräyslista on jo tulostettu!")."</font><br>";
 
-  if (mb_strpos($_SERVER['SCRIPT_NAME'], "tulosta_keraysera.php") === FALSE) {
+  if (strpos($_SERVER['SCRIPT_NAME'], "tulosta_keraysera.php") === FALSE) {
     // poistetaan lukot
     $query = "UNLOCK TABLES";
     $res   = pupe_query($query);

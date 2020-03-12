@@ -58,7 +58,7 @@ if (!function_exists("tarkista_jaksotetut_laskutunnukset")) {
       }
     }
 
-    if (!empty($vialliset)) $vialliset = mb_substr($vialliset, 0, -1);
+    if (!empty($vialliset)) $vialliset = substr($vialliset, 0, -1);
 
     return array($hyvat, $vialliset);
   }
@@ -67,7 +67,7 @@ if (!function_exists("tarkista_jaksotetut_laskutunnukset")) {
 if (!function_exists("vlas_dateconv")) {
   function vlas_dateconv($date) {
     //kääntää mysqln vvvv-kk-mm muodon muotoon vvvvkkmm
-    return mb_substr($date, 0, 4).mb_substr($date, 5, 2).mb_substr($date, 8, 2);
+    return substr($date, 0, 4).substr($date, 5, 2).substr($date, 8, 2);
   }
 }
 
@@ -89,21 +89,21 @@ if (!function_exists("laskunkieli")) {
     $asiakas_apu_res = pupe_query($asiakas_apu_query);
     $asiakas_apu_row = mysqli_fetch_assoc($asiakas_apu_res);
 
-    if (mb_strtoupper(trim($asiakas_apu_row["kieli"])) == "SE") {
+    if (strtoupper(trim($asiakas_apu_row["kieli"])) == "SE") {
       $laskun_kieli = "SE";
     }
-    elseif (mb_strtoupper(trim($asiakas_apu_row["kieli"])) == "EE") {
+    elseif (strtoupper(trim($asiakas_apu_row["kieli"])) == "EE") {
       $laskun_kieli = "EE";
     }
-    elseif (mb_strtoupper(trim($asiakas_apu_row["kieli"])) == "FI") {
+    elseif (strtoupper(trim($asiakas_apu_row["kieli"])) == "FI") {
       $laskun_kieli = "FI";
     }
     else {
-      $laskun_kieli = trim(mb_strtoupper($yhtiorow["kieli"]));
+      $laskun_kieli = trim(strtoupper($yhtiorow["kieli"]));
     }
 
     if ($kieli != "") {
-      $laskun_kieli = trim(mb_strtoupper($kieli));
+      $laskun_kieli = trim(strtoupper($kieli));
     }
 
     return $laskun_kieli;
@@ -113,11 +113,11 @@ if (!function_exists("laskunkieli")) {
 if (!function_exists("pp")) {
   //pilkut pisteiksi
   function pp($muuttuja, $round="", $rmax="", $rmin="") {
-    if (mb_strlen($round)>0) {
-      if (mb_strlen($rmax)>0 and $rmax<$round) {
+    if (strlen($round)>0) {
+      if (strlen($rmax)>0 and $rmax<$round) {
         $round = $rmax;
       }
-      if (mb_strlen($rmin)>0 and $rmin>$round) {
+      if (strlen($rmin)>0 and $rmin>$round) {
         $round = $rmin;
       }
 
@@ -179,8 +179,8 @@ if ($php_cli) {
   $nosoap = "";
 
   // Laskutetaanko myös vientitilauksia
-  if (!empty($argv[3]) and mb_substr($argv[3], 0, 7) == "vienti_") {
-    $argv[3] = mb_substr($argv[3], 7);
+  if (!empty($argv[3]) and substr($argv[3], 0, 7) == "vienti_") {
+    $argv[3] = substr($argv[3], 7);
     $viennit = "KYLLA";
   }
 
@@ -219,7 +219,7 @@ if ($php_cli) {
 
   $tee = "TARKISTA";
 }
-elseif (mb_strpos($_SERVER['SCRIPT_NAME'], "verkkolasku.php") !== FALSE) {
+elseif (strpos($_SERVER['SCRIPT_NAME'], "verkkolasku.php") !== FALSE) {
 
   if (isset($_POST["tee"])) {
     if ($_POST["tee"] == 'lataa_tiedosto') $lataa_tiedosto = 1;
@@ -339,10 +339,6 @@ else {
     }
     elseif ($yhtiorow["verkkolasku_lah"] == "apix") {
       $nimifinvoice = "/tmp/laskutus-$kukarow[yhtio]-".date("Ymd")."-".md5(uniqid(rand(), true))."_finvoice.xml";
-    }
-    elseif ($yhtiorow["verkkolasku_lah"] == "fitek") {
-      $nimifinvoice = "/tmp/laskutus-$kukarow[yhtio]-".date("Ymd")."-".md5(uniqid(rand(), true))."_finvoice.xml";
-      $nosoap = 'NOSOAP';
     }
     else {
       $nimifinvoice = "$pupe_root_polku/dataout/laskutus-$kukarow[yhtio]-".date("Ymd")."-".md5(uniqid(rand(), true))."_finvoice.xml";
@@ -1093,7 +1089,7 @@ else {
       }
 
       // vika pilkku pois
-      $tunnukset = mb_substr($tunnukset, 0, -1);
+      $tunnukset = substr($tunnukset, 0, -1);
 
       if ($yhtiorow["koontilaskut_yhdistetaan"] == 'T' or $yhtiorow['koontilaskut_yhdistetaan'] == 'V') {
         $ketjutus_group = ", lasku.toim_nimi, lasku.toim_nimitark, lasku.toim_osoite, lasku.toim_postino, lasku.toim_postitp, lasku.toim_maa ";
@@ -1363,7 +1359,7 @@ else {
           }
 
           //vika pilkku pois
-          $rahtikirjanrot = mb_substr($rahtikirjanrot, 0, -1);
+          $rahtikirjanrot = substr($rahtikirjanrot, 0, -1);
 
           // haetaan rahdin hinta
           list($rah_hinta, $rah_ale, $rah_alv, $rah_netto) = hae_rahtimaksu($otsikot);
@@ -1814,7 +1810,7 @@ else {
               $rhire = pupe_query($query);
               $trow = mysqli_fetch_assoc($rhire);
 
-              $kv_komm = t("Kuljetusvakuutus muodostuu tilauksista", $kieli).": ".mb_substr($kv_tilaukset, 0, -2);
+              $kv_komm = t("Kuljetusvakuutus muodostuu tilauksista", $kieli).": ".substr($kv_tilaukset, 0, -2);
 
               // laskurow-valuu tosta edellisesta while loopista. Siinä on vikan otsikon tiedot.
               // lisätään kuljetusvakuutus
@@ -2028,7 +2024,7 @@ else {
             $viite = $frow["sopimusnumero"]."1".sprintf('%09d', $lasno);
           }
           elseif ($frow["sopimusnumero"] > 0 and $frow["factoringyhtio"] == 'AKTIA' and $frow["viitetyyppi"] == '') {
-            $viite = mb_str_pad($frow["sopimusnumero"], 6, '0', STR_PAD_RIGHT).sprintf("%010d", $lasno);
+            $viite = str_pad($frow["sopimusnumero"], 6, '0', STR_PAD_RIGHT).sprintf("%010d", $lasno);
           }
           else {
             $viite = $lasno;
@@ -2063,12 +2059,12 @@ else {
 
             if ($seviite != 'SE') {
               //  Jos viitenumero on väärin mennään oletuksilla!
-              if (mb_substr($viite, 0, 2) != "RF" and tarkista_viite($viite) === FALSE) {
+              if (substr($viite, 0, 2) != "RF" and tarkista_viite($viite) === FALSE) {
                 $viite = $lasno;
                 $tulos_ulos .= "<font class='message'><br>\n".t("HUOM: laskun '%s' käsinsyotetty viitenumero '%s' on väärin! Laskulle annettii uusi viite '%s'", "", $lasno, $tarkrow["kasinsyotetty_viite"], $viite)."!</font><br>\n<br>\n";
                 require 'inc/generoiviite.inc';
               }
-              elseif (mb_substr($viite, 0, 2) == "RF" and tarkista_rfviite($viite) === FALSE) {
+              elseif (substr($viite, 0, 2) == "RF" and tarkista_rfviite($viite) === FALSE) {
                 $viite = $lasno;
                 $tulos_ulos .= "<font class='message'><br>\n".t("HUOM: laskun '%s' käsinsyotetty RF-viitenumero '%s' on väärin! Laskulle annettii uusi viite '%s'", "", $lasno, $tarkrow["kasinsyotetty_viite"], $viite)."!</font><br>\n<br>\n";
                 require 'inc/generoiviite.inc';
@@ -2329,14 +2325,14 @@ else {
             }
 
             // Hoidetaan pyöristys sekä valuuttakäsittely
-            if ($lasrow["valkoodi"] != '' and trim(mb_strtoupper($lasrow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+            if ($lasrow["valkoodi"] != '' and trim(strtoupper($lasrow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
               $lasrow["kasumma"]   = $lasrow["kasumma_valuutassa"];
               $lasrow["summa"]     = $lasrow["summa_valuutassa"];
               $lasrow["arvo"]      = $lasrow["arvo_valuutassa"];
               $lasrow["pyoristys"] = $lasrow["pyoristys_valuutassa"];
             }
 
-            if (mb_strtoupper($laskun_kieli) != mb_strtoupper($yhtiorow['kieli'])) {
+            if (strtoupper($laskun_kieli) != strtoupper($yhtiorow['kieli'])) {
               //Käännetään maksuehto
               $masrow["teksti"] = t_tunnus_avainsanat($masrow, "teksti", "MAKSUEHTOKV", $laskun_kieli);
             }
@@ -2370,7 +2366,7 @@ else {
             elseif ($lasrow["chn"] == "112") {
               finvoice_otsik($tootsisainenfinvoice, $lasrow, $kieli, $pankkitiedot, $masrow, $myyrow, $tyyppi, $toimaikarow, $tulos_ulos, $silent);
             }
-            elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato", "fitek"))) {
+            elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato"))) {
               finvoice_otsik($tootfinvoice, $lasrow, $kieli, $pankkitiedot, $masrow, $myyrow, $tyyppi, $toimaikarow, $tulos_ulos, $silent, $nosoap);
             }
             else {
@@ -2425,7 +2421,7 @@ else {
               elseif ($lasrow["chn"] == "112") {
                 finvoice_alvierittely($tootsisainenfinvoice, $lasrow, $alvrow);
               }
-              elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato", "fitek"))) {
+              elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato"))) {
                 finvoice_alvierittely($tootfinvoice, $lasrow, $alvrow);
               }
               else {
@@ -2440,7 +2436,7 @@ else {
             elseif ($lasrow["chn"] == "112") {
               finvoice_otsikko_loput($tootsisainenfinvoice, $lasrow, $masrow, $pankkitiedot);
             }
-            elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato", "fitek"))) {
+            elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato"))) {
               finvoice_otsikko_loput($tootfinvoice, $lasrow, $masrow, $pankkitiedot);
             }
 
@@ -2600,7 +2596,7 @@ else {
                 }
               }
 
-              if (mb_strtolower($laskun_kieli) != mb_strtolower($yhtiorow['kieli'])) {
+              if (strtolower($laskun_kieli) != strtolower($yhtiorow['kieli'])) {
                 //Käännetään nimitys
                 $tilrow['nimitys'] = t_tuotteen_avainsanat($tilrow, 'nimitys', $laskun_kieli);
               }
@@ -2699,7 +2695,7 @@ else {
                 }
               }
 
-              if ($lasrow["valkoodi"] != '' and trim(mb_strtoupper($lasrow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+              if ($lasrow["valkoodi"] != '' and trim(strtoupper($lasrow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
                 // Veroton rivihinta valuutassa
                 $tilrow["rivihinta"] = $tilrow["rivihinta_valuutassa"];
 
@@ -2752,11 +2748,11 @@ else {
 
               if ($lasrow["chn"] == "111") {
 
-                if ((int) mb_substr(sprintf("%06s", $tilrow["tilaajanrivinro"]), -6) > 0 and !in_array((int) mb_substr(sprintf("%06s", $tilrow["tilaajanrivinro"]), -6), $rivinumerot)) {
-                  $rivinumero = (int) mb_substr(sprintf("%06s", $tilrow["tilaajanrivinro"]), -6);
+                if ((int) substr(sprintf("%06s", $tilrow["tilaajanrivinro"]), -6) > 0 and !in_array((int) substr(sprintf("%06s", $tilrow["tilaajanrivinro"]), -6), $rivinumerot)) {
+                  $rivinumero = (int) substr(sprintf("%06s", $tilrow["tilaajanrivinro"]), -6);
                 }
                 else {
-                  $rivinumero = (int) mb_substr(sprintf("%06s", $tilrow["tunnus"]), -6);
+                  $rivinumero = (int) substr(sprintf("%06s", $tilrow["tunnus"]), -6);
                 }
 
                 elmaedi_rivi($tootedi, $tilrow, $rivinumero);
@@ -2764,7 +2760,7 @@ else {
               elseif ($lasrow["chn"] == "112") {
                 finvoice_rivi($tootsisainenfinvoice, $tilrow, $lasrow, $vatamount, $laskutyyppi);
               }
-              elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato", "fitek"))) {
+              elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato"))) {
                 finvoice_rivi($tootfinvoice, $tilrow, $lasrow, $vatamount, $laskutyyppi);
               }
               else {
@@ -2789,7 +2785,7 @@ else {
               //Nämä menee verkkolaskuputkeen
               $verkkolaskuputkeen_suora[$lasrow["laskunro"]] = $lasrow["nimi"];
             }
-            elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato", "fitek"))) {
+            elseif (in_array($yhtiorow["verkkolasku_lah"], array("iPost", "finvoice", "maventa", "trustpoint", "ppg", "apix", "sepa", "talenom", "arvato"))) {
               $liitteet  = hae_liitteet_verkkolaskuun($yhtiorow["verkkolasku_lah"], $laskutettavat);
               $liitteita = !empty($liitteet);
 
@@ -3077,22 +3073,6 @@ else {
           }
         }
       }
-      elseif ($yhtiorow["verkkolasku_lah"] == "fitek" and file_exists(realpath($nimifinvoice))) {
-        // Splitataan file ja lähetetään YKSI lasku kerrallaan
-        $fitek_laskuarray = explode("<?xml version=", file_get_contents($nimifinvoice));
-        $fitek_laskumaara = count($fitek_laskuarray);
-
-        if ($fitek_laskumaara > 0) {
-          require_once "tilauskasittely/tulosta_lasku.inc";
-          for ($a = 1; $a < $fitek_laskumaara; $a++) {
-            preg_match("/\<InvoiceNumber\>(.*?)\<\/InvoiceNumber\>/i", $fitek_laskuarray[$a], $invoice_number);
-
-            $fitek_invoice = "<?xml version=".$fitek_laskuarray[$a];
-            
-            $tulos_ulos = fitek_queue($fitek_invoice, $invoice_number[1], $kieli);
-          }
-        }
-      }
       elseif (finvoice_pankki() && $yhtiorow["verkkolasku_lah"] == "sepa" and file_exists(realpath($nimifinvoice))) {
         rename($nimifinvoice, "{$pupe_root_polku}/dataout/" . finvoice_pankki() . "_error/" . basename($nimifinvoice));
 
@@ -3100,7 +3080,7 @@ else {
       }
       elseif ($yhtiorow["verkkolasku_lah"] == "trustpoint" and !file_exists(realpath($nimifinvoice))) {
         // Tämä näytetään vain kun laskutetaan käsin ja lasku ei mene automaattiseen verkkolaskuputkeen
-        if (mb_strpos($_SERVER['SCRIPT_NAME'], "valitse_laskutettavat_tilaukset.php") !== FALSE) {
+        if (strpos($_SERVER['SCRIPT_NAME'], "valitse_laskutettavat_tilaukset.php") !== FALSE) {
           js_openFormInNewWindow();
 
           foreach ($tulostettavat as $lasku) {
@@ -3265,7 +3245,7 @@ else {
 
       if ($yhtiorow['lasku_tulostin'] == -88 or (isset($valittu_tulostin) and $valittu_tulostin == "-88")) {
         // Tämä näytetään vain kun laskutetaan käsin.
-        if (mb_strpos($_SERVER['SCRIPT_NAME'], "valitse_laskutettavat_tilaukset.php") !== FALSE or mb_strpos($_SERVER['SCRIPT_NAME'], "tilaus_myynti.php") !== FALSE) {
+        if (strpos($_SERVER['SCRIPT_NAME'], "valitse_laskutettavat_tilaukset.php") !== FALSE or strpos($_SERVER['SCRIPT_NAME'], "tilaus_myynti.php") !== FALSE) {
           js_openFormInNewWindow();
 
           foreach ($tulostettavat as $lasku) {
@@ -3476,7 +3456,7 @@ else {
     echo "$tulos_ulos";
 
     // Annetaan mahdollisuus tallentaa finvoicetiedosto jos se on luotu..
-    if (isset($nimifinvoice) and file_exists($nimifinvoice) and (mb_strpos($_SERVER['SCRIPT_NAME'], "verkkolasku.php") !== FALSE or mb_strpos($_SERVER['SCRIPT_NAME'], "valitse_laskutettavat_tilaukset.php") !== FALSE) and $yhtiorow["verkkolasku_lah"] == "finvoice") {
+    if (isset($nimifinvoice) and file_exists($nimifinvoice) and (strpos($_SERVER['SCRIPT_NAME'], "verkkolasku.php") !== FALSE or strpos($_SERVER['SCRIPT_NAME'], "valitse_laskutettavat_tilaukset.php") !== FALSE) and $yhtiorow["verkkolasku_lah"] == "finvoice") {
       echo "<br><table><tr><th>".t("Tallenna finvoice-aineisto").":</th>";
       echo "<form method='post' class='multisubmit'>";
       echo "<input type='hidden' name='tee' value='lataa_tiedosto'>";
@@ -3486,7 +3466,7 @@ else {
     }
   }
 
-  if ($tee == '' and mb_strpos($_SERVER['SCRIPT_NAME'], "verkkolasku.php") !== FALSE) {
+  if ($tee == '' and strpos($_SERVER['SCRIPT_NAME'], "verkkolasku.php") !== FALSE) {
 
     //päivämäärän tarkistus
     $tilalk = explode("-", $yhtiorow["myyntireskontrakausi_alku"]);
@@ -3644,6 +3624,6 @@ else {
   }
 }
 
-if (!$php_cli and mb_strpos($_SERVER['SCRIPT_NAME'], "verkkolasku.php") !== FALSE) {
+if (!$php_cli and strpos($_SERVER['SCRIPT_NAME'], "verkkolasku.php") !== FALSE) {
   require "inc/footer.inc";
 }
