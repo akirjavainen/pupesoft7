@@ -8462,7 +8462,7 @@ if ($tee == '') {
           }
           elseif (in_array($toim, array('VALMISTAVARASTOON', 'VALMISTAASIAKKAALLE', 'RIVISYOTTO', 'PIKATILAUS'))) {
             echo "<td {$class} align='right' nowrap>";
-            echo "{$kpl_ruudulle} ".mb_strtolower($row["tilausrivin_yksikko"]);
+            echo "<a href='#' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta lukumäärää:\", \"$kpl_ruudulle\", \"kpl\", \"$toim\");'>{$kpl_ruudulle} " . mb_strtolower($row["tilausrivin_yksikko"]) . "</a>"; // MODIFIED, added JavaScript value question
 
             if ($sahkoinen_tilausliitanta and isset($vastaavat_html) and trim($vastaavat_html) != '' and isset($vastaavat_table2) and trim($vastaavat_table2) != '' and isset($paarivin_saldokysely) and $paarivin_saldokysely and in_array($row['var'], array('U', 'T'))) {
               echo "<br />", $vastaavat_table2;
