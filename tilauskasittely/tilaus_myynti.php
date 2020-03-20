@@ -8623,7 +8623,7 @@ if ($tee == '') {
             if ($myyntihinta != $hinta) $myyntihinta = hintapyoristys($myyntihinta)." (".hintapyoristys($hinta).")";
             else $myyntihinta = hintapyoristys($myyntihinta);
 
-            echo "<td $class align='right'>$myyntihinta</td>";
+            echo "<td $class align='right'><a href='#' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta kappalehintaa:\", \"$hinta\", \"summa\", \"$toim\");'>$hinta</a></td>"; // MODIFIED, added JavaScript value question, changed myyntihinta -> hinta
 
             if (!empty($row["netto"])) {
               echo "<td $class align='right'>".t("NETTO")."</td>";
