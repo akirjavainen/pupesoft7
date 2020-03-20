@@ -1277,7 +1277,7 @@ if ($tee == "ETSILASKU") {
               <input type='submit' value='".t("Näytä ruudulla")."'></form>";
 
         // MODIFIED, added JWIO ERP links:
-        if (file_exists("../../hinnasto")) {
+        if (file_exists("../../hinnasto") && $toim != "LASKU") {
               echo "<a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'> Mittakuvat ja s&auml;hk&ouml;postil&auml;hetys</a> ";
               //echo "<a href='/raportit/receipt/printreceipt.php?yhtio=$row[yhtio]&order=$row[tunnus]' target='_blank'>Kuittitulostus</a>";
         }
