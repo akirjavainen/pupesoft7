@@ -1003,8 +1003,16 @@ class MagentoClient {
   }
 
   // Päivitetään sadot
-  public function paivita_saldot(array $dnstock) {
+  public function paivita_saldot(array $dnstock, $ajetaanko_kaikki = false) {
     $this->log('magento_saldot', "Päivitetään saldot");
+
+
+    if ($ajetaanko_kaikki === false) {
+      $this->log('magento_saldot', "Päivitetään muuttuneet");
+    }
+    else {
+      $this->log('magento_saldot', "Päivitetään kaikki");
+    }
 
     $count = 0;
     $total_count = count($dnstock);
