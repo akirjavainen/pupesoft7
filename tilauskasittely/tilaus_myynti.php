@@ -8471,7 +8471,7 @@ if ($tee == '') {
             echo "</td>";
           }
           else {
-            echo "<td $class align='right' nowrap>$kpl_ruudulle</td>";
+            echo "<td $class align='right' nowrap><a href='#' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta lukumäärää:\", \"$kpl_ruudulle\", \"kpl\", \"$toim\");'>$kpl_ruudulle</a></td>"; // MODIFIED, added JavaScript value question
           }
         }
 
