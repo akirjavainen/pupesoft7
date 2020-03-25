@@ -361,7 +361,7 @@ if (!function_exists('finvoice_otsik')) {
         xml_add("InvoiceRecipientPartyIdentifier", tulosta_ytunnus($lasrow['ytunnus'], $lasrow['maa'], ""), $tootfinvoice, 35);
 
         $laskutus_nimitieto = trim($laskutusosoitetiedot["laskutus_nimi"]." ".$laskutusosoitetiedot["laskutus_nimitark"]);
-        $laskutus_nimitieto_array = mb_str_split($laskutus_nimitieto, 35); // MODIFIED, BUGFIX, 3rd parameter "2" was in conflict with php-mbstring
+        $laskutus_nimitieto_array = mb_str_split($laskutus_nimitieto, 35); // MODIFIED, BUGFIX, removed 3rd parameter: mb_str_split in conflict with stock function (encoding vs. min_length)
 
         foreach ($laskutus_nimitieto_array as $laskutus_nimi_osa) {
           xml_add("InvoiceRecipientOrganisationName", $laskutus_nimi_osa, $tootfinvoice, 35, 2);
@@ -393,7 +393,7 @@ if (!function_exists('finvoice_otsik')) {
       xml_add("BuyerPartyIdentifier", tulosta_ytunnus($lasrow['ytunnus'], $lasrow['maa'], ""), $tootfinvoice, 35);
 
       $asiakas_nimitieto = trim($lasrow['nimi']." ".$lasrow['nimitark']);
-      $asiakas_nimitieto_array = mb_str_split($asiakas_nimitieto, 35); // MODIFIED, BUGFIX, 3rd parameter "2" was in conflict with php-mbstring
+      $asiakas_nimitieto_array = mb_str_split($asiakas_nimitieto, 35); // MODIFIED, BUGFIX, removed 3rd parameter: mb_str_split in conflict with stock function (encoding vs. min_length)
 
       foreach ($asiakas_nimitieto_array as $asiakas_nimi_osa) {
         xml_add("BuyerOrganisationName", $asiakas_nimi_osa, $tootfinvoice, 35, 2);
