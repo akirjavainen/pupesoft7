@@ -116,13 +116,13 @@ if (php_sapi_name() != 'cli' and (!isset($ei_kayttoliittymaa) or $ei_kayttoliitt
           mrdd_id.options[1].selected = '1';
           document.getElementById('toimitusehto').value = 'DAP'; // MODIFIED, added
           document.getElementById('toimitusehtoLisa').value = 'Toimitettuna määräpaikalle'; // MODIFIED, added
-          if (!isiPad) alert('".t("HUOM: Käytettävä rahtisopimus vaihdettiin")."!');
+          //if (!isiPad) alert('".t("HUOM: Käytettävä rahtisopimus vaihdettiin")."!'); // MODIFIED, commented out
         }
         else if (merahti != 'K' && mrdd_sel != 2 && rvcb_ch != true) {
           mrdd_id.options[2].selected = '1';
           document.getElementById('toimitusehto').value = 'EXW'; // MODIFIED, added
           document.getElementById('toimitusehtoLisa').value = 'Noudettuna'; // MODIFIED, added
-          if (!isiPad) alert('".t("HUOM: Käytettävä rahtisopimus vaihdettiin")."!');
+          //if (!isiPad) alert('".t("HUOM: Käytettävä rahtisopimus vaihdettiin")."!'); // MODIFIED, commented out
         }
       }
 
