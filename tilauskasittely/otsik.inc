@@ -114,10 +114,12 @@ if (php_sapi_name() != 'cli' and (!isset($ei_kayttoliittymaa) or $ei_kayttoliitt
 
         if (merahti == 'K' && mrdd_sel != 1) {
           mrdd_id.options[1].selected = '1';
+          document.getElementById('toimitusehto').value = 'DAP'; // MODIFIED, added
           if (!isiPad) alert('".t("HUOM: Käytettävä rahtisopimus vaihdettiin")."!');
         }
         else if (merahti != 'K' && mrdd_sel != 2 && rvcb_ch != true) {
           mrdd_id.options[2].selected = '1';
+          document.getElementById('toimitusehto').value = 'EXW'; // MODIFIED, added
           if (!isiPad) alert('".t("HUOM: Käytettävä rahtisopimus vaihdettiin")."!');
         }
       }
