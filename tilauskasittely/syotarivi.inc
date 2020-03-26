@@ -668,7 +668,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
         <td valign='top' colspan='{$nrospanni}'><input type='text' maxlength='100' size='75' name='tuotenimitys' id='tuotenimitys' value = '$tuotenimitys' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value);'></td>"; // MODIFIED, added
   }
 
-  echo "<td valign='top' class='back'><input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'>";
+  //echo "<td valign='top' class='back'><input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'>"; // MODIFIED, commented out
 
   if ($toim == "YLLAPITO") {
 

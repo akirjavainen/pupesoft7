@@ -8724,7 +8724,7 @@ if ($tee == '') {
                   </form> ";
             }
 
-            $poista_onclick = "";
+            $poista_onclick = "onclick='return nappi_onclick_confirm(\"".t('Olet poistamassa riviä, oletko varma')."?\");'"; // MODIFIED, added confirmation
 
             if ($row['vanha_otunnus'] != $tilausnumero) {
               //kyseessä JT-rivi tai JT-muiden mukana, joka tulee asiakkaan edellisiltä tilauksilta. Näille riveille halutaan poista nappiin alertti
