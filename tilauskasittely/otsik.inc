@@ -3705,16 +3705,22 @@ if ($tila == "" and !isset($jatka)) {
 
     // MODIFIED, added:
     if (file_exists("../../raportit")) {
+	    $tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	    $vakiotekstit = "<br><br>Vakiotekstit: " 
-	    . "<a href='#' onclick='addCommentText(\"Toimitusaika 4 viikkoa tilauksesta (välimyyntivarauksin).\"); return false;'>Toimitusaika</a> "
-	    . "<a href='#' onclick='addCommentText(\"Karmileveys 92 mm.\"); return false;'>Karmileveys</a> "
-	    . "<a href='#' onclick='addCommentText(\"Sävy valkoinen peittomaalattu NCS S 0502-Y.\"); return false;'>Valkoinen</a> "
-	    . "<a href='#' onclick='addCommentText(\"U-arvo alle 1 W/m2K (lämpimät asuinrakennukset).\"); return false;'>U-arvo</a> "
-	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta.\"); return false;'>Asennus</a> "
-	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta tai sähkötyötä.\"); return false;'>SPI-asennus</a> "
-	    . "<a href='#' onclick='addCommentText(\"Asennusreikien poraus.\"); return false;'>Karmireiät</a> "
-	    . "<a href='#' onclick='addCommentText(\"Raaka-aineena sormijatkettu mänty.\"); return false;'>Raaka-aine</a> "
-	    . "<a href='#' onclick='addCommentText(\"Paloikkunoilla ei tyyppihyväksyntää tai koepolttotuloksia.\\nTilaajan tulee hakea rakenteelle hyväksyntä ennen valmistuksen aloittamista.\"); return false;'>Palolasit</a> "
+	    . "<br>" 
+	    . "<a href='#' onclick='addCommentText(\"Toimitusaika 4 viikkoa tilauksesta (välimyyntivarauksin).\"); return false;'>Toimitusaika</a>$tab "
+	    . "<a href='#' onclick='addCommentText(\"Karmileveys 92 mm.\"); return false;'>Karmileveys</a>$tab "
+	    . "<a href='#' onclick='addCommentText(\"Sisäpuolen sävy valkoinen peittomaalattu NCS S 0502-Y.\"); return false;'>Valk.sisä</a>$tab "
+	    . "<a href='#' onclick='addCommentText(\"Ulkopuolen sävy valkoinen RAL 9010.\"); return false;'>Valk.ulko</a>$tab "
+	    . "<a href='#' onclick='addCommentText(\"U-arvo alle 1 W/m2K (lämpimät asuinrakennukset).\"); return false;'>U-arvo</a>$tab "
+	    . "<br>" 
+	    . "<br>" 
+	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta.\"); return false;'>Asennus</a>$tab "
+	    . "<a href='#' onclick='addCommentText(\"Ei sisällä asennusta tai sähkötyötä.\"); return false;'>SPI-asennus</a>$tab "
+	    . "<a href='#' onclick='addCommentText(\"Asennusreikien poraus.\"); return false;'>Karmireiät</a>$tab "
+	    . "<a href='#' onclick='addCommentText(\"Raaka-aineena sormijatkettu mänty.\"); return false;'>Raaka-aine</a>$tab "
+	    . "<a href='#' onclick='addCommentText(\"Lasitukset molemminpuolin Suomen Rakennusmääräyskokoelman F2 mukaisia turvalaseja.\"); return false;'>Turvalasit</a>$tab "
+	    . "<a href='#' onclick='addCommentText(\"Paloikkunoilla ei tyyppihyväksyntää tai koepolttotuloksia.\\nTilaajan tulee hakea rakenteelle hyväksyntä ennen valmistuksen aloittamista.\"); return false;'>Palolasit</a>$tab "
 	    . "</td></tr>";
     } else {
 	    $vakiotekstit = "";
