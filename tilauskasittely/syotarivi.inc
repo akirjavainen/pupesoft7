@@ -171,7 +171,7 @@ if (file_exists("../../hinnasto")) {
 	echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
 	echo "</td>";
 }
-                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 0.9; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 0.9;\">Hinta -10 %</a></td>"; // MODIFIED: added
+                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.05; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.05;\">Hinta +5 %</a></td>"; // MODIFIED: added
                 echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.1; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.1;\">Hinta +10 %</a></td>"; // MODIFIED: added
                 echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.25; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.25;\">Hinta +25 %</a></td></tr>"; // MODIFIED: added
 
@@ -514,7 +514,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
 	echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
 	echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
 	echo "</td>";
-	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 0.9; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 0.9;\">Hinta -10 %</a></td>";
+	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.05; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.05;\">Hinta +5 %</a></td>";
 	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.1; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.1;\">Hinta +10 %</a></td>";
 	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.25; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.25;\">Hinta +25 %</a></td>";
 	echo "<td id=\"tdM2\"></td>";
