@@ -106,6 +106,25 @@ if (mysqli_field_name($result, $i) == "toimaika") {
   $tyyppi = 1.5;
 }
 
+if (mysqli_field_name($result, $i) == "laskutyyppi") {
+
+  $ulos = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">";
+
+  $apu = $trow[$i];
+  $sel = array();
+  $sel[$apu] = "selected";
+
+  $ulos .= "<option value = '-9'>".t("Oletus")."</option>";
+
+  foreach (pupesoft_laskutyypit() as $ltyynumero => $ltyyteksti) {
+    $ulos .= "<option value = '$ltyynumero' $sel[$ltyynumero]>".t($ltyyteksti)."</option>";
+  }
+
+  $ulos .= "</select></td>";
+
+  $jatko = 0;
+}
+
 if (mysqli_field_name($result, $i) == "sisviesti1") {
   $ulos = "<td><textarea cols='45' rows='5' name='$nimi'>$trow[$i]</textarea></td>";
   $jatko = 0;
