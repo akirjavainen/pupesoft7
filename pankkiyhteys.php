@@ -78,8 +78,8 @@ if ($tee == "kirjaudu") {
   }
   else {
     // Setataan SECURE cookiet, HTTP only
-    setcookie($cookie_secret, $salasana, time() + 300, '/', $pupesoft_server, true, true);
-    setcookie($cookie_tunnus, $pankkiyhteys_tunnus, time() + 300, '/', $pupesoft_server, true, true);
+    setcookie($cookie_secret, $salasana, time() + 300, '/', $pupesoft_server, false, false); // MODIFIED, allow HTTP or HTTPS for cookies
+    setcookie($cookie_tunnus, $pankkiyhteys_tunnus, time() + 300, '/', $pupesoft_server, false, false); // MODIFIED, allow HTTP or HTTPS for cookies
 
     // Laitetaan samantien myös globaaliin
     $_COOKIE[$cookie_secret] = $salasana;
@@ -92,8 +92,8 @@ if ($tee == "kirjaudu") {
 // Kirjaudutaan ulos pankista
 if ($tee == "kirjaudu_ulos") {
   // Unsetataan cookiet
-  setcookie($cookie_secret, "deleted", time() - 43200, '/', $pupesoft_server, true, true);
-  setcookie($cookie_tunnus, "deleted", time() - 43200, '/', $pupesoft_server, true, true);
+  setcookie($cookie_secret, "deleted", time() - 43200, '/', $pupesoft_server, false, false); // MODIFIED, allow HTTP or HTTPS for cookies
+  setcookie($cookie_tunnus, "deleted", time() - 43200, '/', $pupesoft_server, false, false); // MODIFIED, allow HTTP or HTTPS for cookies
 
   // Poistetaan myös globaalista
   unset($_COOKIE[$cookie_secret]);
