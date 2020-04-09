@@ -1476,7 +1476,7 @@ if (!function_exists('rivi_lahete')) {
                   and tilausrivi.tyyppi  != 'V'
                   AND tilausrivi.tyyppi  != 'D'
                   and tilausrivi.var     != 'O'
-                  ORDER BY tunnus ASC";
+                  ORDER BY tilausrivi.tunnus ASC"; // MODIFIED, BUGFIX
         $perheresult = pupe_query($query);
 
         if (mysqli_num_rows($perheresult) > 1) {
