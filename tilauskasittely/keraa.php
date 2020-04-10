@@ -3530,7 +3530,7 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
             $_toimtuoteno_otsikko
             <th>".t("Nimitys")."</th>
             <th>".t("Määrä")."</th>
-            <th>".t("Poikkeava määrä")."</th>";
+            <th>".t("Poikkeava määrä (kerätään/laskutetaan NYT)")."</th>"; // MODIFIED, clarified
 
       if ($yhtiorow['kerayserat'] == 'P' or ($yhtiorow['kerayserat'] == 'A' and $row_chk['kerayserat'] == 'A')) {
         echo "<th>", t("Pakkaus"), "</th>";
