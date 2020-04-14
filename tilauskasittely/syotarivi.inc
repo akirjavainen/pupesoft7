@@ -653,7 +653,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
     $kommentit_columns = 75;
   }
 
-  echo "<td valign='top' colspan='".($nrospanni-$nrospanni_vah)."'><textarea name='kommentti' cols='$kommentit_columns' rows='2' wrap='soft'>$kommentti</textarea></td>";
+  echo "<td valign='top' colspan='".($nrospanni-$nrospanni_vah)."'><textarea name='kommentti' id='kommentti' cols='$kommentit_columns' rows='2' wrap='soft'>$kommentti</textarea></td>"; // MODIFIED, added id
 
   if ($yhtiorow['rivinumero_syotto'] != '') {
     echo "<td valign='top'><input type='text' size='2' name='tilrivinumero' value='$rivinumero'></td>";
