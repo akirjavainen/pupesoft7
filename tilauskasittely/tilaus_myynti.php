@@ -7722,7 +7722,7 @@ if ($tee == '') {
         elseif ($row["perheid"] == 0 and $row["perheid2"] == 0 or ($tilauksen_jarjestys != '0' and $tilauksen_jarjestys != '1' and $tilauksen_jarjestys != '4' and $tilauksen_jarjestys != '5' and $tilauksen_jarjestys != '8') or (($tilauksen_jarjestys == '0' or $tilauksen_jarjestys == '4') and $erikoistuote_tuoteperhe[$row['perheid']] == $row['sorttauskentta'] and $tuoteperhe_kayty != $row['perheid'])) {
 
           //$echorivino = "<a href='#' onclick='moveRowUpOrDown(\"{$row['yhtio']}\", \"{$row['otunnus']}\", \"{$row['nimitys']}\", \"{$row['tunnus']}\", true);'>&#x2191;</a> $rivino <a href='#' onclick='moveRowUpOrDown(\"{$row['yhtio']}\", \"{$row['otunnus']}\", \"{$row['nimitys']}\", \"{$row['tunnus']}\", false);'>&#x2193;</a>"; // MODIFIED, added move up/down links
-          $echorivino = $rivino;
+          $echorivino = "<p id='" . $row['tunnus'] . "'>$rivino"; // MODIFIED, added #id
 
           if ($yhtiorow['rivinumero_syotto'] != '') {
             if ($row['tilaajanrivinro'] != '' and $row['tilaajanrivinro'] != 0 and $echorivino != $row['tilaajanrivinro']) {
