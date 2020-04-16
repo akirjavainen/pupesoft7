@@ -8462,7 +8462,7 @@ if ($tee == '') {
           }
           elseif (in_array($toim, array('VALMISTAVARASTOON', 'VALMISTAASIAKKAALLE', 'RIVISYOTTO', 'PIKATILAUS'))) {
             echo "<td {$class} align='right' nowrap>";
-            echo "<a href='#' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta lukumäärää:\", \"$kpl_ruudulle\", \"kpl\", \"$toim\"); return false;'>{$kpl_ruudulle} " . mb_strtolower($row["tilausrivin_yksikko"]) . "</a>"; // MODIFIED, added JavaScript value question
+            echo "<a href='#' id='link_kpl_$row[tunnus]' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta lukumäärää:\", \"$kpl_ruudulle\", \"kpl\", \"$toim\"); return false;'>{$kpl_ruudulle} " . mb_strtolower($row["tilausrivin_yksikko"]) . "</a>"; // MODIFIED, added JavaScript value question
 
             if ($sahkoinen_tilausliitanta and isset($vastaavat_html) and trim($vastaavat_html) != '' and isset($vastaavat_table2) and trim($vastaavat_table2) != '' and isset($paarivin_saldokysely) and $paarivin_saldokysely and in_array($row['var'], array('U', 'T'))) {
               echo "<br />", $vastaavat_table2;
@@ -8471,7 +8471,7 @@ if ($tee == '') {
             echo "</td>";
           }
           else {
-            echo "<td $class align='right' nowrap><a href='#' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta lukumäärää:\", \"$kpl_ruudulle\", \"kpl\", \"$toim\"); return false;'>$kpl_ruudulle</a></td>"; // MODIFIED, added JavaScript value question
+            echo "<td $class align='right' nowrap><a href='#' id='link_kpl_$row[tunnus]' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta lukumäärää:\", \"$kpl_ruudulle\", \"kpl\", \"$toim\"); return false;'>$kpl_ruudulle</a></td>"; // MODIFIED, added JavaScript value question
           }
         }
 
@@ -8623,7 +8623,7 @@ if ($tee == '') {
             if ($myyntihinta != $hinta) $myyntihinta = hintapyoristys($myyntihinta)." (".hintapyoristys($hinta).")";
             else $myyntihinta = hintapyoristys($myyntihinta);
 
-            echo "<td $class align='right'><a href='#' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta kappalehintaa:\", \"$hinta\", \"summa\", \"$toim\"); return false;'>$hinta</a></td>"; // MODIFIED, added JavaScript value question, changed myyntihinta -> hinta
+            echo "<td $class align='right'><a href='#' id='link_summa_$row[tunnus]' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta kappalehintaa:\", \"$hinta\", \"summa\", \"$toim\"); return false;'>$hinta</a></td>"; // MODIFIED, added JavaScript value question, changed myyntihinta -> hinta
 
             if (!empty($row["netto"])) {
               echo "<td $class align='right'>".t("NETTO")."</td>";
