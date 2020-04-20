@@ -137,6 +137,12 @@ if (isset($toimi_array[1])) $alias_set = $toimi_array[1];
 if (isset($toimi_array[2])) $rajattu_nakyma = $toimi_array[2];
 
 if ($toim == "toimi" or $toim == "asiakas" or $toim == "tuote" or $toim == "avainsana") {
+
+// MODIFIED, added:
+if (file_exists("../raportit/javascript/jspupesoft.js")) {
+	include("../raportit/includes/phpupesoft.php");
+	include("../raportit/javascript/jspupesoft.js");
+}
   enable_ajax();
 }
 
