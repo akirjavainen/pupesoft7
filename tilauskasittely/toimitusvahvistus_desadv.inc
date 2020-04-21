@@ -94,7 +94,7 @@ if (!function_exists('desadv_header')) {
         $desadv_message .= "DTM+137:{$dtmdate}:102'";
       }
       else {
-        $dtmdate = mb_substr($year, 2, 2).$month.$day.$hour.$minute.$second;
+        $dtmdate = substr($year, 2, 2).$month.$day.$hour.$minute.$second;
         $desadv_message .= "DTM+137:{$dtmdate}:202'";
       }
       $x++;
@@ -115,7 +115,7 @@ if (!function_exists('desadv_header')) {
         list($date, $time) = explode(" ", $desadv_laskurow['luontiaika']);
         list($year, $month, $day) = explode("-", $date);
         list($hour, $minute, $second) = explode(":", $time);
-        $desadv_message .= "DTM+171:".mb_substr($year, 2, 2).$month.$day.$hour.$minute.$second.":202'";
+        $desadv_message .= "DTM+171:".substr($year, 2, 2).$month.$day.$hour.$minute.$second.":202'";
         $x++;
 
         // DTM - despatch and/or delivery date/time
@@ -134,7 +134,7 @@ if (!function_exists('desadv_header')) {
           $rffcode = "ON";
         }
 
-        $desadv_message .= "RFF+$rffcode:".mb_substr($desadv_laskurow["asiakkaan_tilausnumero"], 0, 35)."'";
+        $desadv_message .= "RFF+$rffcode:".substr($desadv_laskurow["asiakkaan_tilausnumero"], 0, 35)."'";
         $x++;
       }
       else {
@@ -145,32 +145,32 @@ if (!function_exists('desadv_header')) {
         $query = "SELECT avainsana
                   FROM asiakkaan_avainsanat
                   WHERE yhtio       = '{$kukarow['yhtio']}'
-                  AND liitostunnus  = '{$laskurow[liitostunnus]}'
+                  AND liitostunnus  = '{$desadv_laskurow[liitostunnus]}'
                   AND laji          = 'KICK_EDI'
                   AND avainsana    != ''";
         $edi_chk_res = pupe_query($query);
         $edi_chk_row = mysqli_fetch_assoc($edi_chk_res);
 
-        $desadv_message .= "RFF+CR:".mb_substr($edi_chk_row["avainsana"], 0, 35)."'";
+        $desadv_message .= "RFF+CR:".substr($edi_chk_row["avainsana"], 0, 35)."'";
         $x++;
       }
 
       if ($desadv_version != 'ean005') {
         // RFF - waybill number
         // AAM = waybill number
-        $desadv_message .= "RFF+AAM:".mb_substr($desadv_rakir_row["rahtikirjanro"], 0, 35)."'";
+        $desadv_message .= "RFF+AAM:".substr($desadv_rakir_row["rahtikirjanro"], 0, 35)."'";
         $x++;
 
         // RFF - buyer's order number
         // CO = buyer's order number
         if ($desadv_laskurow['asiakkaan_tilausnumero'] != '') {
-          if (mb_strpos($desadv_laskurow['asiakkaan_tilausnumero'], "-") !== FALSE) {
+          if (strpos($desadv_laskurow['asiakkaan_tilausnumero'], "-") !== FALSE) {
             // Stockmannille explodetaan
             list($group, $order) = explode("-", $desadv_laskurow['asiakkaan_tilausnumero']);
-            $desadv_message .= "RFF+CO:".mb_substr($order, 0, 35)."'";
+            $desadv_message .= "RFF+CO:".substr($order, 0, 35)."'";
           }
           else {
-            $desadv_message .= "RFF+CO:".mb_substr($desadv_laskurow["asiakkaan_tilausnumero"], 0, 35)."'";
+            $desadv_message .= "RFF+CO:".substr($desadv_laskurow["asiakkaan_tilausnumero"], 0, 35)."'";
           }
           $x++;
         }
@@ -183,17 +183,17 @@ if (!function_exists('desadv_header')) {
         $desadv_message .= "NAD+SU+{$yhtiorow['ovttunnus']}::9'";
       }
       else {
-        $desadv_message .= "NAD+SE+{$yhtiorow['ovttunnus']}:100++".mb_substr($yhtiorow["nimi"], 0, 35)."+".mb_substr($yhtiorow["osoite"], 0, 35)."+".mb_substr($yhtiorow["postitp"], 0, 35)."++".mb_substr($yhtiorow["postino"], 0, 17)."+".mb_substr($yhtiorow["maa"], 0, 3)."'";
+        $desadv_message .= "NAD+SE+{$yhtiorow['ovttunnus']}:100++".substr($yhtiorow["nimi"], 0, 35)."+".substr($yhtiorow["osoite"], 0, 35)."+".substr($yhtiorow["postitp"], 0, 35)."++".substr($yhtiorow["postino"], 0, 17)."+".substr($yhtiorow["maa"], 0, 3)."'";
       }
       $x++;
     }
 
     if ($desadv_version == 'fi0089') {
       // CZ - consignee
-      $desadv_message .= "NAD+CZ+{$yhtiorow['ovttunnus']}::100++".mb_substr($yhtiorow["nimi"], 0, 35)."+".mb_substr($yhtiorow["osoite"], 0, 35)."+".mb_substr($yhtiorow["postitp"], 0, 35)."++".mb_substr($yhtiorow["postino"], 0, 17)."+".mb_substr($yhtiorow["maa"], 0, 3)."'";
+      $desadv_message .= "NAD+CZ+{$yhtiorow['ovttunnus']}::100++".substr($yhtiorow["nimi"], 0, 35)."+".substr($yhtiorow["osoite"], 0, 35)."+".substr($yhtiorow["postitp"], 0, 35)."++".substr($yhtiorow["postino"], 0, 17)."+".substr($yhtiorow["maa"], 0, 3)."'";
       $x++;
       // SE - seller
-      $desadv_message .= "NAD+SE+{$yhtiorow['ovttunnus']}::100++".mb_substr($yhtiorow["nimi"], 0, 35)."+".mb_substr($yhtiorow["osoite"], 0, 35)."+".mb_substr($yhtiorow["postitp"], 0, 35)."++".mb_substr($yhtiorow["postino"], 0, 17)."+".mb_substr($yhtiorow["maa"], 0, 3)."'";
+      $desadv_message .= "NAD+SE+{$yhtiorow['ovttunnus']}::100++".substr($yhtiorow["nimi"], 0, 35)."+".substr($yhtiorow["osoite"], 0, 35)."+".substr($yhtiorow["postitp"], 0, 35)."++".substr($yhtiorow["postino"], 0, 17)."+".substr($yhtiorow["maa"], 0, 3)."'";
       $x++;
     }
 
@@ -203,7 +203,7 @@ if (!function_exists('desadv_header')) {
         $desadv_message .= "NAD+BY+$desadv_laskurow[asiakasovttunnus]::9'";
       }
       else {
-        $desadv_message .= "NAD+BY+$desadv_laskurow[asiakasovttunnus]:100++".mb_substr($desadv_laskurow["asiakasnimi"], 0, 35).":".mb_substr($desadv_laskurow["asiakasnimitark"], 0, 35)."+".mb_substr($desadv_laskurow["asiakasosoite"], 0, 35)."+".mb_substr($desadv_laskurow["asiakaspostitp"], 0, 35)."++".mb_substr($desadv_laskurow["asiakaspostino"], 0, 17)."+".mb_substr($desadv_laskurow["asiakasmaa"], 0, 3)."'";
+        $desadv_message .= "NAD+BY+$desadv_laskurow[asiakasovttunnus]:100++".substr($desadv_laskurow["asiakasnimi"], 0, 35).":".substr($desadv_laskurow["asiakasnimitark"], 0, 35)."+".substr($desadv_laskurow["asiakasosoite"], 0, 35)."+".substr($desadv_laskurow["asiakaspostitp"], 0, 35)."++".substr($desadv_laskurow["asiakaspostino"], 0, 17)."+".substr($desadv_laskurow["asiakasmaa"], 0, 3)."'";
       }
       $x++;
     }
@@ -225,23 +225,23 @@ if (!function_exists('desadv_header')) {
       if ($toitarow['toim_nimi'] != '' and $toitarow['toim_ovttunnus'] != '') {
         //toimitustavan terminaalin-toimitusosoite
         $desadv_message .= "NAD+CN+{$toitarow['toim_ovttunnus']}::92++"
-          .mb_substr($toitarow["toim_nimi"], 0, 35).":"
-          .mb_substr($toitarow["toim_nimitark"], 0, 35)."+"
-          .mb_substr($toitarow["toim_osoite"], 0, 35)."+"
-          .mb_substr($toitarow["toim_postitp"], 0, 35)."++"
-          .mb_substr($toitarow["toim_postino"], 0, 17)."+"
-          .mb_substr($toitarow["toim_maa"], 0, 3)."'";
+          .substr($toitarow["toim_nimi"], 0, 35).":"
+          .substr($toitarow["toim_nimitark"], 0, 35)."+"
+          .substr($toitarow["toim_osoite"], 0, 35)."+"
+          .substr($toitarow["toim_postitp"], 0, 35)."++"
+          .substr($toitarow["toim_postino"], 0, 17)."+"
+          .substr($toitarow["toim_maa"], 0, 3)."'";
         $x++;
       }
       elseif ($desadv_laskurow["toim_nimi"] != '' and $desadv_laskurow['asiakasovttunnus'] != '') {
         //asiakkaan toimitusosoite
         $desadv_message .= "NAD+CN+{$desadv_laskurow['asiakasovttunnus']}:100++"
-          .mb_substr($desadv_laskurow["toim_nimi"], 0, 35).":"
-          .mb_substr($desadv_laskurow["toim_nimitark"], 0, 35)."+"
-          .mb_substr($desadv_laskurow["toim_osoite"], 0, 35)."+"
-          .mb_substr($desadv_laskurow["toim_postitp"], 0, 35)."++"
-          .mb_substr($desadv_laskurow["toim_postino"], 0, 17)."+"
-          .mb_substr($desadv_laskurow["toim_maa"], 0, 3)."'";
+          .substr($desadv_laskurow["toim_nimi"], 0, 35).":"
+          .substr($desadv_laskurow["toim_nimitark"], 0, 35)."+"
+          .substr($desadv_laskurow["toim_osoite"], 0, 35)."+"
+          .substr($desadv_laskurow["toim_postitp"], 0, 35)."++"
+          .substr($desadv_laskurow["toim_postino"], 0, 17)."+"
+          .substr($desadv_laskurow["toim_maa"], 0, 3)."'";
         $x++;
       }
       else {
@@ -251,16 +251,16 @@ if (!function_exists('desadv_header')) {
       if ($desadv_laskurow['toim_nimi'] != '' and $desadv_laskurow['asiakastoim_ovttunnus'] != '') {
         // NAD - identification of the delivery party
         $desadv_message .= "NAD+DP+{$desadv_laskurow['asiakastoim_ovttunnus']}::92++"
-          .mb_substr($desadv_laskurow["toim_nimi"], 0, 35).":"
-          .mb_substr($desadv_laskurow["toim_nimitark"], 0, 35)."+"
-          .mb_substr($desadv_laskurow["toim_osoite"], 0, 35)."+"
-          .mb_substr($desadv_laskurow["toim_postitp"], 0, 35)."++"
-          .mb_substr($desadv_laskurow["toim_postino"], 0, 17)."+"
-          .mb_substr($desadv_laskurow["toim_maa"], 0, 3)."'";
+          .substr($desadv_laskurow["toim_nimi"], 0, 35).":"
+          .substr($desadv_laskurow["toim_nimitark"], 0, 35)."+"
+          .substr($desadv_laskurow["toim_osoite"], 0, 35)."+"
+          .substr($desadv_laskurow["toim_postitp"], 0, 35)."++"
+          .substr($desadv_laskurow["toim_postino"], 0, 17)."+"
+          .substr($desadv_laskurow["toim_maa"], 0, 3)."'";
         $x++;
 
         if ($desadv_version != "fi0089") {
-          $desadv_message .= "LOC+11+:::".mb_substr($desadv_laskurow["toim_postitp"], 0, 70)."'";
+          $desadv_message .= "LOC+11+:::".substr($desadv_laskurow["toim_postitp"], 0, 70)."'";
           $x++;
         }
       }
@@ -270,19 +270,19 @@ if (!function_exists('desadv_header')) {
 
       // IC = information contact
       if ($yhteyshenkilo != '') {
-        $desadv_message .= "CTA+IC+:".mb_substr($yhteyshenkilo, 0, 35)."'";
+        $desadv_message .= "CTA+IC+:".substr($yhteyshenkilo, 0, 35)."'";
         $x++;
 
         // COM - communication contact
         if ($yhteyshenkilo_puh != '') {
-          $desadv_message .= "COM+".mb_substr($yhteyshenkilo_puh, 0, 512).":TE'";
+          $desadv_message .= "COM+".substr($yhteyshenkilo_puh, 0, 512).":TE'";
           $x++;
         }
         else {
           $yhteyshenkilo_puh = $desadv_laskurow['puhelin'] != '' ? $desadv_laskurow['puhelin'] : ($desadv_laskurow['gsm'] != '' ? $desadv_laskurow['gsm'] : ($desadv_laskurow['tyopuhelin'] != '' ? $desadv_laskurow['tyopuhelin'] : '')); // max 15 merkkiä, C
 
           if ($yhteyshenkilo_puh != '') {
-            $desadv_message .= "COM+".mb_substr($yhteyshenkilo_puh, 0, 512).":TE'";
+            $desadv_message .= "COM+".substr($yhteyshenkilo_puh, 0, 512).":TE'";
             $x++;
           }
         }
@@ -290,7 +290,7 @@ if (!function_exists('desadv_header')) {
 
       if (trim($desadv_laskurow['toimitusehto']) != '') {
         // TOD - terms of delivery
-        $desadv_message .= "TOD+6+Z2K+".mb_substr($desadv_laskurow['toimitusehto'], 0, 3)."'";
+        $desadv_message .= "TOD+6+Z2K+".substr($desadv_laskurow['toimitusehto'], 0, 3)."'";
         $x++;
       }
 
@@ -422,7 +422,7 @@ if (!function_exists('desadv_row')) {
           }
 
           // LIN - line item
-          $desadv_message .= "LIN+{$i}++".mb_substr($tuotteet_row["eankoodi"], 0, 35).":EN'";
+          $desadv_message .= "LIN+{$i}++".substr($tuotteet_row["eankoodi"], 0, 35).":EN'";
           $x++;
 
           // PIA - additional product identification
@@ -433,13 +433,13 @@ if (!function_exists('desadv_row')) {
             $piacode = "1";
           }
 
-          $desadv_message .= "PIA+$piacode+".mb_substr($tuotenumero, 0, 35).":SA'";
+          $desadv_message .= "PIA+$piacode+".substr($tuotenumero, 0, 35).":SA'";
           $x++;
 
           if ($desadv_version != "ean005") {
             // IMD - additional information of the article
             $tuotteen_nimitys = preg_replace("/[^a-zA-ZåäöÅÄÖ0-9]/", " ", $tuotteet_row['nimitys']);
-            $desadv_message .= "IMD+F+8+:::".mb_substr($tuotteen_nimitys, 0, 256)."'";
+            $desadv_message .= "IMD+F+8+:::".substr($tuotteen_nimitys, 0, 256)."'";
             $x++;
           }
 
@@ -456,7 +456,7 @@ if (!function_exists('desadv_row')) {
             // In line level RFF+CO the order line number has to be like we send in our orders 10, 20, 30 etc. instead of 1, 2, 3
             // RFF+CO: 116100531:10'
             if ($desadv_laskurow['asiakkaan_tilausnumero'] != '') {
-              $desadv_message .= "RFF+CO:".mb_substr($desadv_laskurow["asiakkaan_tilausnumero"], 0, 35).":{$tuotteet_row['tilaajanrivinro']}'";
+              $desadv_message .= "RFF+CO:".substr($desadv_laskurow["asiakkaan_tilausnumero"], 0, 35).":{$tuotteet_row['tilaajanrivinro']}'";
               $x++;
             }
 
@@ -609,7 +609,7 @@ if (!function_exists('desadv_row')) {
           $error .= t("Tuotteelta %s puuttuu EAN-koodi", '', $tuotteet_row['tuoteno'])."<br>";
         }
 
-        $desadv_message .= "LIN+{$i}++".mb_substr($tuotteet_row["eankoodi"], 0, 35).":EN'";
+        $desadv_message .= "LIN+{$i}++".substr($tuotteet_row["eankoodi"], 0, 35).":EN'";
         $x++;
 
         // PIA - additional product identification
@@ -620,12 +620,12 @@ if (!function_exists('desadv_row')) {
           $piacode = "1";
         }
 
-        $desadv_message .= "PIA+$piacode+".mb_substr($tuotenumero, 0, 35).":SA'";
+        $desadv_message .= "PIA+$piacode+".substr($tuotenumero, 0, 35).":SA'";
         $x++;
 
         // IMD - additional information of the article
         $tuotteen_nimitys = preg_replace("/[^a-zA-ZåäöÅÄÖ0-9]/", " ", $tuotteet_row['nimitys']);
-        $desadv_message .= "IMD+F+8+:::".mb_substr($tuotteen_nimitys, 0, 256)."'";
+        $desadv_message .= "IMD+F+8+:::".substr($tuotteen_nimitys, 0, 256)."'";
         $x++;
 
         // QTY - quantity
@@ -641,7 +641,7 @@ if (!function_exists('desadv_row')) {
           // In line level RFF+CO the order line number has to be like we send in our orders 10, 20, 30 etc. instead of 1, 2, 3
           // RFF+CO: 116100531:10'
           if ($desadv_laskurow['asiakkaan_tilausnumero'] != '') {
-            $desadv_message .= "RFF+CO:".mb_substr($desadv_laskurow["asiakkaan_tilausnumero"], 0, 35).":{$tuotteet_row['tilaajanrivinro']}'";
+            $desadv_message .= "RFF+CO:".substr($desadv_laskurow["asiakkaan_tilausnumero"], 0, 35).":{$tuotteet_row['tilaajanrivinro']}'";
             $x++;
           }
 
@@ -805,9 +805,9 @@ if ($desadv_host != '' and $desadv_user != '' and $desadv_pass != '' and $desadv
         $apixfilepath = "{$pupe_root_polku}/dataout/apix_error/";
         $apixfilename = "out_desadv_apix_{$desadv_laskurow['tunnus']}.dat";
 
-	rename($filenimi, $apixfilepath.$apixfilename);
+        rename($filenimi, $apixfilepath.$apixfilename);
 
-	$status = apix_edi_put_file($apixfilename, $desadv_laskurow["tunnus"], "PupesoftEdifact");
+        $status = apix_edi_put_file($apixfilename, $desadv_laskurow["tunnus"], "PupesoftEdifact");
 
         $palautus = 0;
       }
