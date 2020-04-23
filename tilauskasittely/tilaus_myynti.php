@@ -7722,11 +7722,12 @@ if ($tee == '') {
         elseif ($row["perheid"] == 0 and $row["perheid2"] == 0 or ($tilauksen_jarjestys != '0' and $tilauksen_jarjestys != '1' and $tilauksen_jarjestys != '4' and $tilauksen_jarjestys != '5' and $tilauksen_jarjestys != '8') or (($tilauksen_jarjestys == '0' or $tilauksen_jarjestys == '4') and $erikoistuote_tuoteperhe[$row['perheid']] == $row['sorttauskentta'] and $tuoteperhe_kayty != $row['perheid'])) {
 
           //$echorivino = "<a href='#' onclick='moveRowUpOrDown(\"{$row['yhtio']}\", \"{$row['otunnus']}\", \"{$row['nimitys']}\", \"{$row['tunnus']}\", true);'>&#x2191;</a> $rivino <a href='#' onclick='moveRowUpOrDown(\"{$row['yhtio']}\", \"{$row['otunnus']}\", \"{$row['nimitys']}\", \"{$row['tunnus']}\", false);'>&#x2193;</a>"; // MODIFIED, added move up/down links
-          $echorivino = "<p id='" . $row['tunnus'] . "'>$rivino"; // MODIFIED, added #id
+          $echorivino_id = "<p id='" . $row['tunnus'] . "'>"; // MODIFIED, added #id
+          $echorivino = $rivino;
 
           if ($yhtiorow['rivinumero_syotto'] != '') {
             if ($row['tilaajanrivinro'] != '' and $row['tilaajanrivinro'] != 0 and $echorivino != $row['tilaajanrivinro']) {
-              $echorivino .= " &raquo; ($row[tilaajanrivinro])";
+              $echorivino .= $echorivino_id . " &raquo; ($row[tilaajanrivinro])";
             }
           }
 
@@ -7737,7 +7738,7 @@ if ($tee == '') {
               echo "<td rowspan = '2' class='back' style='width:10px; padding:0px; margin:0px;'>$buttonit</td>";
             }
 
-            echo "<td $class rowspan = '2'>$echorivino";
+            echo "<td $class rowspan = '2'>$echorivino_id" . $echorivino; // MODIFIED, added #id
 
             if (($yhtiorow["salli_jyvitys_myynnissa"] == "V" and $kukarow['jyvitys'] == 'S') or $yhtiorow["salli_jyvitys_myynnissa"] == "S" or ($toim == 'TARJOUS' and $yhtiorow['salli_jyvitys_tarjouksella'] == 'S')) {
               echo "<input type='checkbox' class='valitut_rivit' name='valitut_rivit[]' value='{$row['tunnus']}' />";
@@ -7751,7 +7752,7 @@ if ($tee == '') {
               echo "<td class='back' style='width:10px; padding:0px; margin:0px;'>$buttonit</td>";
             }
 
-            echo "<td $class>$echorivino";
+            echo "<td $class>$echorivino_id" . $echorivino; // MODIFIED, added #id
 
             if (($yhtiorow["salli_jyvitys_myynnissa"] == "V" and $kukarow['jyvitys'] == 'S') or $yhtiorow["salli_jyvitys_myynnissa"] == "S" or ($toim == 'TARJOUS' and $yhtiorow['salli_jyvitys_tarjouksella'] == 'S')) {
               echo "<br/>";

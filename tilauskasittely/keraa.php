@@ -3518,8 +3518,13 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
         $colspanni++;
       }
 
-      echo "<table id='maintable'>
-          <tr>";
+      echo "<table id='maintable'>";
+      if (strlen($otsik_row["viesti"] > 0)) echo "<tr><th colspan='6'>Tilausviite: " . $otsik_row["viesti"] . "</th></tr>"; // MODIFIED, added
+      if (strlen($otsik_row["comments"] > 0)) echo "<tr><th colspan='6'>Kommentti 1: " . $otsik_row["comments"] . "</th></tr>"; // MODIFIED, added
+      if (strlen($otsik_row["sisviesti1"] > 0)) echo "<tr><th colspan='6'>Sisäinen viesti: " . $otsik_row["sisviesti1"] . "</th></tr>"; // MODIFIED, added
+      if (strlen($otsik_row["sisviesti2"] > 0)) echo "<tr><th colspan='6'>Kommentti 2: " . $otsik_row["sisviesti2"] . "</th></tr>"; // MODIFIED, added
+      if (strlen($otsik_row["sisviesti3"] > 0)) echo "<tr><th colspan='6'>Kommentti 3: " . $otsik_row["sisviesti3"] . "</th></tr>"; // MODIFIED, added
+      echo "<tr>";
 
       if (!empty($rivinumerot)) {
         echo "<th>#</th>";

@@ -1288,7 +1288,7 @@ if ($tila == "" and !isset($jatka)) {
     </tr>";
   echo "<tr>
       <td valign='top'>".t("Nimi").": </td>
-      <td><input type='text' name='nimi' size='35' value='$srow[nimi]'></td>
+      <td><input type='text' name='nimi' id='nimi' size='35' value='$srow[nimi]'></td>
     </tr>";
   echo "<tr>
       <td></td>
@@ -1468,7 +1468,7 @@ if ($tila == "" and !isset($jatka)) {
     }
     echo "<tr>
         <td valign='top'> ".t("Nimi").": </td>
-        <td><input type='text' name='tnimi' size='35' value='$srow[toim_nimi]'></td></tr>";
+        <td><input type='text' name='tnimi' id='tnimi' size='35' value='$srow[toim_nimi]' onfocusout=\"setOrderReferenceFromShippingName();\"></td></tr>"; // MODIFIED, added id
     echo "<tr>
         <td></td>
         <td><input type='text' name='tnimitark' id='tnimitark' size='35' value='$srow[toim_nimitark]' onfocusout=\"copyPhoneNumber(document.getElementById('tpuh'), document.getElementById('tnimitark').value);\"></td></tr>"; // MODIFIED, added onfocusout event and id

@@ -547,7 +547,7 @@ if (!function_exists('alku_lahete')) {
 
     $komm = "";
     $puh = ""; // MODIFIED, added
-    if (file_exists("../../common")) $puh = get_order_contact_person_phone_number($GLOBALS["masterlink"], $laskurow['yhtio'], (int)$laskurow['liitostunnus'], $laskurow['tilausyhteyshenkilo']); // MODIFIED, added
+    if (file_exists("../../common")) $puh = get_order_contact_person_phone_number($GLOBALS["masterlink"], (string)$laskurow['yhtio'], (int)$laskurow['liitostunnus'], (string)$laskurow['tilausyhteyshenkilo']); // MODIFIED, added
     if (strlen($puh) > 0) $puh = " " . $puh; // MODIFIED, added
 
     if ($base_lahetetyyppi == "tulosta_lahete_custom.inc") {
