@@ -2020,10 +2020,12 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
               // Onko tuotteella staattinen tilausrivikommentti
               if ($trow["tilausrivi_kommentti"] != "" and $rivitunnus == 0 and $sallitaanko_rivikommentti) {
                 // Tilausrivin systeemikommentti
+		/*
                 if (mb_stripos($kommentti, $trow["tilausrivi_kommentti"]) === FALSE) {
                   if (trim($kommentti) != "")  $kommentti = "\n".$kommentti;
                   $kommentti = trim($trow["tilausrivi_kommentti"].$kommentti);
-                }
+		}
+		 */
               }
 
               // jos meillä on vanha laadittuaika, niin käytetää sitä
@@ -3238,10 +3240,12 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
     // Onko tuotteella staattinen tilausrivikommentti
     if ($trow["tilausrivi_kommentti"] != "" and $rivitunnus == 0 and $sallitaanko_rivikommentti) {
       // Tilausrivin systeemikommentti
+      /*
       if (mb_stripos($kommentti, $trow["tilausrivi_kommentti"]) === FALSE) {
         if (trim($kommentti) != "")  $kommentti = "\n".$kommentti;
         $kommentti = trim($trow["tilausrivi_kommentti"].$kommentti);
       }
+       */
     }
 
     if ($rivitunnus == 0 and ($trow["status"] == "P" or $trow["status"] == "X")) {
