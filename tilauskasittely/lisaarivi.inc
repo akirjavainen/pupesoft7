@@ -2020,7 +2020,7 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
               // Onko tuotteella staattinen tilausrivikommentti
               if ($trow["tilausrivi_kommentti"] != "" and $rivitunnus == 0 and $sallitaanko_rivikommentti) {
                 // Tilausrivin systeemikommentti
-		/*
+		/* MODIFIED, commented out:
                 if (mb_stripos($kommentti, $trow["tilausrivi_kommentti"]) === FALSE) {
                   if (trim($kommentti) != "")  $kommentti = "\n".$kommentti;
                   $kommentti = trim($trow["tilausrivi_kommentti"].$kommentti);
@@ -3240,7 +3240,7 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
     // Onko tuotteella staattinen tilausrivikommentti
     if ($trow["tilausrivi_kommentti"] != "" and $rivitunnus == 0 and $sallitaanko_rivikommentti) {
       // Tilausrivin systeemikommentti
-      /*
+      /* MODIFIED, commented out:
       if (mb_stripos($kommentti, $trow["tilausrivi_kommentti"]) === FALSE) {
         if (trim($kommentti) != "")  $kommentti = "\n".$kommentti;
         $kommentti = trim($trow["tilausrivi_kommentti"].$kommentti);
