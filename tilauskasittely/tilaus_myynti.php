@@ -8035,7 +8035,11 @@ if ($tee == '') {
           $liitekuvat = '';
         }
 
-        echo "<td $class align='left'>{$liitekuvat}<a href='#' id='link_nimitys_$row[tunnus]' onclick='editProductQuick(\"$row[yhtio]\", \"$laskurow[ytunnus]\", \"$row[otunnus]\", \"$row[tunnus]\", \"$toim\"); return false;'>".t_tuotteen_avainsanat($row, "nimitys")."$extranet_tarkistus_teksti</a></td>"; // MODIFIED, added JavaScript quick edit
+        if (strlen(getImageLink((int)$laskurow["tunnus"], (int)$row["tunnus"], true)) > 0) { // If product is a window or door
+          echo "<td $class align='left'>{$liitekuvat}<a href='#' id='link_nimitys_$row[tunnus]' onclick='editProductQuick(\"$row[yhtio]\", \"$laskurow[ytunnus]\", \"$row[otunnus]\", \"$row[tunnus]\", \"$toim\"); return false;'>".t_tuotteen_avainsanat($row, "nimitys")."$extranet_tarkistus_teksti</a></td>"; // MODIFIED, added JavaScript quick edit
+	} else {
+          echo "<td $class align='left'>{$liitekuvat}".t_tuotteen_avainsanat($row, "nimitys")."$extranet_tarkistus_teksti</td>";
+	}
 
         if ($kukarow['extranet'] == '' and $toim == "MYYNTITILI" and $laskurow["alatila"] == "V") {
 
