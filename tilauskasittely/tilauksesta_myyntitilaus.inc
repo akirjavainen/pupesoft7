@@ -343,7 +343,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
 
         while ($liiterow = mysqli_fetch_assoc($liiteres)) {
 
-          $liiterow["data"] = sanitize_string($liiterow["data"]);
+          $liiterow["data"] = mysqli_real_escape_string($GLOBALS["masterlink"], $liiterow["data"]); // MODIFIED, fixed DEPRECATED
 
           $query = "INSERT INTO liitetiedostot SET
                     yhtio           = '$kukarow[yhtio]',
