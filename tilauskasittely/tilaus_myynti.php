@@ -8035,7 +8035,7 @@ if ($tee == '') {
           $liitekuvat = '';
         }
 
-        echo "<td $class align='left'>{$liitekuvat}".t_tuotteen_avainsanat($row, "nimitys")."$extranet_tarkistus_teksti</td>";
+        echo "<td $class align='left'>{$liitekuvat}<a href='#' id='link_nimitys_$row[tunnus]' onclick='editProductQuick(\"$row[yhtio]\", \"$laskurow[ytunnus]\", \"$row[otunnus]\", \"$row[tunnus]\", \"$toim\"); return false;'>".t_tuotteen_avainsanat($row, "nimitys")."$extranet_tarkistus_teksti</a></td>"; // MODIFIED, added JavaScript quick edit
 
         if ($kukarow['extranet'] == '' and $toim == "MYYNTITILI" and $laskurow["alatila"] == "V") {
 
