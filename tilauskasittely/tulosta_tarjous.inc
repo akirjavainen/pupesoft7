@@ -384,8 +384,8 @@ if (!function_exists('alku_tarjous')) {
 
       $pdf_tarjous->draw_text(310, 687, t("Maksuehto", $kieli),  $page_tarjous[$sivu], $pieni);
       $pdf_tarjous->draw_text(310, 677, $laskurow["maksuehto"],  $page_tarjous[$sivu], $norm);
-      $pdf_tarjous->draw_text(295, 649, t("COVID-19 -kriisin johdosta tarkastamme asiakkaidemme", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
-      $pdf_tarjous->draw_text(295, 636, t("maksuviiveet, mikä saattaa vaikuttaa maksuehtoihin", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
+      $pdf_tarjous->draw_text(295, 662, t("COVID-19 -kriisin johdosta tarkastamme asiakkaidemme", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
+      $pdf_tarjous->draw_text(295, 649, t("maksuviiveet, mikä saattaa vaikuttaa maksuehtoihin", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
       $pdf_tarjous->draw_text(295, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
       //$pdf_tarjous->draw_text(295, 610, t("Kätisyys ikkunoissa sisältäpäin ja ovissa ulkoapäin", $kieli) . ".", $page_tarjous[$sivu], $boldi); // MODIFIED, added
 
