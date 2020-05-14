@@ -1522,6 +1522,16 @@ if (!function_exists('loppu_tarjous')) {
       $pdf_tarjous->draw_text(404, 25, $y_iban." / ".$y_swift,      $page_tarjous[$sivu], $pieni);
     }
 
+    /*
+      $aaa_nimi = "../pics/aaa.jpg";
+      $fh_aaa = fopen($aaa_nimi, "r");
+      $data_aaa = fread($fh_aaa, filesize($aaa_nimi));
+      fclose($fh_aaa);
+
+      $image_aaa = $pdf_tarjous->jfif_embed($data_aaa);
+      $pdf_tarjous->image_place($image_aaa, 40, 524, $page_tarjous[$sivu]);
+    */
+
     if ($tots == 1 and $summa != 0 and $yhtiorow['tarjoustyyppi'] == 0) {
 
       if ($laskurow['alv'] > 0 and $yhtiorow["alv_kasittely"] == '') {
@@ -2057,6 +2067,15 @@ if (!function_exists('loppu_tarjous')) {
     }
 
     //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 12, get_datetime_checksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
+/*
+    $aaa_nimi = "../pics/aaa.jpg";
+    $fh_aaa = fopen($aaa_nimi, "r");
+    $data_aaa = fread($fh_aaa, filesize($aaa_nimi));
+    fclose($fh_aaa);
+
+    $image_aaa = $pdf_tarjous->jfif_embed($data_aaa);
+    $pdf_tarjous->image_place($image_aaa, 75, 440, $page_tarjous[$sivu]);
+ */
     return array($page_tarjous, $sivu);
   }
 }

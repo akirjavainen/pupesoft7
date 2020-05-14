@@ -8637,7 +8637,7 @@ if ($tee == '') {
               echo "<td {$class} align='right'>";
               $ale_echo = "";
               for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
-                $ale_echo .= $row["ale{$alepostfix}"]." + ";
+                $ale_echo .= "<a href='#' id='link_ale1_$row[tunnus]' onclick='askForValue(\"$row[yhtio]\", \"$row[otunnus]\", \"$row[tunnus]\", \"Muuta rivin alennusprosenttia:\", \"" . $row["ale{$alepostfix}"] . "\", \"ale1\", \"$toim\"); return false;'>" . $row["ale{$alepostfix}"] . "</a> + "; // MODIFIED, added JavaScript value question
               }
 
               $ale_echo = mb_substr($ale_echo, 0, -3);
