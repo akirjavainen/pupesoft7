@@ -1644,6 +1644,7 @@ if (!function_exists('rivi_lahete')) {
     $row["varattu"] = ($row["varattu"]*1);
     $row["kpl"]   = ($row["kpl"]*1);
     $kpl_rivilla   = (($row["kpl"]+$row["varattu"]+$row["jt"])*1);
+    $GLOBALS["total_tilkpl"] += $kpl_rivilla; // MODIFIED, added
 
     if ($piilotarivi != 1) $yhteensamaara += $kpl_rivilla;
 
@@ -3897,6 +3898,9 @@ if (!function_exists('loppu_lahete')) {
         extract($params);
       }
       else {
+        $pdf->draw_text(410, 92, t("Yhteensä", $kieli) . ":", $thispage, $norm); // MODIFIED, added
+        $oikpos = $pdf->mb_strlen(round($GLOBALS["total_tilkpl"], 1) . " kpl", $norm); // MODIFIED, added
+        $pdf->draw_text(565-$oikpos, 92, round($GLOBALS["total_tilkpl"], 1) . " kpl", $thispage, $norm); // MODIFIED, added
         // Verolliset hinnat yhtiönparametreistä tai lähetetyypistä
         //if (($laskurow['alv'] > 0 and $yhtiorow["alv_kasittely"] == '') or mb_strpos($lahetetyyppi, "_verollinen")) { // MODIFIED, commented out
           $pdf->draw_text(410, 72, t("Yhteensä verollinen", $kieli).":", $thispage, $norm);
