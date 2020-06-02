@@ -946,7 +946,7 @@ if ($tee == 'P') {
                 elseif ($otsikkorivi['clearing'] == 'JT-TILAUS' and $strow["tila"] == "D") {
 
                   // N, T - Myyntitilaus odottaa JT-tuotteita
-                  $ukysx  = "UPDATE lasku SET tila = 'N', alatila = 'T', comments = '' WHERE yhtio = '$strow[yhtio]' and tunnus = '$strow[tunnus]'";
+                  $ukysx  = "UPDATE lasku SET tila = 'L', alatila = 'D', comments = '' WHERE yhtio = '$strow[yhtio]' and tunnus = '$strow[tunnus]'"; // MODIFIED, N T -> L D
                   $ukysxres  = pupe_query($ukysx);
                 }
 
@@ -1118,10 +1118,10 @@ if ($tee == 'P') {
                       $values .= ", now()";
                       break;
                     case 'alatila':
-                      $values .= ", ''";
+                      $values .= ", 'D'"; // MODIFIED: '' -> D
                       break;
                     case 'tila':
-                      $values .= ", 'N'";
+                      $values .= ", 'L'"; // MODIFIED: N -> L
                       break;
                     case 'kate_korjattu':
                     case 'lahetetty_ulkoiseen_varastoon':
