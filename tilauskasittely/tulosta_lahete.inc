@@ -538,7 +538,7 @@ if (!function_exists('alku_lahete')) {
           $pdf->draw_text(290, 640, t("Hinnat sisältävät arvonlisäveron", $kieli).".", $thispage, $boldi);
         }
         else {
-          $pdf->draw_text(290, 640, t("Hinnat eivät sisällä arvonlisäveroa", $kieli).".",  $thispage, $boldi); // MODIFIED, moved text left
+          $pdf->draw_text(290, 640, t("Hintoihin lisätään arvonlisävero 24 %", $kieli).".",  $thispage, $boldi); // MODIFIED, moved text left
         }
       }
     }
