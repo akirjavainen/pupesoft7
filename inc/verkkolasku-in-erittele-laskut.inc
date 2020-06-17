@@ -18,7 +18,7 @@ function erittele_laskut($file) {
     $xmlencoding = "UTF-8";
   }
 
-  if (mb_stripos(file_get_contents($file), "Finvoice") !== FALSE) {
+  if (stripos(file_get_contents($file), "Finvoice") !== FALSE) {
     foreach (file($file) as $ln) {
 
       $ln = trim($ln); // varmistaan että ei jää roskia
@@ -28,15 +28,18 @@ function erittele_laskut($file) {
         $type = "SOAP";
       }
 
-      if (preg_match("/\<Finvoice.*?Version\=\"([1-2]\.[0-3]{1,2})\".*?\>/i", $ln, $lnversion) > 0) {
-        $type        = "FINVOICE";
+      if (preg_match("/\<Finvoice.*?Version\=\"([1-3]\.[0-3]{1,2})\".*?\>/i", $ln, $lnversion) > 0) {
+        $type = "FINVOICE";
         $finvoiceversion = (float) $lnversion[1];
 
-        $ln = mb_substr($ln, mb_stripos($ln, "<Finvoice"));
+        $ln = substr($ln, stripos($ln, "<Finvoice"));
 
         // Lisätään varmasti oikeat DOCTYPE määritys
         // Tämä siksi että haluamme käyttää paikallista kuvausta eikä ladata kuvausta verkosta!
-        if ($finvoiceversion >= 2) {
+        if ($finvoiceversion >= 3) {
+          $ln = "<?xml version=\"1.0\" encoding=\"$xmlencoding\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"datain/Finvoice_3.0.xsl\"?>\n<Finvoice Version=\"$lnversion[1]\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"datain/Finvoice_3.0.xsd\">";
+        }
+        elseif ($finvoiceversion >= 2) {
           $ln = "<?xml version=\"1.0\" encoding=\"$xmlencoding\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"datain/Finvoice_2.0.xsl\"?>\n<Finvoice Version=\"$lnversion[1]\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"datain/Finvoice_2.0.xsd\">";
         }
         elseif ($finvoiceversion == 1.3) {
@@ -57,7 +60,7 @@ function erittele_laskut($file) {
       if ($type == "FINVOICE") $boob .= $ln."\n"; // Rakennetaan varsinainen finvoice tiedosto
 
       //   Tiedostosta löytyi finvoiceaineisto
-      if ($type == "FINVOICE" and mb_stripos($ln, "</Finvoice>") !== FALSE) {
+      if ($type == "FINVOICE" and stripos($ln, "</Finvoice>") !== FALSE) {
 
         // Oteaan SOAP-kehyksestä Receiver PartyId koska se ei nyt aina tulekaan niin kauniisti Finvoicessa, esim jos toimittajalla on huono asiakasrekisteri
         if ($soap != "" and preg_match("/\<eb\:To\>\<eb\:PartyId\>(.*?)\<\/eb\:PartyId\>\<eb\:Role\>Receiver\<\/eb\:Role\>\<\/eb\:To\>/i", $soap, $receiverparty) > 0) {
@@ -77,7 +80,7 @@ function erittele_laskut($file) {
         }
 
         if ($ebid == "") {
-          $ebid = "gen".mb_substr(md5(rand()), 0, 20);
+          $ebid = "gen".substr(md5(rand()), 0, 20);
         }
 
         $path_parts = pathinfo($file);
