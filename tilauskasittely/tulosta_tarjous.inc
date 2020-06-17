@@ -1410,8 +1410,8 @@ if (!function_exists('tarjous_rivi_custom')) {
 if (!function_exists('loppu_tarjous')) {
   function loppu_tarjous($pdf_tarjous, $laskurow, $kieli, $page_tarjous, $sivu, $tots,
     $total_tarjous = 0, $verolliset_verottomat_hinnat = '',
-    $total_brutto = 0, $kala = 0, $vikanrivin_sivu = 0, $naytetaanko_rivihinta,
-    $naytetaanko_yhteissummarivi = "") {
+    $total_brutto = 0, $kala = 0, $vikanrivin_sivu = 0, $naytetaanko_rivihinta = "",
+    $naytetaanko_yhteissummarivi = "") { // MODIFIED, BUGFIX $naytetaanko_rivihinta = "" default missing
     global $kukarow, $yhtiorow, $boldi, $pieni, $norm, $rectparam, $kaanteinen_verotus;
 
     // yhtiötiedot
@@ -2066,16 +2066,17 @@ if (!function_exists('loppu_tarjous')) {
       }
     }
 
+    /*
     //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 12, get_datetime_checksum(), $page_tarjous[$sivu], $pieni); // MODIFIED, added
-/*
     $aaa_nimi = "../pics/aaa.jpg";
     $fh_aaa = fopen($aaa_nimi, "r");
     $data_aaa = fread($fh_aaa, filesize($aaa_nimi));
     fclose($fh_aaa);
 
     $image_aaa = $pdf_tarjous->jfif_embed($data_aaa);
-    $pdf_tarjous->image_place($image_aaa, 75, 440, $page_tarjous[$sivu]);
- */
+    $pdf_tarjous->image_place($image_aaa, 75, 40, $page_tarjous[$sivu]);
+*/
+
     return array($page_tarjous, $sivu);
   }
 }
