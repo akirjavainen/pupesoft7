@@ -362,14 +362,14 @@ if (!empty($etsinappi)) {
                 and tilausrivi.var not in ('P','J','O','S')";
 
     if ($toim == 'AVOIMET') {
-      $query .= " and tilausrivi.tyyppi in ('L','M','W')
+      $query .= " and tilausrivi.tyyppi in ('L','W')
                   and (tilausrivi.varattu + tilausrivi.jt) != 0
                   and tilausrivi.toimitettuaika = '0000-00-00 00:00:00'
                   and tilausrivi.laskutettuaika = '0000-00-00'
                   and tilausrivi.toimaika < CURDATE()";
     }
     elseif ($toim == 'KAIKKIAVOIMET') {
-      $query .= " and tilausrivi.tyyppi in ('L','M','W')
+      $query .= " and tilausrivi.tyyppi in ('L','W')
                   and (tilausrivi.varattu + tilausrivi.jt) != 0
                   and tilausrivi.laskutettuaika = '0000-00-00'";
     }
@@ -587,7 +587,7 @@ if (!empty($etsinappi)) {
 
     while ($row = mysqli_fetch_assoc($result)) {
 
-      if (mb_substr($row['toimitettu'], 0, 4) == "1970") {
+      if (substr($row['toimitettu'], 0, 4) == "1970") {
         $row['toimitettu'] = "";
       }
 
