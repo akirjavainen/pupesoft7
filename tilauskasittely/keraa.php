@@ -946,7 +946,7 @@ if ($tee == 'P') {
                 elseif ($otsikkorivi['clearing'] == 'JT-TILAUS' and $strow["tila"] == "D") {
 
                   // N, T - Myyntitilaus odottaa JT-tuotteita
-                  $ukysx  = "UPDATE lasku SET tila = 'L', alatila = 'D', comments = '' WHERE yhtio = '$strow[yhtio]' and tunnus = '$strow[tunnus]'"; // MODIFIED, N T -> L D
+                  $ukysx  = "UPDATE lasku SET tila = 'N', alatila = 'D', comments = '' WHERE yhtio = '$strow[yhtio]' and tunnus = '$strow[tunnus]'";
                   $ukysxres  = pupe_query($ukysx);
                 }
 
@@ -1093,7 +1093,6 @@ if ($tee == 'P') {
                     // Laitetaan uusi tilaus osatoimitukseksi alkuperäiselle tilaukselle
                     $kysely  = "UPDATE lasku SET tunnusnippu=tunnus WHERE yhtio = '$kukarow[yhtio]' and tunnus = '$tilrivirow[otunnus]'";
                     $insres  = pupe_query($kysely);
-
                     $laskusplitrow["tunnusnippu"] = $tilrivirow["otunnus"];
                   }
 
@@ -1118,10 +1117,10 @@ if ($tee == 'P') {
                       $values .= ", now()";
                       break;
                     case 'alatila':
-                      $values .= ", 'D'"; // MODIFIED: '' -> D
+                      $values .= ", ''";
                       break;
                     case 'tila':
-                      $values .= ", 'L'"; // MODIFIED: N -> L
+                      $values .= ", 'N'";
                       break;
                     case 'kate_korjattu':
                     case 'lahetetty_ulkoiseen_varastoon':
@@ -4458,7 +4457,9 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
       }
     }
     else {
-      echo t("Tällä tilauksella ei ole yhtään kerättävää riviä!");
+	  $bugfix_query = "UPDATE lasku SET tila='L', alatila='D' WHERE tunnus='$id' AND yhtio='$kukarow[yhtio]';";
+	  mysqli_query($GLOBALS["masterlink"], $bugfix_query) or die(mysqli_error($GLOBALS["masterlink"])); // MODIFIED, BUGFIX
+      echo t("Ei löydetty kerättäviä rivejä, mutta korjattiin mahdollisesti epäonnistunut edellinen keräys.");
     }
   }
 
