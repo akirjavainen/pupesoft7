@@ -18,14 +18,30 @@ if (mysqli_field_name($result, $i) == "maa") {
 
   while ($vrow = mysqli_fetch_array($vresult)) {
     $sel="";
-    if (mb_strtoupper($trow[$i]) == mb_strtoupper($vrow[0])) {
+    if (strtoupper($trow[$i]) == strtoupper($vrow[0])) {
       $sel = "selected";
     }
-    $ulos .= "<option value = '".mb_strtoupper($vrow[0])."' $sel>".t($vrow[1])."</option>";
+    $ulos .= "<option value = '".strtoupper($vrow[0])."' $sel>".t($vrow[1])."</option>";
   }
 
   $ulos .= "</select></td>";
   $jatko = 0;
+}
+
+if (mysqli_field_name($result, $i) == "varastotoimipaikka") {
+    $sela = $selb = '';
+    if ($trow[$i] != '') {
+      $selb = "SELECTED";
+    }
+    else {
+      $sela = "SELECTED";
+    }
+
+    $ulos  = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">";
+    $ulos .= "<option value = '' $sela>".t("Ei")."</option>";
+    $ulos .= "<option value = 'o' $selb>".t("Kyllä")."</option>";
+    $ulos .= "</select></td>";
+    $jatko = 0;
 }
 
 if ((mysqli_field_name($result, $i) == "tilino") or

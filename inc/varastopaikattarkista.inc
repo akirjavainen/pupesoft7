@@ -7,7 +7,7 @@ if (!function_exists("varastopaikattarkista")) {
     static $alkuhyllyalue, $alkuhyllynro, $loppuhyllyalue, $loppuhyllynro;
 
     if (mysqli_field_name($result, $i) == "alkuhyllyalue") {
-      $t[$i] = trim(mb_strtoupper($t[$i]));
+      $t[$i] = trim(strtoupper($t[$i]));
       $alkuhyllyalue = $t[$i];
 
       if (trim($t[$i]) == '') {
@@ -16,7 +16,7 @@ if (!function_exists("varastopaikattarkista")) {
     }
 
     if (mysqli_field_name($result, $i) == "alkuhyllynro") {
-      $t[$i] = trim(mb_strtoupper($t[$i]));
+      $t[$i] = trim(strtoupper($t[$i]));
       $alkuhyllynro = $t[$i];
 
       if (trim($t[$i]) == '') {
@@ -25,7 +25,7 @@ if (!function_exists("varastopaikattarkista")) {
     }
 
     if (mysqli_field_name($result, $i) == "loppuhyllyalue") {
-      $t[$i] = trim(mb_strtoupper($t[$i]));
+      $t[$i] = trim(strtoupper($t[$i]));
       $loppuhyllyalue = $t[$i];
 
       if (trim($t[$i]) == '') {
@@ -34,7 +34,7 @@ if (!function_exists("varastopaikattarkista")) {
     }
 
     if (mysqli_field_name($result, $i) == "loppuhyllynro") {
-      $t[$i] = trim(mb_strtoupper($t[$i]));
+      $t[$i] = trim(strtoupper($t[$i]));
       $loppuhyllynro = $t[$i];
 
       if (trim($t[$i]) == '') {
@@ -98,7 +98,10 @@ if (!function_exists("varastopaikattarkista")) {
 
     if (mysqli_field_name($result, $i) == "ulkoinen_jarjestelma") {
       if (in_array($t[$i], array('L','P')) and !LOGMASTER_RAJAPINTA) {
-        $virhe[$i] .= t("Valittuun ulkoiseen järjestelmään vaaditut FTP-tiedot puuttuvat")."!";
+        $virhe[$i] .= t("Valitun ulkoisen järjestelmän vaatimat FTP-tiedot puuttuvat")."!";
+      }
+      if ($t[$i] == 'S' and !SMARTEN_RAJAPINTA) {
+        $virhe[$i] .= t("Valitun ulkoisen järjestelmän vaatimat FTP-tiedot puuttuvat")."!";
       }
     }
   }

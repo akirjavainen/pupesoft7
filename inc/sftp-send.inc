@@ -11,9 +11,10 @@ else exit;
 // $ftppath --> Kansio FTP-palvelimella jonne failit työnnetään
 // $ftpfile --> Siirrettävä tiedosto
 // $ftpport --> Custom portti, ei pakollinen
+// $ftpskey --> SSH avain, ei pakollinen
+
 // $ftpfail --> Kansio jonne laitetaan failit jos siirto feilaa, ei pakollinen
 // $ftpsucc --> Kansio jonne tallennetaan failit jos siirto onnistuu, ei pakollinen
-// $ftptype --> FTP-palvelimen tyyppi esim "AS400", ei pakollinen
 // $ftptmpr --> Käytetäänkö .TMP päätettä siirron aikana.
 
 // Palautetaan:
@@ -35,7 +36,7 @@ $sftpport = !empty($ftpport) ? $ftpport : 22;
 $filenimi = basename($ftpfile);
 
 // jos viimeinen merkki pathissä ei ole kauttaviiva lisätään kauttaviiva...
-if (mb_substr($ftppath, -1) != "/") {
+if (substr($ftppath, -1) != "/") {
   $ftppath .= "/";
 }
 
@@ -45,8 +46,14 @@ if (!$connection) {
   $palautus = "Could not connect to remote host. ($ftphost)";
 }
 
-if ($palautus == "" and !ssh2_auth_password($connection, $ftpuser, $ftppass)) {
-  $palautus = "Could not login to remote host ($ftpuser, $ftppass)";
+if ($palautus == "") {
+  if (!empty($ftpskey)) {
+    @ssh2_auth_pubkey_file($connection, $ftpuser, $ftpskey.'.pub', $ftpskey);
+  }
+
+  if (!ssh2_auth_password($connection, $ftpuser, $ftppass)) {
+    $palautus = "Could not login to remote host ($ftpuser, $ftppass)";
+  }
 }
 
 if ($palautus == "") {
@@ -107,7 +114,7 @@ if ($palautus != "" and (!isset($ftpfail) or $ftpfail == "")) {
   $rivi .= "\n";
   $rivi .= "$palautus\n";
 
-  $boob = mail($yhtiorow['alert_email'], mb_encode_mimeheader(t("Tiedostonsiirto epäonnistui")."!", "UTF-8", "Q"), $rivi, "From: ".mb_encode_mimeheader($yhtiorow["nimi"], "UTF-8", "Q")." <$yhtiorow[postittaja_email]>\n", "-f $yhtiorow[postittaja_email]");
+  $boob = mail($yhtiorow['alert_email'], mb_encode_mimeheader(t("Tiedostonsiirto epäonnistui")."!", "ISO-8859-1", "Q"), $rivi, "From: ".mb_encode_mimeheader($yhtiorow["nimi"], "ISO-8859-1", "Q")." <$yhtiorow[postittaja_email]>\n", "-f $yhtiorow[postittaja_email]");
 
   if ($boob === FALSE) {
     $tulos_ulos_ftp .= "<font class='error'>\n";
