@@ -63,14 +63,13 @@ if ($livesearch_tee == "TUOTEHAKU") {
   exit;
 }
 
-// Enaboidaan ajax kikkare
-enable_ajax();
-
 if (strpos($_SERVER['SCRIPT_NAME'], "inventoi.php") !== FALSE) {
+  // Enabloidaan ajax kikkare
+  enable_ajax();
 
   $koko_url = $_SERVER['SCRIPT_NAME'].'?'.$_SERVER['QUERY_STRING'];
 
-  echo "  <script type='text/javascript'>
+  echo "<script type='text/javascript'>
         $(function() {
           $('#inven_laji').on('change', function() {
             var select_value = $(this).val();
@@ -1301,7 +1300,7 @@ if ($tee == 'VALMIS') {
             $result = pupe_query($query);
 
             // Jos pävitettiin saldoa, tehdään kirjanpito. Vaikka summa olisi nolla. Muuten jälkilaskenta ei osaa korjata tätä, jos tiliöintejä ei tehdä.
-            if (mysqli_affected_rows($link) > 0) {
+            if (mysqli_affected_rows($GLOBALS["masterlink"]) > 0) {
 
               // Päivämäärällä inventoitaessa laitetaan tämäpäivämäärä,
               // jos eri päivämäärä ei ole syötetty,

@@ -7,6 +7,15 @@
 // $ftppath --> Kansio FTP-palvelimella jonne failit työnnetään
 // $ftpdest --> Minne tallennetaan
 // $ftpport --> Custom portti, ei pakollinen
+// $ftpskey --> SSH avain, ei pakollinen
+// $ftpsdel --> Poista haettu faili palvelimelta, ei pakollinen
+
+if (empty($ftpskey)) {
+  $ftpskey = "";
+}
+if (empty($ftpsdel)) {
+  $ftpsdel = FALSE;
+}
 
 class SFTPConnection {
   private $connection;
@@ -20,7 +29,12 @@ class SFTPConnection {
     }
   }
 
-  public function login($username, $password) {
+  public function login($username, $password, $ftpskey) {
+
+    if (!empty($ftpskey)) {
+      @ssh2_auth_pubkey_file($this->connection, $username, $ftpskey.'.pub', $ftpskey);
+    }
+
     if (!ssh2_auth_password($this->connection, $username, $password)) {
       throw new Exception("Could not login to remote host ($username, $password)");
     }
@@ -45,7 +59,7 @@ class SFTPConnection {
     return $handle;
   }
 
-  public function getFilesFrom($path, $dest) {
+  public function getFilesFrom($path, $dest, $ftpsdel) {
     $sftp = $this->sftp;
     $dir = "ssh2.sftp://".$sftp.$path;
 
@@ -65,23 +79,27 @@ class SFTPConnection {
       }
 
       fclose($stream);
+
+      if ($ftpsdel === TRUE) {
+        ssh2_sftp_unlink($sftp, $path.$file);
+      }
     }
   }
 }
 
 // jos viimeinen merkki pathissä ei ole kauttaviiva lisätään kauttaviiva...
-if (mb_substr($ftppath, -1) != "/") {
+if (substr($ftppath, -1) != "/") {
   $ftppath .= "/";
 }
 
-if (mb_substr($ftpdest, -1) != "/") {
+if (substr($ftpdest, -1) != "/") {
   $ftpdest .= "/";
 }
 
 try {
   $sftp = new SFTPConnection($ftphost, $ftpport);
-  $sftp->login($ftpuser, $ftppass);
-  $sftp->getFilesFrom($ftppath, $ftpdest);
+  $sftp->login($ftpuser, $ftppass, $ftpskey);
+  $sftp->getFilesFrom($ftppath, $ftpdest, $ftpsdel);
 }
 catch(Exception $e) {
   pupesoft_log("sftp_get", "Error: $e\n");
