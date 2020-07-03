@@ -1271,7 +1271,7 @@ if ($tila == "" and !isset($jatka)) {
               and varastopaikat.tunnus = '$oletusvarasto'";
     $varatoimires = pupe_query($query);
 
-    if ($varatoimirow = mysql_fetch_assoc($varatoimires)) {
+    if ($varatoimirow = mysqli_fetch_assoc($varatoimires)) {
       // Valitaan tämä toimipaikaksi
       $yhtiotoimipaikka = $varatoimirow['tunnus'];
 
