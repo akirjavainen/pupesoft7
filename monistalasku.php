@@ -587,7 +587,7 @@ if ($tee == "ETSILASKU") {
           if (isset($suoraanlasku[$row["tilaus"]]) and $suoraanlasku[$row["tilaus"]] != '') {
             $sel = "CHECKED";
           }
-          echo "<input type='checkbox' name='suoraanlasku[{$row['tilaus']}]' value='on' {$sel}> ".t("Suoraan laskutukseen")."<br>";
+          echo "<input type='checkbox' name='suoraanlasku[{$row['tilaus']}]' value='on' CHECKED> ".t("Suoraan laskutukseen")."<br>"; // MODIFIED, default CHECKED
         }
 
         $sel = "";
@@ -617,7 +617,7 @@ if ($tee == "ETSILASKU") {
 
         echo "<input type='checkbox'
                      name='sailyta_rivikommentit[{$row['tilaus']}]'
-                     value='on'>" . t('Säilytä rivikommentit') . "<br>";
+                     value='on' CHECKED>" . t('Säilytä rivikommentit') . "<br>"; // MODIFIED, default CHECKED
 
         echo "<input type='checkbox'
                      name='verkkotunnus_laskulta[{$row['tilaus']}]'
