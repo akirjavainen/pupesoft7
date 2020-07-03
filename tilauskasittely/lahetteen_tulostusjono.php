@@ -7,6 +7,7 @@ require 'validation/Validation.php';
 require 'valmistuslinjat.inc';
 
 $onkologmaster = (LOGMASTER_RAJAPINTA and in_array($yhtiorow['ulkoinen_jarjestelma'], array('', 'K')));
+$onkosmarten = (SMARTEN_RAJAPINTA and in_array($yhtiorow['ulkoinen_jarjestelma'], array('', 'K')));
 
 if (isset($tee) and $tee == "TILAA_AJAX") {
   require_once "inc/tilaa_ajax.inc";
@@ -216,7 +217,7 @@ if ($tee2 == 'TULOSTA') {
     }
 
     //tulostettavat tilausket
-    $tilausnumerorypas[] = mb_substr($laskut, 0, -1);
+    $tilausnumerorypas[] = substr($laskut, 0, -1);
     //ja niiden lukumäärä
     $laskuja = $lask;
   }
@@ -625,7 +626,7 @@ if ($tee2 == 'VALITSE') {
       echo "</table><br><br>";
       echo "<input type='hidden' name='lasku_yhtio' value='$kukarow[yhtio]'>";
 
-      if ($onkologmaster and in_array($prirow['ulkoinen_jarjestelma'], array('L','P'))) {
+      if (($onkologmaster or $onkosmarten) and in_array($prirow['ulkoinen_jarjestelma'], array('L','P'))) {
         echo t("Ulkoisen varaston tilaus");
       }
       else {
@@ -686,7 +687,7 @@ if ($tee2 == '') {
     //  Varastorajaus jos käyttäjällä on joku varasto valittuna
     elseif ($_tarkista_varastot and $kukarow['varasto'] != '' and $kukarow['varasto'] != 0) {
       // jos käyttäjällä on monta varastoa valittuna, valitaan ensimmäinen
-      $tuvarasto   = mb_strpos($kukarow['varasto'], ',') !== false ? array_shift(explode(",", $kukarow['varasto'])) : $kukarow['varasto'];
+      $tuvarasto   = strpos($kukarow['varasto'], ',') !== false ? array_shift(explode(",", $kukarow['varasto'])) : $kukarow['varasto'];
     }
     else {
       $tuvarasto   = "KAIKKI";
@@ -730,7 +731,7 @@ if ($tee2 == '') {
   }
 
   if ($tuvarasto != '' and $tuvarasto != 'KAIKKI') {
-    if (mb_strpos($tuvarasto, "##")) {
+    if (strpos($tuvarasto, "##")) {
       $temp_tuvarasto = explode("##", $tuvarasto);
       $haku .= " and lasku.varasto='$temp_tuvarasto[0]' and lasku.tulostusalue = '$temp_tuvarasto[1]'";
     }
@@ -1223,7 +1224,7 @@ if ($tee2 == '') {
 
       $laadittu_e   = tv1dateconv($tilrow["laadittu"], "P", "LYHYT");
       $h1time_e    = tv1dateconv($tilrow["h1time"], "P", "LYHYT");
-      $h1time_e    = str_replace(mb_substr($laadittu_e, 0, mb_strpos($laadittu_e, " ")), "", $h1time_e);
+      $h1time_e    = str_replace(substr($laadittu_e, 0, strpos($laadittu_e, " ")), "", $h1time_e);
 
       echo "<$ero valign='top' nowrap align='right'>$laadittu_e<br>$h1time_e</$ero>";
 
@@ -1268,6 +1269,7 @@ if ($tee2 == '') {
       $prirow = mysqli_fetch_array($prires);
 
       $onkologmaster_varasto = ($onkologmaster and in_array($prirow['ulkoinen_jarjestelma'], array('L','P')));
+      $onkosmarten_varasto = ($onkosmarten and $prirow['ulkoinen_jarjestelma'] == 'S');
 
       if ($tilrow["tilauksia"] > 1) {
         echo "<$ero valign='top'></$ero>";
@@ -1391,7 +1393,7 @@ if ($tee2 == '') {
         echo "<input type='hidden' name='lasku_yhtio'   value='$tilrow[yhtio]'>";
         echo "<$ero valign='top'>";
 
-        if ($onkologmaster_varasto) {
+        if ($onkologmaster_varasto or $onkosmarten_varasto) {
           echo t("Ulkoisen varaston tilaus");
 
           $keskenres = tilaus_aktiivinen_kayttajalla($tilrow['otunnus']);
@@ -1436,7 +1438,7 @@ if ($tee2 == '') {
       }
 
       // Kerätään tunnukset tulosta kaikki-toimintoa varten
-      if (!$onkologmaster_varasto) {
+      if (!$onkologmaster_varasto and !$onkosmarten_varasto) {
         $tulostakaikki_tun[$tilrow['otunnus']] = $tilrow["yhtio"];
       }
 
