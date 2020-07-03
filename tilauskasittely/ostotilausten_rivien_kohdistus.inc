@@ -764,12 +764,12 @@ if ($tila == 'tee_kohdistus') {
 
     foreach ($lisavarusterivi_kpl as $tunnus => $kpl) {
       $kpl    = str_replace(",", ".", $kpl);
-      $perheid2 = mb_substr($tunnus, 0, mb_strpos($tunnus, '##'));
-      $tuoteno  = mb_substr($tunnus,  mb_strpos($tunnus, '##')+2, mb_strpos($tunnus, '#*#')-mb_strpos($tunnus, '##')-2);
+      $perheid2 = substr($tunnus, 0, strpos($tunnus, '##'));
+      $tuoteno  = substr($tunnus,  strpos($tunnus, '##')+2, strpos($tunnus, '#*#')-strpos($tunnus, '##')-2);
       $hinta     = str_replace(",", ".", $lisavarusterivi_hinta[$tunnus]);
-      $potunnus = mb_substr($tunnus, mb_strpos($tunnus, '#*#')+3);
+      $potunnus = substr($tunnus, strpos($tunnus, '#*#')+3);
 
-      if (abs($kpl) > 0 or mb_strtoupper($kpl) == "DEL") {
+      if (abs($kpl) > 0 or strtoupper($kpl) == "DEL") {
         if (abs($kpl) > 0) {
           $query  = "SELECT *
                      FROM tuote
@@ -1041,7 +1041,7 @@ if ($tila == 'tee_kohdistus') {
         }
       }
 
-      if ($rivi["kpl"] == 0 and mb_strtoupper($kpl) == "DEL") {
+      if ($rivi["kpl"] == 0 and strtoupper($kpl) == "DEL") {
         $query = "DELETE FROM tilausrivi
                   WHERE yhtio = '$kukarow[yhtio]'
                   and tunnus  = '$tunnus'
@@ -1248,8 +1248,8 @@ if ($tila == '') {
 
   foreach ($kenhak_array as $i => $kentta) {
     // tarkastetaan onko hakukentässä jotakin
-    if (isset($haku[$i]) and mb_strlen($haku[$i]) > 0) {
-      if ($kentta == "toimaika" and mb_strpos($haku[$i], ".") !== false) {
+    if (isset($haku[$i]) and strlen($haku[$i]) > 0) {
+      if ($kentta == "toimaika" and strpos($haku[$i], ".") !== false) {
         $_aika = explode(".", $haku[$i]);
 
         if (count($_aika) == 2) {
@@ -1278,7 +1278,7 @@ if ($tila == '') {
 
   $jarjestys = "";
 
-  if (mb_strlen($ojarj) > 0) {
+  if (strlen($ojarj) > 0) {
     $jarjestys = $kenhak_array[$ojarj].", ";
   }
 
@@ -1331,7 +1331,7 @@ if ($tila == '') {
   }
 
   if ($lisa1 != '') {
-    $lisa1 = " HAVING ".mb_substr($lisa1, 0, -3);
+    $lisa1 = " HAVING ".substr($lisa1, 0, -3);
     $limit = "";
     $alku = 0;
   }
@@ -1584,7 +1584,7 @@ if ($tila == '') {
     echo "<input type='hidden' name='toimipaikka' value='{$toimipaikka}'>";
     echo "<input type='submit' value='".t("Tee uusi rivi")."'></form>";
 
-    if ($onkologmaster and $laskurow['sisviesti3'] == '') {
+    if (($onkologmaster or $onkosmarten) and $laskurow['sisviesti3'] == '') {
       echo "<form method='post'>
           <input type='hidden' name='toimittajaid' value='$toimittajaid'>
           <input type='hidden' name='toiminto' value='saapuminen_ulkoiseen_jarjestelmaan'>
@@ -2257,9 +2257,9 @@ if ($tila == '') {
 
     if ($onkosuoratoimitus_suoraan_asiakkaalle) {
 
-      $toimitettuaikavv = mb_substr($rivirow["suoratoimitettuaika"], 0, 4);
-      $toimitettuaikakk = mb_substr($rivirow["suoratoimitettuaika"], 5, 2);
-      $toimitettuaikapp = mb_substr($rivirow["suoratoimitettuaika"], 8, 2);
+      $toimitettuaikavv = substr($rivirow["suoratoimitettuaika"], 0, 4);
+      $toimitettuaikakk = substr($rivirow["suoratoimitettuaika"], 5, 2);
+      $toimitettuaikapp = substr($rivirow["suoratoimitettuaika"], 8, 2);
 
       if ($toimitettuaikavv == 0) $toimitettuaikavv = "";
       if ($toimitettuaikakk == 0) $toimitettuaikakk = "";
@@ -2358,7 +2358,7 @@ if ($tila == '') {
         <input type='submit' value='".t("Tee uusi rivi")."'>
         </form>";
 
-    if ($onkologmaster and $laskurow['sisviesti3'] == '') {
+    if (($onkologmaster or $onkosmarten) and $laskurow['sisviesti3'] == '') {
       echo "<form method='post'>
           <input type='hidden' name='toimittajaid' value='$toimittajaid'>
           <input type='hidden' name='toiminto' value='saapuminen_ulkoiseen_jarjestelmaan'>

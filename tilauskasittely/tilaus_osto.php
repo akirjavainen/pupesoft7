@@ -75,7 +75,7 @@ if (isset($ajax_toiminto) and trim($ajax_toiminto) == 'tarkista_tehtaan_saldot')
     require "inc/sahkoinen_tilausliitanta.inc";
   }
 
-  if (!isset($data)) $data = array('id' => 0, 'error' => true, 'error_msg' => t("Haku ei onnistunut! Ole yhteydessä IT-tukeen"));
+  if (!isset($data)) $data = array('id' => 0, 'error' => true, 'error_msg' => utf8_encode(t("Haku ei onnistunut! Ole yhteydessä IT-tukeen")));
 
   echo json_encode($data);
   exit;
@@ -91,7 +91,7 @@ if (isset($ajax_toiminto) and trim($ajax_toiminto) == 'tarkista_tehtaan_saldot_k
     require "inc/sahkoinen_tilausliitanta.inc";
   }
 
-  if (!isset($data)) $data = array('id' => 0, 'error' => true, 'error_msg' => t("Haku ei onnistunut! Ole yhteydessä IT-tukeen"));
+  if (!isset($data)) $data = array('id' => 0, 'error' => true, 'error_msg' => utf8_encode(t("Haku ei onnistunut! Ole yhteydessä IT-tukeen")));
 
   echo json_encode($data);
   exit;
@@ -605,20 +605,22 @@ if ($tee != "" and $tee != "MUUOTAOSTIKKOA") {
                           AND uusiotunnus = 0";
           pupe_query($kohdistus_q);
 
-          $onkologmaster = in_array($yhtiorow['ulkoinen_jarjestelma'], array('','S'));
-          $ulkoinen_varasto = false;
-
           // Lähetetään sanoma vain, jos valitulla varastolla on ulkoinen jarjestelma
-          if ($laskurow['varasto'] > 0) {
-            $v_query = "SELECT *
+          if (in_array($yhtiorow['ulkoinen_jarjestelma'], array('','S')) and $laskurow['varasto'] > 0) {
+            $v_query = "SELECT ulkoinen_jarjestelma
                         FROM varastopaikat
                         WHERE yhtio = '{$kukarow['yhtio']}'
-                        AND tunnus = '{$laskurow['varasto']}'
-                        AND ulkoinen_jarjestelma IN ('P')";
+                        AND tunnus = '{$laskurow['varasto']}'";
             $v_result = pupe_query($v_query);
+            $v_row = mysqli_fetch_assoc($v_result);
 
-            if (mysqli_num_rows($v_result) == 1) {
-              $ulkoinen_varasto = true;
+            if (in_array($v_row['ulkoinen_jarjestelma'], array('L','P'))) {
+              // Lähetetään ulkoiseen järjestelmään
+              require "rajapinnat/logmaster/inbound_delivery.php";
+            }
+            if ($v_row['ulkoinen_jarjestelma'] == 'S') {
+              // Lähetetään ulkoiseen järjestelmään
+              require "rajapinnat/smarten/inbound_delivery.php";
             }
           }
 
@@ -810,7 +812,7 @@ if ($tee != "" and $tee != "MUUOTAOSTIKKOA") {
         foreach ($ale as $a_index => $a) {
           $ale_query .= $a_index .' = ' . $a . ',';
         }
-        $ale_query = mb_substr($ale_query, 0, -1);
+        $ale_query = substr($ale_query, 0, -1);
 
         $query = "UPDATE tilausrivi
                   SET tuoteno = '{$vastaavatuoteno}',
@@ -1868,7 +1870,7 @@ if ($tee != "" and $tee != "MUUOTAOSTIKKOA") {
             echo "<div class='availability {$prow['tunnus']}_availability' /> <span class='{$prow['tunnus']}_loading'></span></div>&nbsp;";
           }
 
-          echo ($prow["tilattu"]*1)." ", mb_strtolower($prow['yksikko']), "<br />".($prow["tilattu_ulk"]*1)." ", mb_strtolower($prow['toim_yksikko']), "</td>";
+          echo ($prow["tilattu"]*1)." ", strtolower($prow['yksikko']), "<br />".($prow["tilattu_ulk"]*1)." ", strtolower($prow['toim_yksikko']), "</td>";
           echo "<td $class align='right'>".hintapyoristys($prow["hinta"])."</td>";
 
           $alespan = 7;

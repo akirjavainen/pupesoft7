@@ -149,8 +149,8 @@ if ($_onko_param and $_onko_myynti and $kukarow['extranet'] == '') {
   }
 }
 
-if (isset($alkupera_trow) and $yhtiorow["korvaavat_hyvaksynta"] != "" and mb_strtoupper($alkupera_trow["tuoteno"]) != mb_strtoupper($row["tuoteno"])
-  and mb_strtoupper($row["tuoteno"]) == mb_strtoupper($krow2["tuoteno"])
+if (isset($alkupera_trow) and $yhtiorow["korvaavat_hyvaksynta"] != "" and strtoupper($alkupera_trow["tuoteno"]) != strtoupper($row["tuoteno"])
+  and strtoupper($row["tuoteno"]) == strtoupper($krow2["tuoteno"])
   and (!isset($from_mikrotilaus) or (isset($from_mikrotilaus) and !$from_mikrotilaus))
   and !in_array($row["var2"], array("OK", "PK")) and $korvattiin_korvaavalla == "HIIOHEI!") {
   $varaosavirhe .= t("HUOM: tämä on korvaava tuote, haluatko hyväksyä?")."<br>";
@@ -163,6 +163,16 @@ if (isset($alkupera_trow) and $yhtiorow["korvaavat_hyvaksynta"] != "" and mb_str
 $logmaster_errors = logmaster_verify_row($row['tunnus'], $toim);
 
 foreach ($logmaster_errors as $error) {
+  echo "<font class='error'>";
+  echo "{$error}<br><br>";
+  echo "</font>";
+  $tilausok++;
+  $riviok++;
+}
+
+$smarten_errors = smarten_verify_row($row['tunnus'], $toim);
+
+foreach ($smarten_errors as $error) {
   echo "<font class='error'>";
   echo "{$error}<br><br>";
   echo "</font>";
@@ -195,7 +205,7 @@ if (
   $row["hinta"] == 0
   and $row["tyyppi"] != "V"
   and !in_array($row["var2"], array("OK", "PK"))
-  and !in_array(mb_strtoupper($trow["tuotetyyppi"]), array('R', 'M'))
+  and !in_array(strtoupper($trow["tuotetyyppi"]), array('R', 'M'))
   and !in_array($toim, array("VALMISTAVARASTOON", "SIIRTOLISTA", "SIIRTOTYOMAARAYS", "MYYNTITILI"))
 ) {
   if ($trow['ei_saldoa'] == '' and ($row['perheid'] == 0 or $row['perheid'] == $row['tunnus'])) {
@@ -429,7 +439,7 @@ if (trim($trow["vienti"]) != '' and $row["tyyppi"] != "V" and $row["tyyppi"] != 
   // -maa tarkoittaa että ainoastaan tähän maahan saa myydä
   // eli näytetään vaan tuotteet jossa vienti kentässä on tyhjää tai -maa.. ja se ei saa olla +maa
 
-  if (mb_strpos(mb_strtoupper($trow["vienti"]), mb_strtoupper("+$laskurow[toim_maa]")) !== FALSE and mb_strpos($trow["vienti"], "+") !== FALSE) {
+  if (strpos(strtoupper($trow["vienti"]), strtoupper("+$laskurow[toim_maa]")) !== FALSE and strpos($trow["vienti"], "+") !== FALSE) {
     //ei saa myydä tähän maahan
     $varaosavirhe .= t("VIRHE: Tätä tuotetta ei saa myydä maahan")." $laskurow[toim_maa]!<br>";
     $riviok++;
@@ -442,7 +452,7 @@ if (trim($trow["vienti"]) != '' and $row["tyyppi"] != "V" and $row["tyyppi"] != 
     }
   }
 
-  if (mb_strpos(mb_strtoupper($trow["vienti"]), mb_strtoupper("-$laskurow[toim_maa]")) === FALSE and mb_strpos($trow["vienti"], "-") !== FALSE) {
+  if (strpos(strtoupper($trow["vienti"]), strtoupper("-$laskurow[toim_maa]")) === FALSE and strpos($trow["vienti"], "-") !== FALSE) {
     //ei saa myydä tähän maahan
     $varaosavirhe .= t("VIRHE: Tätä tuotetta ei saa myydä maahan")." $laskurow[toim_maa]!!<br>";
     $riviok++;
@@ -747,8 +757,8 @@ if (
 
           $title  = "";
 
-          if (mb_strtoupper($alkurow['varastomaa']) != mb_strtoupper($yhtiorow['maa'])) {
-            $title .= mb_strtoupper($alkurow['varastomaa'])." ";
+          if (strtoupper($alkurow['varastomaa']) != strtoupper($yhtiorow['maa'])) {
+            $title .= strtoupper($alkurow['varastomaa'])." ";
           }
 
           $title .= "$alkurow[hyllyalue] $alkurow[hyllynro] $alkurow[hyllyvali] $alkurow[hyllytaso]";
@@ -1078,8 +1088,8 @@ elseif (
 
       $title  = "";
 
-      if (mb_strtoupper($alkurow['varastomaa']) != mb_strtoupper($yhtiorow['maa'])) {
-        $title .= mb_strtoupper($alkurow['varastomaa'])." ";
+      if (strtoupper($alkurow['varastomaa']) != strtoupper($yhtiorow['maa'])) {
+        $title .= strtoupper($alkurow['varastomaa'])." ";
       }
 
       $title .= "$alkurow[hyllyalue] $alkurow[hyllynro] $alkurow[hyllyvali] $alkurow[hyllytaso]";
@@ -1124,7 +1134,7 @@ elseif (
     $perheen_tuotteet .= "'$perhe_tuoteno_row[tuoteno]',";
   }
 
-  $perheen_tuotteet = mb_substr($perheen_tuotteet, 0, -1);
+  $perheen_tuotteet = substr($perheen_tuotteet, 0, -1);
 
   $query = "SELECT DISTINCT liitostunnus, tyyppi_tieto, toimi.nimi
             FROM tuotteen_toimittajat use index (yhtio_tuoteno)
@@ -1379,7 +1389,7 @@ if ($toim != "VALMISTAVARASTOON" and $row['tuoteno'] != '' and ($yhtiorow['vasta
 
           if ($chk_status_row['status'] == 'P' and $vmyytavissa == 0) continue;
 
-          if ((($vmyytavissa > 0 or $yhtiorow['vastaavat_tuotteet_esitysmuoto'] == 'S') and mb_strtoupper($_tuote['tuoteno']) != mb_strtoupper($row["tuoteno"])) or $yhtiorow['vastaavat_tuotteet_esitysmuoto'] == 'A') {
+          if ((($vmyytavissa > 0 or $yhtiorow['vastaavat_tuotteet_esitysmuoto'] == 'S') and strtoupper($_tuote['tuoteno']) != strtoupper($row["tuoteno"])) or $yhtiorow['vastaavat_tuotteet_esitysmuoto'] == 'A') {
 
             $tvrow = hae_tuote($_tuote['tuoteno']);
 
@@ -1503,7 +1513,7 @@ if ($toim != "VALMISTAVARASTOON" and $row['tuoteno'] != '' and ($yhtiorow['vasta
 
             $vastaavat_table .= "<td align='left'>";
 
-            if ($yhtiorow['vastaavat_tuotteet_esitysmuoto'] != 'A' or (mb_strtoupper($_tuote['tuoteno']) != mb_strtoupper($row["tuoteno"]))) {
+            if ($yhtiorow['vastaavat_tuotteet_esitysmuoto'] != 'A' or (strtoupper($_tuote['tuoteno']) != strtoupper($row["tuoteno"]))) {
               $vastaavat_table .= "<form method='post' name='jalkitoimita'>
                           <input type='hidden' name='toim'       value = '$toim'>
                           <input type='hidden' name='lopetus'     value = '$lopetus'>

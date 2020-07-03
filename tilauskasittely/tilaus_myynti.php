@@ -43,6 +43,10 @@ if (@include "rajapinnat/logmaster/logmaster-functions.php");
 elseif (@include "logmaster-functions.php");
 else exit;
 
+if (@include "rajapinnat/smarten/smarten-functions.php");
+elseif (@include "smarten-functions.php");
+else exit;
+
 if ($toim == "EXTRANET") {
   require "asiakasvalinta.inc";
 }
@@ -5748,6 +5752,15 @@ if ($tee == '') {
     $tilausok++;
   }
 
+  $smarten_errors = smarten_verify_order($laskurow['tunnus'], $toim);
+
+  foreach ($smarten_errors as $error) {
+    echo "<font class='error'>";
+    echo "{$error}<br><br>";
+    echo "</font>";
+    $tilausok++;
+  }
+
   $numres_saatavt  = 0;
 
   if ((int) $kukarow["kesken"] > 0) {
@@ -8052,7 +8065,7 @@ if ($tee == '') {
           }
         }
         elseif ((($toim != "TARJOUS" and $toim != "EXTTARJOUS") or $yhtiorow['tarjouksen_tuotepaikat'] == "") and $muokkauslukko_rivi == "" and ($kukarow['extranet'] == '' or ($kukarow['extranet'] != '' and $yhtiorow['tuoteperhe_suoratoimitus'] == 'E')) and $trow["ei_saldoa"] == "") {
-          
+ 
           $avainsana_result = t_avainsana("TILRIVI_VIILAUS");
           $avainsana_tulos = mysqli_fetch_assoc($avainsana_result);
 
@@ -8062,9 +8075,9 @@ if ($tee == '') {
           else {
             $tyyli = "";
           }
-          
+ 
           if ($paikat != '') {
-            
+ 
             echo "  <td $class $tyyli align='left' nowrap>";
 
             //valitaan näytetävä lippu varaston tai yhtiön maanperusteella

@@ -156,7 +156,7 @@ if (!function_exists('alku')) {
         $pohja = 577;
 
         $txt = t("Ostaja/Laskutusosoite", $kieli).":";
-        $length = $pdf_lasku->mb_strlen($txt, $pieni);
+        $length = $pdf_lasku->strlen($txt, $pieni);
 
         $pdf_lasku->draw_text(50, $ostaja_kala+12, $txt, $page_lasku[$sivu], $pieni);
         $pdf_lasku->draw_rectangle($ostaja_kala+10, 50, $ostaja_kala+10, 50+$length, $page_lasku[$sivu], $rectparam);
@@ -184,7 +184,7 @@ if (!function_exists('alku')) {
 
     if (in_array($laskutyyppi, array('21', '22'))) {
       $txt = t("Toimitusosoite", $kieli).":";
-      $length = $pdf_lasku->mb_strlen($txt, $pieni);
+      $length = $pdf_lasku->strlen($txt, $pieni);
 
       $pdf_lasku->draw_text(50, $toim_kala, $txt, $page_lasku[$sivu], $pieni);
       $pdf_lasku->draw_rectangle($toim_kala-2, 50, $toim_kala-2, 50+$length, $page_lasku[$sivu], $rectparam);
@@ -273,7 +273,7 @@ if (!function_exists('alku')) {
       $pdf_lasku->draw_text(310, $otsik[$rivi_ind], t("Viitenumero", $kieli), $page_lasku[$sivu], $pieni);
 
       // Näytetään tilausnumero viitteenä kun kyseessä on ulkomaille lähetettävä proformalasku
-      if ($toim == 'PROFORMA' and mb_strtoupper($laskurow["maa"] )!= mb_strtoupper($yhtiorow["maa"]) and $laskurow["viite"] == "") {
+      if ($toim == 'PROFORMA' and strtoupper($laskurow["maa"] )!= strtoupper($yhtiorow["maa"]) and $laskurow["viite"] == "") {
         $pdf_lasku->draw_text(310, $arvo[$rivi_ind], $laskurow["tunnus"], $page_lasku[$sivu], $boldi);
       }
       else {
@@ -290,9 +290,9 @@ if (!function_exists('alku')) {
         $norm);
     }
     else {
-      for ($s = mb_strlen($laskurow["maksuehto"]); $s > 0; $s--) {
-        if ($pdf_lasku->mb_strlen($laskurow["maksuehto"], $norm) > 110) {
-          $laskurow["maksuehto"] = mb_substr($laskurow["maksuehto"], 0, $s);
+      for ($s = strlen($laskurow["maksuehto"]); $s > 0; $s--) {
+        if ($pdf_lasku->strlen($laskurow["maksuehto"], $norm) > 110) {
+          $laskurow["maksuehto"] = substr($laskurow["maksuehto"], 0, $s);
         }
         else {
           break;
@@ -362,7 +362,7 @@ if (!function_exists('alku')) {
       if ($laskurow["kasumma"] != 0.00) {
         $pdf_lasku->draw_text(430, $otsik[$rivi_ind], t("Kassa-alennus", $kieli)." ".$laskurow["valkoodi"], $page_lasku[$sivu], $pieni);
 
-        if ($laskurow["valkoodi"] != '' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+        if ($laskurow["valkoodi"] != '' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
           $pdf_lasku->draw_text(430, $arvo[$rivi_ind], $laskurow["kasumma_valuutassa"], $page_lasku[$sivu], $norm);
         }
         else {
@@ -487,7 +487,7 @@ if (!function_exists('alku')) {
     // Leveämmät laatikot
     $toimehto = t_avainsana("TOIMEHTO", $kieli, " and concat(selite,' ',selitetark) = '{$laskurow["toimitusehto"]}'", "", "", "selitetark");
     if ($toimehto == "") $toimehto = $laskurow["toimitusehto"];
-    else $toimehto = mb_substr($laskurow["toimitusehto"], 0, 3)." ".$toimehto;
+    else $toimehto = substr($laskurow["toimitusehto"], 0, 3)." ".$toimehto;
 
     if (!empty($toimehto)) {
       $pdf_lasku->draw_text(310, $otsik[$rivi_ind], t("Toimitusehto", $kieli), $page_lasku[$sivu], $pieni);
@@ -557,7 +557,7 @@ if (!function_exists('laskun_kommentit')) {
       $komm .= "\n".t("Kohde", $kieli).":###".$laskurow['kohde'];
     }
 
-    if (trim($laskurow['viesti']) != '' and $pdf_lasku->mb_strlen($laskurow["viesti"], $norm) > 270) {
+    if (trim($laskurow['viesti']) != '' and $pdf_lasku->strlen($laskurow["viesti"], $norm) > 270) {
       $komm .= "\n".t("Tilausviite", $kieli).":###".$laskurow['viesti'];
     }
 
@@ -599,11 +599,11 @@ if (!function_exists('laskun_kommentit')) {
           $kentta = $al_row["selite"];
 
           if (((!is_numeric($tyomrow[$kentta]) and trim($tyomrow[$kentta]) != '') or (is_numeric($tyomrow[$kentta]) and $tyomrow[$kentta] != 0)) and trim($tyomrow[$kentta]) != '0000-00-00') {
-            if (mb_strtoupper($al_row["selitetark_2"]) == "TEXT") {
+            if (strtoupper($al_row["selitetark_2"]) == "TEXT") {
               $komm .= "\n$al_row[selitetark]:###".wordwrap(str_replace("\n", "\n###", $tyomrow[$kentta]), 90, "\n###");
             }
             else {
-              if (mb_strtoupper($al_row["selitetark_2"]) == "DATE") {
+              if (strtoupper($al_row["selitetark_2"]) == "DATE") {
                 $tyomrow[$kentta] = tv1dateconv($tyomrow[$kentta]);
               }
               elseif ($kentta == "suorittaja") {
@@ -657,10 +657,10 @@ if (!function_exists('laskun_kommentit')) {
       $maxoik = 0;
 
       foreach ($kommentit as $kommentti) {
-        if (mb_strpos($kommentti, "###") !== FALSE) {
+        if (strpos($kommentti, "###") !== FALSE) {
           list($o, $v) = explode("###", $kommentti);
 
-          $oikpos = $pdf_lasku->mb_strlen($o, $boldi);
+          $oikpos = $pdf_lasku->strlen($o, $boldi);
 
           if ($oikpos > $maxoik) {
             $maxoik = $oikpos;
@@ -678,7 +678,7 @@ if (!function_exists('laskun_kommentit')) {
           list($page_lasku[$sivu], $pohja) = uusi_sivu($laskurow, $asiakasrow, $kieli, $pdf_lasku, $toim, $laskutyyppi, 'X');
         }
 
-        if (mb_strpos($kommentti, "###") !== false) {
+        if (strpos($kommentti, "###") !== false) {
           list($o, $v) = explode("###", $kommentti);
 
           $pdf_lasku->draw_text(35, $pohja, trim($o), $page_lasku[$sivu], $boldi);
@@ -843,13 +843,13 @@ if (!function_exists('rivi_lasku')) {
     if ($row['tuoteno'] != $yhtiorow["kuljetusvakuutus_tuotenumero"]
       and $row['tuoteno'] != $yhtiorow["laskutuslisa_tuotenumero"]
       and trim($row['laskuviesti']) != ''
-      and mb_strpos($row["kommentti"], "$row[laskuviesti]") === FALSE
+      and strpos($row["kommentti"], "$row[laskuviesti]") === FALSE
       and !in_array($laskutyyppi, array(6, 21, 22))
     ) {
       $row["kommentti"] = trim($row["laskuviesti"])."\n".$row["kommentti"];
     }
 
-    if ($row['tuoteno'] != $yhtiorow["kuljetusvakuutus_tuotenumero"] and $row['tuoteno'] != $yhtiorow["laskutuslisa_tuotenumero"] and trim($row['asiakkaan_tilausnumero']) != '' and mb_strpos($row["kommentti"], "$row[asiakkaan_tilausnumero]") === FALSE and $laskutyyppi != 6) {
+    if ($row['tuoteno'] != $yhtiorow["kuljetusvakuutus_tuotenumero"] and $row['tuoteno'] != $yhtiorow["laskutuslisa_tuotenumero"] and trim($row['asiakkaan_tilausnumero']) != '' and strpos($row["kommentti"], "$row[asiakkaan_tilausnumero]") === FALSE and $laskutyyppi != 6) {
       $row["kommentti"] = trim($row["asiakkaan_tilausnumero"])."\n".$row["kommentti"];
     }
 
@@ -864,7 +864,7 @@ if (!function_exists('rivi_lasku')) {
         $row["nimitys"] = str_replace($row['tuoteno'].' - ', '', $row['nimitys']);
       }
 
-      if (mb_strpos($row["kommentti"], "100%") !== false) {
+      if (strpos($row["kommentti"], "100%") !== false) {
         $_ennakkoteksti = t("Ennakkolasku");
         $row["kommentti"] = preg_replace("/{$_ennakkoteksti}.*100\%/", '', $row["kommentti"]);
       }
@@ -936,13 +936,13 @@ if (!function_exists('rivi_lasku')) {
           }
         }
 
-        $row["kommentti"] = mb_substr($row["kommentti"], 0, -2);
+        $row["kommentti"] = substr($row["kommentti"], 0, -2);
       }
     }
 
     if ($laskutyyppi == 7) {
 
-      if ($row["eankoodi"] != "") {
+      if (!empty($row["eankoodi"])) {
         $row["kommentti"] = "EAN: $row[eankoodi]\n$row[kommentti]";
       }
 
@@ -1068,10 +1068,10 @@ if (!function_exists('rivi_otsikot')) {
       if ($laskutyyppi == 21 or $laskutyyppi == 22) {
 
         //Määrä
-        $oikpos = $pdf_lasku->mb_strlen(t("Määrä", $kieli).":", $pieni);
+        $oikpos = $pdf_lasku->strlen(t("Määrä", $kieli).":", $pieni);
         $pdf_lasku->draw_text(365-$oikpos, $kala, t("Määrä", $kieli).":", $thispage, $pieni);
 
-        $oikpos = $pdf_lasku->mb_strlen(t("A-hinta", $kieli).":", $pieni);
+        $oikpos = $pdf_lasku->strlen(t("A-hinta", $kieli).":", $pieni);
         $pdf_lasku->draw_text(435-$oikpos, $kala, t("A-hinta", $kieli).":", $thispage, $pieni);
       }
       else {
@@ -1086,7 +1086,7 @@ if (!function_exists('rivi_otsikot')) {
       if (in_array($laskutyyppi, array('21', '22'))) {
         list($ff_string, $ff_font) = pdf_fontfit(t("Yhteensä", $kieli).":", 50, $pdf_lasku, $pieni);
 
-        $oikpos = $pdf_lasku->mb_strlen($ff_string, $ff_font);
+        $oikpos = $pdf_lasku->strlen($ff_string, $ff_font);
         $pdf_lasku->draw_text(540-$oikpos, $kala, $ff_string, $thispage, $ff_font);
       }
       else {
@@ -1201,7 +1201,7 @@ if (!function_exists('rivi_original')) {
       $loop_i = -10;
 
       //Nimitys
-      foreach (mb_str_split($row['nimitys'], 40) as $nimitys_split) {
+      foreach (str_split($row['nimitys'], 40) as $nimitys_split) {
         $loop_i += 10;
 
         $pdf_lasku->draw_text(35, $kala - $loop_i, $nimitys_split, $thispage, $norm);
@@ -1212,7 +1212,7 @@ if (!function_exists('rivi_original')) {
       $loop_i = -10;
 
       //Tuoteno
-      foreach (mb_str_split($row['tuoteno'], 10) as $tuoteno_split) {
+      foreach (str_split($row['tuoteno'], 10) as $tuoteno_split) {
 
         $loop_i += 10;
 
@@ -1242,7 +1242,7 @@ if (!function_exists('rivi_original')) {
     }
 
     //Määrä
-    $oikpos = $pdf_lasku->mb_strlen($row["kpl"], $norm);
+    $oikpos = $pdf_lasku->strlen($row["kpl"], $norm);
     $pdf_lasku->draw_text(365-$oikpos, $kala, $row["kpl"], $thispage, $norm);
 
     // yksikköhinta pitää olla veroton
@@ -1256,7 +1256,7 @@ if (!function_exists('rivi_original')) {
         $laskalv = 0;
       }
 
-      if ($laskurow["valkoodi"] != '' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+      if ($laskurow["valkoodi"] != '' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
         $veroton_hinta = $row["hinta"] / (1 + $laskalv / 100);
       }
       else {
@@ -1269,7 +1269,7 @@ if (!function_exists('rivi_original')) {
 
     if (($laskutyyppi == 19 and (empty($row['perheid']) or $row['tunnus'] == $row['perheid'])) or $laskutyyppi != 19) {
       // A-hinta
-      $oikpos = $pdf_lasku->mb_strlen(hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $norm);
+      $oikpos = $pdf_lasku->strlen(hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $norm);
       $pdf_lasku->draw_text(435-$oikpos, $kala, hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $thispage, $norm);
 
       //Alennus
@@ -1281,12 +1281,12 @@ if (!function_exists('rivi_original')) {
 
       if ($kurssi != 1) {
         //Veroton Rivihinta Valuutassa
-        $oikpos = $pdf_lasku->mb_strlen(hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $norm);
+        $oikpos = $pdf_lasku->strlen(hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $thispage, $norm);
       }
       else {
         // Veroton Rivihinta
-        $oikpos = $pdf_lasku->mb_strlen(hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $norm);
+        $oikpos = $pdf_lasku->strlen(hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $thispage, $norm);
       }
 
@@ -1320,7 +1320,7 @@ if (!function_exists('rivi_original')) {
       //Yksikkö
       $_yks = t_avainsana("Y", $kieli, "and avainsana.selite='$row[yksikko]'", "", "", "selitetark");
 
-      $oikpos = $pdf_lasku->mb_strlen($_yks, $pieni);
+      $oikpos = $pdf_lasku->strlen($_yks, $pieni);
       $pdf_lasku->draw_text(365-$oikpos, $kala, $_yks, $thispage, $pieni);
     }
 
@@ -1339,7 +1339,7 @@ if (!function_exists('rivi_original')) {
           $laskalv = 0;
         }
 
-        if ($laskurow["valkoodi"] != '' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+        if ($laskurow["valkoodi"] != '' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
           $verollinen_hinta = $row["hinta"] * (1 + $laskalv / 100);
         }
         else {
@@ -1348,14 +1348,14 @@ if (!function_exists('rivi_original')) {
       }
 
       // A-hinta verollisena
-      $oikpos = $pdf_lasku->mb_strlen(hintapyoristys(laskuval($verollinen_hinta, $kurssi), 0, $laskurow['_loppunollat']), $norm);
+      $oikpos = $pdf_lasku->strlen(hintapyoristys(laskuval($verollinen_hinta, $kurssi), 0, $laskurow['_loppunollat']), $norm);
       $pdf_lasku->draw_text(435-$oikpos, $kala, hintapyoristys(laskuval($verollinen_hinta, $kurssi), 0, $laskurow['_loppunollat']), $thispage, $norm);
 
     } else {
       //Toimitusaika
-      if (mb_substr($row["toimitettuaika"], 0, 10) != "0000-00-00" and !in_array($laskutyyppi, array(6, 21, 22))) {
-        $oikpos = $pdf_lasku->mb_strlen(tv1dateconv(mb_substr($row["toimitettuaika"], 0, 10)), $pieni);
-        $pdf_lasku->draw_text(435-$oikpos, $kala, tv1dateconv(mb_substr($row["toimitettuaika"], 0, 10)), $thispage, $pieni);
+      if (substr($row["toimitettuaika"], 0, 10) != "0000-00-00" and !in_array($laskutyyppi, array(6, 21, 22))) {
+        $oikpos = $pdf_lasku->strlen(tv1dateconv(substr($row["toimitettuaika"], 0, 10)), $pieni);
+        $pdf_lasku->draw_text(435-$oikpos, $kala, tv1dateconv(substr($row["toimitettuaika"], 0, 10)), $thispage, $pieni);
       }
     }
 
@@ -1381,7 +1381,7 @@ if (!function_exists('rivi_original')) {
         $verollrivi = $row["rivihinta_verollinen"];
       }
 
-      $oikpos = $pdf_lasku->mb_strlen(hintapyoristys($verollrivi, 0, $laskurow['_loppunollat']), $pieni);
+      $oikpos = $pdf_lasku->strlen(hintapyoristys($verollrivi, 0, $laskurow['_loppunollat']), $pieni);
       $pdf_lasku->draw_text(535-$oikpos, $kala, hintapyoristys($verollrivi, 0, $laskurow['_loppunollat']), $thispage, $pieni);
     }
 
@@ -1415,7 +1415,7 @@ if (!function_exists('rivi_original')) {
         }
 
         // Jos rivikommentti on pitkä niin rivitämme sen
-        if ($pdf_lasku->mb_strlen($kommentti, $pieni) > $rpit1) {
+        if ($pdf_lasku->strlen($kommentti, $pieni) > $rpit1) {
 
           $kommentti = str_replace(' ' , ' ##', $kommentti);
           $kommentti = str_replace('.' , '.##', $kommentti);
@@ -1425,7 +1425,7 @@ if (!function_exists('rivi_original')) {
           $lause = "";
 
           foreach ($sanat as $sana) {
-            if ($pdf_lasku->mb_strlen($lause, $pieni) > $rpit2) {
+            if ($pdf_lasku->strlen($lause, $pieni) > $rpit2) {
               $pdf_lasku->draw_text(35, $kala+$kalakorjaus, trim($lause), $thispage, $pieni);
               $kala = $kala - 10;
               $lause = "";
@@ -1486,7 +1486,7 @@ if (!function_exists('rivi_plain')) {
     list($ff_string, $ff_font) = pdf_fontfit($row["tuoteno"], 145, $pdf_lasku, $norm);
     $pdf_lasku->draw_text(210, $kala, $ff_string, $thispage, $ff_font);
 
-    $oikpos = $pdf_lasku->mb_strlen($row["kpl"], $norm);
+    $oikpos = $pdf_lasku->strlen($row["kpl"], $norm);
     $pdf_lasku->draw_text(380-$oikpos, $kala, $row["kpl"], $thispage, $norm);
 
     // yksikköhinta pitää olla veroton
@@ -1499,7 +1499,7 @@ if (!function_exists('rivi_plain')) {
         $laskalv = 0;
       }
 
-      if ($laskurow["valkoodi"] != '' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+      if ($laskurow["valkoodi"] != '' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
         $veroton_hinta = $row["hinta"] / (1 + $laskalv / 100);
       }
       else {
@@ -1511,24 +1511,24 @@ if (!function_exists('rivi_plain')) {
     }
 
     // A-hinta
-    $oikpos = $pdf_lasku->mb_strlen(hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $norm);
+    $oikpos = $pdf_lasku->strlen(hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $norm);
     $pdf_lasku->draw_text(455-$oikpos, $kala, hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $thispage, $norm);
 
     //Alennus
     $alennukset_yhteensa = generoi_alekentta_php($row, 'M', 'plain');
     if ($alennukset_yhteensa != 0) {
-      $oikpos = $pdf_lasku->mb_strlen(($alennukset_yhteensa*1), $norm);
+      $oikpos = $pdf_lasku->strlen(($alennukset_yhteensa*1), $norm);
       $pdf_lasku->draw_text(510-$oikpos, $kala, ($alennukset_yhteensa*1), $thispage, $norm);
     }
 
     if ($kurssi != 1) {
       //Veroton Rivihinta Valuutassa
-      $oikpos = $pdf_lasku->mb_strlen(hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $norm);
+      $oikpos = $pdf_lasku->strlen(hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $norm);
       $pdf_lasku->draw_text(575-$oikpos, $kala, hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $thispage, $norm);
     }
     else {
       // Veroton Rivihinta
-      $oikpos = $pdf_lasku->mb_strlen(hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $norm);
+      $oikpos = $pdf_lasku->strlen(hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $norm);
       $pdf_lasku->draw_text(575-$oikpos, $kala, hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $thispage, $norm);
     }
 
@@ -1548,7 +1548,7 @@ if (!function_exists('rivi_plain')) {
         }
 
         // Jos rivikommentti on pitkä niin rivitämme sen
-        if ($pdf_lasku->mb_strlen($kommentti, $pieni) > $rpit1) {
+        if ($pdf_lasku->strlen($kommentti, $pieni) > $rpit1) {
 
           $kommentti = str_replace(' ' , ' ##', $kommentti);
           $kommentti = str_replace('.' , '.##', $kommentti);
@@ -1558,7 +1558,7 @@ if (!function_exists('rivi_plain')) {
           $lause = "";
 
           foreach ($sanat as $sana) {
-            if ($pdf_lasku->mb_strlen($lause, $pieni) > $rpit2) {
+            if ($pdf_lasku->strlen($lause, $pieni) > $rpit2) {
               $pdf_lasku->draw_text(20, $kala, trim($lause), $thispage, $pieni);
               $kala = $kala - 10;
               $lause = "";
@@ -1608,7 +1608,7 @@ if (!function_exists('rivi_plain_2')) {
     list($ff_string, $ff_font) = pdf_fontfit($row["tuoteno"], 100, $pdf_lasku, $norm);
     $pdf_lasku->draw_text(250, $kala, $ff_string, $thispage, $ff_font);
 
-    $oikpos = $pdf_lasku->mb_strlen($row["kpl"], $norm);
+    $oikpos = $pdf_lasku->strlen($row["kpl"], $norm);
     $pdf_lasku->draw_text(380-$oikpos, $kala, $row["kpl"], $thispage, $norm);
 
     // yksikköhinta pitää olla veroton
@@ -1621,7 +1621,7 @@ if (!function_exists('rivi_plain_2')) {
         $laskalv = 0;
       }
 
-      if ($laskurow["valkoodi"] != '' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+      if ($laskurow["valkoodi"] != '' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
         $veroton_hinta = $row["hinta"] / (1 + $laskalv / 100);
       }
       else {
@@ -1633,30 +1633,30 @@ if (!function_exists('rivi_plain_2')) {
     }
 
     // A-hinta
-    $oikpos = $pdf_lasku->mb_strlen(hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $norm);
+    $oikpos = $pdf_lasku->strlen(hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $norm);
     $pdf_lasku->draw_text(455-$oikpos, $kala, hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $thispage, $norm);
 
     //Alennus
     $alennukset_yhteensa = generoi_alekentta_php($row, 'M', 'plain');
     if ($alennukset_yhteensa != 0) {
-      $oikpos = $pdf_lasku->mb_strlen(($alennukset_yhteensa*1), $norm);
+      $oikpos = $pdf_lasku->strlen(($alennukset_yhteensa*1), $norm);
       $pdf_lasku->draw_text(510-$oikpos, $kala, ($alennukset_yhteensa*1), $thispage, $norm);
     }
 
     if ($kurssi != 1) {
       //Veroton Rivihinta Valuutassa
-      $oikpos = $pdf_lasku->mb_strlen(hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $norm);
+      $oikpos = $pdf_lasku->strlen(hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $norm);
       $pdf_lasku->draw_text(575-$oikpos, $kala, hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $thispage, $norm);
     }
     else {
       // Veroton Rivihinta
-      $oikpos = $pdf_lasku->mb_strlen(hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $norm);
+      $oikpos = $pdf_lasku->strlen(hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $norm);
       $pdf_lasku->draw_text(575-$oikpos, $kala, hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $thispage, $norm);
     }
 
     // rivitetään tuotenimitys jos se ei mahdu lokeroonsa
     // Nimitys
-    if ($pdf_lasku->mb_strlen($row['nimitys'], $norm) > 200) {
+    if ($pdf_lasku->strlen($row['nimitys'], $norm) > 200) {
       $pohja = $pdf_lasku->draw_paragraph($kala+$norm["height"], 20, 60, 200, $row['nimitys'], $thispage, $norm);
       $kala = $pohja - $rivinkorkeus;
     }
@@ -1681,7 +1681,7 @@ if (!function_exists('rivi_plain_2')) {
         }
 
         // Jos rivikommentti on pitkä niin rivitämme sen
-        if ($pdf_lasku->mb_strlen($kommentti, $pieni) > $rpit1) {
+        if ($pdf_lasku->strlen($kommentti, $pieni) > $rpit1) {
 
           $kommentti = str_replace(' ' , ' ##', $kommentti);
           $kommentti = str_replace('.' , '.##', $kommentti);
@@ -1691,7 +1691,7 @@ if (!function_exists('rivi_plain_2')) {
           $lause = "";
 
           foreach ($sanat as $sana) {
-            if ($pdf_lasku->mb_strlen($lause, $pieni) > $rpit2) {
+            if ($pdf_lasku->strlen($lause, $pieni) > $rpit2) {
               $pdf_lasku->draw_text(20, $kala, trim($lause), $thispage, $pieni);
               $kala = $kala - 10;
               $lause = "";
@@ -1778,12 +1778,12 @@ if (!function_exists('rivi_viro')) {
 
     if ($kurssi != 1) {
       //Veroton Rivihinta Valuutassa
-      $oikpos = $pdf_lasku->mb_strlen(hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $norm);
+      $oikpos = $pdf_lasku->strlen(hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $norm);
       $pdf_lasku->draw_text(535-$oikpos, $kala, hintapyoristys($row["rivihinta_valuutassa"], 0, $laskurow['_loppunollat']), $thispage, $norm);
     }
     else {
       // Veroton Rivihinta
-      $oikpos = $pdf_lasku->mb_strlen(hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $norm);
+      $oikpos = $pdf_lasku->strlen(hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $norm);
       $pdf_lasku->draw_text(535-$oikpos, $kala, hintapyoristys($row["rivihinta"], 0, $laskurow['_loppunollat']), $thispage, $norm);
     }
 
@@ -1819,8 +1819,8 @@ if (!function_exists('rivi_viro')) {
     }
 
     //Toimitusaika
-    if (mb_substr($row["toimitettuaika"], 0, 10) != "0000-00-00" and $laskutyyppi != 6) {
-      $pdf_lasku->draw_text(440, $kala, tv1dateconv(mb_substr($row["toimitettuaika"], 0, 10)), $thispage, $pieni);
+    if (substr($row["toimitettuaika"], 0, 10) != "0000-00-00" and $laskutyyppi != 6) {
+      $pdf_lasku->draw_text(440, $kala, tv1dateconv(substr($row["toimitettuaika"], 0, 10)), $thispage, $pieni);
     }
 
     // Kommentti
@@ -1845,7 +1845,7 @@ if (!function_exists('rivi_viro')) {
         }
 
         // Jos rivikommentti on pitkä niin rivitämme sen
-        if ($pdf_lasku->mb_strlen($kommentti, $pieni) > $rpit1) {
+        if ($pdf_lasku->strlen($kommentti, $pieni) > $rpit1) {
 
           $kommentti = str_replace(' ' , ' ##', $kommentti);
           $kommentti = str_replace('.' , '.##', $kommentti);
@@ -1855,7 +1855,7 @@ if (!function_exists('rivi_viro')) {
           $lause = "";
 
           foreach ($sanat as $sana) {
-            if ($pdf_lasku->mb_strlen($lause, $pieni) > $rpit2) {
+            if ($pdf_lasku->strlen($lause, $pieni) > $rpit2) {
               $pdf_lasku->draw_text(35, $kala+$kalakorjaus, trim($lause), $thispage, $pieni);
               $kala = $kala - 10;
               $lause = "";
@@ -2003,7 +2003,7 @@ if (!function_exists('loppu')) {
     // Fonttimuuttujat
     extract(lasku_fontit($laskutyyppi));
 
-    if ($yhtiorow["viivakoodi_laskulle"] == "K" and $laskurow["maa"] == "FI" and $laskurow["summa"] > 0 and $vikasivu != "" and function_exists("imagecreate") and $laskurow["vienti"] == "" and mb_strtoupper($laskurow["maa"]) == mb_strtoupper($yhtiorow["maa"])) {
+    if ($yhtiorow["viivakoodi_laskulle"] == "K" and $laskurow["maa"] == "FI" and $laskurow["summa"] > 0 and $vikasivu != "" and function_exists("imagecreate") and $laskurow["vienti"] == "" and strtoupper($laskurow["maa"]) == strtoupper($yhtiorow["maa"])) {
       $piirra_viivakoodi = true;
       $barcode_korkeus = 50;
     }
@@ -2025,7 +2025,7 @@ if (!function_exists('loppu')) {
 
         list($ff_string, $ff_font) = pdf_fontfit($mainostxt, 380, $pdf_lasku, $pieni);
 
-        $oikpos = $pdf_lasku->mb_strlen($ff_string, $ff_font);
+        $oikpos = $pdf_lasku->strlen($ff_string, $ff_font);
 
         if ($laskutyyppi == 20) {
           $pdf_lasku->draw_text(210, $viestikala + $vientikala + $barcode_korkeus, $ff_string, $thispage, $ff_font);
@@ -2127,14 +2127,14 @@ if (!function_exists('loppu')) {
             $thispage, $boldi);
         }
         elseif ($laskurow["valkoodi"] != '' and
-          trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))
+          trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))
         ) {
-          $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $laskurow["summa_valuutassa"]), $boldi);
+          $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $laskurow["summa_valuutassa"]), $boldi);
           $pdf_lasku->draw_text(535 - $oikpos, 92 + $vientikala + $barcode_korkeus,
             sprintf('%.2f', $laskurow["summa_valuutassa"]), $thispage, $boldi);
         }
         else {
-          $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $laskurow["summa"]), $boldi);
+          $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $laskurow["summa"]), $boldi);
           $pdf_lasku->draw_text(535 - $oikpos, 92 + $vientikala + $barcode_korkeus,
             sprintf('%.2f', $laskurow["summa"]), $thispage, $boldi);
         }
@@ -2278,16 +2278,6 @@ if (!function_exists('loppu')) {
         20 + $tileja + $barcode_korkeus, 580, $thispage, $rectparam);
     }
 
-    if (!empty($laskurow["yhtio_toimipaikka"])) {
-      $query = "SELECT vat_numero
-                FROM yhtion_toimipaikat
-                WHERE yhtio = '{$kukarow["yhtio"]}'
-                AND tunnus  = '{$laskurow["yhtio_toimipaikka"]}'";
-
-      $toimipaikka_result = pupe_query($query);
-
-      $toimipaikkarow = mysqli_fetch_assoc($toimipaikka_result);
-    }
 
     // yhtiötiedot
     $y_tiedot_ok = FALSE;
@@ -2301,35 +2291,43 @@ if (!function_exists('loppu')) {
     if ($laskurow['yhtio_maa'] == 'EE') {
       $y_vatnumero = $yhtiorow["ytunnus"];
     }
-    elseif (!empty($toimipaikkarow["vat_numero"])) {
-      $y_vatnumero = preg_replace("/^0037/", "", $toimipaikkarow["vat_numero"]);
-    }
     else {
       $y_vatnumero = preg_replace("/^0037/", "", $laskurow["yhtio_ovttunnus"]);
     }
     $y_iban = $yhtiorow['pankkiiban1'];
     $y_swift = $yhtiorow['pankkiswift1'];
+    $y_toimipaikan_vat = "";
 
-    if ((int) $laskurow["yhtio_toimipaikka"] != 0) {
-      // haetaan toimipaikan tiedot
-      $alhqur = "SELECT puhelin, fax, email, www from yhtion_toimipaikat where yhtio='$laskurow[yhtio]' and tunnus='$laskurow[yhtio_toimipaikka]'";
-      $alhire = pupe_query($alhqur);
+    if (!empty($laskurow["yhtio_toimipaikka"])) {
+      $query = "SELECT *
+                FROM yhtion_toimipaikat
+                WHERE yhtio = '{$kukarow["yhtio"]}'
+                AND tunnus  = '{$laskurow["yhtio_toimipaikka"]}'";
+      $toimipaikka_result = pupe_query($query);
+      $toimipaikkarow = mysqli_fetch_assoc($toimipaikka_result);
 
-      if (mysqli_num_rows($alhire) == 1) {
-        $alhiro = mysqli_fetch_assoc($alhire);
-
+      if (empty($toimipaikkarow['varastotoimipaikka'])) {
+        if (!empty($toimipaikkarow["vat_numero"])) {
+          $y_vatnumero = preg_replace("/^0037/", "", $toimipaikkarow["vat_numero"]);
+        }
         $y_tiedot_ok = TRUE;
-        $y_puhelin = $alhiro['puhelin'];
-        $y_fax = $alhiro['fax'];
-        $y_email = $alhiro['email'];
-        $y_www = $alhiro['www'];
+        $y_puhelin = $toimipaikkarow['puhelin'];
+        $y_fax = $toimipaikkarow['fax'];
+        $y_email = $toimipaikkarow['email'];
+        $y_www = $toimipaikkarow['www'];
+      }
+      else {
+        $y_toimipaikan_vat = $toimipaikkarow["vat_numero"];
       }
     }
 
     // jos meillä on lasku menossa ulkomaille ja se laskutetaan eri ovttunnuksella
     if ($laskurow["yhtio_ovttunnus"] != "" and $laskurow["yhtio_ovttunnus"] != $yhtiorow["ovttunnus"]) {
       // haetaan toimipaikan tiedot
-      $alhqur = "SELECT puhelin, fax, email, www from yhtion_toimipaikat where yhtio='$laskurow[yhtio]' and vat_numero='$laskurow[yhtio_ovttunnus]'";
+      $alhqur = " SELECT puhelin, fax, email, www
+                  from yhtion_toimipaikat
+                  where yhtio = '$laskurow[yhtio]'
+                  and vat_numero = '$laskurow[yhtio_ovttunnus]'";
       $alhire = pupe_query($alhqur);
 
       if (mysqli_num_rows($alhire) == 1) {
@@ -2346,7 +2344,9 @@ if (!function_exists('loppu')) {
     // jos ei olla haettu muualta, niin haetaan tiedot yhtiöltä
     if (!$y_tiedot_ok) {
       // haetaan toimipaikan tiedot
-      $alhqur = "SELECT puhelin, fax, email, www from yhtio where yhtio='$laskurow[yhtio]'";
+      $alhqur = " SELECT puhelin, fax, email, www
+                  from yhtio
+                  where yhtio = '$laskurow[yhtio]'";
       $alhire = pupe_query($alhqur);
 
       if (mysqli_num_rows($alhire) == 1) {
@@ -2389,7 +2389,10 @@ if (!function_exists('loppu')) {
     $pdf_lasku->draw_text(404, 55 + $tileja + $barcode_korkeus, t("Y-tunnus", $kieli).": ".tulosta_ytunnus($y_vatnumero, $y_maa, $laskurow["vienti"]), $thispage, $pieni);
     $pdf_lasku->draw_text(404, 45 + $tileja + $barcode_korkeus, t("Kotipaikka", $kieli).": $y_kotipaikka", $thispage, $pieni);
 
-    if (mb_strtoupper($y_maa) == 'FI') {
+    if (!empty($y_toimipaikan_vat)) {
+      $pdf_lasku->draw_text(404, 35 + $tileja + $barcode_korkeus, t("Alv-tunnus", $kieli).": ".$y_toimipaikan_vat, $thispage, $pieni);
+    }
+    elseif (strtoupper($y_maa) == 'FI') {
       $pdf_lasku->draw_text(404, 35 + $tileja + $barcode_korkeus, t("Enn.per.rek", $kieli), $thispage, $pieni);
       $pdf_lasku->draw_text(404, 25 + $tileja + $barcode_korkeus, t("Alv.rek", $kieli), $thispage, $pieni);
     }
@@ -2447,7 +2450,7 @@ if (!function_exists('loppu')) {
         $pdf_lasku->draw_text(270, 10, "Virhe viivakoodin luomisessa", $thispage, $boldi);
       }
 
-      unlink($filename);
+      system("rm -f $filename");
     }
   }
 }
@@ -2506,7 +2509,7 @@ if (!function_exists('alvierittely')) {
       $yhteensa_ilman_aleja = $ilman_ale_row['hinta_ilman_alennuksia'];
 
       $pdf_lasku->draw_text(360, $kala, t("Yhteensä ilman alennuksia", $kieli).":", $thispage, $norm);
-      $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $yhteensa_ilman_aleja), $norm);
+      $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $yhteensa_ilman_aleja), $norm);
       $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $yhteensa_ilman_aleja), $thispage, $norm);
       $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
 
@@ -2519,19 +2522,19 @@ if (!function_exists('alvierittely')) {
       if ($toim == 'PROFORMA') {
         $arvo = $kassa_ale != '' ? $arvo * (1-$kassa_ale/100) : $arvo;
 
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $arvo), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $arvo), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $arvo), $thispage, $norm);
       }
-      elseif ($laskurow["valkoodi"] != '' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+      elseif ($laskurow["valkoodi"] != '' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
         $arvo_valuutassa = $kassa_ale != '' ? $laskurow["arvo_valuutassa"] * (1-$kassa_ale/100) : $laskurow["arvo_valuutassa"];
 
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $arvo_valuutassa), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $arvo_valuutassa), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $arvo_valuutassa), $thispage, $norm);
       }
       else {
         $arvo = $kassa_ale != '' ? $laskurow["arvo"] * (1-$kassa_ale/100) : $laskurow["arvo"];
 
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $arvo), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $arvo), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $arvo), $thispage, $norm);
       }
 
@@ -2560,7 +2563,7 @@ if (!function_exists('alvierittely')) {
                      JOIN lasku ON lasku.yhtio = tilausrivi.yhtio and lasku.tunnus = tilausrivi.otunnus
                      WHERE tilausrivi.yhtio='$kukarow[yhtio]' and tilausrivi.alv='$alvrow[alv]' and $where";
         }
-        elseif ($alvrow["alv"] < 500 and $toim != 'PROFORMA' and trim(mb_strtoupper($laskurow["valkoodi"])) == trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+        elseif ($alvrow["alv"] < 500 and $toim != 'PROFORMA' and trim(strtoupper($laskurow["valkoodi"])) == trim(strtoupper($yhtiorow["valkoodi"]))) {
           $aquery = "SELECT
                      round(sum(tilausrivi.rivihinta $kassa_ale_lisa * (tilausrivi.alv / 100)),2) alvrivihinta,
                      sum(tilausrivi.rivihinta $kassa_ale_lisa) rivihinta
@@ -2568,7 +2571,7 @@ if (!function_exists('alvierittely')) {
                      JOIN lasku ON lasku.yhtio = tilausrivi.yhtio and lasku.tunnus = tilausrivi.otunnus
                      WHERE tilausrivi.yhtio='$kukarow[yhtio]' and tilausrivi.alv='$alvrow[alv]' and $where";
         }
-        elseif ($alvrow["alv"] < 500 and $toim != 'PROFORMA' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+        elseif ($alvrow["alv"] < 500 and $toim != 'PROFORMA' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
           $aquery = "SELECT
                      round(sum((tilausrivi.hinta $kassa_ale_lisa / if (lasku.vienti_kurssi > 0, lasku.vienti_kurssi, 1)) / if ('$yhtiorow[alv_kasittely]' = '', (1+tilausrivi.alv/100), 1) * tilausrivi.kpl * {$query_ale_lisa} * (tilausrivi.alv/100)),2) alvrivihinta,
                      sum(round((tilausrivi.hinta $kassa_ale_lisa / if (lasku.vienti_kurssi > 0, lasku.vienti_kurssi, 1)) / if ('$yhtiorow[alv_kasittely]' = '', (1+tilausrivi.alv/100), 1) * tilausrivi.kpl * {$query_ale_lisa},2)) rivihinta
@@ -2588,7 +2591,7 @@ if (!function_exists('alvierittely')) {
         $arow = mysqli_fetch_assoc($aresult);
 
         $pdf_lasku->draw_text(360, $kala, t("Arvonlisävero", $kieli)." (".sprintf('%.2f', $arow["rivihinta"])."): ", $thispage, $norm);
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $arow["alvrivihinta"]), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $arow["alvrivihinta"]), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $arow["alvrivihinta"]), $thispage, $norm);
 
         if ($alvrow["alv"] >= 600) {
@@ -2618,20 +2621,20 @@ if (!function_exists('alvierittely')) {
     if ($toim == 'PROFORMA') {
       $summa = $kassa_ale != '' ? $summa * (1-$kassa_ale/100) : $summa;
 
-      $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $summa), $norm);
+      $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $summa), $norm);
       $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $summa), $thispage, $norm);
       $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
     }
-    elseif ($laskurow["valkoodi"] != '' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+    elseif ($laskurow["valkoodi"] != '' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
       $summa_valuutassa = $kassa_ale != '' ? ($laskurow["summa_valuutassa"]+$laskurow["pyoristys_valuutassa"]) * (1-$kassa_ale/100) : $laskurow["summa_valuutassa"]+$laskurow["pyoristys_valuutassa"];
 
       if (in_array($laskutyyppi, array(21, 22))) {
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $summa_valuutassa), $boldi);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $summa_valuutassa), $boldi);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $summa_valuutassa), $thispage, $boldi);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $boldi);
       }
       else {
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $summa_valuutassa), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $summa_valuutassa), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $summa_valuutassa), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
       }
@@ -2642,13 +2645,13 @@ if (!function_exists('alvierittely')) {
 
         $kala -= 10;
         $pdf_lasku->draw_text(360, $kala, t("Pyöristys", $kieli).":", $thispage, $norm);
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $pyoristys_valuutassa * -1), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $pyoristys_valuutassa * -1), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $pyoristys_valuutassa * -1), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
         $kala -= 10;
 
         $pdf_lasku->draw_text(360, $kala, t("Yhteensä", $kieli).":", $thispage, $norm);
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $summa_valuutassa - $pyoristys_valuutassa), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $summa_valuutassa - $pyoristys_valuutassa), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $summa_valuutassa - $pyoristys_valuutassa), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
       }
@@ -2657,12 +2660,12 @@ if (!function_exists('alvierittely')) {
       $summa = $kassa_ale != '' ? ($laskurow["summa"]+$laskurow["pyoristys"]) * (1-$kassa_ale/100) : $laskurow["summa"]+$laskurow["pyoristys"];
 
       if (in_array($laskutyyppi, array(21, 22))) {
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $summa), $boldi);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $summa), $boldi);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $summa), $thispage, $boldi);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $boldi);
       }
       else {
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $summa), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $summa), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $summa), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
       }
@@ -2672,13 +2675,13 @@ if (!function_exists('alvierittely')) {
 
         $kala -= 10;
         $pdf_lasku->draw_text(360, $kala, t("Pyöristys", $kieli).":", $thispage, $norm);
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $pyoristys * -1), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $pyoristys * -1), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $pyoristys * -1), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
         $kala -= 10;
 
         $pdf_lasku->draw_text(360, $kala, t("Yhteensä", $kieli).":", $thispage, $norm);
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $summa - $pyoristys), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $summa - $pyoristys), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $summa - $pyoristys), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
       }
@@ -2690,17 +2693,17 @@ if (!function_exists('alvierittely')) {
     if (kyseessa_eramaksu($laskurow) and $toim != 'PROFORMA') {
       $kala -= 10;
 
-      if ($laskurow["valkoodi"] != '' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+      if ($laskurow["valkoodi"] != '' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
         $pyoristys = $kassa_ale != '' ? $laskurow["pyoristys_valuutassa"] * (1-$kassa_ale/100) : $laskurow["pyoristys_valuutassa"];
         $pdf_lasku->draw_text(360, $kala, t("Osasuoritukset yhteensä", $kieli).":", $thispage, $norm);
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $laskurow['saldo_maksettu_valuutassa']), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $laskurow['saldo_maksettu_valuutassa']), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $laskurow['saldo_maksettu_valuutassa'] - $pyoristys * -1), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
       }
       else {
         $pyoristys = $kassa_ale != '' ? $laskurow["pyoristys"] * (1-$kassa_ale/100) : $laskurow["pyoristys"];
         $pdf_lasku->draw_text(360, $kala, t("Osasuoritukset yhteensä", $kieli).":", $thispage, $norm);
-        $oikpos = $pdf_lasku->mb_strlen(sprintf('%.2f', $laskurow['saldo_maksettu']), $norm);
+        $oikpos = $pdf_lasku->strlen(sprintf('%.2f', $laskurow['saldo_maksettu']), $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $laskurow['saldo_maksettu'] - $pyoristys * -1), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
       }
@@ -2721,7 +2724,7 @@ if (!function_exists('alvierittely')) {
       if (!empty($ressukka['pankkikortti'])) $tilinolisa .= "'{$ressukka['pankkikortti']}',";
       if (!empty($ressukka['luottokortti'])) $tilinolisa .= "'{$ressukka['luottokortti']}',";
 
-      $tilinolisa = mb_substr($tilinolisa, 0, -1);
+      $tilinolisa = substr($tilinolisa, 0, -1);
 
       if ($tilinolisa != "") {
         $query = "SELECT *
@@ -2745,7 +2748,7 @@ if (!function_exists('alvierittely')) {
           // Haetaan pisin osasuoritustavan nimitys
           $olen_pena = 0;
           foreach ($osasuoritustapanimet as $arggi) {
-            $pitkulainen = $pdf_lasku->mb_strlen($arggi, $norm);
+            $pitkulainen = $pdf_lasku->strlen($arggi, $norm);
             if ($pitkulainen > $olen_pena) $olen_pena = $pitkulainen;
           }
 
@@ -2757,16 +2760,16 @@ if (!function_exists('alvierittely')) {
             $ueloesrivi = sprintf('%.2f', $lasktilitro['summa_valuutassa'] - $pyoristys * -1);
             $pdf_lasku->draw_text(360, $kala, " - ".$ueloes, $thispage, $norm);
 
-            $oikpos = $pdf_lasku->mb_strlen($ueloesrivi, $norm);
+            $oikpos = $pdf_lasku->strlen($ueloesrivi, $norm);
             $pdf_lasku->draw_text(535-$oikpos, $kala, $ueloesrivi , $thispage, $norm);
             $pdf_lasku->draw_text(550, $kala, $lasktilitro["valkoodi"], $thispage, $norm);
           }
           else {
             $ueloesrivi = sprintf('%.2f', $lasktilitro['summa'] - $pyoristys * -1);
             $pdf_lasku->draw_text(360, $kala, " - ".$ueloes, $thispage, $norm);
-            $oikpos = $pdf_lasku->mb_strlen($paivvaa, $norm);
+            $oikpos = $pdf_lasku->strlen($paivvaa, $norm);
             $pdf_lasku->draw_text(370+$olen_pena , $kala, $paivvaa, $thispage, $norm);
-            $oikpos = $pdf_lasku->mb_strlen($ueloesrivi, $norm);
+            $oikpos = $pdf_lasku->strlen($ueloesrivi, $norm);
             $pdf_lasku->draw_text(535-$oikpos, $kala, $ueloesrivi, $thispage, $norm);
             $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
           }
@@ -2777,11 +2780,11 @@ if (!function_exists('alvierittely')) {
 
       $kala -= 10;
 
-      if ($laskurow["valkoodi"] != '' and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+      if ($laskurow["valkoodi"] != '' and trim(strtoupper($laskurow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
         $pyoristys = $kassa_ale != '' ? $laskurow["pyoristys_valuutassa"] * (1-$kassa_ale/100) : $laskurow["pyoristys_valuutassa"];
         $pdf_lasku->draw_text(360, $kala, t("Erämaksulla", $kieli).":", $thispage, $norm);
         $summeli = sprintf('%.2f', $laskurow["summa_valuutassa"]-$laskurow["saldo_maksettu_valuutassa"]);
-        $oikpos = $pdf_lasku->mb_strlen($summeli, $norm);
+        $oikpos = $pdf_lasku->strlen($summeli, $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $summeli - $pyoristys * -1), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
       }
@@ -2789,7 +2792,7 @@ if (!function_exists('alvierittely')) {
         $pyoristys = $kassa_ale != '' ? $laskurow["pyoristys"] * (1-$kassa_ale/100) : $laskurow["pyoristys"];
         $pdf_lasku->draw_text(360, $kala, t("Erämaksulla", $kieli).":", $thispage, $norm);
         $summeli = sprintf('%.2f', $laskurow["summa"]-$laskurow["saldo_maksettu"]);
-        $oikpos = $pdf_lasku->mb_strlen($summeli, $norm);
+        $oikpos = $pdf_lasku->strlen($summeli, $norm);
         $pdf_lasku->draw_text(535-$oikpos, $kala, sprintf('%.2f', $summeli - $pyoristys * -1), $thispage, $norm);
         $pdf_lasku->draw_text(550, $kala, $laskurow["valkoodi"], $thispage, $norm);
       }
@@ -2845,7 +2848,7 @@ if (!function_exists('alvierittely')) {
                 AND tilausnumero     != 0";
       $result = pupe_query($query);
 
-      if (mysqli_affected_rows() > 0) {
+      if (mysqli_affected_rows($link) > 0) {
         $pdf_lasku->draw_text(20, $kala, t("Maksupäätetapahtumat"), $thispage, $norm);
         $kala -= 10;
       }
@@ -2876,7 +2879,7 @@ if (!function_exists('PalautaPankkiviivakoodi')) {
     }
     else {
       // tarkista_iban ei osaa tarkistaa kuin Suomalaisia tilinumeroita
-      $pankkitili = mb_substr(tarkista_iban($tilinumero), 2); // Maatunnus pois
+      $pankkitili = substr(tarkista_iban($tilinumero), 2); // Maatunnus pois
     }
 
     if ($pankkitili == "") {
@@ -2901,15 +2904,15 @@ if (!function_exists('PalautaPankkiviivakoodi')) {
     }
     elseif ($versio == '5') {
       // Annettu viite pitaisi olla muodossa RFxxyy...yy, jossa xx on tarkistenumero
-      $tarkiste = mb_substr($viitenumero, 2, 2);
-      $viitenumero = mb_substr($viitenumero, 4);
+      $tarkiste = substr($viitenumero, 2, 2);
+      $viitenumero = substr($viitenumero, 4);
       $konekielinen_viitenumero = $tarkiste.sprintf("%021d", $viitenumero);
     }
 
     // Erapaiva
-    $pp = mb_substr($erapv, 8, 2);
-    $kk = mb_substr($erapv, 5, 2);
-    $vv = mb_substr($erapv, 2, 2);
+    $pp = substr($erapv, 8, 2);
+    $kk = substr($erapv, 5, 2);
+    $vv = substr($erapv, 2, 2);
 
     $konekielinen_erapv = $vv.$kk.$pp;
 
@@ -2952,8 +2955,8 @@ if (!function_exists("tulosta_lasku")) {
     // Fonttimuuttujat
     extract(lasku_fontit($laskutyyppi));
 
-    if (mb_substr($lasku, 0, 6) == "LASKU:") {
-      $lasku = mb_substr($lasku, 6);
+    if (substr($lasku, 0, 6) == "LASKU:") {
+      $lasku = substr($lasku, 6);
 
       $query = "SELECT *
                 FROM lasku
@@ -3013,16 +3016,16 @@ if (!function_exists("tulosta_lasku")) {
     }
 
     if ($kieli != "") {
-      $kieli = trim(mb_strtoupper($kieli));
+      $kieli = trim(strtoupper($kieli));
     }
     elseif (trim($asiakasrow["kieli"]) != "") {
-      $kieli = trim(mb_strtoupper($asiakasrow["kieli"]));
+      $kieli = trim(strtoupper($asiakasrow["kieli"]));
     }
     elseif (trim($kukarow["kieli"]) != "") {
-      $kieli = trim(mb_strtoupper($kukarow["kieli"]));
+      $kieli = trim(strtoupper($kukarow["kieli"]));
     }
     else {
-      $kieli = trim(mb_strtoupper($yhtiorow["kieli"]));
+      $kieli = trim(strtoupper($yhtiorow["kieli"]));
     }
 
     // haetaan maksuehdon tiedot
@@ -3059,7 +3062,7 @@ if (!function_exists("tulosta_lasku")) {
     if (!empty($sellaskutyyppi)) {
       $laskutyyppi = $sellaskutyyppi;
 
-      if (mb_strpos($sellaskutyyppi, "##") !== FALSE) {
+      if (strpos($sellaskutyyppi, "##") !== FALSE) {
         list($laskutyyppi, $laskurow['laskupohjateksti']) = explode("##", $laskutyyppi);
       }
     }
@@ -3116,7 +3119,7 @@ if (!function_exists("tulosta_lasku")) {
       $barcode_korkeus = 50;
     }
 
-    if ($laskurow["vienti"] != "" or mb_strtoupper($laskurow["maa"]) != mb_strtoupper($yhtiorow["maa"])) {
+    if ($laskurow["vienti"] != "" or strtoupper($laskurow["maa"]) != strtoupper($yhtiorow["maa"])) {
       $vientikala = 20;
     }
 
@@ -3256,7 +3259,7 @@ if (!function_exists("tulosta_lasku")) {
       else {
         // Jos laskutyyppi on 18 (Normaali laskupohja (nimitykset rivitettynä))
         // ja tilaus vaihtuu
-        if ($laskutyyppi == 18 and ($lasrivilask == $lasrivimaara or mb_strpos($row['kommentti'], "yhteensä") !== FALSE or mb_strpos($row['kommentti'], t("yhteensä", $kieli)) !== FALSE or mb_strpos($row['kommentti'], t("yhteensä", $asiakasrow["kieli"])) !== FALSE or mb_strpos($row['kommentti'], t("yhteensä")) !== FALSE)) {
+        if ($laskutyyppi == 18 and ($lasrivilask == $lasrivimaara or strpos($row['kommentti'], "yhteensä") !== FALSE or strpos($row['kommentti'], t("yhteensä", $kieli)) !== FALSE or strpos($row['kommentti'], t("yhteensä", $asiakasrow["kieli"])) !== FALSE or strpos($row['kommentti'], t("yhteensä")) !== FALSE)) {
 
           $row["kommentti"] = trim(t("Tilaus", $kieli).": ".$row['otunnus'])."\n".$row["kommentti"];
 
@@ -3452,7 +3455,7 @@ if (!function_exists("tulosta_lasku")) {
       $result = pupe_query($query);
       $trow = mysqli_fetch_assoc($result);
 
-      if (($komento == "email" and $kukarow["eposti"] != '') or mb_substr($komento, 0, 12) == 'asiakasemail') {
+      if (($komento == "email" and $kukarow["eposti"] != '') or substr($komento, 0, 12) == 'asiakasemail') {
         // lähetetään meili
         $kutsu = $laskuvaikuitti." ".$laskurow["laskunro"];
 
@@ -3460,8 +3463,8 @@ if (!function_exists("tulosta_lasku")) {
           $kutsu .= ", ".trim($laskurow["nimi"]);
         }
 
-        if (mb_substr($komento, 0, 12) == 'asiakasemail') {
-          $asiakasemail = mb_substr($komento, 12);
+        if (substr($komento, 0, 12) == 'asiakasemail') {
+          $asiakasemail = substr($komento, 12);
         }
 
         $_attachments = array(0 => array(
@@ -3500,7 +3503,7 @@ if (!function_exists("tulosta_lasku")) {
       }
       elseif ($komento != "" and $komento != "email") {
         // itse print komento...
-        if (!empty($tulosta_lasku_kpl) and mb_strpos($komento, "-#") === FALSE) {
+        if (!empty($tulosta_lasku_kpl) and strpos($komento, "-#") === FALSE) {
           $komento .= " -#{$tulosta_lasku_kpl}";
         }
 
@@ -3511,7 +3514,7 @@ if (!function_exists("tulosta_lasku")) {
       // Kuittikopio
       if (isset($valittu_kopio_tulostin) and $valittu_kopio_tulostin != '') {
 
-        $asiakasemail_kaytossa = mb_substr($valittu_kopio_tulostin, 0, 12) == 'asiakasemail' ? true : false;
+        $asiakasemail_kaytossa = substr($valittu_kopio_tulostin, 0, 12) == 'asiakasemail' ? true : false;
 
         if (!$asiakasemail_kaytossa) {
           $querykieli = "SELECT *
