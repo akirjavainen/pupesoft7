@@ -4227,7 +4227,7 @@ if (!function_exists('kuittaus_lahete')) {
         extract($params);
       }
 
-      $pdf->draw_text(50, 90, t("Allekirjoitus", $kieli).": _______________________________",   $thispage, $norm);
+      $pdf->draw_text(50, 90, t("Allekirjoitus ja pvm", $kieli).": _______________________________",   $thispage, $norm);
       $pdf->draw_text(300, 90, t("Nimenselvennys", $kieli).": _______________________________",   $thispage, $norm);
 
       // Luodaan palautettavat
