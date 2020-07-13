@@ -1154,7 +1154,7 @@ if ($tila == "" and !isset($jatka)) {
 
   if (!isset($srow['yhtio_toimipaikka'])
     and !empty($srow['maa'])
-    and $srow['maa'] != $yhtiorow['maa']) {
+    and $srow['maa'] != $yhtiorow['maa_vero']) {
     $alhqur = "SELECT tunnus
                FROM yhtion_toimipaikat
                WHERE yhtio     = '$kukarow[yhtio]'
@@ -1169,7 +1169,7 @@ if ($tila == "" and !isset($jatka)) {
   }
   elseif (!empty($srow['yhtio_toimipaikka'])
     and !empty($srow['maa'])
-    and $srow['maa'] != $yhtiorow['maa']) {
+    and $srow['maa'] != $yhtiorow['maa_vero']) {
     $kukarow['toimipaikka'] = $srow['yhtio_toimipaikka'];
   }
 
@@ -1214,8 +1214,8 @@ if ($tila == "" and !isset($jatka)) {
   $asiares = pupe_query($asiaqu);
   $asiarow = mysqli_fetch_assoc($asiares);
 
-  // jos meillä on lasku menossa ulkomaille
-  if ($yhtiorow['maa'] == $srow['maa'] and $yhtiorow['vat_numero'] != '') {
+  // jos meillä on lasku menossa verovelvolliselta ulkomaantoimipaikalta
+  if ($yhtiorow['maa_vero'] == $srow['maa'] and $yhtiorow['vat_numero'] != '') {
     // haetaan maan oletusalvi
     $query = "SELECT selite from avainsana where yhtio='$kukarow[yhtio]' and laji='ALVULK' and selitetark='o' and selitetark_2='$srow[maa]'";
     $alhire = pupe_query($query);
@@ -1275,7 +1275,7 @@ if ($tila == "" and !isset($jatka)) {
       // Valitaan tämä toimipaikaksi
       $yhtiotoimipaikka = $varatoimirow['tunnus'];
 
-      if (strtoupper($yhtiotoimipaikka['maa']) != strtoupper($srow["maa"]) and
+      if (strtoupper($varatoimirow['maa']) != strtoupper($srow["maa"]) and
         strtoupper($yhtiorow['maa']) == strtoupper($srow["maa"]) and
         $srow["laji"] != 'H'
       ) {
@@ -4367,7 +4367,7 @@ if (isset($jatka)) {
   }
 
   if (($kukarow['kesken'] == 0 and isset($predefined_yhtiotoimipaikka) and $predefined_yhtiotoimipaikka != $yhtiotoimipaikka) or
-    (isset($otsikon_laskurow['yhtio_toimipaikka']) and $otsikon_laskurow['yhtio_toimipaikka'] != $yhtiotoimipaikka and ($yhtiorow['maa'] != $srow['maa'] or $yhtiorow['vat_numero'] == ''))
+    (isset($otsikon_laskurow['yhtio_toimipaikka']) and $otsikon_laskurow['yhtio_toimipaikka'] != $yhtiotoimipaikka and ($yhtiorow['maa_vero'] != $srow['maa'] or $yhtiorow['vat_numero'] == ''))
   ) {
     $alv    = $asiarow['alv'];
     $vienti = $asiarow['vienti'];

@@ -227,6 +227,21 @@ else {
     if ($lasku['vienti'] == 'E') $tilino = $tilino_eu;
     if ($lasku['vienti'] == 'K') $tilino = $tilino_ei_eu;
 
+    // Myydäänkö verovelvolliselta ulkomaan varastotoimipaikalta verottomana "kotimaanmyyntinä"?
+    if ($lasku['vienti'] == '' and $lasku['alv'] == 0 and $lasku['yhtio_toimipaikka'] > 0) {
+      $query = "SELECT tunnus
+                FROM yhtion_toimipaikat
+                WHERE yhtio = '$kukarow[yhtio]'
+                and tunnus = $lasku[yhtio_toimipaikka]
+                and vat_numero != ''
+                and varastotoimipaikka != ''";
+      $tptsekres = pupe_query($query);
+      
+      if (mysqli_num_rows($tptsekres)) {
+        $tilino = $tilino_eu;
+      }
+    }
+
     // Valitaan myyntitili käänteisen verotuksen mukaan
     if ($onkokaanteinen == "kylla") {
       $tilino = $tilino_kaanteinen;
