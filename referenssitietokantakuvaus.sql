@@ -74,7 +74,7 @@ CREATE TABLE `abc_aputaulu` (
   KEY `yhtio_tyyppi_try` (`yhtio`,`tyyppi`,`try`),
   KEY `yhtio_tyyppi_tuotemerkki` (`yhtio`,`tyyppi`,`tuotemerkki`),
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`)
-) ENGINE=MyISAM AUTO_INCREMENT=412 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=412 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +100,7 @@ CREATE TABLE `abc_parametrit` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=283 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=283 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -259,7 +259,7 @@ CREATE TABLE `asiakas` (
   FULLTEXT KEY `asiakastoim_nimi` (`toim_nimi`),
   FULLTEXT KEY `asiakasnimitark` (`nimitark`),
   FULLTEXT KEY `asiakastoim_nimitark` (`toim_nimitark`)
-) ENGINE=MyISAM AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=110 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -302,7 +302,7 @@ CREATE TABLE `asiakasalennus` (
   KEY `yhtio_piiri_ryhma` (`yhtio`,`piiri`,`ryhma`),
   KEY `yhtio_asiakas_segmentti_tuoteno` (`yhtio`,`asiakas_segmentti`,`tuoteno`),
   KEY `yhtio_asiakas_segmentti_ryhma` (`yhtio`,`asiakas_segmentti`,`ryhma`)
-) ENGINE=MyISAM AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -346,7 +346,7 @@ CREATE TABLE `asiakashinta` (
   KEY `yhtio_piiri_ryhma` (`yhtio`,`piiri`,`ryhma`),
   KEY `yhtio_asiakas_segmentti_tuoteno` (`yhtio`,`asiakas_segmentti`,`tuoteno`),
   KEY `yhtio_asiakas_segmentti_ryhma` (`yhtio`,`asiakas_segmentti`,`ryhma`)
-) ENGINE=MyISAM AUTO_INCREMENT=106 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=106 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -369,7 +369,7 @@ CREATE TABLE `asiakaskommentti` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_ytunnus_tuoteno` (`yhtio`,`ytunnus`,`tuoteno`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -394,7 +394,7 @@ CREATE TABLE `asiakkaan_avainsanat` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_liitostunnus` (`yhtio`,`liitostunnus`),
   KEY `yhtio_laji` (`yhtio`,`laji`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -445,7 +445,7 @@ CREATE TABLE `asn_sanomat` (
   KEY `yhtio_status_toimtuoteno_toimnro` (`yhtio`,`status`,`tuoteno`,`toim_tuoteno`,`toimittajanumero`),
   KEY `yhtio_status_tuoteno` (`yhtio`,`status`,`tuoteno`),
   FULLTEXT KEY `fulltext_tilausrivi` (`tilausrivi`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -478,7 +478,7 @@ CREATE TABLE `avainsana` (
   KEY `yhtio_laji_selitetark` (`yhtio`,`laji`,`selitetark`(100)),
   KEY `yhtio_laji_perhe_kieli` (`yhtio`,`laji`,`perhe`,`kieli`),
   KEY `yhtio_laji_selitetark3` (`yhtio`,`laji`,`selitetark_3`(100))
-) ENGINE=MyISAM AUTO_INCREMENT=15056 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=15056 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -505,7 +505,7 @@ CREATE TABLE `budjetti` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_taso_kausi` (`yhtio`,`taso`,`kausi`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -531,7 +531,7 @@ CREATE TABLE `budjetti_asiakas` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `asbu` (`yhtio`,`kausi`,`asiakkaan_tunnus`,`osasto`,`try`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -557,7 +557,7 @@ CREATE TABLE `budjetti_asiakasmyyja` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `budjetti_asiakasmyyja` (`yhtio`,`kausi`,`asiakasmyyjan_tunnus`,`osasto`,`try`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -583,7 +583,7 @@ CREATE TABLE `budjetti_maa` (
   `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `mabu` (`yhtio`,`maa_id`,`kausi`,`osasto`,`try`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -609,7 +609,7 @@ CREATE TABLE `budjetti_myyja` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `budjetti_myyja` (`yhtio`,`kausi`,`myyjan_tunnus`,`osasto`,`try`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -635,7 +635,7 @@ CREATE TABLE `budjetti_toimittaja` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `tobu` (`yhtio`,`kausi`,`toimittajan_tunnus`,`osasto`,`try`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -662,7 +662,7 @@ CREATE TABLE `budjetti_tuote` (
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `tubu` (`yhtio`,`kausi`,`tuoteno`,`osasto`(50),`try`(50)),
   KEY `yhtio_tuote_kausi` (`yhtio`,`tuoteno`,`kausi`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -682,7 +682,7 @@ CREATE TABLE `campaigns` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_campaigns_on_company_id` (`company_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -705,7 +705,7 @@ CREATE TABLE `changelog` (
   PRIMARY KEY (`id`),
   KEY `yhtio_table_key_field_luontiaika` (`yhtio`,`table`,`key`,`field`,`luontiaika`),
   KEY `yhtio_table_field_luontiaika` (`yhtio`,`table`,`field`,`luontiaika`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -720,7 +720,7 @@ CREATE TABLE `customers_users` (
   `customer_id` int(11) NOT NULL,
   KEY `index_customers_users_on_user_id` (`user_id`),
   KEY `index_customers_users_on_customer_id` (`customer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -745,7 +745,7 @@ CREATE TABLE `directdebit` (
   `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -769,7 +769,7 @@ CREATE TABLE `directdebit_asiakas` (
   `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -787,7 +787,7 @@ CREATE TABLE `downloads` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_downloads_on_user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -819,7 +819,7 @@ CREATE TABLE `dynaaminen_puu` (
   KEY `yhtio_laji_lft` (`yhtio`,`laji`,`lft`),
   KEY `yhtio_laji_rgt` (`yhtio`,`laji`,`rgt`),
   KEY `index_dynaaminen_puu_on_parent_id` (`parent_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -844,7 +844,7 @@ CREATE TABLE `dynaaminen_puu_avainsanat` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_liitostunnus` (`yhtio`,`liitostunnus`),
   KEY `yhtio_laji` (`yhtio`,`laji`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -866,7 +866,7 @@ CREATE TABLE `etaisyydet` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -890,7 +890,7 @@ CREATE TABLE `extranet_kayttajan_lisatiedot` (
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_liitostunnus_laji_selite` (`yhtio`,`liitostunnus`,`laji`,`selite`),
   KEY `yhtio_laji_selite` (`yhtio`,`laji`,`selite`)
-) ENGINE=MyISAM AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=107 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -927,7 +927,7 @@ CREATE TABLE `factoring` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -946,7 +946,7 @@ CREATE TABLE `files` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_files_on_download_id` (`download_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -982,7 +982,7 @@ CREATE TABLE `fixed_assets_commodities` (
   `modified_by` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_fixed_assets_commodities_on_company_id` (`company_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1006,7 +1006,7 @@ CREATE TABLE `fixed_assets_commodity_rows` (
   `modified_by` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_fixed_assets_commodity_rows_on_commodity_id` (`commodity_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1024,7 +1024,7 @@ CREATE TABLE `git_paivitykset` (
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=420 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=423 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1076,7 +1076,7 @@ CREATE TABLE `hinnasto` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`),
   KEY `index_hinnasto_on_yhtion_toimipaikka_id` (`yhtion_toimipaikka_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1112,7 +1112,7 @@ CREATE TABLE `hyvaksyttavat_dokumentit` (
   `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_tila` (`yhtio`,`tila`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1131,7 +1131,7 @@ CREATE TABLE `hyvaksyttavat_dokumenttityypit` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1151,7 +1151,7 @@ CREATE TABLE `hyvaksyttavat_dokumenttityypit_kayttajat` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `muutospvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1181,7 +1181,7 @@ CREATE TABLE `hyvityssaannot` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_tuote_kentta_tuote_arvo` (`yhtio`,`tuote_kentta`,`tuote_arvo`),
   KEY `yhtio_aika_ostosta` (`yhtio`,`aika_ostosta`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1202,7 +1202,7 @@ CREATE TABLE `incoming_mails` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_incoming_mails_on_mail_server_id` (`mail_server_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1222,7 +1222,7 @@ CREATE TABLE `inventointilista` (
   `muutospvm` datetime DEFAULT NULL,
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1255,7 +1255,7 @@ CREATE TABLE `inventointilistarivi` (
   PRIMARY KEY (`tunnus`),
   KEY `tuotepaikkatunnus` (`yhtio`,`tuotepaikkatunnus`),
   KEY `index_inventointilistarivi_on_yhtio_and_otunnus_and_tuoteno` (`yhtio`,`otunnus`,`tuoteno`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1304,7 +1304,7 @@ CREATE TABLE `kalenteri` (
   KEY `yhtio_tyyppi_pvmalku` (`yhtio`,`tyyppi`,`pvmalku`),
   KEY `yhtio_kuka_tyyppi_pvmalku` (`yhtio`,`kuka`,`tyyppi`,`pvmalku`),
   KEY `yhtio_liitostunnus` (`yhtio`,`liitostunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=107 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1327,7 +1327,7 @@ CREATE TABLE `kampanja_ehdot` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1348,7 +1348,7 @@ CREATE TABLE `kampanja_palkinnot` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1367,7 +1367,7 @@ CREATE TABLE `kampanjat` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1382,7 +1382,7 @@ CREATE TABLE `karhu_lasku` (
   `ltunnus` int(11) NOT NULL DEFAULT '0',
   KEY `ktunnus` (`ktunnus`),
   KEY `ltunnus` (`ltunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1398,7 +1398,7 @@ CREATE TABLE `karhukierros` (
   `pvm` date NOT NULL DEFAULT '0000-00-00',
   `yhtio` varchar(5) NOT NULL DEFAULT '',
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1426,7 +1426,7 @@ CREATE TABLE `kassalipas` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1450,7 +1450,7 @@ CREATE TABLE `kerattavatrivit` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tilausrivi_id_index` (`tilausrivi_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1489,7 +1489,7 @@ CREATE TABLE `kerayserat` (
   KEY `yhtio_sscculkoinen` (`yhtio`,`sscc_ulkoinen`),
   KEY `yhtio_sscc` (`yhtio`,`sscc`),
   KEY `yhtio_tila_laatija` (`yhtio`,`tila`,`laatija`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1530,7 +1530,7 @@ CREATE TABLE `keraysvyohyke` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio` (`yhtio`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1561,7 +1561,7 @@ CREATE TABLE `kirjoittimet` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=105 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=105 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1597,7 +1597,7 @@ CREATE TABLE `kohde` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_asiakas` (`yhtio`,`asiakas`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1620,7 +1620,7 @@ CREATE TABLE `korvaavat` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_id` (`yhtio`,`id`),
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`)
-) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1642,7 +1642,7 @@ CREATE TABLE `korvaavat_kiellot` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1728,7 +1728,7 @@ CREATE TABLE `kuka` (
   KEY `yhtio_kesken` (`yhtio`,`kesken`),
   KEY `yhtio_myyja` (`yhtio`,`myyja`),
   KEY `yhtio_aktiivinen_extranet` (`yhtio`,`aktiivinen`,`extranet`)
-) ENGINE=MyISAM AUTO_INCREMENT=118 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=118 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1751,7 +1751,7 @@ CREATE TABLE `kustannuspaikka` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1783,7 +1783,7 @@ CREATE TABLE `lahdot` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_aktiivi_liitostunnus` (`yhtio`,`aktiivi`,`liitostunnus`),
   KEY `yhtio_aktiivi_pvm` (`yhtio`,`aktiivi`,`pvm`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1822,7 +1822,7 @@ CREATE TABLE `laite` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_paikka` (`yhtio`,`paikka`),
   KEY `yhtio_koodi` (`yhtio`,`koodi`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1842,7 +1842,7 @@ CREATE TABLE `laitteen_sopimukset` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2083,7 +2083,7 @@ CREATE TABLE `lasku` (
   KEY `index_lasku_on_yhtio_and_tila_and_erpcm` (`yhtio`,`tila`,`erpcm`),
   FULLTEXT KEY `asiakasnimi` (`nimi`),
   FULLTEXT KEY `asiakastoim_nimi` (`toim_nimi`)
-) ENGINE=MyISAM AUTO_INCREMENT=150 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2188,7 +2188,7 @@ CREATE TABLE `laskun_lisatiedot` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_otunnus` (`yhtio`,`otunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=132 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=132 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2222,7 +2222,7 @@ CREATE TABLE `liitetiedostot` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_liitos_liitostunnus` (`yhtio`,`liitos`,`liitostunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2243,7 +2243,7 @@ CREATE TABLE `maat` (
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `koodi_ryhma` (`koodi`,`ryhma_tunnus`),
   KEY `koodi_nimi` (`koodi`,`nimi`)
-) ENGINE=MyISAM AUTO_INCREMENT=8885 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8885 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2269,7 +2269,7 @@ CREATE TABLE `mail_servers` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_mail_servers_on_company_id` (`company_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2290,7 +2290,7 @@ CREATE TABLE `maksu` (
   `maksettu` char(1) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2325,7 +2325,7 @@ CREATE TABLE `maksuehto` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=115 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=115 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2351,7 +2351,7 @@ CREATE TABLE `maksupaatetapahtumat` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_index` (`yhtio`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2378,7 +2378,7 @@ CREATE TABLE `maksupositio` (
   `uusiotunnus` int(11) NOT NULL DEFAULT '0',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2400,7 +2400,7 @@ CREATE TABLE `messenger` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_kuka_status` (`yhtio`,`kuka`,`status`),
   KEY `yhtio_vastaanottaja_status` (`yhtio`,`vastaanottaja`,`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=103 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2426,7 +2426,7 @@ CREATE TABLE `muisti` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `haut` (`yhtio`,`kuka`,`haku`,`nimi`,`var`)
-) ENGINE=MyISAM AUTO_INCREMENT=143 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=143 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2461,7 +2461,7 @@ CREATE TABLE `oikeu` (
   KEY `sovellus_index` (`yhtio`,`kuka`,`sovellus`),
   KEY `menut_index` (`yhtio`,`sovellus`,`nimi`,`alanimi`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=63754 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=63754 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2481,7 +2481,7 @@ CREATE TABLE `ostorivien_vahvistus` (
   `luontiaika` datetime NOT NULL,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_rivitunnus` (`yhtio`,`tilausrivin_tunnus`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2511,7 +2511,7 @@ CREATE TABLE `pakkaamo` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2546,7 +2546,7 @@ CREATE TABLE `pakkaus` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_pakkaus_pakkauskuvaus` (`yhtio`,`pakkaus`,`pakkauskuvaus`)
-) ENGINE=MyISAM AUTO_INCREMENT=780 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=780 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2567,7 +2567,7 @@ CREATE TABLE `pakkauskoodit` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2598,7 +2598,7 @@ CREATE TABLE `pankkiyhteys` (
   `ca_certificate_valid_to` datetime DEFAULT NULL,
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2630,7 +2630,7 @@ CREATE TABLE `pankkiyhteystiedot` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2661,7 +2661,7 @@ CREATE TABLE `panttitili` (
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`),
   KEY `yhtio_tuoteno_asiakas_status` (`yhtio`,`tuoteno`,`asiakas`,`status`),
   KEY `yhtio_status_myyntipvm` (`yhtio`,`status`,`myyntipvm`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2679,7 +2679,7 @@ CREATE TABLE `pending_updates` (
   `value` text,
   PRIMARY KEY (`id`),
   KEY `index_pending_updates_on_pending_updatable_id` (`pending_updatable_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2701,7 +2701,7 @@ CREATE TABLE `perusalennus` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_ryhma` (`yhtio`,`ryhma`)
-) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2728,7 +2728,7 @@ CREATE TABLE `puun_alkio` (
   UNIQUE KEY `yhtio_laji_liitos_puuntunnus_kieli` (`yhtio`,`liitos`,`laji`,`puun_tunnus`,`kieli`),
   KEY `yhtio_laji_liitos` (`yhtio`,`laji`,`liitos`),
   KEY `yhtio_laji_puun_tunnus` (`yhtio`,`laji`,`puun_tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2750,7 +2750,7 @@ CREATE TABLE `rahdinkuljettajat` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2771,7 +2771,7 @@ CREATE TABLE `rahtikirjanumero` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2809,7 +2809,7 @@ CREATE TABLE `rahtikirjat` (
   PRIMARY KEY (`tunnus`),
   KEY `otsikko_index` (`yhtio`,`otsikkonro`),
   KEY `rahtikirjanro` (`yhtio`,`rahtikirjanro`(150))
-) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2833,7 +2833,7 @@ CREATE TABLE `rahtimaksut` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2857,7 +2857,7 @@ CREATE TABLE `rahtisopimukset` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2884,7 +2884,7 @@ CREATE TABLE `sahkoisen_lahetteen_rivit` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_otunnus_tilausrivin_tunnus` (`yhtio`,`otunnus`,`tilausrivin_tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2903,7 +2903,7 @@ CREATE TABLE `saldovahvistukset` (
   `liitostunnus` int(11) NOT NULL DEFAULT '0',
   `yhtio` varchar(5) NOT NULL DEFAULT '',
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2924,7 +2924,7 @@ CREATE TABLE `saldovahvistusrivit` (
   `summa` decimal(12,2) NOT NULL DEFAULT '0.00',
   `yhtio` varchar(5) NOT NULL DEFAULT '',
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2954,7 +2954,7 @@ CREATE TABLE `sanakirja` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `fi` (`fi`(50))
-) ENGINE=MyISAM AUTO_INCREMENT=12983 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12983 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2971,6 +2971,7 @@ CREATE TABLE `sarjanumeroseuranta` (
   `lisatieto` text,
   `ostorivitunnus` int(11) NOT NULL DEFAULT '0',
   `myyntirivitunnus` int(11) NOT NULL DEFAULT '0',
+  `panttirivitunnus` int(11) DEFAULT NULL,
   `siirtorivitunnus` int(11) NOT NULL DEFAULT '0',
   `hyllyalue` varchar(5) NOT NULL DEFAULT '',
   `hyllynro` varchar(5) NOT NULL DEFAULT '',
@@ -2998,38 +2999,8 @@ CREATE TABLE `sarjanumeroseuranta` (
   KEY `yhtio_siirtorivitunnus` (`yhtio`,`tuoteno`,`siirtorivitunnus`),
   KEY `yhtio_tuoteno_sarjanumero` (`yhtio`,`tuoteno`,`sarjanumero`),
   FULLTEXT KEY `yhtio_lisatieto` (`yhtio`,`lisatieto`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger sarjanumeroseuranta_insert_trigger before insert on sarjanumeroseuranta for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger sarjanumeroseuranta_update_trigger before update on sarjanumeroseuranta for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `sarjanumeroseuranta_arvomuutos`
@@ -3047,7 +3018,7 @@ CREATE TABLE `sarjanumeroseuranta_arvomuutos` (
   `luontiaika` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `tunnus` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3081,7 +3052,7 @@ CREATE TABLE `suorituksen_kohdistus` (
   PRIMARY KEY (`tunnus`),
   KEY `laskutunnus_index` (`yhtio`,`laskutunnus`),
   KEY `suoritustunnus_index` (`yhtio`,`suoritustunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3112,7 +3083,7 @@ CREATE TABLE `suoritus` (
   KEY `yhtio_asiakastunnus` (`yhtio`,`asiakas_tunnus`),
   KEY `tositerivit_index` (`ltunnus`),
   KEY `yhtio_kohdpvm` (`yhtio`,`kohdpvm`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3136,7 +3107,7 @@ CREATE TABLE `suorituskykyloki` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_luontiaika` (`yhtio`,`luontiaika`),
   KEY `yhtio_skripti_luontiaika` (`yhtio`,`skripti`,`luontiaika`)
-) ENGINE=MyISAM AUTO_INCREMENT=218 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=285 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3191,7 +3162,7 @@ CREATE TABLE `supplier_product_informations` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3231,7 +3202,7 @@ CREATE TABLE `suuntalavat` (
   KEY `yhtio_tila_keraysvyohyke_keikkatunnus` (`yhtio`,`tila`,`keraysvyohyke`,`keikkatunnus`),
   KEY `yhtio_tila_keraysvyohyke_kaytettavyys` (`yhtio`,`tila`,`keraysvyohyke`,`kaytettavyys`),
   KEY `usea_keraysvyohyke` (`yhtio`,`tila`,`usea_keraysvyohyke`,`kaytettavyys`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3253,7 +3224,7 @@ CREATE TABLE `suuntalavat_saapuminen` (
   PRIMARY KEY (`tunnus`),
   KEY `suuntalavat_saapuminen` (`yhtio`,`suuntalava`,`saapuminen`),
   KEY `saapuminen` (`yhtio`,`saapuminen`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3273,7 +3244,7 @@ CREATE TABLE `synclog` (
   `luontiaika` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3294,7 +3265,7 @@ CREATE TABLE `tallennetut_parametrit` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `muisti` (`yhtio`,`kuka`,`sovellus`,`nimitys`)
-) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3327,38 +3298,8 @@ CREATE TABLE `tapahtuma` (
   KEY `yhtio_laji_tuoteno` (`yhtio`,`laji`,`tuoteno`),
   KEY `yhtio_laadittu_hyllyalue_hyllynro` (`yhtio`,`laadittu`,`hyllyalue`,`hyllynro`),
   KEY `yhtio_laji_laadittu` (`yhtio`,`laji`,`laadittu`)
-) ENGINE=MyISAM AUTO_INCREMENT=223 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=223 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tapahtuma_insert_trigger before insert on tapahtuma for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tapahtuma_update_trigger before update on tapahtuma for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `taric_veroperusteet`
@@ -3389,7 +3330,7 @@ CREATE TABLE `taric_veroperusteet` (
   PRIMARY KEY (`tunnus`),
   KEY `fyysinen_avain_index` (`laji`,`toimenpide_id`),
   KEY `nimike_index` (`laji`,`nimike`,`maa_ryhma`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3424,7 +3365,7 @@ CREATE TABLE `taso` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_tyyppi_taso_index` (`yhtio`,`tyyppi`,`taso`)
-) ENGINE=MyISAM AUTO_INCREMENT=3057 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3057 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3509,38 +3450,8 @@ CREATE TABLE `tilausrivi` (
   KEY `suuntalava_index` (`yhtio`,`suuntalava`),
   KEY `yhtio_tyyppi_toimitettuaika` (`yhtio`,`tyyppi`,`toimitettuaika`),
   KEY `yhtio_tyyppi_tuoteno_kerayspvm` (`yhtio`,`tyyppi`,`tuoteno`,`kerayspvm`)
-) ENGINE=MyISAM AUTO_INCREMENT=151 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=151 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tilausrivi_insert_trigger before insert on tilausrivi for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tilausrivi_update_trigger before update on tilausrivi for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `tilausrivin_lisatiedot`
@@ -3604,7 +3515,7 @@ CREATE TABLE `tilausrivin_lisatiedot` (
   KEY `yhtio_vanhaotunnus` (`yhtio`,`vanha_otunnus`),
   KEY `yhtio_asiakkaan_positio` (`yhtio`,`asiakkaan_positio`),
   KEY `kohde_hyllypaikka` (`yhtio`,`kohde_hyllyalue`,`kohde_hyllynro`,`kohde_hyllyvali`,`kohde_hyllytaso`)
-) ENGINE=MyISAM AUTO_INCREMENT=151 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=151 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3638,7 +3549,7 @@ CREATE TABLE `tili` (
   PRIMARY KEY (`tunnus`),
   KEY `tili_index` (`yhtio`,`tilino`),
   FULLTEXT KEY `nimi` (`nimi`)
-) ENGINE=MyISAM AUTO_INCREMENT=4907 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4907 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3659,7 +3570,7 @@ CREATE TABLE `tilikaudet` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=110 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3702,7 +3613,7 @@ CREATE TABLE `tiliointi` (
   KEY `yhtio_tapvm_tilino` (`yhtio`,`tapvm`,`tilino`),
   KEY `yhtio_tapahtumatunnus` (`yhtio`,`tapahtumatunnus`),
   KEY `commodity_id` (`commodity_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=142 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=142 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3736,7 +3647,7 @@ CREATE TABLE `tiliointisaanto` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3767,7 +3678,7 @@ CREATE TABLE `tiliotedata` (
   KEY `yhtio_tilino_tyyppi_tieto` (`yhtio`,`tilino`,`tyyppi`,`tieto`(150)),
   KEY `yhtio_alku` (`yhtio`,`alku`),
   KEY `yhtio_tilino_alku` (`yhtio`,`tilino`,`alku`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3791,7 +3702,7 @@ CREATE TABLE `tiliotesaanto` (
   `kustp2` int(11) NOT NULL DEFAULT '0',
   `tunnus` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3889,7 +3800,7 @@ CREATE TABLE `toimi` (
   PRIMARY KEY (`tunnus`),
   KEY `ytunnus_index` (`yhtio`,`ytunnus`),
   KEY `toimittajanro_index` (`yhtio`,`toimittajanro`)
-) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3922,7 +3833,7 @@ CREATE TABLE `toimittajaalennus` (
   KEY `yhtio_toimittaja_ryhma` (`yhtio`,`toimittaja`,`ryhma`),
   KEY `yhtio_toimittaja_tuoteno` (`yhtio`,`toimittaja`,`tuoteno`),
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3956,7 +3867,7 @@ CREATE TABLE `toimittajahinta` (
   KEY `yhtio_toimittaja_ryhma` (`yhtio`,`toimittaja`,`ryhma`),
   KEY `yhtio_toimittaja_tuoteno` (`yhtio`,`toimittaja`,`tuoteno`),
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4027,7 +3938,7 @@ CREATE TABLE `toimitustapa` (
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_selite` (`yhtio`,`selite`),
   KEY `selite_index` (`yhtio`,`selite`)
-) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4052,7 +3963,7 @@ CREATE TABLE `toimitustavan_avainsanat` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_liitostunnus_kieli_laji` (`yhtio`,`liitostunnus`,`kieli`,`laji`),
   KEY `yhtio__kieli_laji_liitostunnus` (`yhtio`,`kieli`,`laji`,`liitostunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4081,7 +3992,7 @@ CREATE TABLE `toimitustavan_lahdot` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4102,7 +4013,7 @@ CREATE TABLE `toimitustavat_toimipaikat` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_index` (`yhtio`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4128,7 +4039,7 @@ CREATE TABLE `transports` (
   `encoding` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_transports_on_transportable_id` (`transportable_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4154,7 +4065,7 @@ CREATE TABLE `tullinimike` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `tullinimike_cn` (`cn`)
-) ENGINE=MyISAM AUTO_INCREMENT=424529 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=449157 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4274,7 +4185,7 @@ CREATE TABLE `tuote` (
   KEY `yhtio_tuotetyyppi_status` (`yhtio`,`tuotetyyppi`,`status`),
   FULLTEXT KEY `tuoteno` (`tuoteno`),
   FULLTEXT KEY `nimitys` (`nimitys`)
-) ENGINE=MyISAM AUTO_INCREMENT=710405 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=710618 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4292,7 +4203,7 @@ CREATE TABLE `tuote_muutokset` (
   `kuka` varchar(50) NOT NULL DEFAULT '',
   `tunnus` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=14168 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=14168 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4333,38 +4244,8 @@ CREATE TABLE `tuotepaikat` (
   KEY `tuote_index` (`yhtio`,`tuoteno`),
   KEY `saldo_index` (`yhtio`,`saldoaika`,`saldo`),
   KEY `yhtio_hyllypaikka` (`yhtio`,`hyllypaikka`)
-) ENGINE=MyISAM AUTO_INCREMENT=2541135 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2541135 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tuotepaikat_insert_trigger before insert on tuotepaikat for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, "0"), lpad(upper(varastopaikat.alkuhyllynro), 5, "0")) <= concat(rpad(upper(new.hyllyalue), 5, "0"), lpad(upper(new.hyllynro), 5, "0")) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, "0"), lpad(upper(varastopaikat.loppuhyllynro), 5, "0")) >= concat(rpad(upper(new.hyllyalue), 5, "0"), lpad(upper(new.hyllynro), 5, "0"))), new.hyllypaikka = concat(new.hyllyalue, new.hyllynro, new.hyllyvali, new.hyllytaso) */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tuotepaikat_update_trigger before update on tuotepaikat for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, "0"), lpad(upper(varastopaikat.alkuhyllynro), 5, "0")) <= concat(rpad(upper(new.hyllyalue), 5, "0"), lpad(upper(new.hyllynro), 5, "0")) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, "0"), lpad(upper(varastopaikat.loppuhyllynro), 5, "0")) >= concat(rpad(upper(new.hyllyalue), 5, "0"), lpad(upper(new.hyllynro), 5, "0"))), new.hyllypaikka = concat(new.hyllyalue, new.hyllynro, new.hyllyvali, new.hyllytaso) */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `tuoteperhe`
@@ -4398,7 +4279,7 @@ CREATE TABLE `tuoteperhe` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_tyyppi_isatuoteno` (`yhtio`,`tyyppi`,`isatuoteno`),
   KEY `yhtio_tyyppi_tuoteno` (`yhtio`,`tyyppi`,`tuoteno`)
-) ENGINE=MyISAM AUTO_INCREMENT=82243 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=82243 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4430,7 +4311,7 @@ CREATE TABLE `tuotteen_alv` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_maa_tuoteno` (`yhtio`,`maa`,`tuoteno`)
-) ENGINE=MyISAM AUTO_INCREMENT=234703 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=234703 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4460,7 +4341,7 @@ CREATE TABLE `tuotteen_avainsanat` (
   KEY `yhtio_kieli_tuoteno` (`yhtio`,`kieli`,`tuoteno`),
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`),
   KEY `yhtio_kieli_laji_selite` (`yhtio`,`kieli`,`laji`,`selite`(150))
-) ENGINE=MyISAM AUTO_INCREMENT=637262 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=637262 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4502,7 +4383,7 @@ CREATE TABLE `tuotteen_toimittajat` (
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`),
   KEY `yhtio_toimtuoteno` (`yhtio`,`toim_tuoteno`),
   KEY `yhtio_viivakoodi` (`yhtio`,`viivakoodi`)
-) ENGINE=MyISAM AUTO_INCREMENT=633182 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=633182 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4524,7 +4405,7 @@ CREATE TABLE `tuotteen_toimittajat_pakkauskoot` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_toimtuotenotunnus_pakkauskoko` (`yhtio`,`toim_tuoteno_tunnus`,`pakkauskoko`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4548,7 +4429,7 @@ CREATE TABLE `tuotteen_toimittajat_tuotenumerot` (
   UNIQUE KEY `tuotteen_toimittajat_tuotenumerot` (`yhtio`,`toim_tuoteno_tunnus`,`tuoteno`,`viivakoodi`),
   KEY `tuotteen_toimittajat_tuoteno` (`yhtio`,`tuoteno`),
   KEY `tuotteen_toimittajat_viivakoodi` (`yhtio`,`viivakoodi`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4569,7 +4450,7 @@ CREATE TABLE `tyomaarayksen_tapahtumat` (
   `kommentti` varchar(60) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4624,7 +4505,7 @@ CREATE TABLE `tyomaarays` (
   `hyvaksy` varchar(55) NOT NULL DEFAULT '',
   `otunnus` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`otunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4640,7 +4521,7 @@ CREATE TABLE `uutinen_asiakassegmentti` (
   `uutistunnus` int(11) NOT NULL DEFAULT '0',
   `segmenttitunnus` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4661,7 +4542,7 @@ CREATE TABLE `vaihtoehtoiset_verkkolaskutunnukset` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4703,7 +4584,7 @@ CREATE TABLE `vak` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=2873 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2873 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4745,7 +4626,7 @@ CREATE TABLE `vak_imdg` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4769,7 +4650,7 @@ CREATE TABLE `valuu` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_nimi` (`yhtio`,`nimi`)
-) ENGINE=MyISAM AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=109 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4787,7 +4668,7 @@ CREATE TABLE `valuu_historia` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `kotivaluutta_valkoodi_kurssipvm` (`kotivaluutta`,`valuutta`,`kurssipvm`)
-) ENGINE=MyISAM AUTO_INCREMENT=71937 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=76929 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4824,7 +4705,7 @@ CREATE TABLE `varaston_hyllypaikat` (
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_paikka` (`yhtio`,`hyllyalue`,`hyllynro`,`hyllyvali`,`hyllytaso`),
   KEY `yhtio_varasto_mitat` (`yhtio`,`varasto`,`korkeus`,`leveys`,`syvyys`,`maksimitaakka`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4857,7 +4738,7 @@ CREATE TABLE `varaston_tulostimet` (
   `muuttaja` varchar(50) NOT NULL DEFAULT '',
   `tunnus` bigint(20) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4919,7 +4800,7 @@ CREATE TABLE `varastopaikat` (
   KEY `yhtio_maa` (`yhtio`,`maa`),
   KEY `yhtio_alku` (`yhtio`,`alkuhyllyalue`,`alkuhyllynro`),
   KEY `yhtio_loppu` (`yhtio`,`loppuhyllyalue`,`loppuhyllynro`)
-) ENGINE=MyISAM AUTO_INCREMENT=141 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=141 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4943,7 +4824,7 @@ CREATE TABLE `vastaavat` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_id` (`yhtio`,`id`),
   KEY `yhtio_tuoteno` (`yhtio`,`tuoteno`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4985,7 +4866,7 @@ CREATE TABLE `yhteyshenkilo` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_tyyppi_liitostunnus_rooli` (`yhtio`,`tyyppi`,`liitostunnus`,`rooli`)
-) ENGINE=MyISAM AUTO_INCREMENT=6629 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6629 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5116,7 +4997,7 @@ CREATE TABLE `yhtio` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_index` (`yhtio`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5518,7 +5399,7 @@ CREATE TABLE `yhtion_parametrit` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_index` (`yhtio`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5567,7 +5448,7 @@ CREATE TABLE `yhtion_toimipaikat` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_index` (`yhtio`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5589,7 +5470,7 @@ CREATE TABLE `yhtion_toimipaikat_parametrit` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_index` (`yhtio`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5626,7 +5507,7 @@ CREATE TABLE `yriti` (
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `yhtio_tilino` (`yhtio`,`tilino`),
   KEY `index_yriti_on_yhtio_and_iban` (`yhtio`,`iban`)
-) ENGINE=MyISAM AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=78 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -5638,4 +5519,147 @@ CREATE TABLE `yriti` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-28 10:00:01
+-- Dump completed on 2020-07-13 10:00:01
+-- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: referenssi
+-- ------------------------------------------------------
+-- Server version	5.1.73-log
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger sarjanumeroseuranta_insert_trigger before insert on sarjanumeroseuranta for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger sarjanumeroseuranta_update_trigger before update on sarjanumeroseuranta for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tapahtuma_insert_trigger before insert on tapahtuma for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tapahtuma_update_trigger before update on tapahtuma for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tilausrivi_insert_trigger before insert on tilausrivi for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tilausrivi_update_trigger before update on tilausrivi for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, '0'), lpad(upper(varastopaikat.alkuhyllynro), 5, '0')) <= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0')) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, '0'), lpad(upper(varastopaikat.loppuhyllynro), 5, '0')) >= concat(rpad(upper(new.hyllyalue), 5, '0'), lpad(upper(new.hyllynro), 5, '0'))) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tuotepaikat_insert_trigger before insert on tuotepaikat for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, "0"), lpad(upper(varastopaikat.alkuhyllynro), 5, "0")) <= concat(rpad(upper(new.hyllyalue), 5, "0"), lpad(upper(new.hyllynro), 5, "0")) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, "0"), lpad(upper(varastopaikat.loppuhyllynro), 5, "0")) >= concat(rpad(upper(new.hyllyalue), 5, "0"), lpad(upper(new.hyllynro), 5, "0"))), new.hyllypaikka = concat(new.hyllyalue, new.hyllynro, new.hyllyvali, new.hyllytaso) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger tuotepaikat_update_trigger before update on tuotepaikat for each row set new.varasto = (select varastopaikat.tunnus from varastopaikat where varastopaikat.yhtio = new.yhtio and concat(rpad(upper(varastopaikat.alkuhyllyalue), 5, "0"), lpad(upper(varastopaikat.alkuhyllynro), 5, "0")) <= concat(rpad(upper(new.hyllyalue), 5, "0"), lpad(upper(new.hyllynro), 5, "0")) and concat(rpad(upper(varastopaikat.loppuhyllyalue), 5, "0"), lpad(upper(varastopaikat.loppuhyllynro), 5, "0")) >= concat(rpad(upper(new.hyllyalue), 5, "0"), lpad(upper(new.hyllynro), 5, "0"))), new.hyllypaikka = concat(new.hyllyalue, new.hyllynro, new.hyllyvali, new.hyllytaso) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Dumping routines for database 'referenssi'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-07-13 10:00:02
