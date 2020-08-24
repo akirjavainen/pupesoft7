@@ -166,9 +166,10 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
 // MODIFIED, added links to JWIO ERP:
 if (file_exists("../../hinnasto")) {
 	echo "<tr><td colspan='2'>";
-	echo "<a href=\"#\" onclick=\"var w = window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."'); w.opener = this;\">Varastotuotteet</a><br>";
+	//echo "<a href=\"#\" onclick=\"var w = window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."'); w.opener = this;\">Varastotuotteet</a><br>";
 	//echo "<a href=\"#\" onclick=\"var w = window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus'); w.opener = this;\">Ikkunalaskuri</a> || ";
 	//echo "<a href=\"#\" onclick=\"var w = window.open('/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus'); w.opener = this;\">Ovilaskuri</a>";
+	echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 	echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
 	echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
 	echo "</td>";
@@ -512,9 +513,10 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
   echo "<tr>$jarjlisa";
   if (file_exists("../../hinnasto")) { // MODIFIED, added links to JWIO ERP
 	echo "<tr><td colspan='2'>";
-	echo "<a href=\"#\" onclick=\"var w = window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."'); w.opener = this;\">Varastotuotteet</a><br>";
+	//echo "<a href=\"#\" onclick=\"var w = window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."'); w.opener = this;\">Varastotuotteet</a><br>";
 	//echo "<a href=\"#\" onclick=\"var w = window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus'); w.opener = this;\">Ikkunalaskuri</a> || ";
 	//echo "<a href=\"#\" onclick=\"var w = window.open('/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus'); w.opener = this;\">Ovilaskuri</a>";
+	echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 	echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
 	echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
 	echo "</td>";
@@ -796,7 +798,8 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "SIIRTOLIS
 
   echo "<td valign='top' class='back'><input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'> <font class='error'>$varaosavirhe</font></td></tr>"; // MODIFIED, added button id
   echo "<tr><td>"; // MODIFIED, added
-  echo "<a href=\"#\" onclick=\"var w = window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."'); w.opener = this;\">Varastotuotteet</a><br>";
+  //echo "<a href=\"#\" onclick=\"var w = window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."'); w.opener = this;\">Varastotuotteet</a><br>";
+  echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 
   if (($toim == "VALMISTAVARASTOON" and $yhtiorow['valmistuksien_kasittely'] == 'Y') or $yhtiorow["splittauskielto"] == "K") {
 
