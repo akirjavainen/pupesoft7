@@ -2,7 +2,7 @@
 
 require "inc/parametrit.inc";
 
-if ($tee == "keraa") {
+if ($tee == "keraa" && !isset($_GET["auto"])) { // MODIFIED, added automatic mode
   if (isset($_FILES['userfile']) and (is_uploaded_file($_FILES['userfile']['tmp_name']) === TRUE)) {
 
     if ($_FILES['userfile']['size'] == 0) {
@@ -19,12 +19,15 @@ if ($tee == "keraa") {
       echo "<font class='error'><br>".t("Väärä tiedostomuoto")."!</font>";
       $tee = '';
     }
+    
+    $excelrivit = pupeFileReader($_FILES['userfile']['tmp_name'], $ext);
   }
 }
 
-if ($tee == "keraa") {
-  $excelrivit = pupeFileReader($_FILES['userfile']['tmp_name'], $ext);
+// MODIFIED, added automatic mode:
+if (isset($_GET["auto"])) $excelrivit = pupeFileReader("/tmp/collect.csv", "CSV");
 
+if ($tee == "keraa") {
   $kerattavat = array();
 
   foreach ($excelrivit as $rivinumero => $rivi) {
@@ -32,7 +35,6 @@ if ($tee == "keraa") {
     // index 0, maara
     // index 1, tilaus
     // index 2, tuoteno
-
     $kpl   = $rivi[0];
     $tilaus = $rivi[1];
     $tuote  = $rivi[2];
