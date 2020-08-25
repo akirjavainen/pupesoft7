@@ -21628,7 +21628,11 @@ if (!function_exists("pupeFileReader")) {
 
       while ($rivi = fgets($file)) {
         // luetaan rivi tiedostosta..
-        $rivi = explode("\t", pupesoft_cleanstring($rivi));
+	if ($extension == "TXT") { // MODIFIED, BUGFIX for CSV reader
+          $rivi = explode("\t", pupesoft_cleanstring($rivi));
+	} else {
+          $rivi = str_getcsv($rivi);
+	}
 
         for ($colIndex = 0; $colIndex < count($rivi); $colIndex++) {
           $excelrivit[$rowIndex][$colIndex] = trim($rivi[$colIndex]);
