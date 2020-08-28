@@ -3685,7 +3685,7 @@ if ($tila == "" and !isset($jatka)) {
           <span id='y_liitostunnus' style='display: none;'>$srow[liitostunnus]</span>
           <input type='text' size='30' name='tilausyhteyshenkilo' id='manual_tilausyhteyshenkilo' value='$srow[tilausyhteyshenkilo]'><br>";
 
-    echo "&nbsp;<select id='yhteyshenkilo_tilaus' name='yhteyshenkilo_tilaus'>";
+    echo "&nbsp;<select id='yhteyshenkilo_tilaus' name='yhteyshenkilo_tilaus' onchange=\"document.getElementById('manual_tilausyhteyshenkilo').value = ''; document.getElementById('tpuh').value = ''; document.getElementById('temail').value = '';\">";
     echo "<option value = ''>".t("Ei valintaa")."</option>";
 
     while ($yhteysrow = mysqli_fetch_assoc($yhteysresult)) {
