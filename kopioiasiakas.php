@@ -96,6 +96,12 @@ if ($tee == "edit") {
       $jatko = 0;
       $ulos = '';
     }
+    
+    if (mysqli_field_name($result, $i) == "tunnus") { // MODIFIED, added BUGFIX
+      $tyyppi = 0;
+      $jatko = 0;
+      $ulos = '';
+    }
 
     if (mysqli_field_name($result, $i) == 'laatija') {  //speciaali tapaukset
       $tyyppi = 2;
