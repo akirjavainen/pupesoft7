@@ -2848,8 +2848,9 @@ if ($tila == "" and !isset($jatka)) {
 
       $vasen_sarake[$vasen] .= "<input type='text' name='voimaika_pp' value='$voimaika_pp' size='3'>
           <input type='text' name='voimaika_kk' value='$voimaika_kk' size='3'>
-          <input type='text' name='voimaika_vv' value='$voimaika_vv' size='6'>
-          </td>";
+          <input type='text' name='voimaika_vv' value='$voimaika_vv' size='6'>";
+      if (file_exists("../../raportit")) $vasen_sarake[$vasen] .= "<a href='#' onclick='addReminder(\"$laskurow[tunnus]);\"'>Lis&auml;&auml; muistutus</a>"; // MODIFIED, added
+      $vasen_sarake[$vasen] .= "</td>";
       $vasen++;
     }
 
