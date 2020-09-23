@@ -39,7 +39,7 @@ elseif ($type == '3' or ($type == 'S' and
 
   $payer_name = trim(substr($tietue, 63, 12));
   $reference = ltrim(substr($tietue, 43, 20), '0');
-  $sum = substr($tietue, 78, 10); // MODIFIED, BUGFIX POS 77 -> 78
+  $sum = substr($tietue, 78, 9); // MODIFIED, BUGFIX pos 77 -> 78, length 10 -> 9
   $sum = $sum / 100; // XXX summa on sentteinä, etunollatäytöllä.
   if ($factoring_oikaisutunnus != '0') {
     $sum = $sum * -1;
