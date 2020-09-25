@@ -407,17 +407,17 @@ while ($row = mysqli_fetch_assoc($result)) {
 if ($lasktuote > 0) {
   $iltasiivo .= is_log("Poistettiin $lasktuote tuotteelta yhteensä $laskpois duplikaattia toimittajaa");
 }
-// MODIFIED, commented out:
-//$kukaquery = "UPDATE kuka
-//              SET taso = '2'
-//              WHERE taso   = '3'
-//              AND extranet = ''";
-//pupe_query($kukaquery);
+/* MODIFIED, commented out:
+$kukaquery = "UPDATE kuka
+              SET taso = '2'
+              WHERE taso   = '3'
+              AND extranet = ''";
+pupe_query($kukaquery);
 
-//if (mysqli_affected_rows($link) > 0) {
-//  $iltasiivo .= date("d.m.Y @ G:i:s").": Päivitettiin ".mysqli_affected_rows($link)." käyttäjän taso 3 --> 2\n";
-//}
-
+if (mysqli_affected_rows($link) > 0) {
+  $iltasiivo .= date("d.m.Y @ G:i:s").": Päivitettiin ".mysqli_affected_rows($link)." käyttäjän taso 3 --> 2\n";
+}
+ */
 // mitätöidään keskenolevia extranet-tilauksia, jos ne on liian vanhoja ja yhtiön parametri on päällä
 if ($yhtiorow['iltasiivo_mitatoi_ext_tilauksia'] != '') {
 
@@ -491,6 +491,58 @@ if ($yhtiorow['iltasiivo_mitatoi_ext_tilauksia'] != '') {
 
   if ($laskuri > 0) {
     $iltasiivo .= is_log("Mitätöitiin $laskuri extranet-tilausta, jotka olivat $aikaraja tuntia vanhoja.");
+  }
+}
+
+// mitätöidään keskenolevia kassamyynti-tilauksia, jos ne on liian vanhoja ja yhtiön parametri on päällä
+if ($yhtiorow['iltasiivo_mitatoi_kassamyynti_tilauksia'] != '') {
+
+  $laskuri = 0;
+  $ytunnukset = join("','", explode(',', sanitize_string($yhtiorow['iltasiivo_mitatoi_kassamyynti_tilauksia'])));
+
+  $query = "SELECT lasku.tunnus laskutunnus
+            FROM lasku
+            JOIN maksuehto ON (lasku.yhtio = maksuehto.yhtio
+              and lasku.maksuehto = maksuehto.tunnus
+              and maksuehto.kateinen != '')
+            WHERE lasku.yhtio = '{$kukarow['yhtio']}'
+            AND lasku.ytunnus in ('{$ytunnukset}')
+            AND lasku.tila = 'N'
+            AND lasku.alatila = ''
+            AND lasku.kassalipas != ''
+            AND lasku.luontiaika < DATE_SUB(now(), INTERVAL 14 DAY)";
+  $result = pupe_query($query);
+
+  while ($row = mysqli_fetch_assoc($result)) {
+    $komm = "({$kukarow['kuka']}@".date('Y-m-d').")".t("Mitätöi ohjelmassa iltasiivo.php")." (4)<br>";
+
+    $query = "UPDATE lasku SET
+              alatila     = 'N',
+              tila        = 'D',
+              comments    = '$komm'
+              WHERE yhtio = '{$kukarow['yhtio']}'
+              and tunnus  = '{$row['laskutunnus']}'";
+    pupe_query($query);
+
+    $query = "UPDATE tilausrivi SET
+              tyyppi       = 'D'
+              WHERE yhtio  = '{$kukarow['yhtio']}'
+              AND otunnus  = '{$row['laskutunnus']}'
+              and var     != 'P'";
+    pupe_query($query);
+
+    //poistetaan TIETENKIN kukarow[kesken] ettei voi syöttää extranetissä rivejä tälle
+    $query = "UPDATE kuka SET
+              kesken      = ''
+              WHERE yhtio = '{$kukarow['yhtio']}'
+              AND kesken  = '{$row['laskutunnus']}'";
+    pupe_query($query);
+
+    $laskuri++;
+  }
+
+  if ($laskuri > 0) {
+    $iltasiivo .= is_log("Mitätöitiin $laskuri keskeneräistä kassamyynti-tilausta, jotka olivat yli 14 päivää vanhoja.");
   }
 }
 

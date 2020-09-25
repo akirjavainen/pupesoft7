@@ -1,6 +1,6 @@
 <?php
 
-if (mb_strpos($_SERVER['SCRIPT_NAME'], "maksusopimus_laskutukseen.php") !== FALSE) {
+if (strpos($_SERVER['SCRIPT_NAME'], "maksusopimus_laskutukseen.php") !== FALSE) {
 
   // DataTables päälle
   $pupe_DataTables = "maksusopparit";
@@ -11,6 +11,9 @@ if (mb_strpos($_SERVER['SCRIPT_NAME'], "maksusopimus_laskutukseen.php") !== FALS
 if (!function_exists("ennakkolaskuta")) {
   function ennakkolaskuta($tunnus) {
     global $kukarow, $yhtiorow;
+    
+    // Laitetaan debug päälle
+    // $debug = 1;
 
     ///* Etsitään laskun kaikki tiedot jolle maksusopimus on tehty *///
     $query = "SELECT *
@@ -95,7 +98,7 @@ if (!function_exists("ennakkolaskuta")) {
         $query .= "ketjutus='o',";
       }
       elseif ($fieldname == 'tilaustyyppi') {
-        if (mb_strtoupper($laskurow["tilaustyyppi"]) == "A") {
+        if (strtoupper($laskurow["tilaustyyppi"]) == "A") {
           $query .= "tilaustyyppi='A',";
         }
         else {
@@ -183,7 +186,7 @@ if (!function_exists("ennakkolaskuta")) {
       }
     }
 
-    $query = mb_substr($query, 0, -1);
+    $query = substr($query, 0, -1);
     $stresult = pupe_query($query);
     $id = mysqli_insert_id($GLOBALS["masterlink"]);
 
@@ -215,7 +218,7 @@ if (!function_exists("ennakkolaskuta")) {
       }
     }
 
-    $query = mb_substr($query, 0, -1);
+    $query = substr($query, 0, -1);
     $lisatiedot_result = pupe_query($query);
 
     // tehdään vanhan laskun työmääräystidoista 1:1 kopio...
@@ -245,7 +248,7 @@ if (!function_exists("ennakkolaskuta")) {
       }
     }
 
-    $query = mb_substr($query, 0, -1);
+    $query = substr($query, 0, -1);
     $lisatiedot_result = pupe_query($query);
 
 
@@ -351,6 +354,8 @@ if (!function_exists("ennakkolaskuta")) {
             $ale_kentat .=  ",ale{$i}";
             $ale_arvot .= ", '".$row["ale{$i}"]."'";
           }
+          $ale_kentat .= ", erikoisale";
+          $ale_arvot .= ",{$row['erikoisale']}";
         }
 
         $summa = round($summa, 6);
@@ -392,7 +397,7 @@ if (!function_exists("ennakkolaskuta")) {
 }
 
 //Käyttöliittymä
-if (mb_strpos($_SERVER['SCRIPT_NAME'], "maksusopimus_laskutukseen.php") !== FALSE) {
+if (strpos($_SERVER['SCRIPT_NAME'], "maksusopimus_laskutukseen.php") !== FALSE) {
   $query = "SELECT nimitys
             FROM tuote
             WHERE yhtio = '$kukarow[yhtio]' and tuoteno = '$yhtiorow[ennakkomaksu_tuotenumero]'";
