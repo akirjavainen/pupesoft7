@@ -1,9 +1,9 @@
 <?php
 
 $vientiselite = str_replace("'", " ", $vientiselite); // Poistaa SQL-virheen mahdollisuuden
-$tpv = mb_substr($pvm, 0, 2);
-$tpk = mb_substr($pvm, 2, 2);
-$tpp = mb_substr($pvm, 4, 2);
+$tpv = substr($pvm, 0, 2);
+$tpk = substr($pvm, 2, 2);
+$tpp = substr($pvm, 4, 2);
 
 if ($tpv < 1000) $tpv += 2000;
 
@@ -68,10 +68,10 @@ if (round($maara, 2) != 0) {
       $luottokuntatieto = str_replace(",", ".", $luottokuntatieto);
 
       // Kantaluku: alusta ekaan spaceen
-      $kanta = (float) mb_substr($luottokuntatieto, 0, mb_strpos($luottokuntatieto, " "));
+      $kanta = (float) substr($luottokuntatieto, 0, strpos($luottokuntatieto, " "));
 
       // Palkkio: vikasta spacesta loppuun
-      $palkkio = (float) mb_substr($luottokuntatieto, (mb_strrpos($luottokuntatieto, " ") + 1));
+      $palkkio = (float) substr($luottokuntatieto, (strrpos($luottokuntatieto, " ") + 1));
 
       list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($tiliointisaantorow["tilino2"], $tiliointisaantorow["kustp2"]);
 
@@ -158,7 +158,7 @@ if (round($maara, 2) != 0) {
 
     echo "<font class='message'>*** ".t("tiliöinti luotu")." ($tiliotesaantotilino) ***</font><br>\n";
 
-    if ($yhtiorow['tiliotteen_selvittelyt'] == "" and $tiliotedatarow['alku'] == $tiliotedatarow['loppu']) {
+    if (empty($ei_summata_selvittelyja) and $yhtiorow['tiliotteen_selvittelyt'] == "" and $tiliotedatarow['alku'] == $tiliotedatarow['loppu']) {
       // Jos yhtiön parametri sallii ja käsittelyssä on yhden päivän tiliote niin voidaan tiliöidä kaikki selvittelyt samalle tositteelle.
       $vastavienti += $maara;
       $vastavienti_valuutassa += $kohdm;
