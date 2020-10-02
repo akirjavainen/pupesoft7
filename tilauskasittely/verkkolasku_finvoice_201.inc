@@ -582,9 +582,11 @@ if (!function_exists('finvoice_otsik')) {
       }
       elseif (trim($lasrow['asiakkaan_tilausnumero']) != "") {
         xml_add("OrderIdentifier", substr($lasrow['asiakkaan_tilausnumero'], 0, 35), $tootfinvoice, 35);
+        xml_add("BuyerReferenceIdentifier", substr($lasrow['asiakkaan_tilausnumero'], 0, 35), $tootfinvoice, 35); // MODIFIED, added
       }
       else {
         xml_add("OrderIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);
+        xml_add("BuyerReferenceIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35); // MODIFIED, added
       }
 
       xml_add("AgreementIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);
