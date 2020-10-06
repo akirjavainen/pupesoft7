@@ -565,7 +565,7 @@ if ($tee == "VALITSE") {
         echo "<td><input type='checkbox' name='tunnus[$row[tunnus]]' value='$row[tunnus]' {$checked}></td>";
       }
 
-      echo "<td><a href='$PHP_SELF?tee=NAYTATILAUS&toim=$toim&tunnukset=$tunnukset&tunnus=$row[tunnus]'>$row[tunnus]<br>$row[viesti]</a></td>"; // MODIFIED, added $row[viesti]
+      echo "<td><a href='$PHP_SELF?tee=NAYTATILAUS&toim=$toim&tunnukset=$tunnukset&tunnus=$row[tunnus]'>$row[tunnus]<br>$row[viesti]</a> $row[sisviesti3]</td>"; // MODIFIED, added $row[viesti]
 
       // jos veroton summa on nolla ja verollinen summa on myös hyvin lähellä nollaa
       // niin tehdään nollalasku
@@ -1162,10 +1162,10 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
   }
 
   // GROUP BY pitää olla sama kun verkkolasku.php:ssä rivi ~1243
-// MODIFIED, added lasku.sisviesti2, lasku.toimaika and lasku.toimitustapa in the next query:
+// MODIFIED, added lasku.sisviesti2, lasku.sisviesti3, lasku.toimaika and lasku.toimitustapa in the next query:
   // HUOM LISÄKSI laskutusviikonpäivä mukaan GROUP BY:hin!!!!
   $query = "SELECT
-            lasku.laskutusvkopv, lasku.ytunnus, lasku.nimi, lasku.nimitark, lasku.osoite, lasku.postino, lasku.postitp, lasku.sisviesti2, lasku.toimaika, lasku.toimitustapa, 
+            lasku.laskutusvkopv, lasku.ytunnus, lasku.nimi, lasku.nimitark, lasku.osoite, lasku.postino, lasku.postitp, lasku.sisviesti2, lasku.sisviesti3, lasku.toimaika, lasku.toimitustapa, 
             lasku.toim_nimi, lasku.toim_nimitark, lasku.toim_osoite, lasku.toim_postino, lasku.toim_postitp,
             lasku.maksuehto, lasku.chn,
             lasku.tila, lasku.alatila,
