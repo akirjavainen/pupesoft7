@@ -149,6 +149,55 @@ if ($tee == "") {
 
       echo "<option value='{$pankkiyhteys["tunnus"]}'{$selected}>";
       echo "{$pankkiyhteys["pankin_nimi"]}</option>";
+      
+      // MODIFIED, added CLI interface for scheduled retrieving:
+      // ---
+      if (php_sapi_name() == 'cli') {
+	$pankkiyhteys_tunnus = $pankkiyhteys["tunnus"];
+	$viite_references = array();
+    	$pankki = hae_pankkiyhteys_ja_pura_salaus($pankkiyhteys["tunnus"], $sepa_pankkiyhteys_salasana);
+
+        $params = array(
+          "file_type"             => "KTL",
+          "status"                => "NEW", // NEW, DLD tai ALL
+          "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
+          "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
+        );
+
+        $viite_tiedostot = sepa_download_file_list($params);
+	if (empty($viite_tiedostot["files"])) exit("Ei uusia ladattavia aineistoja pankissa (1).\n\n\n");
+        print_r($viite_tiedostot);
+        unset($params);
+  
+        $params = array(
+          "file_type"             => "KTL",
+          "viitteet"              => $viite_tiedostot,
+          "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
+          "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
+        );
+
+        $tiedostot = sepa_download_files($params);
+
+        if ($tiedostot) {
+          foreach ($tiedostot as $aineisto) {
+            if (strlen($aineisto['data']) > 0) {
+              $filenimi = tempnam("{$pupe_root_polku}/datain", "pankkiaineisto");
+              $data = base64_decode($aineisto['data']);
+              $status = file_put_contents($filenimi, $data);
+              $aineistotunnus = tallenna_tiliote_viite($filenimi);
+              kasittele_tiliote_viite($aineistotunnus);
+              //unlink($filenimi);
+            } else {
+              echo "Aineisto $aineistotunnus oli tyhjä...\n\n\n";
+            }
+          }
+        } else {
+          echo "Ei uusia ladattavia aineistoja pankissa (2).\n\n\n";
+        }
+        exit("");
+      }
+      // ---
+
     }
 
     echo "</select>";
