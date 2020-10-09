@@ -39,11 +39,12 @@ elseif ($type == '3' or ($type == 'S' and
 
   $payer_name = trim(substr($tietue, 63, 12));
   $reference = ltrim(substr($tietue, 43, 20), '0');
-  $sum = substr($tietue, 78, 9); // MODIFIED, BUGFIX pos 77 -> 78, length 10 -> 9
-  $sum = $sum / 100; // XXX summa on sentteinä, etunollatäytöllä.
-  if ($factoring_oikaisutunnus != '0') {
-    $sum = $sum * -1;
-  }
+  $sum = substr($tietue, 78, 11); // MODIFIED, BUGFIX pos 77 -> 78, length 10 -> 11
+  $sum = (float)preg_replace("/[^0-9]/", "", $sum); // MODIFIED, added
+  $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MODIFIED, BUGFIX 100 -> 1000
+  //if ($factoring_oikaisutunnus != '0') { // MODIFIED, BUGFIX (commented out)
+  //  $sum = $sum * -1;
+  //}
   $currency_code = substr($tietue, 75, 1);
   $entry_date = "20".dateconv(substr($tietue, 15, 6)); // VVKKPP
   $payment_date = "20".dateconv(substr($tietue, 21, 6)); // VVKKPP
