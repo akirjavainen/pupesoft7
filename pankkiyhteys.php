@@ -205,7 +205,7 @@ if ($tee == "") {
 
     echo "<tr>";
     echo "<th><label for='salasana'>" . t("Salasana") . "</label></th>";
-    echo "<td><input type='password' name='salasana' id='salasana'/></td>";
+    echo "<td><input type='password' name='salasana' id='salasana' value='$sepa_pankkiyhteys_salasana'/></td>";
     echo "</tr>";
 
     echo "</tbody>";
