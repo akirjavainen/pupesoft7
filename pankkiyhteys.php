@@ -153,7 +153,6 @@ if ($tee == "") {
       // MODIFIED, added CLI interface for scheduled retrieving:
       // ---
       if (php_sapi_name() == 'cli') {
-	$pankkiyhteys_tunnus = $pankkiyhteys["tunnus"];
 	$viite_references = array();
     	$pankki = hae_pankkiyhteys_ja_pura_salaus($pankkiyhteys["tunnus"], $sepa_pankkiyhteys_salasana);
 
