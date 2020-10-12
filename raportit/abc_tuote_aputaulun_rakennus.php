@@ -115,7 +115,7 @@ if ($tee == 'YHTEENVETO') {
               AND tilausrivi.toimitettuaika >= '$vva-$kka-$ppa 00:00:00'
               AND tilausrivi.toimitettuaika <= '$vvl-$kkl-$ppl 23:59:59'
               GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22";
-    $rivires = pupe_query($query);
+    $rivires = pupe_query($query, $GLOBALS["masterlink"]);
 
     $abctyypit = array("kulutus");
   }
@@ -162,7 +162,7 @@ if ($tee == 'YHTEENVETO') {
               AND tilausrivi.laskutettuaika >= '$vva-$kka-$ppa'
               AND tilausrivi.laskutettuaika <= '$vvl-$kkl-$ppl'
               GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17";
-    $rivires = pupe_query($query);
+    $rivires = pupe_query($query, $GLOBALS["masterlink"]);
 
     $abctyypit = array("kate", "kpl", "rivia", "summa");
   }
@@ -213,7 +213,7 @@ if ($tee == 'YHTEENVETO') {
               FROM tuotepaikat
               WHERE yhtio = '{$kukarow['yhtio']}'
               AND tuoteno = '{$row['tuoteno']}'";
-    $saldores = pupe_query($query);
+    $saldores = pupe_query($query, $GLOBALS["masterlink"]);
     $saldorow = mysqli_fetch_assoc($saldores);
 
     $row['saldo'] = (float) $saldorow['saldo'];
@@ -235,7 +235,7 @@ if ($tee == 'YHTEENVETO') {
                 and var      = 'P'
                 and laadittu >= '$vva-$kka-$ppa 00:00:00'
                 and laadittu <= '$vvl-$kkl-$ppl 23:59:59'";
-      $puuteres = pupe_query($query);
+      $puuteres = pupe_query($query, $GLOBALS["masterlink"]);
       $puuterow = mysqli_fetch_assoc($puuteres);
 
       $row['puutekpl']   = (float) $puuterow['puutekpl'];
@@ -290,7 +290,7 @@ if ($tee == 'YHTEENVETO') {
               AND tuotepaikat.tuoteno NOT IN ($myydyttuotteet)
               GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26
               HAVING saldo > 0";
-    $rivires = pupe_query($query);
+    $rivires = pupe_query($query, $GLOBALS["masterlink"]);
 
     while ($row = mysqli_fetch_assoc($rivires)) {
       $kate_sort[]  = $row['kate'];
@@ -308,7 +308,7 @@ if ($tee == 'YHTEENVETO') {
                 and var      = 'P'
                 and laadittu >= '$vva-$kka-$ppa 00:00:00'
                 and laadittu <= '$vvl-$kkl-$ppl 23:59:59'";
-      $puuteres = pupe_query($query);
+      $puuteres = pupe_query($query, $GLOBALS["masterlink"]);
       $puuterow = mysqli_fetch_assoc($puuteres);
 
       $row['puutekpl']   = (float) $puuterow['puutekpl'];
@@ -330,7 +330,7 @@ if ($tee == 'YHTEENVETO') {
                AND tiliointi.tapvm    >= '$vva-$kka-$ppa'
                AND tiliointi.tapvm    <= '$vvl-$kkl-$ppl'
                AND tiliointi.korjattu = ''";
-    $result = pupe_query($query);
+    $result = pupe_query($query, $GLOBALS["masterlink"]);
     $kprow  = mysqli_fetch_assoc($result);
     $kustannuksetyht = $kprow["summa"];
   }
@@ -425,8 +425,9 @@ if ($tee == 'YHTEENVETO') {
                 AND selite  not like '%alkusaldo%'
                 ORDER BY laadittu
                 LIMIT 1";
-      $insres = pupe_query($query);
+      $insres = pupe_query($query, $GLOBALS["masterlink"]);
       $tulorow = mysqli_fetch_assoc($insres);
+      if (mysqli_num_rows($insres) <= 0) exit("");
 
       // katotaan onko kelvollinen tuote, elikkä luokitteluperuste pitää olla > 0
       if ($row["${abcwhat}"] > 0) {

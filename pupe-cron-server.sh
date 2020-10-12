@@ -50,3 +50,4 @@ fi
 
 # Enabloidaan kaikki disabloidut printterit
 bash ${POLKU}/enable-printers.sh
+

@@ -46,11 +46,12 @@ do
   echo ": ABC Aputaulujen rakennus."
 
   # Rakennetaan Asiakas-ABC-analyysin aputaulut
-  cd ${POLKU}/raportit/; php abc_asiakas_aputaulun_rakennus.php $YHTIO
+  cd ${POLKU}/raportit/
+  php abc_asiakas_aputaulun_rakennus.php $YHTIO
 
   # Rakennetaan Tuote-ABC-analyysin aputaulut
-  cd ${POLKU}/raportit/; php abc_tuote_aputaulun_rakennus.php $YHTIO
-  cd ${POLKU}/raportit/; php abc_tuote_aputaulun_rakennus.php $YHTIO kulutus
+  php abc_tuote_aputaulun_rakennus.php $YHTIO
+  php abc_tuote_aputaulun_rakennus.php $YHTIO kulutus
 
   echo -n `date "+%d.%m.%Y @ %H:%M:%S"`
   echo ": ABC Aputaulujen rakennus. Done!"

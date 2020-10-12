@@ -6,18 +6,24 @@ ob_start();
 require "inc/parametrit.inc";
 require "inc/pankkiyhteys_functions.inc";
 
-echo "<font class='head'>" . t('SEPA-pankkiyhteys') . "</font>";
-echo "<hr>";
+// MODIFIED, do not echo HTML when using CLI interface:
+if (php_sapi_name() != 'cli') {
+	echo "<font class='head'>" . t('SEPA-pankkiyhteys') . "</font>";
+	echo "<hr>";
+}
 
 // Varmistetaan, että sepa pankkiyhteys on kunnossa. Funkio kuolee, jos ei ole.
 sepa_pankkiyhteys_kunnossa();
 
-toggle_all("viite_toggler", "viite_boxes");
-toggle_all("tiliote_toggler", "tiliote_boxes");
-toggle_all("factoring_tiliote_toggler", "factoring_tiliote_boxes");
-toggle_all("factoring_viite_toggler", "factoring_viite_boxes");
-toggle_all("finvoice_toggler", "finvoice_boxes");
-toggle_all("palaute_toggler", "palaute_boxes");
+// MODIFIED, do not create JavaScript functions when using CLI interface:
+if (php_sapi_name() != 'cli') {
+	toggle_all("viite_toggler", "viite_boxes");
+	toggle_all("tiliote_toggler", "tiliote_boxes");
+	toggle_all("factoring_tiliote_toggler", "factoring_tiliote_boxes");
+	toggle_all("factoring_viite_toggler", "factoring_viite_boxes");
+	toggle_all("finvoice_toggler", "finvoice_boxes");
+	toggle_all("palaute_toggler", "palaute_boxes");
+}
 
 $tee = empty($tee) ? '' : $tee;
 $toim = empty($toim) ? '' : $toim;
@@ -131,24 +137,30 @@ if ($tee == "") {
 
   if ($kaytossa_olevat_pankkiyhteydet) {
 
-    echo "<form name='pankkiyhteys' method='post' action='pankkiyhteys.php'>";
-    echo "<input type='hidden' name='tee' value='kirjaudu'/>";
-    echo "<input type='hidden' name='toim' value='$toim'/>";
-    echo "<table>";
-    echo "<tbody>";
+    // MODIFIED, do not echo HTML when using CLI interface:
+    if (php_sapi_name() != 'cli') {
+      echo "<form name='pankkiyhteys' method='post' action='pankkiyhteys.php'>";
+      echo "<input type='hidden' name='tee' value='kirjaudu'/>";
+      echo "<input type='hidden' name='toim' value='$toim'/>";
+      echo "<table>";
+      echo "<tbody>";
 
-    echo "<tr>";
-    echo "<th>";
-    echo t("Valitse pankki");
-    echo "</th>";
-    echo "<td>";
-    echo "<select name='pankkiyhteys_tunnus'>";
+      echo "<tr>";
+      echo "<th>";
+      echo t("Valitse pankki");
+      echo "</th>";
+      echo "<td>";
+      echo "<select name='pankkiyhteys_tunnus'>";
+    }
 
     foreach ($kaytossa_olevat_pankkiyhteydet as $pankkiyhteys) {
       $selected = $pankkiyhteys_tunnus == $pankkiyhteys["tunnus"] ? " selected" : "";
 
-      echo "<option value='{$pankkiyhteys["tunnus"]}'{$selected}>";
-      echo "{$pankkiyhteys["pankin_nimi"]}</option>";
+      // MODIFIED, do not echo HTML when using CLI interface:
+      if (php_sapi_name() != 'cli') {
+        echo "<option value='{$pankkiyhteys["tunnus"]}'{$selected}>";
+        echo "{$pankkiyhteys["pankin_nimi"]}</option>";
+      }
       
       // MODIFIED, added CLI interface for scheduled retrieving:
       // ---
@@ -164,36 +176,48 @@ if ($tee == "") {
         );
 
         $viite_tiedostot = sepa_download_file_list($params);
-	if (empty($viite_tiedostot["files"])) exit("Ei uusia ladattavia aineistoja pankissa (1).\n\n\n");
+	if (empty($viite_tiedostot["files"])) exit("Ei uusia ladattavia aineistoja pankissa.\n\n");
+	echo "\n\n\nviite_tiedostot:\n";
         print_r($viite_tiedostot);
         unset($params);
-  
+
+	foreach ($viite_tiedostot["files"] as $viiteref) {
+		array_push($viite_references, $viiteref["fileReference"]);
+	}
+	echo "\n\n\nviite_references:\n";
+	print_r($viite_references);
+	echo "\n\n\n";
+
         $params = array(
           "file_type"             => "KTL",
-          "viitteet"              => $viite_tiedostot,
+          "viitteet"              => $viite_references,
           "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
           "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
         );
 
         $tiedostot = sepa_download_files($params);
+	echo "\n\n\ntiedostot:\n";
+	print_r($tiedostot);
 
         if ($tiedostot) {
           foreach ($tiedostot as $aineisto) {
             if (strlen($aineisto['data']) > 0) {
-              $filenimi = tempnam("{$pupe_root_polku}/datain", "pankkiaineisto");
+              //$filenimi = tempnam("{$pupe_root_polku}/datain", "pankkiaineisto");
+              $filenimi = tempnam("/net/verkkolevy/Tiliotteet", date("Y-m-d") . "_viitemaksut_");
               $data = base64_decode($aineisto['data']);
               $status = file_put_contents($filenimi, $data);
               $aineistotunnus = tallenna_tiliote_viite($filenimi);
-              kasittele_tiliote_viite($aineistotunnus);
+	      echo "Tallennettiin $filenimi.\n";
+              //kasittele_tiliote_viite($aineistotunnus);
               //unlink($filenimi);
             } else {
-              echo "Aineisto $aineistotunnus oli tyhjä...\n\n\n";
+              echo "Aineisto oli tyhjä...\n\n\n";
             }
           }
         } else {
           echo "Ei uusia ladattavia aineistoja pankissa (2).\n\n\n";
         }
-        exit("");
+        //exit("");
       }
       // ---
 
