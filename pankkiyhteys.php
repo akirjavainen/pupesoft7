@@ -169,16 +169,18 @@ if ($tee == "") {
     	$pankki = hae_pankkiyhteys_ja_pura_salaus($pankkiyhteys["tunnus"], $sepa_pankkiyhteys_salasana);
 
         $params = array(
-          "file_type"             => "KTL",
+          "file_type"             => "KTL", // TITO (tiliotteet) tai KTL (viitemaksut)
           "status"                => "NEW", // NEW, DLD tai ALL
           "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
           "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
         );
 
         $viite_tiedostot = sepa_download_file_list($params);
-	if (empty($viite_tiedostot["files"])) exit("Ei uusia ladattavia aineistoja pankissa.\n\n");
+
 	echo "\n\n\nviite_tiedostot:\n";
-        print_r($viite_tiedostot);
+	print_r($viite_tiedostot);
+
+	if (empty($viite_tiedostot["files"])) exit("Ei uusia ladattavia aineistoja pankissa.\n\n");
         unset($params);
 
 	foreach ($viite_tiedostot["files"] as $viiteref) {
