@@ -210,7 +210,7 @@ if ($tee == "") {
               $status = file_put_contents($filenimi, $data);
               $aineistotunnus = tallenna_tiliote_viite($filenimi);
 	      echo "Tallennettiin $filenimi.\n";
-              //kasittele_tiliote_viite($aineistotunnus);
+              kasittele_tiliote_viite($aineistotunnus);
               //unlink($filenimi);
             } else {
               echo "Aineisto oli tyhjä...\n\n\n";
