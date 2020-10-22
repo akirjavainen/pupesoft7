@@ -2592,8 +2592,8 @@ if ($fieldname == "varastopaikan_lippu") {
   $apu = $trow[$i];
   $sel[$apu] = "SELECTED";
 
-  $ulos .= "<option value = ''>".t("Myynnissä ei näytetä vaarastopaikan maan lippu")."</option>";
-  $ulos .= "<option value = 'K' $sel[K]>".t("Myynnissä näytetään vaarastopaikan maan lippu")."</option>";
+  $ulos .= "<option value = ''>".t("Myynnissä ei näytetä varastopaikan maan lippua")."</option>";
+  $ulos .= "<option value = 'K' $sel[K]>".t("Myynnissä näytetään varastopaikan maan lippu")."</option>";
   $ulos .= "</select></td>";
 
   $jatko = 0;
