@@ -15133,7 +15133,7 @@ if (!function_exists("pupe_DataTables")) {
             \"aLengthMenu\": [[10, 25, 50, 100, 250, 500, -1], [10, 25, 50, 100, 250, 500, \"".t("Kaikki")."\"]],
             \"bInfo\" : parametrit[tableid][4],
             \"bStateSave\" : true,
-            \"iDisplayLength\" : 25,
+            \"iDisplayLength\" : 500, // MODIFIED, 25 -> 500
             \"oLanguage\": {
               \"sSearch\" : \"".t("Etsi taulukosta").":\",
               \"sZeroRecords\": \"".t("Ei hakuosumia")."\",
