@@ -120,7 +120,7 @@ function siirra_tiedosto_kansioon($tiedosto_polku, $kansio) {
   }
 
   rename($tiedosto_polku, $kansio.$uusi_filename);
-  system("chown -R :apache ".$kansio.$uusi_filename.";");
+  system("chown -R :http ".$kansio.$uusi_filename.";");
 }
 
 function kasittele_xml_tiedosto(SimpleXMLElement $xml, $tiedosto_polku) {

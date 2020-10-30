@@ -12,7 +12,7 @@
        port        = 15005
        socket_type = stream
        wait        = no
-       user        = apache
+       user        = http
        server      = /var/www/html/pupesoft/optiscan.php
        disable     = no
     }
