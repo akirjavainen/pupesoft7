@@ -9,7 +9,7 @@
 // Oletuksena asiakkaan maksama summa on oltava täsmälleen oikein
 $Viitemaksujen_kohdistus_sallittu_heitto = 0.01;
 
-if ($yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"] > 0 and $yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"] <= 10.00) {
+if ($yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"] > 0 and $yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"] <= 1.00) {
   $Viitemaksujen_kohdistus_sallittu_heitto = $yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"];
 }
 
