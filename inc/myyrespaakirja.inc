@@ -1,6 +1,7 @@
 <?php
 
 echo "<font class='head'>".t("Suorituspäiväkirja")."</font><hr>";
+if (!isset($tee)) echo "<body onload=\"document.getElementsByName('Nayta')[0].click();\">\n"; // MODIFIED, added
 
 if (!isset($alvk)) $alvk = date("m", mktime(0, 0, 0, date("m"), date("d")-1, date("Y")));
 if (!isset($alvp)) $alvp = date("d", mktime(0, 0, 0, date("m"), date("d")-1, date("Y")));
@@ -114,7 +115,7 @@ while ($ratiro = mysqli_fetch_array($ratire)) {
 
 echo "
   </td>
-      <td class='back'><input type = 'submit' value = '".t("Näytä")."'></td></tr></table></form><br><br>";
+      <td class='back'><input type = 'submit' name = 'Nayta' value = '".t("Näytä")."'></td></tr></table></form><br><br>"; // MODIFIED, added name
 
 if ($tee == "1") {
 
