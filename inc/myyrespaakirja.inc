@@ -11,7 +11,7 @@ $psel = array();
 $vsel = array();
 
 $ksel[$alvk] = "SELECTED";
-$psel[$alvp] = "SELECTED";
+$psel[$alvp] = ""; // MODIFIED, SELECTED full month
 $vsel[$alvv] = "SELECTED";
 $tsel[$laji] = "SELECTED";
 
@@ -55,7 +55,7 @@ echo "
   <option value = '12' $ksel[12]>12</option>
   </select>
   <select name='alvp'>
-  <option value = '00'>".t("koko kuukausi")."
+  <option value = '00' SELECTED>".t("koko kuukausi")."
   <option value = '01' $psel[01]>01</option>
   <option value = '02' $psel[02]>02</option>
   <option value = '03' $psel[03]>03</option>
@@ -89,7 +89,7 @@ echo "
   <option value = '31' $psel[31]>31</option>
   </select></td>
   </tr>
-  <tr>";
+  <tr>"; // MODIFIED, SELECTED full month
 
 // haetaan kaikki yrityksen rahatilit mysql muodossa
 $query  = "SELECT oletus_rahatili, nimi, tilino
