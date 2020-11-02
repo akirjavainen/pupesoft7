@@ -150,15 +150,15 @@ elseif ($type == '3' or ($type == 'S' and
               kurssi       = '$kurssi',
               maksupvm     = '$payment_date',
               kirjpvm      = '$entry_date'";
-    $result = pupe_query($query, $GLOBALS["masterlink"]); // MODIFIED, BUGFIX
-    $tiliointitunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+    $result = pupe_query($query, $GLOBALS["link"]); // MODIFIED, BUGFIX
+    $tiliointitunnus = mysqli_insert_id($GLOBALS["link"]);
 
     // päivitetään suorituksen tunnnus tiliotedataan ja tiliotedata käsitellyksi
     $query = "UPDATE tiliotedata SET
               tiliointitunnus = '$tiliointitunnus',
               kasitelty       = now()
               WHERE tunnus    = '$tiliotedatarow[tunnus]'";
-    $dataupdres = pupe_query($query, $GLOBALS["masterlink"]); // MODIFIED, BUGFIX
+    $dataupdres = pupe_query($query, $GLOBALS["link"]); // MODIFIED, BUGFIX
   }
 }
 elseif ($type != 'S' and $type != '9') {
