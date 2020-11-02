@@ -31785,7 +31785,7 @@ if (!function_exists("tallenna_tiliote_viite")) {
                     echo "<br>";
 
                     $xtyyppi=0;
-                    $virhe++;
+                    $virhe++; // COMMENT OUT TO FORCE
                   }
                 }
               }
@@ -31800,7 +31800,7 @@ if (!function_exists("tallenna_tiliote_viite")) {
                 echo "<br>";
 
                 $xtyyppi=0;
-                $virhe++;
+                $virhe++; // COMMENT OUT TO FORCE
               }
               break;
             // Viiteaineisto
@@ -31920,7 +31920,7 @@ if (!function_exists("tallenna_tiliote_viite")) {
             echo "<br>";
 
             $xtyyppi=0;
-            $virhe++;
+            $virhe++; // COMMENT OUT TO FORCE
           }
         }
       }
@@ -31990,7 +31990,7 @@ if (!function_exists("tallenna_tiliote_viite")) {
             echo "<br>";
 
             $xtyyppi=0;
-            $virhe++;
+            $virhe++; // COMMENT OUT TO FORCE
           }
         }
       }
