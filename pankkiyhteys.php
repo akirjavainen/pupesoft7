@@ -166,6 +166,7 @@ if ($tee == "") {
       // ---
       if (php_sapi_name() == 'cli') {
 	$viite_references = array();
+	$tiliote_references = array();
     	$pankki = hae_pankkiyhteys_ja_pura_salaus($pankkiyhteys["tunnus"], $sepa_pankkiyhteys_salasana);
 
         $params_ktl = array(
@@ -175,7 +176,7 @@ if ($tee == "") {
           "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
         );
         $params_tito = array(
-          "file_type"             => "KTL", // TITO (tiliotteet) tai KTL (viitemaksut)
+          "file_type"             => "TITO", // TITO (tiliotteet) tai KTL (viitemaksut)
           "status"                => "NEW", // NEW, DLD tai ALL
           "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
           "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
@@ -183,17 +184,19 @@ if ($tee == "") {
 
         $viite_tiedostot = sepa_download_file_list($params_ktl);
         $tiliote_tiedostot = sepa_download_file_list($params_tito);
-
-	echo "\n\n\nviite_tiedostot:\n";
-	print_r($viite_tiedostot);
-	echo "\n\n\ntiliote_tiedostot:\n";
-	print_r($tiliote_tiedostot);
-
-	if (empty($viite_tiedostot["files"])) echo "Ei uusia ladattavia viiteaineistoja pankissa.\n\n";
-	if (empty($tiliote_tiedostot["files"])) echo "Ei uusia ladattavia tilioteaineistoja pankissa.\n\n";
-	if (empty($viite_tiedostot["files"]) && empty($tiliote_tiedostot["files"])) exit("");
         unset($params_ktl);
 	unset($params_tito);
+
+	echo "viite_tiedostot:\n";
+	print_r($viite_tiedostot);
+	echo "\n\n\n";
+	echo "tiliote_tiedostot:\n";
+	print_r($tiliote_tiedostot);
+	echo "\n\n\n";
+
+	if (empty($viite_tiedostot["files"])) echo "Ei uusia ladattavia viiteaineistoja pankissa.\n";
+	if (empty($tiliote_tiedostot["files"])) echo "Ei uusia ladattavia tilioteaineistoja pankissa.\n";
+	if (empty($viite_tiedostot["files"]) && empty($tiliote_tiedostot["files"])) exit("");
 
 	foreach ($viite_tiedostot["files"] as $viiteref) {
 		array_push($viite_references, $viiteref["fileReference"]);
@@ -201,7 +204,6 @@ if ($tee == "") {
 	foreach ($tiliote_tiedostot["files"] as $tilioteref) {
 		array_push($tiliote_references, $tilioteref["fileReference"]);
 	}
-	echo "\n\n\n";
 	echo "viite_references:\n";
 	print_r($viite_references);
 	echo "\n\n\n";
@@ -224,33 +226,32 @@ if ($tee == "") {
 
         $tiedostot_viite = sepa_download_files($params_ktl);
         $tiedostot_tiliote = sepa_download_files($params_tito);
-	echo "\n\n\n";
+
 	echo "tiedostot_viite:\n";
 	print_r($tiedostot_viite);
 	echo "\n\n\n";
 	echo "tiedostot_tiliote:\n";
 	print_r($tiedostot_tiliote);
+	echo "\n\n\n";
 
         if ($tiedostot_viite) {
           foreach ($tiedostot_viite as $aineisto) {
-            $filenimi = tempnam("{$pupe_root_polku}/datain", date("Y-m-d") . "_viitemaksut_");
+            $filenimi = tempnam($sepa_pankkiyhteys_tallennuskansio, date("Y-m-d") . "_viitemaksut_");
             $data = base64_decode($aineisto['data']);
             $status = file_put_contents($filenimi, $data);
             $aineistotunnus = tallenna_tiliote_viite($filenimi, true); // $forceta = true
-	    echo "Tallennettiin $filenimi.\n";
             kasittele_tiliote_viite($aineistotunnus);
-            unlink($filenimi);
+	    echo "Tallennettiin $filenimi.\n";
           }
         }
         if ($tiedostot_tiliote) {
           foreach ($tiedostot_tiliote as $aineisto) {
-            $filenimi = tempnam("{$pupe_root_polku}/datain", date("Y-m-d") . "_tiliote_");
+            $filenimi = tempnam($sepa_pankkiyhteys_tallennuskansio, date("Y-m-d") . "_tiliote_");
             $data = base64_decode($aineisto['data']);
             $status = file_put_contents($filenimi, $data);
             $aineistotunnus = tallenna_tiliote_viite($filenimi, true); // $forceta = true
-	    echo "Tallennettiin $filenimi.\n";
             kasittele_tiliote_viite($aineistotunnus);
-            unlink($filenimi);
+	    echo "Tallennettiin $filenimi.\n";
           }
         }
       }
