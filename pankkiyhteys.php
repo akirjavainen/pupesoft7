@@ -189,10 +189,10 @@ if ($tee == "") {
 
 	echo "viite_tiedostot:\n";
 	print_r($viite_tiedostot);
-	echo "\n\n\n";
+	echo "\n\n";
 	echo "tiliote_tiedostot:\n";
 	print_r($tiliote_tiedostot);
-	echo "\n\n\n";
+	echo "\n\n";
 
 	if (empty($viite_tiedostot["files"])) echo "Ei uusia ladattavia viiteaineistoja pankissa.\n";
 	if (empty($tiliote_tiedostot["files"])) echo "Ei uusia ladattavia tilioteaineistoja pankissa.\n";
@@ -206,10 +206,10 @@ if ($tee == "") {
 	}
 	echo "viite_references:\n";
 	print_r($viite_references);
-	echo "\n\n\n";
+	echo "\n\n";
 	echo "tiliote_references:\n";
 	print_r($tiliote_references);
-	echo "\n\n\n";
+	echo "\n\n";
 
         $params_ktl = array(
           "file_type"             => "KTL",
@@ -229,10 +229,10 @@ if ($tee == "") {
 
 	echo "tiedostot_viite:\n";
 	print_r($tiedostot_viite);
-	echo "\n\n\n";
+	echo "\n\n";
 	echo "tiedostot_tiliote:\n";
 	print_r($tiedostot_tiliote);
-	echo "\n\n\n";
+	echo "\n\n";
 
         if ($tiedostot_viite) {
           foreach ($tiedostot_viite as $aineisto) {
