@@ -204,14 +204,13 @@ if ($tee == "") {
         if ($tiedostot) {
           foreach ($tiedostot as $aineisto) {
             if (strlen($aineisto['data']) > 0) {
-              //$filenimi = tempnam("{$pupe_root_polku}/datain", "pankkiaineisto");
-              $filenimi = tempnam("/net/verkkolevy/Tiliotteet", date("Y-m-d") . "_viitemaksut_");
+              $filenimi = tempnam("{$pupe_root_polku}/datain", date("Y-m-d") . "_viitemaksut_");
               $data = base64_decode($aineisto['data']);
               $status = file_put_contents($filenimi, $data);
               $aineistotunnus = tallenna_tiliote_viite($filenimi, true); // $forceta = true
 	      echo "Tallennettiin $filenimi.\n";
               kasittele_tiliote_viite($aineistotunnus);
-              //unlink($filenimi);
+              unlink($filenimi);
             } else {
               echo "Aineisto oli tyhjä...\n\n\n";
             }
