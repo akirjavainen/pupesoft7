@@ -1326,6 +1326,8 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
  <td class='' style='background-color: #E2E2E2;'>
  <a href='/raportit/sopimusalennus.php?order=$tilrow[tunnukset]'><input type='submit' name='sopimusalennus' value='Ale-%'></a>
  <a href='/pupesoft/tilauskasittely/tilaus_myynti.php?tilausnumero=$tilrow[tunnukset_ruudulle]&mista=muokkaatilaus&toim=RIVISYOTTO'><input type='submit' name='muokkaa' value='Muokkaa'></a>
+ <a href='/hinnasto/printable.php?pupeorder=$tilrow[tunnukset_ruudulle]' target='_blank'><input type='submit' value='Mittakuvat'></a>
+ <a href='/tuotanto/index.php?order=$tilrow[tunnukset_ruudulle]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>
  <a href='/raportit/ehtokorjaus.php?order=$tilrow[tunnukset_ruudulle]'><input type='submit' name='ehtokorjaus' value='Ehtokorjaus'></a>
  <a href='/toimitusvahvistus/index.php?nonavi=1&default_order=$tilrow[tunnukset_ruudulle]'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a></td>
           </td>
