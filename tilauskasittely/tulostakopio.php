@@ -1277,7 +1277,7 @@ if ($tee == "ETSILASKU") {
               <input type='submit' value='".t("Näytä ruudulla")."'></form>";
 
           // MODIFIED, added JWIO ERP links:
-          if (file_exists("../../hinnasto") && $toim != "LASKU") {
+          if (file_exists("../../hinnasto")) {
             echo "<a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
             //echo "<a href='/raportit/receipt/printreceipt.php?yhtio=$row[yhtio]&order=$row[tunnus]' target='_blank'><input type='submit' value='Kuittitulostus'></a>";
           }
@@ -1294,7 +1294,7 @@ if ($tee == "ETSILASKU") {
             <input type='hidden' name='tee' value='NAYTATILAUS'>
             <input type='hidden' name='mista' value='tulostakopio'>
             <input type='submit' value='".t("Näytä pdf")."' onClick=\"js_openFormInNewWindow('tulostakopioform_$row[tunnus]', 'tulostakopio_$row[tunnus]'); return false;\"></form>";
-            if (file_exists("../../tuotanto") && $toim != "LASKU") echo "<a href='/tuotanto/index.php?order=$row[tunnus]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>"; // MODIFIED, added
+            if (file_exists("../../tuotanto")) echo "<a href='/tuotanto/index.php?order=$row[tunnus]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>"; // MODIFIED, added
 
         if ($kukarow["extranet"] == "") {
           echo "<br>
