@@ -1278,7 +1278,7 @@ if ($tee == "ETSILASKU") {
 
           // MODIFIED, added JWIO ERP links:
           if (file_exists("../../hinnasto") && $toim != "LASKU") {
-            echo "<a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'><input type='submit' value='Mittakuvat ja e-mail'></a>";
+            echo "<a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
             //echo "<a href='/raportit/receipt/printreceipt.php?yhtio=$row[yhtio]&order=$row[tunnus]' target='_blank'><input type='submit' value='Kuittitulostus'></a>";
           }
           echo "<br>";
