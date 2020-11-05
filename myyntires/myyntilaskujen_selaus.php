@@ -56,16 +56,16 @@ echo "<td><input type='submit' class='hae_btn' value='".t("Etsi")."'></td></tr>"
 
 $row = 0;
 while ($maksurow=mysqli_fetch_array($result)) {
-
+  $class = $maksurow["erpcm"] < date("Y-m-d") ? " class='spec'" : ""; // MODIFIED, added
   for ($i=0; $i<mysqli_num_fields($result)-2; $i++) {
     if (mysqli_field_name($result, $i) == 'laskunro') {
       $tunnus = $maksurow[mysqli_num_fields($result)-2];
-      echo "<td><a href=\"../muutosite.php?tee=E&tunnus=$tunnus\">$maksurow[$i]</a></td>";
+      echo "<td" . $class . "><a href=\"../muutosite.php?tee=E&tunnus=$tunnus\">$maksurow[$i]</a></td>"; // MODIFIED, class
     } elseif (mysqli_field_name($result, $i) == 'nimi') {
       /* linkki CRM:aan */
-      echo "<td><a href=\"../crm/asiakasmemo.php?ytunnus=$maksurow[ytunnus]\">$maksurow[$i]</a></td>";
+      echo "<td" . $class . "><a href=\"../crm/asiakasmemo.php?ytunnus=$maksurow[ytunnus]\">$maksurow[$i]</a></td>"; // MODIFIED, class
     } else {
-      echo "<td>$maksurow[$i]</td>";
+      echo "<td" . $class . ">$maksurow[$i]</td>"; // MODIFIED, class
     }
   }
   $asiakas_tunnus=$maksurow[mysqli_num_fields($result)-2];
