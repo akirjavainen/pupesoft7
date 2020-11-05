@@ -2203,6 +2203,21 @@ if ($tee == 'MONISTA') {
 
   if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MODIFIED, added JWIO ERP copy function
   $tee = ''; //mennään alkuun
+
+  // MODIFIED, added forwarding:
+  switch ($toim) {
+    case "TARJOUS":
+      echo "<meta http-equiv=\"refresh\" content=\"1;URL=tilauskasittely/tilaus_myynti.php?yhtio=$kukarow[yhtio]&tilausnumero=$utunnus&mista=muokkaatilaus&toim=TARJOUS\">\n";
+      break;
+
+    case "TILAUS":
+      echo "<meta http-equiv=\"refresh\" content=\"1;URL=tilauskasittely/tilaus_myynti.php?yhtio=$kukarow[yhtio]&tilausnumero=$utunnus&mista=muokkaatilaus&toim=RIVISYOTTO\">\n";
+      break;
+	
+    default: // lasku
+      echo "<meta http-equiv=\"refresh\" content=\"1;URL=tilauskasittely/valitse_laskutettavat_tilaukset.php?indexvas=1\">\n";
+      break;
+  }
 }
 
 if ($tee == '' and $vain_monista == "") {
