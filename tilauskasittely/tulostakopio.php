@@ -1276,12 +1276,12 @@ if ($tee == "ETSILASKU") {
               <input type='hidden' name='mista' value='tulostakopio'>
               <input type='submit' value='".t("Näytä ruudulla")."'></form>";
 
-        // MODIFIED, added JWIO ERP links:
-        if (file_exists("../../hinnasto") && $toim != "LASKU") {
-              echo "<a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'> Mittakuvat ja s&auml;hk&ouml;postil&auml;hetys</a> ";
-              //echo "<a href='/raportit/receipt/printreceipt.php?yhtio=$row[yhtio]&order=$row[tunnus]' target='_blank'>Kuittitulostus</a>";
-        }
-              echo "<br>";
+          // MODIFIED, added JWIO ERP links:
+          if (file_exists("../../hinnasto") && $toim != "LASKU") {
+            echo "<a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'><input type='submit' value='Mittakuvat ja e-mail'></a>";
+            //echo "<a href='/raportit/receipt/printreceipt.php?yhtio=$row[yhtio]&order=$row[tunnus]' target='_blank'><input type='submit' value='Kuittitulostus'></a>";
+          }
+          echo "<br>";
         }
 
         echo "<form id='tulostakopioform_$row[tunnus]' name='tulostakopioform_$row[tunnus]' action='$PHP_SELF' method='post' autocomplete='off'>
@@ -1294,6 +1294,7 @@ if ($tee == "ETSILASKU") {
             <input type='hidden' name='tee' value='NAYTATILAUS'>
             <input type='hidden' name='mista' value='tulostakopio'>
             <input type='submit' value='".t("Näytä pdf")."' onClick=\"js_openFormInNewWindow('tulostakopioform_$row[tunnus]', 'tulostakopio_$row[tunnus]'); return false;\"></form>";
+            if (file_exists("../../tuotanto") && $toim != "LASKU") echo "<a href='/tuotanto/index.php?order=$row[tunnus]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>"; // MODIFIED, added
 
         if ($kukarow["extranet"] == "") {
           echo "<br>
