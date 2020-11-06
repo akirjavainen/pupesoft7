@@ -1,7 +1,9 @@
 <?php
 
-if ($_REQUEST["tee"] == "haekeikka") {
-  $_GET["ohje"] = "off";
+if (isset($_REQUEST["tee"])) { // MODIFIED, BUGFIX
+  if ($_REQUEST["tee"] == "haekeikka") {
+    $_GET["ohje"] = "off";
+  }
 }
 
 if (mb_strpos($_SERVER['SCRIPT_NAME'], "hyvak.php")  !== FALSE) {
