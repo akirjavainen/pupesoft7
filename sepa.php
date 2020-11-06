@@ -1029,7 +1029,7 @@ if (SEPA_PANKKIYHTEYS and !empty($pankkiyhteys_tiedosto)) {
 
     echo "<tr>";
     echo "<th><label for='salasana'>" . t("Syötä pankkiyhteyden salasana") . "</label></th>";
-    echo "<td><input type='password' name='salasana' id='salasana' value='$sepa_pankkiyhteys_salasana' /></td>";
+    echo "<td><input type='password' name='salasana' id='salasana' value='$sepa_pankkiyhteys_salasana' /></td>"; // MODIFIED, added password
     echo "</tr>";
     echo "</table>";
 
