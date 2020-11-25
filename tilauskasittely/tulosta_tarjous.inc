@@ -954,7 +954,7 @@ if (!function_exists('rivi_tarjous')) {
                     round(sum(tilausrivi.hinta / if({$laskurow['vienti_kurssi']} = 0, 1, {$laskurow['vienti_kurssi']}) * if ('$yhtiorow[alv_kasittely]' != '' and tilausrivi.alv < 500, (1+tilausrivi.alv/100), 1) * (tilausrivi.varattu+tilausrivi.jt+tilausrivi.kpl) * {$query_ale_lisa}),'$yhtiorow[hintapyoristys]') rivihinta_verolli,
                     round(sum(tilausrivi.hinta / if({$laskurow['vienti_kurssi']} = 0, 1, {$laskurow['vienti_kurssi']}) / if ('$yhtiorow[alv_kasittely]'  = '' and tilausrivi.alv < 500, (1+tilausrivi.alv/100), 1) * (tilausrivi.varattu+tilausrivi.jt+tilausrivi.kpl) * {$query_ale_lisa}),'$yhtiorow[hintapyoristys]') rivihinta_veroton,
                     round(round(sum(tilausrivi.hinta / if({$laskurow['vienti_kurssi']} = 0, 1, {$laskurow['vienti_kurssi']}) * if ('$yhtiorow[alv_kasittely]' != '' and tilausrivi.alv < 500, (1+tilausrivi.alv/100), 1) * (tilausrivi.varattu+tilausrivi.jt+tilausrivi.kpl)),'$yhtiorow[hintapyoristys]') / ($row[kpl]+$row[varattu]+$row[jt]),'$yhtiorow[hintapyoristys]') hinta_verolli,
-                    round(round(sum(tilausrivi.hinta / if({$laskurow['vienti_kurssi']} = 0, 1, {$laskurow['vienti_kurssi']}) / if ('$yhtiorow[alv_kasittely]'  = '' and tilausrivi.alv < 500, (1+tilausrivi.alv/100), 1) * (tilausrivi.varattu+tilausrivi.jt+tilausrivi.kpl)),'$yhtiorow[hintapyoristys]') / ($row[kpl]+$row[varattu]+$row[jt]),'$yhtiorow[hintapyoristys]') hinta_veroton
+		    round(round(sum(tilausrivi.hinta / if({$laskurow['vienti_kurssi']} = 0, 1, {$laskurow['vienti_kurssi']}) / if ('$yhtiorow[alv_kasittely]'  = '' and tilausrivi.alv < 500, (1+tilausrivi.alv/100), 1) * (tilausrivi.varattu+tilausrivi.jt+tilausrivi.kpl)),'$yhtiorow[hintapyoristys]') / ($row[kpl]+$row[varattu]+$row[jt]),'$yhtiorow[hintapyoristys]') hinta_veroton
                     FROM tilausrivi
                     JOIN lasku ON tilausrivi.yhtio = lasku.yhtio and tilausrivi.otunnus = lasku.tunnus
                     WHERE tilausrivi.yhtio = '$kukarow[yhtio]'
@@ -2576,8 +2576,10 @@ if (!function_exists('alvierittely')) {
     else {
       $_lasku_vai_tarjoustxt = "Lasku";
     }
-
-    $pdf_tarjous->draw_text(350, $kala, t("{$_lasku_vai_tarjoustxt} yhteensä", $kieli).":", $page_tarjous[$sivu], $boldi);
+    $qty_result = pupe_query("SELECT SUM(tilkpl) AS total_tilkpl FROM tilausrivi WHERE otunnus='" . $laskurow["tunnus"] . "';");
+    $qty_row = mysqli_fetch_assoc($qty_result);
+    $total_tilkpl = (int)$qty_row["total_tilkpl"]; // MODIFIED, added
+    $pdf_tarjous->draw_text(350, $kala, t("{$_lasku_vai_tarjoustxt} yhteensä (" . round($total_tilkpl) . " kpl)", $kieli).":", $page_tarjous[$sivu], $boldi); // MODIFIED, added total qty
 
     if ($toim == 'PROFORMA') {
       $summa = $kassa_ale != '' ? $summa * (1-$kassa_ale/100) : $summa;
