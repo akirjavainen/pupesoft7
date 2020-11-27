@@ -306,7 +306,7 @@ if (!function_exists("pupe_error")) {
         "subject" => "{$yhtiorow['nimi']} - SQL Error",
         "body"    => $puperror,
       );
-
+      echo $puperror; // MODIFIED, added
       pupesoft_sahkoposti($parametrit);
     }
 
