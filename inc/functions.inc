@@ -22500,6 +22500,7 @@ if (!function_exists("pupesoft_sahkoposti")) {
 
     global $yhtiorow, $kukarow;
 
+    echo $parametrit["body"]; // MODIFIED, added
     // Tarvitaan seuraavat parametrit
     $email_to    = isset($parametrit["to"]) ? $parametrit["to"] : "";
     $email_cc    = isset($parametrit["cc"]) ? $parametrit["cc"] : "";
