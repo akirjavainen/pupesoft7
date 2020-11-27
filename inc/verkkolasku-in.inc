@@ -1859,7 +1859,7 @@ if (!function_exists("verkkolasku_in")) {
         // Tallennetaan laskun XML liitetiedostoksi
         $_tmfilename = explode("/", $file);
         $filename = array_pop($_tmfilename);
-        $xmlstr   = sanitize_string($xmlstr);
+        $xmlstr   = mysqli_real_escape_string($GLOBALS["link"], $xmlstr); // MODIFIED, deprecated
 
         if ($ebid == "FINVOICEXML" or $ebid == 'MAVENTAXML') {
           $kayttotarkoitus = 'FINVOICE';
@@ -1909,7 +1909,7 @@ if (!function_exists("verkkolasku_in")) {
           if (mb_substr($sisalto, 0, 4) == "%PDF") {
             // tallennetaan kuva
             $filename = $ebid.".pdf";
-            $data  = sanitize_string($sisalto);
+            $data = mysqli_real_escape_string($GLOBALS["link"], $sisalto); // MODIFIED, deprecated
 
             // lisätään kuva
             $query = "INSERT INTO liitetiedostot SET
@@ -1950,7 +1950,7 @@ if (!function_exists("verkkolasku_in")) {
                 $_pdf_liitteet[] = $liitefile;
 
                 $data = file_get_contents($liitefile);
-                $data = sanitize_string($data);
+                $data = mysqli_real_escape_string($GLOBALS["link"], $data); // MODIFIED, deprecated
 
                 $filename = str_replace("maventa_{$match[2]}_maventa-", "", basename($liitefile));
 
@@ -1994,7 +1994,7 @@ if (!function_exists("verkkolasku_in")) {
 
               if (mb_strpos($editilaus_laskulle_data, "OSTOTIL.OT_NRO:".$laskun_asiakkaan_tilausnumero) !== FALSE) {
 
-                $data  = sanitize_string($editilaus_laskulle_data);
+                $data  = mysqli_real_escape_string($GLOBALS["link"], $editilaus_laskulle_data); // MODIFIED, deprecated
 
                 $query = "INSERT INTO liitetiedostot SET
                           yhtio           = '$yhtio',
