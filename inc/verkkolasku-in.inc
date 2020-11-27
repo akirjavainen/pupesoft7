@@ -612,6 +612,7 @@ if (!function_exists("verkkolasku_in")) {
       $ytunnus = $trow["ytunnus"];
       $verkapunimi = $trow["nimi"];
 
+      $hyvak = array(); // MODIFIED, BUGFIX
       $hyvak[1] = $trow['oletus_hyvak1'];
       $hyvak[2] = $trow['oletus_hyvak2'];
       $hyvak[3] = $trow['oletus_hyvak3'];
@@ -851,7 +852,7 @@ if (!function_exists("verkkolasku_in")) {
                 $oletusprojekti = $toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
               }
             }
-
+            $hyvak = array(); // MODIFIED, BUGFIX
             if ($tiliointirow['hyvak1'] == 'MAKSUUN') {
               $hyvak[1] = "";
               $hyvak[2] = "";
@@ -1119,7 +1120,7 @@ if (!function_exists("verkkolasku_in")) {
 
       // Katsotaan onko meillä "tuuraajia" hyväksynnässä
       for ($tuuraaja_i = 1; $tuuraaja_i < 6; $tuuraaja_i++) {
-        $query = "SELECT if (tuuraaja != '', tuuraaja, kuka) kuka
+        $query = "SELECT if (tuuraaja != '', tuuraaja, kuka) kuka 
                   FROM kuka
                   WHERE yhtio  = '{$yhtio}'
                   AND kuka     = '{$hyvak[$tuuraaja_i]}'
@@ -1127,7 +1128,7 @@ if (!function_exists("verkkolasku_in")) {
         $result = pupe_query($query);
         $hyvak_row = mysqli_fetch_assoc($result);
 
-        $hyvak[$tuuraaja_i] = $hyvak_row['kuka'];
+	$hyvak[$tuuraaja_i] = (mysqli_num_rows($result) > 0) ? $hyvak_row['kuka'] : ""; // MODIFIED, BUGFIX
       }
 
       if (mb_strlen($hyvak[5]) > 0) {
