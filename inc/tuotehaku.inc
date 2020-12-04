@@ -7,21 +7,21 @@ $poistetulisa = " and (tuote.status not in ('P','X') or (SELECT sum(saldo) FROM 
 
 if (
   // Haetaan myös poistetut, jos kyseessä on tuotehallinta, eikä olla extranetissä
-  (mb_strpos($_SERVER['SCRIPT_NAME'], "tuote.php") !== false and $kukarow["extranet"] == "")
+  (strpos($_SERVER['SCRIPT_NAME'], "tuote.php") !== false and $kukarow["extranet"] == "")
 
   // Haetaan myös poistetut, jos kyseessä on ostotilaus ja yhtiön parametreistä on valittu, että
   // myös poistettuja tuotteita voi lisätä tilaukselle
-  or (mb_strpos($_SERVER['SCRIPT_NAME'], "tilaus_osto.php") !== false and $yhtiorow["poistetut_lisays"] == "P")
+  or (strpos($_SERVER['SCRIPT_NAME'], "tilaus_osto.php") !== false and $yhtiorow["poistetut_lisays"] == "P")
 
   // Haetaan myös poistetut, jos kyseessä on extranet-tilaus ja yhtiön parametreistä on valittu,
   // että myös poistettuja tuotteita voi lisätä tilaukselle
-  or (mb_strpos($_SERVER['SCRIPT_NAME'], "tilaus_myynti.php") !== false and !empty($extranet) and $yhtiorow["poistetut_lisays"] == "P")
+  or (strpos($_SERVER['SCRIPT_NAME'], "tilaus_myynti.php") !== false and !empty($extranet) and $yhtiorow["poistetut_lisays"] == "P")
 ) {
   $poistetulisa = "";
 }
 
 // Etsitän enarilla jos kappaleita ei ole syötetty eikä hakuja käytetty
-if ((!isset($kpl) or $kpl == "") and !is_array($kpl_array) and mb_substr($tuoteno, 0, 1) != '*' and mb_substr($tuoteno, -1) != '*' and mb_substr($tuoteno, 0, 1) != '?' and mb_substr($tuoteno, 0, 1) != '#' and mb_substr($tuoteno, 0, 1) != '@') {
+if ((!isset($kpl) or $kpl == "") and !is_array($kpl_array) and substr($tuoteno, 0, 1) != '*' and substr($tuoteno, -1) != '*' and substr($tuoteno, 0, 1) != '?' and substr($tuoteno, 0, 1) != '#' and substr($tuoteno, 0, 1) != '@') {
 
   $query = "SELECT *
             FROM tuote
@@ -35,12 +35,17 @@ if ((!isset($kpl) or $kpl == "") and !is_array($kpl_array) and mb_substr($tuoten
     $trow = mysqli_fetch_assoc($tresult);
     $tuoteno = $trow['tuoteno'];
     $kpl = 1;
+
+    if ($trow['tahtituote'] == "-1") {
+      $kpl = -1;
+    }
+
     $enarimatch = TRUE;
   }
 }
 
 if (!$enarimatch) {
-  if (mb_substr($tuoteno, 0, 1) != '*' and mb_substr($tuoteno, -1) != '*' and mb_substr($tuoteno, 0, 1) != '?' and mb_substr($tuoteno, 0, 1) != '#' and mb_substr($tuoteno, 0, 1) != '@' and $yhtiorow["automaattinen_tuotehaku"] != '') {
+  if (substr($tuoteno, 0, 1) != '*' and substr($tuoteno, -1) != '*' and substr($tuoteno, 0, 1) != '?' and substr($tuoteno, 0, 1) != '#' and substr($tuoteno, 0, 1) != '@' and $yhtiorow["automaattinen_tuotehaku"] != '') {
 
     $query = "SELECT *
               FROM tuote
@@ -68,13 +73,13 @@ if (!$enarimatch) {
   }
 
   // Nyt me selataan
-  if ((mb_substr($tuoteno, 0, 1) == '*' or mb_substr($tuoteno, -1) == '*' or mb_substr($tuoteno, 0, 1) == '?' or mb_substr($tuoteno, 0, 1) == "@") and trim(mb_strlen($tuoteno)) >= 2) {
+  if ((substr($tuoteno, 0, 1) == '*' or substr($tuoteno, -1) == '*' or substr($tuoteno, 0, 1) == '?' or substr($tuoteno, 0, 1) == "@") and trim(strlen($tuoteno)) >= 2) {
 
     $th_lisa1   = "";
     $ulos       = "";
     $kieltolisa = "";
 
-    if (mb_substr($tuoteno, 0, 1) == '?') {
+    if (substr($tuoteno, 0, 1) == '?') {
       // Toimittajan tuotenumero
 
       $tuotteen_toimittajat_liitostunnus = "";
@@ -86,7 +91,7 @@ if (!$enarimatch) {
       $query = "SELECT *
                 from tuotteen_toimittajat
                 where yhtio      = '$kukarow[yhtio]'
-                and toim_tuoteno like '%".mb_substr($tuoteno, 1)."%'
+                and toim_tuoteno like '%".substr($tuoteno, 1)."%'
                 {$tuotteen_toimittajat_liitostunnus}";
       $tresult = pupe_query($query);
 
@@ -95,25 +100,25 @@ if (!$enarimatch) {
       }
 
       if ($th_lisa1 != "") {
-        $th_lisa1 = "and tuote.tuoteno in (".mb_substr($th_lisa1, 0, -1).")"; // vika pilkku pois
+        $th_lisa1 = "and tuote.tuoteno in (".substr($th_lisa1, 0, -1).")"; // vika pilkku pois
       }
     }
-    elseif (mb_substr($tuoteno, -2) == '**') {
+    elseif (substr($tuoteno, -2) == '**') {
       // Tuoteryhmä
       $th_lisa1 = " and tuote.try = '$tuoteno' ";
     }
-    elseif (mb_substr($tuoteno, 0, 1) == '*') {
+    elseif (substr($tuoteno, 0, 1) == '*') {
       // Jos eka merkki on tähti etsitään teksteistä
-      $tuoteno = mb_substr($tuoteno, 1);
+      $tuoteno = substr($tuoteno, 1);
       $sanat = explode(" ", $tuoteno);
 
       foreach ($sanat as $sana) {
         $th_lisa1 .= " and concat_ws(' ', tuote.nimitys, tuote.lyhytkuvaus, tuote.tuotemerkki) like '%" . trim($sana) . "%' ";
       }
     }
-    elseif (mb_substr($tuoteno, -1) == '*') {
+    elseif (substr($tuoteno, -1) == '*') {
       // Jos vika merkki on tähti niin etsitään osittainen tuotenumero
-      $tuoteno = mb_substr($tuoteno, 0, -1);
+      $tuoteno = substr($tuoteno, 0, -1);
 
       $th_lisa1 = " and tuote.tuoteno like '" . $tuoteno . "%' ";
 
@@ -126,9 +131,9 @@ if (!$enarimatch) {
                           AND tuotteen_toimittajat.liitostunnus = '{$laskurow['liitostunnus']}' )";
       }
     }
-    elseif (mb_substr($tuoteno, 0, 1) == '@') {
+    elseif (substr($tuoteno, 0, 1) == '@') {
       // Jos ensimmäinen merkki on AT-merkki niin etsitään kyseisellä tuotenumero
-      $tuoteno = mb_substr($tuoteno, 1);
+      $tuoteno = substr($tuoteno, 1);
       $th_lisa1 = " and tuote.tuoteno = '".$tuoteno."' ";
     }
 
@@ -153,7 +158,7 @@ if (!$enarimatch) {
           $yhtiot .= "'".$prow["yhtio"]."',";
           $konsyhtiot[] = $prow["yhtio"];
         }
-        $yhtiot = mb_substr($yhtiot, 0, -1);
+        $yhtiot = substr($yhtiot, 0, -1);
         $yhtiot = "yhtio in ($yhtiot) ";
 
       }
@@ -202,7 +207,7 @@ if (!$enarimatch) {
       }
     }
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "tuote.php") !== false and $kukarow["extranet"] == "" and !empty($poistuvat_tuotteet)) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "tuote.php") !== false and $kukarow["extranet"] == "" and !empty($poistuvat_tuotteet)) {
       $havinglisa = "HAVING tuote.status not in ('P','X') and saldo > 0 and ei_saldoa = ''";
     }
     else {
@@ -307,7 +312,7 @@ if (!$enarimatch) {
 
     // Etsitään vielä asiakaskommenteista, jos ei ole mitenkään muuten löytynyt ja kyseessä on
     // myyntitilaus
-    if (count($rows) == 0 and mb_strpos($_SERVER['SCRIPT_NAME'], "tilaus_myynti.php") !== false) {
+    if (count($rows) == 0 and strpos($_SERVER['SCRIPT_NAME'], "tilaus_myynti.php") !== false) {
       $query = "SELECT tuote.*
                 FROM tuote
                 JOIN asiakaskommentti
@@ -450,7 +455,7 @@ if (!$enarimatch) {
       }
     }
   }
-  elseif ((mb_substr($tuoteno, 0, 1) == '*' or mb_substr($tuoteno, -1) == '*' or mb_substr($tuoteno, 0, 1) == '?' or mb_substr($tuoteno, 0, 1) == '@') and trim(mb_strlen($tuoteno)) < 2) {
+  elseif ((substr($tuoteno, 0, 1) == '*' or substr($tuoteno, -1) == '*' or substr($tuoteno, 0, 1) == '?' or substr($tuoteno, 0, 1) == '@') and trim(strlen($tuoteno)) < 2) {
     $kentta      = 'tuoteno';
     $varaosavirhe   = t("VIRHE: Hakusanan on sisällettävä vähintään kaksi merkkiä")."!<br>";
     $tuoteno    = '';
@@ -461,9 +466,9 @@ if (!$enarimatch) {
 
     ///* Viivakoodinlukija-special *///
     ///* Konffaa lukija näin: prefiksiksi #-merkki ja suffiksiksi RETURN*///
-    if (mb_substr($tuoteno, 0, 1) == '#') {
+    if (substr($tuoteno, 0, 1) == '#') {
 
-      $th_lisa1 = "and tuote.eankoodi='".mb_substr($tuoteno, 1)."'";
+      $th_lisa1 = "and tuote.eankoodi='".substr($tuoteno, 1)."'";
 
       $query = "SELECT tuote.tuoteno
                 FROM tuote
@@ -491,9 +496,9 @@ if (!$enarimatch) {
       }
     }
 
-    if (mb_strpos($tuoteno, '####') !== FALSE and $konsernihaku == "KYLLA") {
-      $hakyhtio  = mb_substr($tuoteno, mb_strpos($tuoteno, '####')+4);
-      $tuoteno   = mb_substr($tuoteno, 0, mb_strpos($tuoteno, '####'));
+    if (strpos($tuoteno, '####') !== FALSE and $konsernihaku == "KYLLA") {
+      $hakyhtio  = substr($tuoteno, strpos($tuoteno, '####')+4);
+      $tuoteno   = substr($tuoteno, 0, strpos($tuoteno, '####'));
     }
     else {
       $hakyhtio   = $kukarow["yhtio"];
@@ -509,7 +514,7 @@ if (!$enarimatch) {
     if (mysqli_num_rows($result) != 1) {
       $kentta = 'tuoteno';
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "tilaus_myynti.php") === FALSE or $kukarow['extranet'] != '') {
+      if (strpos($_SERVER['SCRIPT_NAME'], "tilaus_myynti.php") === FALSE or $kukarow['extranet'] != '') {
         $varaosavirhe .= t("VIRHE: Tuotenumeroa")." $tuoteno ".t("ei löydy järjestelmästä")."!<br>";
       }
 
