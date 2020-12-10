@@ -1410,7 +1410,7 @@ if ($tee == 'MONISTA') {
             $values .= ", '".t("Reklamaatio laskuun", $asiakrow['kieli']).": ".$monistarow["laskunro"].".'";
           }
           else {
-            $values .= ", ''";
+            $values .= ", '".$monistarow["viesti"]."'"; // MODIFIED, added
           }
           break;
         case 'vienti_kurssi';
