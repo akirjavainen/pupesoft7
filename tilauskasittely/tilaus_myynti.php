@@ -10112,6 +10112,7 @@ if ($tee == '') {
               <input type='submit' value='".t("Näytä")."' onClick=\"js_openFormInNewWindow('tulostaform_tmyynti', 'tulosta_myynti'); return false;\">
               <input type='submit' value='".t("Tulosta")."' onClick=\"js_openFormInNewWindow('tulostaform_tmyynti', 'samewindow'); return false;\">
               </form>";
+            if (file_exists("../../hinnasto")) echo "<a href='/hinnasto/printable.php?pupeorder=$laskurow[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>"; // MODIFIED, added
             echo "</td>";
 
             if ($sarakkeet_alku-9 > 0) {
