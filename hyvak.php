@@ -734,6 +734,8 @@ if ($tee == 'H') {
   }
 
   // Kuka hyväksyi??
+  $kentta = "h1time"; // MODIFIED, BUGFIX
+  $laskurow['h1time'] = "99"; // MODIFIED, BUGFIX
   if ($laskurow['hyvaksyja_nyt'] == $laskurow['hyvak1'] and $laskurow["h1time"]=="0000-00-00 00:00:00") {
     $kentta = "h1time";
     $laskurow['h1time'] = "99";
