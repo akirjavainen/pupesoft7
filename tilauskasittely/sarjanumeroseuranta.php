@@ -1,5 +1,10 @@
 <?php
 
+if (file_exists("../../common")) {
+	include("../../common/html_output.php");
+	include("../../common/functions-sql.php");
+}
+
 // otetaan sisään voidaan ottaa $myyntirivitunnus tai $ostorivitunnus
 // ja $from niin tiedetään mistä tullaan ja minne palata
 
@@ -1205,6 +1210,7 @@ elseif ($lisa != "" or $lisa2 != "") {
         LIMIT 250";
   $sarjaresiso = pupe_query($query);
 }
+//echo $query;
 
 if ($rivirow["tuoteno"] != '') {
 
@@ -1819,6 +1825,8 @@ if (!empty($valitut_sarjat)) {
 if (mb_strpos($_SERVER['SCRIPT_NAME'], "sarjanumeroseuranta.php")  !== FALSE) {
   require "inc/footer.inc";
 }
+
+if (file_exists("../../common")) html_sql_table($sarjaresiso, true); // MODIFIED, added
 
 /**
  *
