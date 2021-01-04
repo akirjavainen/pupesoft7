@@ -5,7 +5,7 @@ if (isset($_POST["tee"])) {
   if ($_POST["kaunisnimi"] != '') $_POST["kaunisnimi"] = str_replace("/", "", $_POST["kaunisnimi"]);
 }
 
-if (mb_strpos($_SERVER['SCRIPT_NAME'], "ostoseuranta.php") !== FALSE) {
+if (strpos($_SERVER['SCRIPT_NAME'], "ostoseuranta.php") !== FALSE) {
   // Ei käytetä pakkausta
   $compression = FALSE;
 
@@ -33,9 +33,9 @@ else {
         list($a, $b) = explode("=", $muutparametri);
 
 
-        if (mb_strpos($a, "[") !== FALSE) {
-          $i = mb_substr($a, mb_strpos($a, "[")+1, mb_strpos($a, "]")-(mb_strpos($a, "[")+1));
-          $a = mb_substr($a, 0, mb_strpos($a, "["));
+        if (strpos($a, "[") !== FALSE) {
+          $i = substr($a, strpos($a, "[")+1, strpos($a, "]")-(strpos($a, "[")+1));
+          $a = substr($a, 0, strpos($a, "["));
 
           ${$a}[$i] = $b;
         }
@@ -75,7 +75,7 @@ else {
       foreach ($yhtiot as $apukala) {
         $yhtio .= "'$apukala',";
       }
-      $yhtio = mb_substr($yhtio, 0, -1);
+      $yhtio = substr($yhtio, 0, -1);
     }
 
     // jos joku päiväkenttä on tyhjää ei tehdä mitään
@@ -267,7 +267,7 @@ else {
       }
 
       if ($order != "") {
-        $order = mb_substr($order, 0, -1);
+        $order = substr($order, 0, -1);
       }
       else {
         $order = "1";
@@ -304,7 +304,7 @@ else {
       }
 
       // Kumpaa päivämäärää käytetään
-      if (mb_strpos($ajotapa, "mapvm") !== FALSE) {
+      if (strpos($ajotapa, "mapvm") !== FALSE) {
         $pvmvar = " lasku.mapvm ";
       }
       else {
@@ -321,6 +321,8 @@ else {
 
       $query_ale_lisa = generoi_alekentta('O');
 
+      $tuotekerroinlisa = "if (tuotteen_toimittajat.tuotekerroin=0 or tuotteen_toimittajat.tuotekerroin is null,1,tuotteen_toimittajat.tuotekerroin)";
+
       // Tehdään query
       $query = "SELECT $select";
 
@@ -333,43 +335,43 @@ else {
 
         for ($i = $startmonth;  $i <= $endmonth;) {
 
-          $alku  = date("Y-m-d", mktime(0, 0, 0, mb_substr($i, 4, 2), mb_substr($i, 6, 2),  mb_substr($i, 0, 4)));
-          $loppu = date("Y-m-d", mktime(0, 0, 0, mb_substr($i, 4, 2), date("t", mktime(0, 0, 0, mb_substr($i, 4, 2), mb_substr($i, 6, 2),  mb_substr($i, 0, 4))),  mb_substr($i, 0, 4)));
+          $alku  = date("Y-m-d", mktime(0, 0, 0, substr($i, 4, 2), substr($i, 6, 2),  substr($i, 0, 4)));
+          $loppu = date("Y-m-d", mktime(0, 0, 0, substr($i, 4, 2), date("t", mktime(0, 0, 0, substr($i, 4, 2), substr($i, 6, 2),  substr($i, 0, 4))),  substr($i, 0, 4)));
 
-          $alku_ed  = date("Y-m-d", mktime(0, 0, 0, mb_substr($i, 4, 2), mb_substr($i, 6, 2),  mb_substr($i, 0, 4)-1));
-          $loppu_ed = date("Y-m-d", mktime(0, 0, 0, mb_substr($i, 4, 2), date("t", mktime(0, 0, 0, mb_substr($i, 4, 2), mb_substr($i, 6, 2),  mb_substr($i, 0, 4))),  mb_substr($i, 0, 4)-1));
+          $alku_ed  = date("Y-m-d", mktime(0, 0, 0, substr($i, 4, 2), substr($i, 6, 2),  substr($i, 0, 4)-1));
+          $loppu_ed = date("Y-m-d", mktime(0, 0, 0, substr($i, 4, 2), date("t", mktime(0, 0, 0, substr($i, 4, 2), substr($i, 6, 2),  substr($i, 0, 4))),  substr($i, 0, 4)-1));
 
           //Osto
-          $query .= " sum(if($pvmvar >= '$alku'  and $pvmvar <= '$loppu', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$query_ale_lisa},0)) '".mb_substr($MONTH_ARRAY[(mb_substr($i, 4, 2)*1)], 0, 3)." ".mb_substr($i, 0, 4)." ".t("Ostot")."', ";
+          $query .= " sum(if($pvmvar >= '$alku'  and $pvmvar <= '$loppu', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$tuotekerroinlisa}*{$query_ale_lisa},0)) '".substr($MONTH_ARRAY[(substr($i, 4, 2)*1)], 0, 3)." ".substr($i, 0, 4)." ".t("Ostot")."', ";
 
           //Ostoed
           if ($piiloed == "") {
-            $query .= " sum(if($pvmvar >= '$alku_ed'  and $pvmvar <= '$loppu_ed', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$query_ale_lisa},0)) '".mb_substr($MONTH_ARRAY[(mb_substr($i, 4, 2)*1)], 0, 3)." ".(mb_substr($i, 0, 4)-1)." ".t("Ostot")."', ";
+            $query .= " sum(if($pvmvar >= '$alku_ed'  and $pvmvar <= '$loppu_ed', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$tuotekerroinlisa}*{$query_ale_lisa},0)) '".substr($MONTH_ARRAY[(substr($i, 4, 2)*1)], 0, 3)." ".(substr($i, 0, 4)-1)." ".t("Ostot")."', ";
           }
 
           if ($piilota_kappaleet == "") {
-            $query .= "  sum(if($pvmvar >= '$alku'  and $pvmvar <= '$loppu', tilausrivi.kpl,0)) '".mb_substr($MONTH_ARRAY[(mb_substr($i, 4, 2)*1)], 0, 3)." ".mb_substr($i, 0, 4)." ".t("Ostokpl")."', ";
+            $query .= "  sum(if($pvmvar >= '$alku'  and $pvmvar <= '$loppu', tilausrivi.kpl,0)) '".substr($MONTH_ARRAY[(substr($i, 4, 2)*1)], 0, 3)." ".substr($i, 0, 4)." ".t("Ostokpl")."', ";
 
             //KPLED
             if ($piiloed == "") {
-              $query .= "  sum(if($pvmvar >= '$alku_ed' and $pvmvar <= '$loppu_ed',tilausrivi.kpl,0)) '".mb_substr($MONTH_ARRAY[(mb_substr($i, 4, 2)*1)], 0, 3)." ".(mb_substr($i, 0, 4)-1)." ".t("Ostokpl")."', ";
+              $query .= "  sum(if($pvmvar >= '$alku_ed' and $pvmvar <= '$loppu_ed',tilausrivi.kpl,0)) '".substr($MONTH_ARRAY[(substr($i, 4, 2)*1)], 0, 3)." ".(substr($i, 0, 4)-1)." ".t("Ostokpl")."', ";
             }
           }
 
-          $i = date("Ymd", mktime(0, 0, 0, mb_substr($i, 4, 2)+1, 1,  mb_substr($i, 0, 4)));
+          $i = date("Ymd", mktime(0, 0, 0, substr($i, 4, 2)+1, 1,  substr($i, 0, 4)));
         }
 
         // Vika pilkku pois
-        $query = mb_substr($query, 0 , -2);
+        $query = substr($query, 0 , -2);
       }
       else {
         //Osto
-        $query .= " sum(if($pvmvar >= '$vva-$kka-$ppa'  and $pvmvar <= '$vvl-$kkl-$ppl', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$query_ale_lisa},0)) ostonyt, ";
+        $query .= " sum(if($pvmvar >= '$vva-$kka-$ppa'  and $pvmvar <= '$vvl-$kkl-$ppl', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$tuotekerroinlisa}*{$query_ale_lisa},0)) ostonyt, ";
 
         //Ostoed
         if ($piiloed == "") {
-          $query .= " sum(if($pvmvar >= '$vvaa-$kka-$ppa'  and $pvmvar <= '$vvll-$kkl-$ppl', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$query_ale_lisa},0)) ostoed, ";
-          $query .= " round(sum(if($pvmvar >= '$vva-$kka-$ppa'  and $pvmvar <= '$vvl-$kkl-$ppl', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$query_ale_lisa},0))/sum(if($pvmvar >= '$vvaa-$kka-$ppa'  and $pvmvar <= '$vvll-$kkl-$ppl', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$query_ale_lisa},0)),2) ostoind, ";
+          $query .= " sum(if($pvmvar >= '$vvaa-$kka-$ppa'  and $pvmvar <= '$vvll-$kkl-$ppl', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$tuotekerroinlisa}*{$query_ale_lisa},0)) ostoed, ";
+          $query .= " round(sum(if($pvmvar >= '$vva-$kka-$ppa'  and $pvmvar <= '$vvl-$kkl-$ppl', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$tuotekerroinlisa}*{$query_ale_lisa},0))/sum(if($pvmvar >= '$vvaa-$kka-$ppa'  and $pvmvar <= '$vvll-$kkl-$ppl', tilausrivi.hinta*lasku.vienti_kurssi*tilausrivi.kpl*{$tuotekerroinlisa}*{$query_ale_lisa},0)),2) ostoind, ";
         }
 
         $query .= " sum(if($pvmvar >= '$vva-$kka-$ppa'  and $pvmvar <= '$vvl-$kkl-$ppl', tilausrivi.rivihinta,0)) ostoarvonyt, ";
@@ -391,7 +393,7 @@ else {
         }
 
         // Vika pilkku ja space pois
-        $query = mb_substr($query, 0 , -2);
+        $query = substr($query, 0 , -2);
       }
 
       $query .= "  FROM lasku use index (yhtio_tila_tapvm)
@@ -399,11 +401,12 @@ else {
             JOIN yhtio ON (yhtio.yhtio = lasku.yhtio)
             LEFT JOIN tuote use index (tuoteno_index) ON tuote.yhtio=lasku.yhtio and tuote.tuoteno=tilausrivi.tuoteno
             LEFT JOIN toimi use index (PRIMARY) ON toimi.yhtio=lasku.yhtio and toimi.tunnus=lasku.liitostunnus
+            LEFT JOIN tuotteen_toimittajat ON tuotteen_toimittajat.yhtio=tilausrivi.yhtio and tuotteen_toimittajat.tuoteno=tilausrivi.tuoteno and tuotteen_toimittajat.liitostunnus=lasku.liitostunnus
             WHERE lasku.yhtio in ($yhtio)
             $asiakasrajaus
             and lasku.tila = 'K'";
 
-      if (mb_strpos($ajotapa, "valmiit") !== FALSE) {
+      if (strpos($ajotapa, "valmiit") !== FALSE) {
         $query .= " and kohdistettu = 'X' ";
         $query .= " and lasku.alatila = 'X' ";
       }
@@ -441,7 +444,7 @@ else {
       }
 
       if ($query != "") {
-        if (mb_strpos($_SERVER['SCRIPT_NAME'], "ostoseuranta.php") !== FALSE) {
+        if (strpos($_SERVER['SCRIPT_NAME'], "ostoseuranta.php") !== FALSE) {
           include 'inc/pupeExcel.inc';
 
           $worksheet    = new pupeExcel();
@@ -554,7 +557,7 @@ else {
             }
 
             // Jos gruupataan enemmän kuin yksi taso niin tehdään välisumma
-            if ($gluku > 1 and $edluku != $row[0] and $edluku != 'x' and $piiyhteensa == '' and mb_strpos($group, ',') !== FALSE and mb_substr($group, 0, 13) != "tuote.tuoteno") {
+            if ($gluku > 1 and $edluku != $row[0] and $edluku != 'x' and $piiyhteensa == '' and strpos($group, ',') !== FALSE and substr($group, 0, 13) != "tuote.tuoteno") {
               $excelsarake = $ostoind = $ostoarvoind = $ostokplind = 0;
 
               foreach ($valisummat as $vnim => $vsum) {
@@ -617,7 +620,7 @@ else {
 
           for ($i=0; $i < mysqli_num_fields($result); $i++) {
 
-            if ($i < mb_substr_count($select, ", ")) {
+            if ($i < substr_count($select, ", ")) {
               $valisummat[mysqli_field_name($result, $i)] = "";
               $totsummat[mysqli_field_name($result, $i)]  = "";
             }
@@ -711,7 +714,7 @@ else {
         }
 
         if ($osoitetarrat != "" and $tarra_aineisto != '') {
-          $tarra_aineisto = mb_substr($tarra_aineisto, 0, -1);
+          $tarra_aineisto = substr($tarra_aineisto, 0, -1);
 
 
           echo "<br><table>";
@@ -999,7 +1002,7 @@ else {
     echo "</form>";
   }
 
-  if (mb_strpos($_SERVER['SCRIPT_NAME'], "ostoseuranta.php") !== FALSE) {
+  if (strpos($_SERVER['SCRIPT_NAME'], "ostoseuranta.php") !== FALSE) {
     require "../inc/footer.inc";
   }
 }
