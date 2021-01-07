@@ -214,6 +214,12 @@ if (
     $tilausok++;
     $saako_hyvaksya++;
   }
+  // MODIFIED, added:
+  if (file_exists("../../raportit")) {
+    if (!isDescriptionMatchingGlassType((int)$row['tunnus'], (string)$row['kommentti'])) {
+      $varaosavirhe .= t("HUOM: Lasityyppi ei vastaa kommenttia!")."<br>";
+    }
+  }
 }
 
 $tilausrivin_kateraja = $yhtiorow["tilausrivin_kateraja"];
