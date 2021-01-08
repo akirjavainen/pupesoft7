@@ -1,5 +1,10 @@
 <?php
-include("../../raportit/includes/phpupesoft2.php"); // MODIFIED, added
+// MODIFIED, added:
+if (file_exists("../../raportit")) {
+	include("../../common/functions-sql.php");
+	include("../../common/functions-ascii.php");
+	include("../../raportit/includes/phpupesoft2.php");
+}
 
 if (!empty($_REQUEST["naytetaan_kate"])) {
   setcookie("katteen_nayttaminen", $_REQUEST["naytetaan_kate"]);
@@ -8215,7 +8220,7 @@ if ($tee == '') {
 		  $total_m3 += calculateSquareCubic($row["nimitys"], $row["tilkpl"], false);
             } else { // MODIFIED, added
 		  $imagelink = getImageLink((int)$laskurow["tunnus"], (int)$row["tunnus"], true);
-		  $imagelink = file_get_contents($imagelink); // Uncomment to show link instead of image
+		  $imagelink = file_get_contents($imagelink);
 	  	  if (strlen($imagelink) > 0) $shippingtext = "<font color='green' style='font-weight: bold;'>$imagelink</font>"; // MODIFIED, added
 		  $tuoteno_text = "";
             }
@@ -9287,6 +9292,12 @@ if ($tee == '') {
             }
 
             echo t("Kommentti").": <font {$font_color} style='font-weight: bold;'>".str_replace("\n", "<br>", $row["kommentti"])."</font><br>";
+            // MODIFIED, added:
+            if (file_exists("../../raportit")) {
+              if (!isDescriptionMatchingGlassType((int)$row["tunnus"], (string)$row["nimitys"], (string)$row["kommentti"])) {
+                echo "<br><font color='red'>HUOM: Lasityyppi ei vastaa kommenttia!</font><br>";
+              }
+            }
           }
 
           if ($yhtiorow['naytetaanko_ale_peruste_tilausrivilla'] != '' and $row['ale_peruste'] != '') {
