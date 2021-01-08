@@ -9295,7 +9295,7 @@ if ($tee == '') {
             // MODIFIED, added:
             if (file_exists("../../raportit")) {
               if (!isDescriptionMatchingGlassType((int)$row["tunnus"], (string)$row["nimitys"], (string)$row["kommentti"])) {
-                echo "<br><font color='red'>HUOM! Laskuriin valittu lasityyppi ei vastaa tekstikuvausta!</font><br>";
+                echo "<br><font color='red'>HUOM! Laskuriin valittu lasityyppi ei vastaa tekstikuvausta.</font><br>";
               }
             }
           }
