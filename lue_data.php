@@ -53,7 +53,7 @@ if (php_sapi_name() == 'cli') {
     $table = trim($argv[2]);
 
     // Täältä voi tulla ties mitä lisäparameja
-    if (mb_strpos($table, ".") !== FALSE) {
+    if (strpos($table, ".") !== FALSE) {
       $paramit = explode("..", $table);
 
       // Eka veks, ku siinä on taulun nimi eikä parami
@@ -78,7 +78,7 @@ if (php_sapi_name() == 'cli') {
   if (trim($argv[3]) != '') {
     $path_parts = pathinfo(trim($argv[3]));
     $_FILES['userfile']['name'] = $path_parts['basename'];
-    $_FILES['userfile']['type'] = ((mb_strtoupper($path_parts['extension']) == 'TXT' or mb_strtoupper($path_parts['extension']) == 'CSV')) ? 'text/plain' : ((mb_strtoupper($path_parts['extension']) == 'XLS') ? 'application/vnd.ms-excel' : '');
+    $_FILES['userfile']['type'] = (strtoupper($path_parts['extension']) == 'TXT' or strtoupper($path_parts['extension']) == 'CSV') ? 'text/plain' : (strtoupper($path_parts['extension']) == 'XLS') ? 'application/vnd.ms-excel' : '';
     $_FILES['userfile']['tmp_name'] = $argv[3];
     $_FILES['userfile']['error'] = 0; // UPLOAD_ERR_OK
     $_FILES['userfile']['size'] = filesize($argv[3]);
@@ -118,7 +118,7 @@ if (php_sapi_name() == 'cli') {
 else {
   // Laitetaan max time 5H
   ini_set("max_execution_time", 18000);
-  if (mb_strpos($_SERVER['SCRIPT_NAME'], "lue_data.php") !== FALSE) {
+  if (strpos($_SERVER['SCRIPT_NAME'], "lue_data.php") !== FALSE) {
     require "inc/parametrit.inc";
   }
   $cli = false;
@@ -190,14 +190,14 @@ if (isset($_FILES['userfile']) and (is_uploaded_file($_FILES['userfile']['tmp_na
   }
 
   $path_parts = pathinfo($_FILES['userfile']['name']);
-  $ext = mb_strtoupper($path_parts['extension']);
+  $ext = strtoupper($path_parts['extension']);
 
   lue_data_echo("<font class='message'>".t("Tarkastetaan lähetetty tiedosto")."...<br><br></font>");
 
   $retval = tarkasta_liite("userfile", array("XLSX", "XLS", "ODS", "SLK", "XML", "GNUMERIC", "CSV", "TXT", "DATAIMPORT"));
 
   if ($retval !== TRUE) {
-    lue_data_echo("<font class='error'><br>".t("Väärä tiedostomuoto")."!</font>");
+    lue_data_echo("<font class='error'><br>".t("Väärä tiedostomuoto")."!</font><br>{$retval}");
     $kasitellaan_tiedosto = FALSE;
   }
 }
@@ -250,10 +250,10 @@ if ($kasitellaan_tiedosto) {
 
   // Katsotaan onko sarakkeita useasta taulusta
   for ($i = 0; $i < count($headers); $i++) {
-    if (mb_strpos($headers[$i], ".") !== FALSE) {
+    if (strpos($headers[$i], ".") !== FALSE) {
 
       list($taulu, $sarake) = explode(".", $headers[$i]);
-      $taulu = mb_strtolower(trim($taulu));
+      $taulu = strtolower(trim($taulu));
 
       // Joinataanko sama taulu monta kertaa?
       if ((isset($mul_taulas[$taulu]) and isset($mul_taulut[$taulu."__".$mul_taulas[$taulu]]) and in_array($headers[$i], $mul_taulut[$taulu."__".$mul_taulas[$taulu]])) or (isset($mul_taulut[$taulu]) and (!isset($mul_taulas[$taulu]) or !isset($mul_taulut[$taulu."__".$mul_taulas[$taulu]])) and in_array($headers[$i], $mul_taulut[$taulu]))) {
@@ -285,9 +285,9 @@ if ($kasitellaan_tiedosto) {
     list($taulu, ) = explode(".", $utaulu);
     $taulu = preg_replace("/__[0-9]*$/", "", $taulu);
 
-    if (mb_substr($taulu, 0, 11) == 'puun_alkio_') {
+    if (substr($taulu, 0, 11) == 'puun_alkio_') {
       $taulu = 'puun_alkio';
-      $table_tarkenne = mb_substr($taulu, 11);
+      $table_tarkenne = substr($taulu, 11);
     }
 
     list($pakolliset, $kielletyt, $wherelliset, $eiyhtiota, $joinattava, $saakopoistaa, $oletukset, $eisaaollatyhja) = pakolliset_sarakkeet($taulu);
@@ -301,7 +301,7 @@ if ($kasitellaan_tiedosto) {
   // Laitetaan jokaisen taulun otsikkorivi kuntoon
   for ($i = 0; $i < count($headers); $i++) {
 
-    if (mb_strpos($headers[$i], ".") !== FALSE) {
+    if (strpos($headers[$i], ".") !== FALSE) {
       list($sarake1, $sarake2) = explode(".", $headers[$i]);
       if ($sarake2 != "") $sarake1 = $sarake2;
     }
@@ -309,14 +309,14 @@ if ($kasitellaan_tiedosto) {
       $sarake1 = $headers[$i];
     }
 
-    $sarake1 = mb_strtoupper(trim($sarake1));
+    $sarake1 = strtoupper(trim($sarake1));
 
     $taulunotsikot[$taulut[$i]][] = $sarake1;
 
     // Pitääkö tämä sarake laittaa myös johonki toiseen tauluun?
     foreach ($joinattavat as $taulu => $joinit) {
 
-      if (mb_strpos($headers[$i], ".") !== FALSE) {
+      if (strpos($headers[$i], ".") !== FALSE) {
         list ($etu, $taka) = explode(".", $headers[$i]);
         if ($taka == "") $taka = $etu;
       }
@@ -362,7 +362,7 @@ if ($kasitellaan_tiedosto) {
       // Pitääkö tämä sarake laittaa myös johonki toiseen tauluun?
       foreach ($taulunotsikot as $taulu => $joinit) {
 
-        if (mb_strpos($headers[$excej], ".") !== FALSE) {
+        if (strpos($headers[$excej], ".") !== FALSE) {
           list ($etu, $taka) = explode(".", $headers[$excej]);
           if ($taka == "") $taka = $etu;
         }
@@ -667,8 +667,8 @@ if ($kasitellaan_tiedosto) {
     list($table_mysql, ) = explode(".", $taulu);
     $table_mysql = preg_replace("/__[0-9]*$/", "", $table_mysql);
 
-    if (mb_substr($table_mysql, 0, 11) == 'puun_alkio_') {
-      $table_tarkenne = mb_substr($table_mysql, 11);
+    if (substr($table_mysql, 0, 11) == 'puun_alkio_') {
+      $table_tarkenne = substr($table_mysql, 11);
       $table_mysql = 'puun_alkio';
     }
 
@@ -693,22 +693,22 @@ if ($kasitellaan_tiedosto) {
 
       while ($row = mysqli_fetch_array($fres)) {
         // Pushataan arrayseen kaikki sarakenimet ja tietuetyypit
-        $trows[$table_mysql.".".mb_strtoupper($row[0])] = $row[1];
+        $trows[$table_mysql.".".strtoupper($row[0])] = $row[1];
 
         $tlengthpit = preg_replace("/[^0-9,]/", "", $row[1]);
 
-        if (mb_strpos($tlengthpit, ",") !== FALSE) {
+        if (strpos($tlengthpit, ",") !== FALSE) {
           // Otetaan desimaalien määrä talteen
-          $tdecimal[$table_mysql.".".mb_strtoupper($row[0])] = (int) mb_substr($tlengthpit, mb_strpos($tlengthpit, ",")+1);
-          $tlengthpit = mb_substr($tlengthpit, 0, mb_strpos($tlengthpit, ",")+1)+1;
+          $tdecimal[$table_mysql.".".strtoupper($row[0])] = (int) substr($tlengthpit, strpos($tlengthpit, ",")+1);
+          $tlengthpit = substr($tlengthpit, 0, strpos($tlengthpit, ",")+1)+1;
         }
 
-        if (mb_substr($row[1], 0, 7) == "decimal" or mb_substr($row[1], 0, 3) == "int") {
+        if (substr($row[1], 0, 7) == "decimal" or substr($row[1], 0, 3) == "int") {
           // Sallitaan myös miinusmerkki...
           $tlengthpit++;
         }
 
-        $tlength[$table_mysql.".".mb_strtoupper($row[0])] = trim($tlengthpit);
+        $tlength[$table_mysql.".".strtoupper($row[0])] = trim($tlengthpit);
       }
 
       // Nämä ovat pakollisia dummysarakkeita jotka ohitetaan lopussa automaattisesti!
@@ -723,7 +723,7 @@ if ($kasitellaan_tiedosto) {
 
       if (count($apu_sarakkeet) > 0) {
         foreach ($apu_sarakkeet as $s) {
-          $trows[$table_mysql.".".mb_strtoupper($s)] = "";
+          $trows[$table_mysql.".".strtoupper($s)] = "";
         }
       }
 
@@ -949,7 +949,7 @@ if ($kasitellaan_tiedosto) {
       }
 
       // Rivin toiminto
-      $taulunrivit[$taulu][$eriviindex][$postoiminto] = mb_strtoupper(trim($taulunrivit[$taulu][$eriviindex][$postoiminto]));
+      $taulunrivit[$taulu][$eriviindex][$postoiminto] = strtoupper(trim($taulunrivit[$taulu][$eriviindex][$postoiminto]));
 
       // Sallitaan myös MUOKKAA ja LISÄÄ toiminnot
       if ($taulunrivit[$taulu][$eriviindex][$postoiminto] == "LISÄÄ")     $taulunrivit[$taulu][$eriviindex][$postoiminto] = "LISAA";
@@ -1011,7 +1011,7 @@ if ($kasitellaan_tiedosto) {
 
           $valinta .= " and TOIM_TUOTENO='{$toim_tuoteno}'";
         }
-        elseif ($table_mysql == 'tullinimike' and mb_strtoupper($taulunotsikot[$taulu][$j]) == "CN") {
+        elseif ($table_mysql == 'tullinimike' and strtoupper($taulunotsikot[$taulu][$j]) == "CN") {
 
           $taulunrivit[$taulu][$eriviindex][$j] = str_replace(' ', '', $taulunrivit[$taulu][$eriviindex][$j]);
 
@@ -1021,7 +1021,7 @@ if ($kasitellaan_tiedosto) {
             $tila = 'ohita';
           }
         }
-        elseif ($table_mysql == 'extranet_kayttajan_lisatiedot' and mb_strtoupper($taulunotsikot[$taulu][$j]) == "LIITOSTUNNUS" and $liitostunnusvalinta == 2) {
+        elseif ($table_mysql == 'extranet_kayttajan_lisatiedot' and strtoupper($taulunotsikot[$taulu][$j]) == "LIITOSTUNNUS" and $liitostunnusvalinta == 2) {
           $query = "SELECT tunnus
                     FROM kuka
                     WHERE yhtio   = '$kukarow[yhtio]'
@@ -1177,7 +1177,7 @@ if ($kasitellaan_tiedosto) {
             }
           }
         }
-        elseif ($table_mysql == 'asiakas' and mb_stripos($taulunrivit[$taulu][$eriviindex][$postoiminto], 'LISAA') !== FALSE and $taulunotsikot[$taulu][$j] == "YTUNNUS" and $taulunrivit[$taulu][$eriviindex][$j] == "AUTOM") {
+        elseif ($table_mysql == 'asiakas' and stripos($taulunrivit[$taulu][$eriviindex][$postoiminto], 'LISAA') !== FALSE and $taulunotsikot[$taulu][$j] == "YTUNNUS" and $taulunrivit[$taulu][$eriviindex][$j] == "AUTOM") {
 
           if ($yhtiorow["asiakasnumeroinnin_aloituskohta"] != "") {
             $apu_asiakasnumero = $yhtiorow["asiakasnumeroinnin_aloituskohta"];
@@ -1311,8 +1311,8 @@ if ($kasitellaan_tiedosto) {
         }
       }
 
-      if (mb_substr($taulu, 0, 11) == 'puun_alkio_') {
-        $valinta .= " and laji = '".mb_substr($taulu, 11)."' ";
+      if (substr($taulu, 0, 11) == 'puun_alkio_') {
+        $valinta .= " and laji = '".substr($taulu, 11)."' ";
       }
 
       // jos ei ole puuttuva tieto etsitään riviä
@@ -1584,7 +1584,7 @@ if ($kasitellaan_tiedosto) {
               }
             }
 
-            if (mb_substr($trows[$table_mysql.".".$otsikko], 0, 7) == "decimal" or mb_substr($trows[$table_mysql.".".$otsikko], 0, 4) == "real") {
+            if (substr($trows[$table_mysql.".".$otsikko], 0, 7) == "decimal" or substr($trows[$table_mysql.".".$otsikko], 0, 4) == "real") {
 
               // Korvataan decimal kenttien pilkut pisteillä...
               $taulunrivit[$taulu][$eriviindex][$r] = str_replace(",", ".", $taulunrivit[$taulu][$eriviindex][$r]);
@@ -1601,11 +1601,11 @@ if ($kasitellaan_tiedosto) {
               }
             }
 
-            if ((int) $tlength[$table_mysql.".".$otsikko] > 0 and mb_strlen($taulunrivit[$taulu][$eriviindex][$r]) > $tlength[$table_mysql.".".$otsikko]
+            if ((int) $tlength[$table_mysql.".".$otsikko] > 0 and strlen($taulunrivit[$taulu][$eriviindex][$r]) > $tlength[$table_mysql.".".$otsikko]
               and !($table_mysql == "tuotepaikat"  and $otsikko == "OLETUS"  and $taulunrivit[$taulu][$eriviindex][$r] == 'XVAIHDA')
               and !($table_mysql == "asiakashinta" and $otsikko == 'ASIAKAS' and $asiakkaanvalinta > 1)) {
 
-              lue_data_echo(t("Virhe rivillä").": $rivilaskuri <font class='error'>".t("VIRHE").": $otsikko ".t("kentässä on liian pitkä tieto")."!</font> {$taulunrivit[$taulu][$eriviindex][$r]}: ".mb_strlen($taulunrivit[$taulu][$eriviindex][$r])." > ".$tlength[$table_mysql.".".$otsikko]."!<br>");
+              lue_data_echo(t("Virhe rivillä").": $rivilaskuri <font class='error'>".t("VIRHE").": $otsikko ".t("kentässä on liian pitkä tieto")."!</font> {$taulunrivit[$taulu][$eriviindex][$r]}: ".strlen($taulunrivit[$taulu][$eriviindex][$r])." > ".$tlength[$table_mysql.".".$otsikko]."!<br>");
               $hylkaa++; // ei päivitetä tätä riviä
             }
 
@@ -1674,14 +1674,14 @@ if ($kasitellaan_tiedosto) {
                 $tee = "25paalle";
               }
 
-              if (mb_strtoupper($taulunrivit[$taulu][$eriviindex][$r]) == "PERU") {
+              if (strtoupper($taulunrivit[$taulu][$eriviindex][$r]) == "PERU") {
                 $tee = "peru";
               }
 
-              if ($taulunrivit[$taulu][$eriviindex][$r] == "0000-00-00" or mb_substr(mb_strtoupper($taulunrivit[$taulu][$eriviindex][$r]), 0, 4) == "POIS") {
+              if ($taulunrivit[$taulu][$eriviindex][$r] == "0000-00-00" or substr(strtoupper($taulunrivit[$taulu][$eriviindex][$r]), 0, 4) == "POIS") {
 
-                if (mb_substr(mb_strtoupper($taulunrivit[$taulu][$eriviindex][$r]), 0, 4) == "POIS" and mb_strlen($taulunrivit[$taulu][$eriviindex][$r]) == 15) {
-                  $epakurpvm = mb_substr($taulunrivit[$taulu][$eriviindex][$r], 5);
+                if (substr(strtoupper($taulunrivit[$taulu][$eriviindex][$r]), 0, 4) == "POIS" and strlen($taulunrivit[$taulu][$eriviindex][$r]) == 15) {
+                  $epakurpvm = substr($taulunrivit[$taulu][$eriviindex][$r], 5);
                 }
 
                 $tee = "pois";
@@ -2061,7 +2061,7 @@ if ($kasitellaan_tiedosto) {
 
                 $query .= ", $otsikko = '{$taulunrivit[$taulu][$eriviindex][$r]}' ";
               }
-              elseif (mb_substr($taulu, 0, 11) == 'puun_alkio_') {
+              elseif (substr($taulu, 0, 11) == 'puun_alkio_') {
                 if ($otsikko == 'PUUN_TUNNUS') {
                   if ($dynaamisen_taulun_liitos == 'koodi') {
                     $query_x = "SELECT tunnus
@@ -2160,7 +2160,7 @@ if ($kasitellaan_tiedosto) {
           $and .= " and alkupvm = '$chalkupvm' and loppupvm = '$chloppupvm'";
         }
 
-        if (mb_substr($taulu, 0, 11) == 'puun_alkio_' and $taulunrivit[$taulu][$eriviindex][$postoiminto] != 'POISTA') {
+        if (substr($taulu, 0, 11) == 'puun_alkio_' and $taulunrivit[$taulu][$eriviindex][$postoiminto] != 'POISTA') {
           $query .= " , laji = '{$table_tarkenne}' ";
         }
 
@@ -2172,20 +2172,20 @@ if ($kasitellaan_tiedosto) {
         // Taulun oletusarvot, jos ollaan lisäämässä uutta tietuetta
         if ($taulunrivit[$taulu][$eriviindex][$postoiminto] == "LISAA") {
           foreach ($oletukset as $oletus_kentta => $oletus_arvo) {
-            if (mb_stripos($query, ", $oletus_kentta = ") === FALSE) {
+            if (stripos($query, ", $oletus_kentta = ") === FALSE) {
               $query .= ", $oletus_kentta = '$oletus_arvo' ";
             }
           }
         }
 
         // lisätään tuote, mutta ei olla speksattu alvia ollenkaan...
-        if ($taulunrivit[$taulu][$eriviindex][$postoiminto] == 'LISAA' and $table_mysql == 'tuote' and mb_stripos($query, ", alv = ") === FALSE) {
+        if ($taulunrivit[$taulu][$eriviindex][$postoiminto] == 'LISAA' and $table_mysql == 'tuote' and stripos($query, ", alv = ") === FALSE) {
           $query .= ", alv = '$oletus_alvprossa' ";
         }
 
         // Jos on asiakas-taulu, niin populoidaan kaikkien dropdown-menujen arvot, mikäli niitä ei ole annettu.
         if ($table_mysql == 'asiakas' and $taulunrivit[$taulu][$eriviindex][$postoiminto] == 'LISAA') {
-          if (mb_stripos($query, ", maksuehto = ") === FALSE) {
+          if (stripos($query, ", maksuehto = ") === FALSE) {
             $select_query = "SELECT * FROM maksuehto WHERE yhtio = '{$kukarow['yhtio']}' AND kaytossa='' ORDER BY jarjestys, teksti limit 1";
             $select_result = pupe_query($select_query);
             $select_row = mysqli_fetch_assoc($select_result);
@@ -2193,7 +2193,7 @@ if ($kasitellaan_tiedosto) {
             $query .= ", maksuehto = '{$select_row["tunnus"]}' ";
           }
 
-          if (mb_stripos($query, ", toimitustapa = ") === FALSE) {
+          if (stripos($query, ", toimitustapa = ") === FALSE) {
             $select_query = "SELECT * FROM toimitustapa WHERE yhtio = '{$kukarow['yhtio']}' ORDER BY jarjestys, selite limit 1";
             $select_result = pupe_query($select_query);
             $select_row = mysqli_fetch_assoc($select_result);
@@ -2201,51 +2201,51 @@ if ($kasitellaan_tiedosto) {
             $query .= ", toimitustapa = '{$select_row["selite"]}' ";
           }
 
-          if (mb_stripos($query, ", valkoodi = ") === FALSE) {
+          if (stripos($query, ", valkoodi = ") === FALSE) {
             $query .= ", valkoodi = '{$yhtiorow["valkoodi"]}' ";
           }
 
-          if (mb_stripos($query, ", kerayspoikkeama = ") === FALSE) {
+          if (stripos($query, ", kerayspoikkeama = ") === FALSE) {
             $query .= ", kerayspoikkeama = '0' ";
           }
 
-          if (mb_stripos($query, ", laskutusvkopv = ") === FALSE) {
+          if (stripos($query, ", laskutusvkopv = ") === FALSE) {
             $query .= ", laskutusvkopv = '0' ";
           }
 
-          if (mb_stripos($query, ", laskutyyppi = ") === FALSE) {
+          if (stripos($query, ", laskutyyppi = ") === FALSE) {
             $query .= ", laskutyyppi = '-9' ";
           }
 
-          if (mb_stripos($query, ", maa = ") === FALSE) {
+          if (stripos($query, ", maa = ") === FALSE) {
             $query .= ", maa = '{$yhtiorow["maa"]}' ";
           }
 
-          if (mb_stripos($query, ", kansalaisuus = ") === FALSE) {
+          if (stripos($query, ", kansalaisuus = ") === FALSE) {
             $query .= ", kansalaisuus = '{$yhtiorow["kieli"]}' ";
           }
 
-          if (mb_stripos($query, ", laskutus_maa = ") === FALSE) {
+          if (stripos($query, ", laskutus_maa = ") === FALSE) {
             $query .= ", laskutus_maa = '{$yhtiorow["maa"]}' ";
           }
 
-          if (mb_stripos($query, ", toim_maa = ") === FALSE) {
+          if (stripos($query, ", toim_maa = ") === FALSE) {
             $query .= ", toim_maa = '{$yhtiorow["maa"]}' ";
           }
 
-          if (mb_stripos($query, ", kolm_maa = ") === FALSE) {
+          if (stripos($query, ", kolm_maa = ") === FALSE) {
             $query .= ", kolm_maa = '{$yhtiorow["maa"]}' ";
           }
 
-          if (mb_stripos($query, ", kieli = ") === FALSE) {
+          if (stripos($query, ", kieli = ") === FALSE) {
             $query .= ", kieli = '{$yhtiorow["kieli"]}' ";
           }
 
-          if (mb_stripos($query, ", chn = ") === FALSE) {
+          if (stripos($query, ", chn = ") === FALSE) {
             $query .= ", chn = '100' ";
           }
 
-          if (mb_stripos($query, ", alv = ") === FALSE) {
+          if (stripos($query, ", alv = ") === FALSE) {
             //yhtiön oletusalvi!
             $wquery = "SELECT selite from avainsana where yhtio='$kukarow[yhtio]' and laji = 'alv' and selitetark != ''";
             $wtres = pupe_query($wquery);
@@ -2254,7 +2254,7 @@ if ($kasitellaan_tiedosto) {
             $query .= ", alv = '{$wtrow["selite"]}' ";
           }
 
-          if (mb_stripos($query, ", asiakasnro = ") === FALSE and $yhtiorow["automaattinen_asiakasnumerointi"] != "") {
+          if (stripos($query, ", asiakasnro = ") === FALSE and $yhtiorow["automaattinen_asiakasnumerointi"] != "") {
 
             if ($yhtiorow["asiakasnumeroinnin_aloituskohta"] != "") {
               $apu_asiakasnumero = $yhtiorow["asiakasnumeroinnin_aloituskohta"];
@@ -2281,7 +2281,7 @@ if ($kasitellaan_tiedosto) {
 
         // Laitetaan oletuksena asiakashinnalle yhtiön valuutta
         if ($table_mysql == "asiakashinta" and $taulunrivit[$taulu][$eriviindex][$postoiminto] != "POISTA") {
-          if (mb_stripos($query, ", valkoodi = ") === FALSE) {
+          if (stripos($query, ", valkoodi = ") === FALSE) {
             $query .= ", valkoodi = '{$yhtiorow["valkoodi"]}' ";
           }
         }
@@ -2289,7 +2289,7 @@ if ($kasitellaan_tiedosto) {
         // Laitetaan oletuksena tuotteen toimittajalle toimittajan valuutta ja maa,
         // jos saraketta excelissä ei ole
         if ($table_mysql == "tuotteen_toimittajat" and $taulunrivit[$taulu][$eriviindex][$postoiminto] == "LISAA" and isset($toimi_liitostunnus)) {
-          if (mb_stripos($query, ", valuutta = ") === FALSE) {
+          if (stripos($query, ", valuutta = ") === FALSE) {
             $toimi_val_query = "SELECT oletus_valkoodi
                                 FROM toimi
                                 WHERE yhtio  = '{$kukarow["yhtio"]}'
@@ -2300,7 +2300,7 @@ if ($kasitellaan_tiedosto) {
             $query .= ", valuutta = '{$toimi_valuutta["oletus_valkoodi"]}'";
           }
 
-          if (mb_stripos($query, ", alkuperamaa = ") === FALSE) {
+          if (stripos($query, ", alkuperamaa = ") === FALSE) {
             $toimi_maa_query = "SELECT maa
                                 FROM toimi
                                 WHERE yhtio  = '{$kukarow["yhtio"]}'
@@ -2421,9 +2421,9 @@ if ($kasitellaan_tiedosto) {
           for ($i=1; $i < mysqli_num_fields($result); $i++) {
 
             // Tarkistetaan saako käyttäjä päivittää tätä kenttää
-            $Lindexi = array_search(mb_strtoupper(mysqli_field_name($result, $i)), $taulunotsikot[$taulu]);
+            $Lindexi = array_search(strtoupper(mysqli_field_name($result, $i)), $taulunotsikot[$taulu]);
 
-            if (mb_strtoupper(mysqli_field_name($result, $i)) == 'TUNNUS') {
+            if (strtoupper(mysqli_field_name($result, $i)) == 'TUNNUS') {
               $tassafailissa = TRUE;
             }
             elseif ($Lindexi !== FALSE and array_key_exists($Lindexi, $taulunrivit[$taulu][$eriviindex])) {
@@ -2488,7 +2488,7 @@ if ($kasitellaan_tiedosto) {
             generoi_hinnastot($tunnus);
 
             // Synkronoidaan
-            if (mb_stripos($yhtiorow["synkronoi"], $table_mysql) !== FALSE) {
+            if (stripos($yhtiorow["synkronoi"], $table_mysql) !== FALSE) {
               if ($taulunrivit[$taulu][$eriviindex][$postoiminto] == 'LISAA') {
                 $syncrow = array();
               }
@@ -2742,7 +2742,7 @@ if (!$cli and !isset($api_kentat)) {
     $_taulu = array_shift($taulut);
   }
 
-  if (mb_substr($_taulu, 0, 10) == 'puun_alkio') {
+  if (substr($_taulu, 0, 10) == 'puun_alkio') {
     $_taulu_query = "puun_alkio";
   }
   else {
@@ -2755,16 +2755,16 @@ if (!$cli and !isset($api_kentat)) {
   $wherelliset = array_unique($wherelliset);
 
   echo "<tr><td class='tumma'>".t("Tietokantataulun pakolliset tiedot").":<br>".t("(Näitä tietoja ei voi muuttaa)")."</td>";
-  echo "<td><ul><li>".mb_strtolower(implode("</li><li>", $pakolliset))."</li></ul></td></tr>";
+  echo "<td><ul><li>".strtolower(implode("</li><li>", $pakolliset))."</li></ul></td></tr>";
 
   if (!empty($wherelliset)) {
     echo "<tr><td class='tumma'>".t("Sarakkeet jotka pitää aineistossa kertoa").":</td>";
-    echo "<td><ul><li>".mb_strtolower(implode("</li><li>", $wherelliset))."</li></ul></td></tr>";
+    echo "<td><ul><li>".strtolower(implode("</li><li>", $wherelliset))."</li></ul></td></tr>";
   }
 
   if (!empty($kielletyt)) {
     echo "<tr><td class='tumma'>".t("Sarakkeet joita ei saa aineistossa kertoa").":</td>";
-    echo "<td><ul><li>".mb_strtolower(implode("</li><li>", $kielletyt))."</li></ul></td></tr>";
+    echo "<td><ul><li>".strtolower(implode("</li><li>", $kielletyt))."</li></ul></td></tr>";
   }
 
   $_ei_olemassa = array('todo');
@@ -2780,7 +2780,7 @@ if (!$cli and !isset($api_kentat)) {
         continue;
       }
 
-      if (!in_array(mb_strtoupper($_row['Field']), $pakolliset) and !in_array(mb_strtoupper($_row['Field']), $wherelliset) and !in_array(mb_strtoupper($_row['Field']), $kielletyt)) {
+      if (!in_array(strtoupper($_row['Field']), $pakolliset) and !in_array(strtoupper($_row['Field']), $wherelliset) and !in_array(strtoupper($_row['Field']), $kielletyt)) {
         $_kentat[] = $_row['Field'];
       }
     }
