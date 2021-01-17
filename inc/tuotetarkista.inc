@@ -15,13 +15,13 @@ if (!function_exists("tuotetarkista")) {
         $virhe[$i] = t("Tieto puuttuu");
       }
       else {
-        $temp_ekakirjain = (mb_substr(trim($t[$i]), 0, 1));
+        $temp_ekakirjain = (substr(trim($t[$i]), 0, 1));
 
         if (($temp_ekakirjain == '*') or ($temp_ekakirjain == '@') or ($temp_ekakirjain == '?')) {
           $virhe[$i] = t("Tuotenumero ei voi alkaa merkeillä *, @ tai ?");
         }
         else {
-          if (mb_substr(trim($t[$i]), -1) == '*') {
+          if (substr(trim($t[$i]), -1) == '*') {
             $virhe[$i] = t("Tuotenumero ei voi loppua merkkiin *");
           }
           else {
@@ -43,10 +43,10 @@ if (!function_exists("tuotetarkista")) {
       $tem_tuoteno = $t[$i];
 
       // Onko tuotteella tapahtumia
-      if ($poistolukko != "" and ($poistolukko != "LUEDATA" or ($poistolukko == "LUEDATA" and mb_strtoupper($luedata_toiminto) == "POISTA"))) {
+      if ($poistolukko != "" and ($poistolukko != "LUEDATA" or ($poistolukko == "LUEDATA" and strtoupper($luedata_toiminto) == "POISTA"))) {
         onkotapahtumajariveja($tem_tuoteno);
 
-        if ($poistolukko != "" and mb_strtoupper($luedata_toiminto) == "POISTA") {
+        if ($poistolukko != "" and strtoupper($luedata_toiminto) == "POISTA") {
           $virhe[$i] = t("Tuotetta ei saa poistaa, koska tuotteella on tilausrivejä/tapahtumia")."!";
         }
       }
@@ -205,7 +205,7 @@ if (!function_exists("tuotetarkista")) {
     if ($fieldname == "tuotemassa") {
       $tem_tuotemassa = $t[$i];
     }
-    
+
     if ($fieldname == "halytysraja") {
       $tem_halytysraja = $t[$i];
     }
@@ -213,14 +213,14 @@ if (!function_exists("tuotetarkista")) {
     if ($fieldname == "tuotetyyppi") {
       if (isset($t[$i])) {
         // Tyyppiä ei saa vaihtaa, jos tuotteella on yksikin tapahtuma
-        if (trim(mb_strtoupper($trow["tuotetyyppi"])) != trim(mb_strtoupper($t[$i]))) {
+        if (trim(strtoupper($trow["tuotetyyppi"])) != trim(strtoupper($t[$i]))) {
 
           // Onko tuotteella tapahtumia
           if ($poistolukko != "" and $poistolukko != "TSEKATTU") {
             onkotapahtumajariveja($tem_tuoteno);
           }
 
-          if (trim(mb_strtoupper($trow["tuotetyyppi"])) == "") {
+          if (trim(strtoupper($trow["tuotetyyppi"])) == "") {
             if ($poistolukko != "" and ($t[$i] == 'R' or $t[$i] == 'K' or $t[$i] == 'M')) {
               $virhe[$i] = t("Tuotetyyppiä ei voida muuttaa, koska tuotteella on tapahtumia")."!";
             }
@@ -290,13 +290,13 @@ if (!function_exists("tuotetarkista")) {
     if ($fieldname == "vienti" and $laji != "V" and $tem_tuotetyyppi != "A" and $tem_tuotetyyppi != "B") {
 
       // Katsotaan, ettei ole sekaisin plussia ja miinuksia
-      if ($t[$i] != '' and mb_strpos($t[$i], "+") !== FALSE and mb_strpos($t[$i], "-") !== FALSE) {
+      if ($t[$i] != '' and strpos($t[$i], "+") !== FALSE and strpos($t[$i], "-") !== FALSE) {
         $virhe[$i] = t("Laita samanaikaisesti vain + tai - maakoodeja!")."<br>";
       }
       elseif ($t[$i] != '') {
 
         // Käyttäjät voi erotella myös maat pilkuilla, joten vaihdetaan ne tässä spaceiksi, trimmataan ja uppercasetaan
-        $t[$i] = str_replace(",", " ", mb_strtoupper(trim($t[$i])));
+        $t[$i] = str_replace(",", " ", strtoupper(trim($t[$i])));
 
         // Poistetaan ylimääräiset spacet (kaksi tai enemmän spaceja yhdeksi spaceksi)
         $t[$i] = preg_replace("/ {2,}/", " ", $t[$i]);
@@ -307,16 +307,16 @@ if (!function_exists("tuotetarkista")) {
         foreach ($apu_vientikiellot as $apu_vientikielto) {
 
           // varmistetaan, että löytyy plus tai miinusmerkki
-          if (mb_strpos($apu_vientikielto, "+") === FALSE and mb_strpos($apu_vientikielto, "-") === FALSE) {
+          if (strpos($apu_vientikielto, "+") === FALSE and strpos($apu_vientikielto, "-") === FALSE) {
             $virhe[$i] .= t("Maakoodi virheellisessä muodossa").": '$apu_vientikielto'<br>";
           }
           // varmistetaan, että plus tai miinus on eka merkki
-          elseif (mb_strpos($apu_vientikielto, "+") != 0 or mb_strpos($apu_vientikielto, "-") != 0) {
+          elseif (strpos($apu_vientikielto, "+") != 0 or strpos($apu_vientikielto, "-") != 0) {
             $virhe[$i] .= t("Maakoodi virheellisessä muodossa").": '$apu_vientikielto'<br>";
           }
           else {
             // Otetaan eka +/- pois
-            $apu_vientikielto = mb_substr($apu_vientikielto, 1);
+            $apu_vientikielto = substr($apu_vientikielto, 1);
 
             // Katsotaan löytyykö annettu maakoodi
             $query = "SELECT distinct koodi
@@ -367,7 +367,7 @@ if (!function_exists("tuotetarkista")) {
 
     if ($fieldname == 'status') {
       // trim ja upcase statukselle
-      $t[$i] = mb_strtoupper(trim($t[$i]));
+      $t[$i] = strtoupper(trim($t[$i]));
 
       $tem_status = $t[$i];
       $tem_status_vanha = $trow[$i];
@@ -486,7 +486,7 @@ if (!function_exists("tuotetarkista")) {
         $query = "UPDATE tuotteen_avainsanat SET
                   selite      = ''
                   WHERE yhtio = '{$kukarow['yhtio']}'
-                  AND laji    = 'synkronointi'
+                  AND laji   in ('synkronointi','synkronointi_smarten')
                   AND tuoteno = '{$tem_tuoteno}'";
         $updres = pupe_query($query);
       }

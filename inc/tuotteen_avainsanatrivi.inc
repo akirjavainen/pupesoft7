@@ -29,7 +29,8 @@ if (mysqli_field_name($result, $i) == "laji") {
   $ulos .= "<option value='ei_edi_ostotilaukseen' {$sel['ei_edi_ostotilaukseen']}>".t("Tuotetta ei lisätä EDI-ostotilaukselle")."</option>";
   $ulos .= "<option value='hammastus' $sel[hammastus]>".t("Tuotteen hammastus")."</option>";
   $ulos .= "<option value='laatuluokka' {$sel['laatuluokka']}>".t("Tuotteen laatuluokka")."</option>";
-  $ulos .= "<option value='synkronointi' {$sel['synkronointi']}>".t("Tuotteen synkronointi")."</option>";
+  $ulos .= "<option value='synkronointi' {$sel['synkronointi']}>".t("Tuotteen synkronointi PostNord")."</option>";
+  $ulos .= "<option value='synkronointi_smarten' {$sel['synkronointi_smarten']}>".t("Tuotteen synkronointi Smarten")."</option>";
   $ulos .= "<option value='toimpalautus' {$sel['toimpalautus']}>".t("Palautus toimittajalle")."</option>";
   $ulos .= "<option value='varastopalautus' {$sel['varastopalautus']}>".t("Palautus sallittuihin varastoihin")."</option>";
   $ulos .= "<option value='hinnastoryhmittely' {$sel['hinnastoryhmittely']}>".t("hinnastoryhmittely")."</option>";
@@ -77,7 +78,7 @@ if (mysqli_field_name($result, $i) == "tuoteno") {
 
 if (mysqli_field_name($result, $i) == "selite") {
 
-  if (mb_strtolower($tem_laji) == "elinkaari") {
+  if (strtolower($tem_laji) == "elinkaari") {
 
     $vresult = t_avainsana("ELINKAARI");
 
@@ -174,7 +175,7 @@ if (mysqli_field_name($result, $i) == "selite") {
 
     $ulos .= "</select></td>";
   }
-  elseif (mb_strtolower($tem_laji) == "magento_attribute_set_id") {
+  elseif (strtolower($tem_laji) == "magento_attribute_set_id") {
     $ulos = "<td><input type='text' name='$nimi' value='{$trow[$i]}'></input></td>";
   }
   else {
@@ -185,7 +186,7 @@ if (mysqli_field_name($result, $i) == "selite") {
 }
 
 if (mysqli_field_name($result, $i) == "selitetark") {
-  if (mb_strtolower($tem_laji) == "magento_attribute_set_id") {
+  if (strtolower($tem_laji) == "magento_attribute_set_id") {
     $tyyppi = 0;
   }
   else {
@@ -213,7 +214,7 @@ if (mysqli_field_name($result, $i) == "kieli") {
 }
 
 if (mysqli_field_name($result, $i) == 'status') {
-  if (mb_substr($trow['laji'], 0, 10) == 'lisatieto_') {
+  if (substr($trow['laji'], 0, 10) == 'lisatieto_') {
     $sel = array_fill_keys(array($trow[$i]), " selected") + array('P' => '', 'L' => '');
 
     $ulos = "<td><select name='{$nimi}' ".js_alasvetoMaxWidth($nimi, 300).">";
@@ -230,7 +231,7 @@ if (mysqli_field_name($result, $i) == 'status') {
 }
 
 if (mysqli_field_name($result, $i) == 'nakyvyys') {
-  if (mb_substr($trow['laji'], 0, 10) == 'lisatieto_') {
+  if (substr($trow['laji'], 0, 10) == 'lisatieto_') {
     $sel = array($trow[$i] => " selected") + array('o' => '', 'K' => '', 'P' => '');
 
     $ulos = "<td><select name='{$nimi}' ".js_alasvetoMaxWidth($nimi, 300).">";
@@ -266,7 +267,7 @@ if (mysqli_field_name($result, $i) == 'selite' && $trow[3] == 'ps_ala_try') {
 }
 
 if (mysqli_field_name($result, $i) == 'jarjestys') {
-  if (mb_strtolower($tem_laji) == "magento_attribute_set_id") {
+  if (strtolower($tem_laji) == "magento_attribute_set_id") {
     $tyyppi = 0;
   }
 }
