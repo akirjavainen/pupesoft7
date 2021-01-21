@@ -272,7 +272,7 @@ if (!function_exists('alku_lahete')) {
         $toimaikares = pupe_query($query);
 
         if (mysqli_num_rows($toimaikares) > 1) {
-          $useita = "JOO";
+          //$useita = "JOO"; // MODIFIED, commented out
         }
       }
 
