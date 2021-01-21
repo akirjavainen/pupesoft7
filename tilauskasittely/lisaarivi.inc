@@ -3417,7 +3417,7 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
     if (isset($GLOBALS['kampanjahinnoitteluntunnus'])) {
       $kampanjatunnus = $GLOBALS['kampanjahinnoitteluntunnus'];
     }
-
+    $tilausrivi_nimitys = ($_POST['tapa'] == 'VAIHDAJAPOISTA') ? $tilausrivi['nimitys'] : $trow['nimitys']; // MODIFIED, do not lose tilausrivi.nimitys
     // lisätään puuterivi
     $query = "INSERT into tilausrivi set
               hyllyalue       = '$p_hyllyalue',
@@ -3457,8 +3457,8 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
               perheid         = '$perheid',
               perheid2        = '$perheid2',
               tunnus          = '$rivitunnus',
-              nimitys         = '$tilausrivi[nimitys]',
-              jaksotettu      = '$jaksotettu'"; // MODIFIED: trow -> tilausrivi (nimitys)
+              nimitys         = '$tilausrivi_nimitys',
+              jaksotettu      = '$jaksotettu'"; // MODIFIED: trow[nimitys] -> $tilausrivi_nimitys
 
     if ($trow['ei_saldoa'] != '' and $yhtiorow["kerataanko_saldottomat"] == '') {
       $query .= ", keratty = 'saldoton', kerattyaika = now()";
