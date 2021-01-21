@@ -3457,8 +3457,8 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
               perheid         = '$perheid',
               perheid2        = '$perheid2',
               tunnus          = '$rivitunnus',
-              nimitys         = '$tilausrivi[nimitys]', // MODIFIED: trow -> tilausrivi
-              jaksotettu      = '$jaksotettu'"; // MODIFIED, retain nimitys
+              nimitys         = '$tilausrivi[nimitys]',
+              jaksotettu      = '$jaksotettu'"; // MODIFIED: trow -> tilausrivi (nimitys)
 
     if ($trow['ei_saldoa'] != '' and $yhtiorow["kerataanko_saldottomat"] == '') {
       $query .= ", keratty = 'saldoton', kerattyaika = now()";
