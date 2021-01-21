@@ -411,10 +411,10 @@ if (!function_exists('alku_lahete')) {
       $pdf->draw_text(430, 729, t("Päiväys", $kieli),               $thispage, $pieni);
 
       if ($lahetetyyppi_avainsana == 1) { // Ei kellonaikaa
-        $pdf->draw_text(430, 719, tv1dateconv($kerarow["kerattyaika"]), $thispage, $norm);
+        $pdf->draw_text(430, 719, tv1dateconv($laskurow["muutospvm"]), $thispage, $norm); // MODIFIED $kerarow["kerattyaika"]
       }
       else {
-        $pdf->draw_text(430, 719, tv1dateconv($kerarow["kerattyaika"], "pitka"), $thispage, $norm);
+        $pdf->draw_text(430, 719, tv1dateconv($laskurow["muutospvm"], "pitka"), $thispage, $norm); // MODIFIED $kerarow["kerattyaika"]
       }
       $pdf->draw_rectangle(716, 300, 695, 580, $thispage, $rectparam);
 
@@ -903,10 +903,10 @@ if (!function_exists('uusi_sivu_lahete')) {
       $pdf->draw_text(430, 771, t("Päiväys", $kieli),               $thispage, $pieni);
 
       if ($lahetetyyppi_avainsana == 1) { // Ei kellonaikaa
-        $pdf->draw_text(430, 761, tv1dateconv($kerarow["kerattyaika"], "pitka"),   $thispage, $norm);
+        $pdf->draw_text(430, 761, tv1dateconv($laskurow["muutospvm"], "pitka"),   $thispage, $norm); // MODIFIED $kerarow["kerattyaika"]
       }
       else {
-        $pdf->draw_text(430, 761, tv1dateconv($kerarow["kerattyaika"]),   $thispage, $norm);
+        $pdf->draw_text(430, 761, tv1dateconv($laskurow["muutospvm"]),   $thispage, $norm); // MODIFIED $kerarow["kerattyaika"]
       }
 
       // viivakoodi
