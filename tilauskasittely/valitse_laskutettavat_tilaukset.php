@@ -1314,7 +1314,7 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
       // MODIFIED, added:
 	  $tun_array = explode("<br>", $tilrow[tunnukset_ruudulle]);
 	  foreach($tun_array as $tun) {
-		  echo "<a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tun&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tun</a>";
+		  echo "<a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tun&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tun</a><br>";
       }
       
 		  echo "</td>
