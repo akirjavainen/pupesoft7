@@ -1306,9 +1306,18 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
 
         $teksti = tv1dateconv($laskutusvkopv);
       }
+
 // MODIFIED, added link on next line, also added toimitustapa lower:
       echo "  <tr class='aktiivi'>
-	  <td valign='top'><a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tilrow[tunnukset]&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tilrow[tunnukset_ruudulle]</a></td>
+	  <td valign='top'>";
+
+      // MODIFIED, added:
+	  $tun_array = explode("<br>", $tilrow[tunnukset_ruudulle]);
+	  foreach($tun_array as $tun) {
+		  echo "<a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tun&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tun</a>";
+      }
+      
+		  echo "</td>
           <td valign='top'>$tilrow[ytunnus]<br><a href='/raportit/nimihaku.php?search=$tilrow[nimi]'>$tilrow[nimi]</a> $tilrow[nimitark]</td>
           <td valign='top'>$tilrow[tilauksia]<br>$tilrow[riveja]
           <td valign='top' align='right' nowrap>$tilrow[arvo]</td>
