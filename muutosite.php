@@ -982,7 +982,7 @@ if ($tee == 'E' or $tee == 'F') {
   $result = pupe_query($query);
 
   if (mysqli_num_rows($result) != 1) {
-    echo t("Laskua ei löydy!");
+    echo t("Tapahtumaa ei löydy (lasku-taulun tunnus $tunnus)."); // MODIFIED
     exit;
   }
 
