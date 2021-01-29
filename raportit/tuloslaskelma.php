@@ -494,8 +494,7 @@ else {
       <option value='AT' $konsel[AT]>".t("Näytetään konserniasiakkaiden ja konsernitoimittajien tiliöinnit")."</option>
       <option value='T'  $konsel[T]>".t("Näytetään konsernitoimitajien tiliöinnit")."</option>
       <option value='A'  $konsel[A]>".t("Näytetään konserniasiakkaiden tiliöinnit")."</option>
-      </select>
-      HUOM: Ominaisuus huollossa!</td></tr>";
+      </select></td></tr>";
 
   echo "<tr><th valign='top'>".t("Sarakkeet")."</th>";
 
