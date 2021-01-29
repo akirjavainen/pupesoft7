@@ -58,7 +58,7 @@ $query = "INSERT into tiliointi set
           selite   = '$selite',
           laatija  = 'tiliote',
           laadittu = now()";
-$result = pupe_query($query);
+$result = pupe_query($query, $GLOBALS["masterlink"]); // MODIFIED, BUGFIX
 $_tiliointi_id = mysqli_insert_id($GLOBALS["masterlink"]);
 
 $query = "UPDATE tiliotedata SET

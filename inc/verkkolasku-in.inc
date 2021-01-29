@@ -1259,7 +1259,7 @@ if (!function_exists("verkkolasku_in")) {
                 lukko            = '1',
                 laatija          = 'verkkolas',
                 laadittu         = now()";
-      $result = pupe_query($query);
+      $result = pupe_query($query, $GLOBALS["masterlink"]); // MODIFIED, BUGFIX
       $ostovelkatiliointitunnus = mysqli_insert_id($GLOBALS["masterlink"]);
 
       // Onko rivikohtaisia tiliöintisääntöjä
