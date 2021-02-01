@@ -1245,7 +1245,7 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
       if ($tilrow["chn"] == '999') $toimitusselite = t("Laskutuskielto, laskutusta ei tehdä");
 
       $teksti = "";
-      $toimitusselite = "Viikko ".date("W", strtotime($tilrow[toimaika])); // MODIFIED, added
+      $toimitusselite = "Viikko ".date("W", strtotime($tilrow["toimaika"])); // MODIFIED, added
 
       if ($tilrow["laskutusvkopv"] == 0)     $teksti = t("Kaikki");
       elseif ($tilrow["laskutusvkopv"] == 2) $teksti = t("Maanantai");
@@ -1312,7 +1312,7 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
 	  <td valign='top'>";
 
       // MODIFIED, added:
-	  $tun_array = explode("<br>", $tilrow[tunnukset_ruudulle]);
+	  $tun_array = explode("<br>", $tilrow["tunnukset_ruudulle"]);
 	  foreach($tun_array as $tun) {
 		  echo "<a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tun&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tun</a><br>";
       }
