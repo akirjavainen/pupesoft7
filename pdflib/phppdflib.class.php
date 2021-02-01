@@ -448,7 +448,7 @@ class pdffile {
         unset($temp);
         $temp['data'] = "";
         reset($temparray);
-        while ( list ($liboid, $obj) = each($temparray) ) {
+        foreach ($temparray as $liboid => $obj) { // MODIFIED, PHP8 each replaced
           if (isset($obj["parent"]) && $obj["parent"] == $oid) {
             $this->_debug(10, "Adding # $liboid to mstream");
             switch ($obj["type"]) {
@@ -546,7 +546,7 @@ class pdffile {
       $temp["Font"] = $this->_makedictionary($ta);
     }
     reset($this->objects);
-    while (list($id, $obj) = each($this->objects)) {
+    foreach ($this->objects as $id => $obj) { // MODIFIED, PHP8 each replaced
       if ($obj["type"] == "image") {
         $xol["Img$id"] = $this->libtopdf[$id] . " 0 R";
       }
@@ -1252,6 +1252,7 @@ class pdffile {
 
   function _resolve_mode($attrib, $mode) {
     $rmode = $attrib[$mode];
+    $r = $rmode; // MODIFIED, BUGFIX
     if ($rmode != 0) {
       $r = $rmode;
     } else {
