@@ -636,8 +636,8 @@ if ($tunnus != 'T11' and $tunnus != 'T81' and $maksu == 1) {
 
   if ($tiliotekuitti_oikeu and !empty($tiliotekuitti_saajan_nimi)) {
     js_openFormInNewWindow();
-
-    echo "<br><form id='tulostakopioform_tiliotekuitti_{$td_perheid}' name='tulostakopioform_tiliotekuitti_{$td_perheid}' method='post' action='{$palvelin2}tilauskasittely/tulosta_tiliotekuitti.php' autocomplete='off'>
+    // MODIFIED 3 x $td_perheid -> $tiliotedatarow['tunnus'] (BUGFIX):
+    echo "<br><form id='tulostakopioform_tiliotekuitti_{$tiliotedatarow['tunnus']} name='tulostakopioform_tiliotekuitti_{$tiliotedatarow['tunnus']}' method='post' action='{$palvelin2}tilauskasittely/tulosta_tiliotekuitti.php' autocomplete='off'>
           <input type='hidden' name='tee' value='NAYTATILAUS'>
           <input type='hidden' name='maksupvm' value='{$tiliotekuitti_maksupvm}'>
           <input type='hidden' name='arvopvm' value='{$tiliotekuitti_arvopvm}'>
@@ -650,7 +650,7 @@ if ($tunnus != 'T11' and $tunnus != 'T81' and $maksu == 1) {
           <input type='hidden' name='rahamaara' value='{$tiliotekuitti_rahamaara}'>
           <input type='hidden' name='maksajan_tilinumero' value='{$tiliotekuitti_maksajan_tilinumero}'>
           <input type='hidden' name='nayta_pdf' value='1'>
-          <input type='submit' value='".t("Tiliotekuitti", $kieli)."' onClick=\"js_openFormInNewWindow('tulostakopioform_tiliotekuitti_{$td_perheid}', ''); return false;\"></form>";
+          <input type='submit' value='".t("Tiliotekuitti", $kieli)."' onClick=\"js_openFormInNewWindow('tulostakopioform_tiliotekuitti_{$tiliotedatarow['tunnus']}', ''); return false;\"></form>";
   }
 
   $tiliotekuitti_maksupvm = '';
