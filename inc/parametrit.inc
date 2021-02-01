@@ -299,7 +299,7 @@ $link = @mysqli_connect($dbhost, $dbuser, $dbpass) or die ("Tietokantapalvelimee
 mysqli_select_db($link, $dbkanta) or die ("Tietokantaa $dbkanta ei löydy palvelimelta $dbhost! (parametrit.inc)");
 $GLOBALS["link"] = $link;
 mysqli_set_charset($link, "utf8");
-mysqli_query($link, "set collation_connection=\"utf8_unicode_ci\", collation_database=\"utf8_unicode_ci\", group_concat_max_len=1000000", $link);
+mysqli_query($link, "set collation_connection=\"utf8_unicode_ci\", collation_database=\"utf8_unicode_ci\", group_concat_max_len=1000000");
 
 // pupesoft_cleanstring ALL THE COOKIES!!
 $_COOKIE = array_map("pupesoft_cleanstring", $_COOKIE);
