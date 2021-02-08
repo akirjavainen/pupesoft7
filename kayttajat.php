@@ -197,7 +197,7 @@ if ($tee == "UUSI" or $tee == "MUUTA") {
 
   if ($myyja != 0) {
 
-    if (mb_strlen($myyja) > 11) {
+    if (strlen($myyja) > 11) {
       echo "<font class='error'>", t("Myyjänumero enintään 5 merkkiä"), "</font><br>";
       $jatka = 1; // ei perusteta
       unset($submit_button);
@@ -288,7 +288,7 @@ if ($tee == 'UUSI') {
     echo t("Hänelle lisätään nyt myös oikeudet yritykselle"), " {$yhtio}.<br>", t("Käyttäjätiedot kopioidaan yhtiöstä"), " {$monta['yhtio']}.</font><br>";
   }
 
-  if (mb_strlen($ktunnus) > 0 and $jatka != 1) {
+  if (strlen($ktunnus) > 0 and $jatka != 1) {
 
     if (count($profiili) > 0) {
       $profile = implode(",", $profiili);
@@ -496,7 +496,7 @@ if ($tee == 'UUSI') {
 if (isset($selkuka) and ($selkuka == "UUSI" or $selkuka == "KOPSAAUUSI")) {
   $query = "SELECT * FROM kuka WHERE tunnus = -1";
 }
-elseif (mb_strtoupper($toim) == 'EXTRANET' and isset($selkuka)) {
+elseif (strtoupper($toim) == 'EXTRANET' and isset($selkuka)) {
   $query = "SELECT * FROM kuka WHERE tunnus = '{$selkuka}' and extranet != ''";
   $result = pupe_query($query);
 
@@ -523,7 +523,7 @@ if ($tee == 'MUUTA') {
 
   $yhtio = $kukarow['yhtio'];
 
-  if (mb_strlen($firname) > 0 and isset($submit_button)) {
+  if (strlen($firname) > 0 and isset($submit_button)) {
 
     if (count($profiili) > 0) {
       $profile = implode(",", $profiili);
@@ -606,7 +606,7 @@ if ($tee == 'MUUTA') {
               kassamyyja                    = '{$kassamyyja}',
               dynaaminen_kassamyynti        = '{$dynaaminen_kassamyynti}',
               maksupaate_kassamyynti        = '{$maksupaate_kassamyynti}',
-              maksupaate_ip                 = '{$maksupaate_ip}',
+              maksupaate_id                 = '{$maksupaate_id}',
               jyvitys                       = '{$jyvitys}',
               oletus_ohjelma                = '{$oletus_ohjelma}',
               maksuehto                     = '{$maksuehto}',
@@ -906,7 +906,7 @@ if ($tee == 'MUUTA') {
 
           while ($keraysvyohyke_row = mysqli_fetch_assoc($keraysvyohyke_result)) {
 
-            $chk = mb_strpos($krow['keraysvyohyke'], $keraysvyohyke_row['tunnus']) !== false ? ' checked' : '';
+            $chk = strpos($krow['keraysvyohyke'], $keraysvyohyke_row['tunnus']) !== false ? ' checked' : '';
 
             echo "<input type='checkbox' name='keraysvyohyke[]' value='{$keraysvyohyke_row['tunnus']}'{$chk} />&nbsp;{$keraysvyohyke_row['nimitys']}<br />";
           }
@@ -1284,13 +1284,13 @@ if ($tee == 'MUUTA') {
               </tr>";
 
         echo "<tr>
-                <th align='left'>" . t("Maksupäätteen IP") . ":</th>
+                <th align='left'>" . t("Maksupäätteen ID") . ":</th>
                 <td>
-                  <input id='maksupaate_ip'
+                  <input id='maksupaate_id'
                          type='text'
-                         name='maksupaate_ip'
-                         value='{$krow["maksupaate_ip"]}'
-                         placeholder='" . t("IP tai IP:portti") . "'/>
+                         name='maksupaate_id'
+                         value='{$krow["maksupaate_id"]}'
+                         placeholder='12345678'/>
                 </td>
               </tr>";
 

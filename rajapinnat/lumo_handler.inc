@@ -9,7 +9,7 @@
  */
 
 
-require_once "rajapinnat/lumo_client.php";
+require_once "rajapinnat/NetsCloudClient.php";
 
 $korttimaksu   = str_replace(",", ".", $korttimaksu);
 $korttimaksu_f = $korttimaksu * 100;
@@ -34,12 +34,20 @@ foreach ($suoritukset as $suoritus) {
 
   if ($suoritus == 1) $onnistuuko = false;
 
-  $lumo_ip = explode(":", $kukarow["maksupaate_ip"]);
-  $lumo_service_address = $lumo_ip[0];
-  $lumo_service_port = $lumo_ip[1] ? $lumo_ip[1] : 1234;
+  // From salasanat.php
+  global $nets_cloud_base_url, $nets_cloud_username, $nets_cloud_password;
 
-  // Jos käyttäjältä puuttuu maksupäätteen IP
-  if (empty($lumo_service_address)) {
+  // Maksupäätteen id käyttäjän takaa
+  $nets_cloud_terminal_id = $kukarow["maksupaate_id"];
+
+  // Jos tarvittavia parametrejä puuttuu salasanat.php:stä
+  if (empty($nets_cloud_base_url) || empty($nets_cloud_username) || empty($nets_cloud_password)) {
+    $onnistuuko = "Tarvittavia maksupäätekonfiguraatioita puuttuu!";
+    break;
+  }
+
+  // Jos käyttäjältä puuttuu maksupäätteen id
+  if (empty($nets_cloud_terminal_id)) {
     $onnistuuko = "Maksupäätettä ei ole konfiguroitu oikein tälle käyttäjälle";
     break;
   }
@@ -55,11 +63,8 @@ foreach ($suoritukset as $suoritus) {
     // Jos maksutapahtuma epäonnistui niin ei tehdä mitään
     if ($suoritus > 1 and $onnistuuko != "VELOITETTU") break;
 
-    $clientti = new LumoClient($lumo_service_address, $lumo_service_port);
-
-    if ($clientti->getErrorCount() > 0) {
-      $onnistuuko = "Ei yhteyttä maksupäätteeseen";
-      break;
+    if (!isset($clientti) || !$clientti instanceof NetsCloudClient) {
+      $clientti = new NetsCloudClient($nets_cloud_base_url, $nets_cloud_username, $nets_cloud_password, $nets_cloud_terminal_id);
     }
 
     switch ($suoritus) {
@@ -69,38 +74,12 @@ foreach ($suoritukset as $suoritus) {
         $onnistuuko = $clientti->startTransaction($korttimaksu_f);
       }
       elseif ($korttimaksu_f < 0) {
-        // Jos summa on negatiivinen tehdään hyvitys/peruutus
-        // Dummyarkistointitunnus
-        $arkistointitunnus = 999999999999;
-        // Haetaan viimeisimmän onnistuneen maksusuorituksen kuitti
-        $query = "SELECT asiakkaan_kuitti
-                  FROM maksupaatetapahtumat
-                  WHERE yhtio           = '{$kukarow['yhtio']}'
-                  AND tilausnumero      = '{$tilausnumero}'
-                  AND tila              = 'K'
-                  AND asiakkaan_kuitti != ''
-                  ORDER BY luontiaika desc
-                  LIMIT 1";
-        $res = pupe_query($query);
-        $kuittirivi = mysqli_fetch_assoc($res);
-
-        if (isset($kuittirivi['asiakkaan_kuitti']) and !empty($kuittirivi['asiakkaan_kuitti'])) {
-          $kaikki_kuittirivit = explode("\n", $kuittirivi['asiakkaan_kuitti']);
-
-          foreach ($kaikki_kuittirivit as $kuitin_rivi) {
-            list($rivinotsikko, $rivintieto) = explode(":", $kuitin_rivi);
-            // Etsitään kuittiriviltä arkistointitunnusta
-            if (trim($rivinotsikko) == "AVIITE") {
-              $arkistointitunnus = trim($rivintieto);
-              break;
-            }
-          }
-        }
-        // Jos käyttöliittymässä summa on negatiivinen, muutetaan maksupäätteelle
+        // Jos summa on negatiivinen tehdään viimeisimmän tapahtuman hyvitys/peruutus
         $korttimaksu_f = $korttimaksu_f * -1;
-        $onnistuuko = $clientti->startTransaction($korttimaksu_f, 1, $arkistointitunnus);
+        $onnistuuko = $clientti->startTransaction($korttimaksu_f, 1);
       }
       elseif ($peruutus == "X") {
+        // Peruutetaan viimeisin tapahtuma
         $query = "SELECT *
                   FROM maksupaatetapahtumat
                   WHERE yhtio           = '{$kukarow['yhtio']}'
@@ -113,24 +92,11 @@ foreach ($suoritukset as $suoritus) {
         $res        = pupe_query($query);
         $kuittirivi = mysqli_fetch_assoc($res);
 
-        if (isset($kuittirivi['asiakkaan_kuitti']) and !empty($kuittirivi['asiakkaan_kuitti'])) {
-          $kaikki_kuittirivit = explode("\n", $kuittirivi['asiakkaan_kuitti']);
-
-          foreach ($kaikki_kuittirivit as $kuitin_rivi) {
-            list($rivinotsikko, $rivintieto) = explode(":", $kuitin_rivi);
-            // Etsitään kuittiriviltä arkistointitunnusta
-            if (trim($rivinotsikko) == "AVIITE") {
-              $arkistointitunnus = trim($rivintieto);
-              break;
-            }
-          }
-        }
-
         $korttimaksu   = $kuittirivi["summa_valuutassa"];
         $korttimaksu_f = str_replace(",", ".", $korttimaksu);
         $korttimaksu_f = $korttimaksu_f * 100;
-        $onnistuuko    = $clientti->startTransaction($korttimaksu_f, 1, $arkistointitunnus);
-        $korttimaksu   = $korttimaksu * -1;
+        $onnistuuko = $clientti->reverseTransaction($korttimaksu_f);
+        $korttimaksu = $korttimaksu * -1;
       }
       else {
         $onnistuuko = "HYLÄTTY";
@@ -140,15 +106,15 @@ foreach ($suoritukset as $suoritus) {
 
     case '2':
       $kuitti1 = $clientti->getCustomerReceipt();
-      $kuitti1 = $kuitti1;
+      $kuitti1 = utf8_decode($kuitti1);
       $pankkivailuotto = '';
       $maksutyyppi = '';
 
-      if (mb_strpos($kuitti1, "LUOTTOKORTTI") !== false) {
+      if (strpos($kuitti1, "LUOTTOKORTTI") !== false) {
         $pankkivailuotto = 'LUOTTOKORTTI';
         $maksupaate_maksetut['luottokortti'] += $korttimaksu;
       }
-      elseif (mb_strpos($kuitti1, "PANKKIKORTTI") !== false) {
+      elseif (strpos($kuitti1, "PANKKIKORTTI") !== false) {
         $pankkivailuotto = 'PANKKIKORTTI';
         $maksupaate_maksetut['pankkikortti'] += $korttimaksu;
       }
@@ -158,10 +124,10 @@ foreach ($suoritukset as $suoritus) {
         $maksupaate_maksetut['pankkikortti'] += $korttimaksu;
       }
 
-      if (mb_strpos($kuitti1, "PERUUTUS") !== false) {
+      if (strpos($kuitti1, "PERUUTUS") !== false) {
         $maksutyyppi = "PERUUTUS";
       }
-      elseif (mb_strpos($kuitti1, "HYVITYS") !== false) {
+      elseif (strpos($kuitti1, "HYVITYS") !== false) {
         $maksutyyppi = "HYVITYS";
       }
       else {
@@ -172,19 +138,14 @@ foreach ($suoritukset as $suoritus) {
 
     case '3':
       $kuitti2 = $clientti->getMerchantReceipt();
-      $kuitti2 = $kuitti2;
+      $kuitti2 = utf8_decode($kuitti2);
 
-      if (mb_strpos($kuitti2, "ALLEKIRJOITUS")) {
+      if (strpos($kuitti2, "ALLEKIRJOITUS")) {
         require "tilauskasittely/tulosta_asiakkaan_kuitti.inc";
         tulosta_kauppiaan_kuitti($kuitti2, $kukarow["kuittitulostin"]);
       }
       break;
     }
-
-    // Tuhotaan objekti että socketti sulkeutuu
-    unset($clientti);
-    // Venataan sekka koska socketti on joskus hidas ja halutaan seuraava transaktio
-    if ($suoritus < 3) sleep(1);
   }
   else {
     $onnistuuko = "Tarkista summa";
