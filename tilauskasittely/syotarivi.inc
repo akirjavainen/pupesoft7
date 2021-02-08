@@ -393,7 +393,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
     echo "<td valign='top'>$ulos</td>";
   }
 
-  echo "<td valign='top'><input type='text' size='5' name='kpl' id='kpl' maxlength='13' value='$kpl' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value, $laskurow[tunnus]);'></td>"; // MODIFIED, added id & cubic/square meter calculation
+  echo "<td valign='top'><input type='text' size='5' name='kpl' id='kpl' maxlength='13' value='$kpl' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value, \"$laskurow[tunnus]\");'></td>"; // MODIFIED, added id & cubic/square meter calculation
 
   $selh = $selj = $selp = $selo = "";
 
@@ -526,6 +526,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
 	echo "<td id=\"tdM2\"></td>";
 	echo "<td id=\"tdPostalCode\">" . $laskurow['toim_postino'] . "</td>";
 	echo "<td id=\"Kaukoputki\"><a href=\"https://www.kaukokiito.fi/fi/kaukoputki\" target=\"_blank\">Kaukoputki</a></td>";
+	echo "<td id=\"Hintahaku\"><a href=\"#\" onclick=\"getShippingPrice(document.getElementById('tuotenimitys').value, $laskurow[tunnus]);\">Hintahaku</a></td>";
 	echo "</tr>";
   }
   if ($tila == "LISAAKERTARESEPTIIN" or $tila == "LISAAISAKERTARESEPTIIN" or $tila == "LISAARESEPTIIN") {
@@ -671,7 +672,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
         <th colspan='{$nrospanni}' align='left'>".t("Tuotteen nimitys")."</th>
         </tr>
       <tr>$jarjlisa
-        <td valign='top' colspan='{$nrospanni}'><input type='text' maxlength='100' size='75' name='tuotenimitys' id='tuotenimitys' value = '$tuotenimitys' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value, $laskurow[tunnus]);'></td>"; // MODIFIED, added
+        <td valign='top' colspan='{$nrospanni}'><input type='text' maxlength='100' size='75' name='tuotenimitys' id='tuotenimitys' value = '$tuotenimitys' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value, \"$laskurow[tunnus]\");'></td>"; // MODIFIED, added
   }
 
   //echo "<td valign='top' class='back'><input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'>"; // MODIFIED, commented out
