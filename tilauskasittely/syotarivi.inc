@@ -526,7 +526,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
 	echo "<td id=\"tdM2\"></td>";
 	echo "<td id=\"tdPostalCode\">" . $laskurow['toim_postino'] . "</td>";
 	echo "<td id=\"Kaukoputki\"><a href=\"https://www.kaukokiito.fi/fi/kaukoputki\" target=\"_blank\">Kaukoputki</a></td>";
-	echo "<td id=\"Hintahaku\"><a href=\"#\" onclick=\"getShippingPrice(document.getElementById('tuotenimitys').value, $laskurow[tunnus], document.getElementId('kpl').value);\">Hintahaku</a></td>";
+	echo "<td id=\"Hintahaku\"><a href=\"#\" onclick=\"getShippingPrice(document.getElementById('tuotenimitys').value, $laskurow[tunnus], document.getElementById('kpl').value);\">Hintahaku</a></td>";
 	echo "</tr>";
   }
   if ($tila == "LISAAKERTARESEPTIIN" or $tila == "LISAAISAKERTARESEPTIIN" or $tila == "LISAARESEPTIIN") {
