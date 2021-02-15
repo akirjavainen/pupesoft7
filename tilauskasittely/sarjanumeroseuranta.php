@@ -2,6 +2,7 @@
 
 if (file_exists("../../common")) {
 	include("../../common/html_output.php");
+	include("../../common/functions-general.php");
 	include("../../common/functions-sql.php");
 }
 
