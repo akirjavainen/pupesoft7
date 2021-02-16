@@ -1003,7 +1003,7 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
   $_sepa_pankkiyhteys &= ($yhtiorow["pankkitiedostot"] == "F");
   $_sepa_pankkiyhteys &= (!empty($sepa_pankkiyhteys_token));
 
-  define('SEPA_PANKKIYHTEYS', $_sepa_pankkiyhteys == 1 ? true : false);
+  define('SEPA_PANKKIYHTEYS', $_sepa_pankkiyhteys);
 
   # Katsotaan onko Pupesoftissa Logmaster-rajapinta asetettuna
   $_logmaster_rajapinta = true;
