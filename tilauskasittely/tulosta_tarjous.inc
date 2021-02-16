@@ -1210,7 +1210,8 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
       list($ff_string, $ff_font) = pdf_fontfit($lisakala, 56, $pdf_tarjous, $norm);
 
       $oikpos = $pdf_tarjous->mb_strlen($ff_string, $ff_font);
-      $pdf_tarjous->draw_text(482-$oikpos, $kala, $ff_string, $page_tarjous[$sivu], $norm);
+      $page_tarjous_sivu = isset($page_tarjous[$sivu]) ? $page_tarjous[$sivu] : null; // MUOKKAUS: isset()
+      $pdf_tarjous->draw_text(482-$oikpos, $kala, $ff_string, $page_tarjous_sivu, $norm);
     }
 
     if (!in_array($yhtiorow["tarjoustyyppi"], array(2, 4))) {

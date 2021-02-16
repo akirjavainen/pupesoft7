@@ -3077,12 +3077,16 @@ if ($tila == "" and !isset($jatka)) {
 
       while ($vrow = mysqli_fetch_assoc($vresult)) {
         $sel="";
-        if ($srow["tyojono"] == $vrow['selite']) {
-          $sel = "selected";
-        }
-        elseif ($vrow["selitetark_3"] == 'OLETUS' and !isset($srow["tyojono"])) {
-          $sel = "selected";
-        }
+
+	// MUOKKAUS: isset():
+	if (isset($srow["tyojono"]) and isset($vrow["selite"])) {
+          if ($srow["tyojono"] == $vrow['selite']) {
+            $sel = "selected";
+          }
+          elseif ($vrow["selitetark_3"] == 'OLETUS' and !isset($srow["tyojono"])) {
+            $sel = "selected";
+          }
+	}
 
         echo "<option value = '$vrow[selite]' $sel>$vrow[selitetark]</option>";
       }
@@ -3098,12 +3102,16 @@ if ($tila == "" and !isset($jatka)) {
 
       while ($vrow = mysqli_fetch_assoc($vresult)) {
         $sel="";
-        if ($srow["tyostatus"] == $vrow['selite']) {
-          $sel = "selected";
-        }
-        elseif ($vrow["selitetark_3"] == 'OLETUS' and !isset($srow["tyostatus"])) {
-          $sel = "selected";
-        }
+	
+	// MUOKKAUS: isset():
+	if (isset($srow["tyojono"]) and isset($vrow["selite"])) {
+          if ($srow["tyostatus"] == $vrow['selite']) {
+            $sel = "selected";
+          }
+          elseif ($vrow["selitetark_3"] == 'OLETUS' and !isset($srow["tyostatus"])) {
+            $sel = "selected";
+	  }
+	}
 
         echo "<option value = '$vrow[selite]' $sel>$vrow[selitetark]</option>";
       }
