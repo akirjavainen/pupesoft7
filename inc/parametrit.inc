@@ -79,7 +79,7 @@ $_POST    = pupe_register_globals($_POST);
 $_REQUEST = pupe_register_globals($_REQUEST);
 
 // Hoidetaan pakkaus
-if ((isset($compression) and !$compression) or (isset($nayta_pdf) and $nayta_pdf == 1) or (isset($lataa_tiedosto) and $lataa_tiedosto == 1)) {
+if ((isset($compression) and !$compression) or (isset($nayta_pdf) and (int)$nayta_pdf == 1) or (isset($lataa_tiedosto) and (int)$lataa_tiedosto == 1)) {
   ini_set('zlib.output_compression', 'Off');
 }
 else {
@@ -485,7 +485,7 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
     $result = pupe_query($query);
 
     if (mysqli_num_rows($result) != 1 or mb_strlen($session) != 25) {
-      if (isset($nayta_pdf) and $nayta_pdf == 1) {
+      if (isset($nayta_pdf) and (int)$nayta_pdf == 1) {
         echo "Your browser does not seem to support cookies.";
         exit;
       }
@@ -599,7 +599,7 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
     }
 
     // Unohdetaan tallennettu state jos tullaan suoraan indexsvassista
-    if (isset($pupe_DataTables) and isset($indexvas) and $indexvas == 1) {
+    if (isset($pupe_DataTables) and isset($indexvas) and (int)$indexvas == 1) {
 
       if (!is_array($pupe_DataTables)) {
         $pupe_DataTables_cookie = array($pupe_DataTables);
@@ -667,7 +667,7 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
 
   $yhtiorow = hae_yhtion_parametrit($kukarow['yhtio']);
 
-  if ((isset($nayta_pdf) and $nayta_pdf == 1) or (isset($lataa_tiedosto) and $lataa_tiedosto == 1)) {
+  if ((isset($nayta_pdf) and (int)$nayta_pdf == 1) or (isset($lataa_tiedosto) and (int)$lataa_tiedosto == 1)) {
     // Kerrotaan selaimelle, että tämä on tiedosto
     header("Pragma: public");
     header("Expires: 0");
@@ -679,7 +679,7 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
     header("Cache-Control: private", false);
     header("Content-Transfer-Encoding: binary");
 
-    if (isset($nayta_pdf) and $nayta_pdf == 1) {
+    if (isset($nayta_pdf) and (int)$nayta_pdf == 1) {
       header("Content-Type: application/pdf");
       header('Content-Disposition: inline; filename="pupesoft.pdf"');
     }
@@ -728,7 +728,7 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
       }
     }
   }
-  elseif (($phpnimi != 'index.php' and $phpnimi != 'futursoft.php') or (isset($futuvanha) and $futuvanha == '1')) {
+  elseif (($phpnimi != 'index.php' and $phpnimi != 'futursoft.php') or (isset($futuvanha) and (int)$futuvanha == 1)) {
 
     if ((isset($verkkokauppa) and $verkkokauppa != "") and $yhtiorow['css_verkkokauppa'] != "") {
       $yhtiorow['active_css'] = $yhtiorow['css_verkkokauppa'];
@@ -1019,7 +1019,7 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
   $_logmaster_rajapinta &= ($yhtiorow['lahetteen_tulostustapa'] == 'K');
   $_logmaster_rajapinta &= ($yhtiorow['siirtolistan_tulostustapa'] == 'K');
 
-  define('LOGMASTER_RAJAPINTA', $_logmaster_rajapinta == 1 ? true : false);
+  define('LOGMASTER_RAJAPINTA', (int)$_logmaster_rajapinta == 1 ? true : false);
 
   # Katsotaan onko Pupesoftissa Smarten-rajapinta asetettuna
   $_smarten_rajapinta = true;
@@ -1030,5 +1030,5 @@ if ($session != '' or ((isset($verkkokauppa) and $verkkokauppa != "") and $login
   $_smarten_rajapinta &= ($yhtiorow['lahetteen_tulostustapa'] == 'K');
   $_smarten_rajapinta &= ($yhtiorow['siirtolistan_tulostustapa'] == 'K');
 
-  define('SMARTEN_RAJAPINTA', $_smarten_rajapinta == 1 ? true : false);
+  define('SMARTEN_RAJAPINTA', (int)$_smarten_rajapinta == 1 ? true : false);
 }
