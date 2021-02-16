@@ -1717,7 +1717,7 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
           $myy_hyllynro[]  = $paikat[1];
           $myy_hyllyvali[] = $paikat[2];
           $myy_hyllytaso[] = $paikat[3];
-          $myy_era[]      = $paikat[4];
+          $myy_era[]      = (count($paikat) > 4) ? $paikat[4] : null; // MUOKKAUS: isset()
 
           $paikkakelpasi   = TRUE;
           break;
