@@ -1222,8 +1222,9 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
         $pdf_tarjous->draw_text(500, $kala, t("M.V.", $kieli), $page_tarjous[$sivu], $norm);
       }
       else {
-        // MUOKKAUS: BUGIKORJAUS:
-        if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") $pdf_tarjous->draw_text(500, $kala, ($row["alv"]*1)."%", $page_tarjous[$sivu], $norm);
+        // MUOKKAUS: isset():
+        $page_tarjous_sivu = isset($page_tarjous[$sivu]) ? $page_tarjous[$sivu] : null;
+        if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") $pdf_tarjous->draw_text(500, $kala, ($row["alv"]*1)."%", $page_tarjous_sivu, $norm);
       }
     }
 
