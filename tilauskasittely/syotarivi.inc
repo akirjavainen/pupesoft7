@@ -15,6 +15,7 @@ if (!isset($toimaika)) $toimaika = "";
 if (!isset($var)) $var = "";
 if (!isset($varaosavirhe)) $varaosavirhe = "";
 if (!isset($takaisin)) $takaisin = null; // MUOKKAUS: isset()
+if (!isset($jaksotettu)) $jaksotettu = null; // MUOKKAUS: isset()
 
 $debug = 0;
 
