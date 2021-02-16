@@ -1,7 +1,7 @@
 <?php
 
 echo "<font class='head'>".t("Suorituspäiväkirja")."</font><hr>";
-if (!isset($tee)) echo "<body onload=\"document.getElementsByName('Nayta')[0].click();\">\n"; // MODIFIED, added
+if (!isset($tee)) echo "<body onload=\"document.getElementsByName('Nayta')[0].click();\">\n"; // MUOKKAUS: lisatty
 
 if (!isset($alvk)) $alvk = date("m", mktime(0, 0, 0, date("m"), date("d")-1, date("Y")));
 if (!isset($alvp)) $alvp = date("d", mktime(0, 0, 0, date("m"), date("d")-1, date("Y")));
@@ -12,7 +12,7 @@ $psel = array();
 $vsel = array();
 
 $ksel[$alvk] = "SELECTED";
-$psel[$alvp] = ""; // MODIFIED, SELECTED full month
+$psel[$alvp] = ""; // MUOKKAUS: SELECTED koko kuukausi
 $vsel[$alvv] = "SELECTED";
 $tsel[$laji] = "SELECTED";
 
@@ -90,7 +90,7 @@ echo "
   <option value = '31' $psel[31]>31</option>
   </select></td>
   </tr>
-  <tr>"; // MODIFIED, SELECTED full month
+  <tr>"; // MUOKKAUS: SELECTED koko kuukausi
 
 // haetaan kaikki yrityksen rahatilit mysql muodossa
 $query  = "SELECT oletus_rahatili, nimi, tilino
@@ -115,7 +115,7 @@ while ($ratiro = mysqli_fetch_array($ratire)) {
 
 echo "
   </td>
-      <td class='back'><input type = 'submit' name = 'Nayta' value = '".t("Näytä")."'></td></tr></table></form><br><br>"; // MODIFIED, added name
+      <td class='back'><input type = 'submit' name = 'Nayta' value = '".t("Näytä")."'></td></tr></table></form><br><br>"; // MUOKKAUS: name lisatty
 
 if ($tee == "1") {
 

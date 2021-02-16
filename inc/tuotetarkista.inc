@@ -52,7 +52,7 @@ if (!function_exists("tuotetarkista")) {
       }
     }
 
-    if (($fieldname == "projekti" or $fieldname == "kohde" or $fieldname == "kustp") and (int) trim($t[$i]) != 0) {
+    if (($fieldname == "projekti" or $fieldname == "kohde" or $fieldname == "kustp") and (int)trim($t[$i]) != 0) {
 
       if ($fieldname == "projekti") $kptyyppi = "P";
       if ($fieldname == "kohde")    $kptyyppi = "O";
@@ -180,7 +180,8 @@ if (!function_exists("tuotetarkista")) {
       $virhe[$i] = t("Viranomaistuotteella on oltava tili")."!";
     }
 
-    if (($fieldname == "tullinimike1") and ($t[$i] != 0)) {
+    // MUOKKAUS: deprecated -> []:
+    if (($fieldname == "tullinimike1") and (strlen((string)$t[$i] != ""))) {
       $query = "SELECT cn
                 FROM tullinimike
                 WHERE cn = '$t[$i]' and kieli = '$yhtiorow[kieli]'";

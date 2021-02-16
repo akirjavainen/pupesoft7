@@ -1,5 +1,17 @@
 <?php
 
+// MUOKKAUS: isset():
+foreach (array("ulisa", "raportti", "top", "try", "osasto", "toiminto", "arvomatikka", "naytainvtuot", "tuoteno", "ahyllyalue", 
+	"ahyllyvali", "ahyllytaso", "lhyllyalue", "lhyllynro", "lhyllyvali", "lhyllytaso", "naytasaldo", "piilotaToim_tuoteno", 
+	"toimittaja", "tilausnumero", "saldot", "toimas", "ei_inventointi", "prosmuutos", "kplmuutos", "tuotemerkki", "rajaus", 
+	"jarjestys", "debug", "naytanimitys", "ippa", "ikka", "ivva", "sorttauskentan_jarjestys1", "sorttauskentan_jarjestys2", 
+	"sorttauskentan_jarjestys3", "sorttauskentan_jarjestys4", "kertakassa", "status", "varasto", "ei_huomioida_tuotepaikkoja_avainsanoista", 
+	"varastoonvaikutus", "varastonarvo", "reservipaikka", "tilaustyyppi", "keraysvyohyke", "vapaa_teksti", "kaikkiyhteensa", 
+	"nappikeikalle", "ahyllynro", "otunnukset_array", "laskunro", "ppa", "kka", "vva", "ppl", "kkl", "vvl", "toimittajaid", 
+	"kerayseran_numero", "kerayseran_tilaukset") as $var) {
+  if (!isset(${$var})) ${$var} = NULL;
+}
+
 echo "<form method='post' action='$PHP_SELF?$ulisa'>
   <input type='hidden' name='lopetus' value='$lopetus'>
   <input type='hidden' name='toim' value='$toim'>
@@ -330,6 +342,7 @@ if ($otunnus != '' or $laskunro != '') {
   $resultkieli = pupe_query($querykieli);
   $asrow = mysqli_fetch_array($resultkieli);
 
+  if (!is_array($sel)) $sel = array(); // MUOKKAUS: isset()
   if ($asrow["kieli"] != '') {
     $sel[$asrow["kieli"]] = "SELECTED";
   }
@@ -344,7 +357,8 @@ else {
 echo "<td><select name='kieli'>";
 
 foreach ($GLOBALS["sanakirja_kielet"] as $sanakirja_kieli => $sanakirja_kieli_nimi) {
-  echo "<option value='$sanakirja_kieli' $sel[$sanakirja_kieli]>".t($sanakirja_kieli_nimi)."</option>";
+  // MUOKKAUS: isset():
+  if (isset($sel[$sanakirja_kieli])) echo "<option value='$sanakirja_kieli' $sel[$sanakirja_kieli]>".t($sanakirja_kieli_nimi)."</option>";
 }
 
 echo "</select></td></tr>";

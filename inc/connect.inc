@@ -102,6 +102,7 @@ if (PUPE_UNICODE) {
 $pupe_resque = FALSE;
 
 // Otetaan php-resque käyttöön jos se on asennettu
-//if (include_once "php-resque/lib/Resque.php") { // MODIFIED, commented out
+// MUOKKAUS: kommentoitu ulos:
+//if (include_once "php-resque/lib/Resque.php") {
 //  $pupe_resque = TRUE;
 //}

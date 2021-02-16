@@ -39,10 +39,10 @@ elseif ($type == '3' or ($type == 'S' and
 
   $payer_name = trim(substr($tietue, 63, 12));
   $reference = ltrim(substr($tietue, 43, 20), '0');
-  $sum = substr($tietue, 78, 11); // MODIFIED, BUGFIX pos 77 -> 78, length 10 -> 11
-  $sum = (float)preg_replace("/[^0-9]/", "", $sum); // MODIFIED, added
-  $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MODIFIED, BUGFIX 100 -> 1000
-  //if ($factoring_oikaisutunnus != '0') { // MODIFIED, BUGFIX (commented out)
+  $sum = substr($tietue, 78, 11); // MUOKKAUS: BUGIKORJAUS pos 77 -> 78, length 10 -> 11
+  $sum = (float)preg_replace("/[^0-9]/", "", $sum); // MUOKKAUS: lisatty
+  $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MUOKKAUS: BUGIKORJAUS 100 -> 1000
+  //if ($factoring_oikaisutunnus != '0') { // MUOKKAUS: BUGIKORJAUS (kommentoitu ulos)
   //  $sum = $sum * -1;
   //}
   $currency_code = substr($tietue, 75, 1);
@@ -58,7 +58,7 @@ elseif ($type == '3' or ($type == 'S' and
 
   if ($yritirow["yhtio"] == "") {
     echo "<font class='error'>Tilille $account ei löytynyt yritystä.</font><br>\n";
-    exit(""); // MODIFIED, BUGFIX
+    exit(); // MUOKKAUS: BUGIKORJAUS
   }
   else {
     // Setataan kukarow-yhtiö
@@ -74,7 +74,7 @@ elseif ($type == '3' or ($type == 'S' and
 
     if (mysqli_num_rows($valresult) != 1) {
       echo "<font class='error'> Valuuttaa '$yritirow[valkoodi]' ei löytynyt!</font><br>\n";
-      exit(""); // MODIFIED, BUGFIX
+      exit(); // MUOKKAUS: BUGIKORJAUS
     }
     else {
       $valrow = mysqli_fetch_assoc($valresult);
@@ -89,7 +89,7 @@ elseif ($type == '3' or ($type == 'S' and
 
     if ($valrow["valkoodi"] == '') {
       echo "<font class='error'> Yhtiöllä ei ole valuuttaa!</font><br>\n";
-      exit(""); // MODIFIED, BUGFIX
+      exit(); // MUOKKAUS: BUGIKORJAUS
     }
     else {
       $valkoodi = $valrow["valkoodi"];
@@ -150,7 +150,7 @@ elseif ($type == '3' or ($type == 'S' and
               kurssi       = '$kurssi',
               maksupvm     = '$payment_date',
               kirjpvm      = '$entry_date'";
-    $result = pupe_query($query, $GLOBALS["masterlink"]); // MODIFIED, BUGFIX
+    $result = pupe_query($query, $GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
     $tiliointitunnus = mysqli_insert_id($GLOBALS["masterlink"]);
 
     // päivitetään suorituksen tunnnus tiliotedataan ja tiliotedata käsitellyksi
@@ -158,7 +158,7 @@ elseif ($type == '3' or ($type == 'S' and
               tiliointitunnus = '$tiliointitunnus',
               kasitelty       = now()
               WHERE tunnus    = '$tiliotedatarow[tunnus]'";
-    $dataupdres = pupe_query($query, $GLOBALS["link"]); // MODIFIED, BUGFIX
+    $dataupdres = pupe_query($query, $GLOBALS["link"]); // MUOKKAUS: BUGIKORJAUS
   }
 }
 elseif ($type != 'S' and $type != '9') {

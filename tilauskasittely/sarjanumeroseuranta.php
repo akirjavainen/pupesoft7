@@ -2,8 +2,8 @@
 
 if (file_exists("../../common")) {
 	include("../../common/html_output.php");
-	include("../../common/functions-general.php");
 	include("../../common/functions-sql.php");
+	include("../../common/functions-general.php");
 }
 
 // otetaan sisään voidaan ottaa $myyntirivitunnus tai $ostorivitunnus
@@ -1827,7 +1827,7 @@ if (mb_strpos($_SERVER['SCRIPT_NAME'], "sarjanumeroseuranta.php")  !== FALSE) {
   require "inc/footer.inc";
 }
 
-if (file_exists("../../common")) html_sql_table($sarjaresiso, true); // MODIFIED, added
+if (file_exists("../../common")) html_sql_table($sarjaresiso, true); // MUOKKAUS: lisatty sarjataulukko
 
 /**
  *

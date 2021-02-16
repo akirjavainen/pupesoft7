@@ -587,7 +587,8 @@ if ($tee == "ETSILASKU") {
           if (isset($suoraanlasku[$row["tilaus"]]) and $suoraanlasku[$row["tilaus"]] != '') {
             $sel = "CHECKED";
           }
-          echo "<input type='checkbox' name='suoraanlasku[{$row['tilaus']}]' value='on' CHECKED> ".t("Suoraan laskutukseen")."<br>"; // MODIFIED, default CHECKED
+          // MUOKKAUS: oletusarvoksi (CHECKED):
+          echo "<input type='checkbox' name='suoraanlasku[{$row['tilaus']}]' value='on' CHECKED> ".t("Suoraan laskutukseen")."<br>";
         }
 
         $sel = "";
@@ -615,9 +616,10 @@ if ($tee == "ETSILASKU") {
           echo "<input type='checkbox' name='korjaarahdit[{$row['tilaus']}]' value='on' {$sel}> ".t("Laske rahtiveloitus uudestaan")."<br>";
         }
 
+        // MUOKKAUS: oletusarvoksi (CHECKED):
         echo "<input type='checkbox'
                      name='sailyta_rivikommentit[{$row['tilaus']}]'
-                     value='on' CHECKED>" . t('Säilytä rivikommentit') . "<br>"; // MODIFIED, default CHECKED
+                     value='on' CHECKED>" . t('Säilytä rivikommentit') . "<br>";
 
         echo "<input type='checkbox'
                      name='verkkotunnus_laskulta[{$row['tilaus']}]'
@@ -1410,7 +1412,7 @@ if ($tee == 'MONISTA') {
             $values .= ", '".t("Reklamaatio laskuun", $asiakrow['kieli']).": ".$monistarow["laskunro"].".'";
           }
           else {
-            $values .= ", '".$monistarow["viesti"]."'"; // MODIFIED, added
+            $values .= ", '" . $monistarow["viesti"] . "'"; // MUOKKAUS: lisatty
           }
           break;
         case 'vienti_kurssi';
@@ -1445,7 +1447,8 @@ if ($tee == 'MONISTA') {
       $insres  = pupe_query($kysely);
       $utunnus = mysqli_insert_id($GLOBALS["masterlink"]);
 
-      if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MODIFIED, added JWIO ERP copy function
+      // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi:
+      if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus");
 
       $query = "SELECT *
                 FROM lasku
@@ -1547,11 +1550,11 @@ if ($tee == 'MONISTA') {
         // Ei monisteta tunnusta
         for ($i = 1; $i < mysqli_num_fields($monistalisres) - 1; $i++) {
           $fieldname = mysqli_field_name($monistalisres, $i);
-          if ($fieldname != "tunnus") $fields .= ", ".$fieldname; // MODIFIED, added BUGFIX
+          if ($fieldname != "tunnus") $fields .= ", " . $fieldname; // MUOKKAUS: BUGIKORJAUS (ei monisteta tunnusta)
 
           switch ($fieldname) {
-          case 'tunnus': // MODIFIED, added BUGFIX
-            break; // MODIFIED, added BUGFIX
+          case 'tunnus': // MUOKKAUS: BUGIKORJAUS (ei monisteta tunnusta)
+            break;
           case 'otunnus':
             $values .= ", '{$utunnus}'";
             break;
@@ -1630,8 +1633,9 @@ if ($tee == 'MONISTA') {
       else {
 
         $tunnuslisa = "";
-
-        if ($toim == '' and in_array($kumpi, array('MONISTA', 'HYVITA', 'REKLAMA')) and isset($valitse_rivit) and isset($valitse_rivit[$lasku]) and count($valitse_rivit[$lasku]) > 0) {
+        
+		 // MUOKKAUS: BUGIKORJAUS:
+        if ($toim == '' and in_array($kumpi, array('MONISTA', 'HYVITA', 'REKLAMA')) and isset($valitse_rivit) and isset($valitse_rivit[$lasku]) and is_array($valitse_rivit[$lasku]) and count($valitse_rivit[$lasku]) > 0) {
           $tunnuslisa   = "AND tunnus IN (".implode(",", $valitse_rivit[$lasku]).")";
         }
 
@@ -2201,10 +2205,11 @@ if ($tee == 'MONISTA') {
     }
   }
 
-  if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MODIFIED, added JWIO ERP copy function
+  // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi:
+  if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus");
   $tee = ''; //mennään alkuun
 
-  // MODIFIED, added forwarding:
+  // MUOKKAUS: lisatty meta refresh:
   switch ($toim) {
     case "TARJOUS":
       echo "<meta http-equiv=\"refresh\" content=\"1;URL=tilauskasittely/tilaus_myynti.php?yhtio=$kukarow[yhtio]&tilausnumero=$utunnus&mista=muokkaatilaus&toim=TARJOUS\">\n";

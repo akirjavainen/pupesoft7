@@ -21,8 +21,11 @@ class Korvaavat {
     $tuote = mysqli_fetch_assoc($tuote_result);
 
     // Ketju ja tuote talteen
-    $this->id = $tuote['id'];
-    $this->tuote = $tuote;
+    // MUOKKAUS: isset():
+    if (!is_null($tuote)) {
+		$this->id = $tuote['id'];
+		$this->tuote = $tuote;
+	}
   }
 
   /**

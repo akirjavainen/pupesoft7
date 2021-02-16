@@ -440,7 +440,7 @@ if ($tee == 'I') {
       // otetaan valuuttasumma talteen
       $isumma_valuutassa[$i] = $isumma[$i];
       // käännetään kotivaluuttaan
-      $isumma[$i] = sprintf("%.2f", round($isumma[$i] * $kurssi, 2));
+      $isumma[$i] = sprintf("%.2f", round((float)$isumma[$i]) * (float)$kurssi, 2); // MUOKKAUS: BUGIKORJAUS (string * string)
 
       if (mb_strlen($selite) > 0 and mb_strlen($iselite[$i]) == 0) { // Siirretään oletusselite tiliöinneille
         $iselite[$i] = $selite;
@@ -1308,7 +1308,7 @@ if ($tee == '') {
     echo "</tr>\n";
 
     // Ei rikota rivinvaihtoja
-    $iselite[$i] = str_ireplace("<br>", "(br)", $iselite[$i]);
+    if (strlen($iselite[$i]) > 0) $iselite[$i] = str_ireplace("<br>", "(br)", $iselite[$i]); // MUOKKAUS: BUGIKORJAUS (tyhja string[])
 
     echo "<tr><td colspan='".(5+$cspan)."' nowrap><input type='text' name='iselite[{$i}]' value='{$iselite[$i]}' maxlength='150' size='80' placeholder='".t("Selite")."'></td></tr>\n";
     echo "<tr style='height: 5px;'></tr>\n";

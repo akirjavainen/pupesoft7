@@ -238,7 +238,7 @@ if ($teemaksutosite) {
             laatija          = 'tiliote',
             laadittu         = now()";
   $result = pupe_query($query, $GLOBALS["masterlink"]);
-  $_tiliointi_id = mysqli_insert_id($GLOBALS["masterlink"]); // MODIFIED, BUGFIX
+  $_tiliointi_id = mysqli_insert_id($GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
 
   $query = "UPDATE tiliotedata
             SET kasitelty = now(),

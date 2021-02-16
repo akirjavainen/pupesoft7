@@ -14,6 +14,7 @@ if (!isset($toimitettuaika)) $toimitettuaika = "";
 if (!isset($toimaika)) $toimaika = "";
 if (!isset($var)) $var = "";
 if (!isset($varaosavirhe)) $varaosavirhe = "";
+if (!isset($takaisin)) $takaisin = null; // MUOKKAUS: isset()
 
 $debug = 0;
 
@@ -44,7 +45,7 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
       <th align='left'>".t("Määrä")."</th>
       <th align='left'>".t("Tila")."</th>";
 
-  if ($kukarow['hinnat'] == 0) echo "<th align='left'>".t("Hinta")." (ALV 0/24 %)</th>"; // MODIFIED
+  if ($kukarow['hinnat'] == 0) echo "<th align='left'>".t("Hinta")." (ALV 0/24 %)</th>"; // MUOKKAUS: lisatty verollinen hintaboksi
 
   for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
     echo "<th align='left'>".t("Ale")."{$alepostfix}</th>";
@@ -62,7 +63,8 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
     echo "<th align='left'>", t("Kate"), "</th>";
   }
 
- $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".(5+$yhtiorow['hintapyoristys']-2)."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.24; document.getElementById('hinta').value = netto;\">/<input type='text' size='".(5+$yhtiorow['hintapyoristys']-2)."' name='bruttohinta' id='bruttohinta' value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.80645161; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MODIFIED
+  $bruttohinta = (float)$hinta * 1.24;
+  if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".(5+$yhtiorow['hintapyoristys']-2)."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.24; document.getElementById('hinta').value = netto;\">/<input type='text' size='".(5+$yhtiorow['hintapyoristys']-2)."' name='bruttohinta' id='bruttohinta' value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.80645161; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MUOKKAUS: lisatty onkeyup()
   echo "  <td valign='top' class='back'></td>
       </tr>";
 
@@ -112,12 +114,12 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
   }
 
   echo "  <td valign='top'><input type='text' name='kpl' id='kpl' size='5' maxlength='13' value='$kpl'></td>
-      <td valign='top'><input type='text' name='var' size='2' maxlength='1' value='$var'></td>"; // MODIFIED, added id
+      <td valign='top'><input type='text' name='var' size='2' maxlength='1' value='$var'></td>"; // MUOKKAUS: lisatty id
 
   if ($kukarow['hinnat'] == 0) {
     $siemenluku = mb_strlen((int) $hinta) > 5 ? mb_strlen((int) $hinta) : 5;
 
-    //echo "<td valign='top'><input type='text' name='hinta' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' maxlength='".(12+$yhtiorow['hintapyoristys']-2)."' value='$hinta'></td>"; // MODIFIED, removed
+    //echo "<td valign='top'><input type='text' name='hinta' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' maxlength='".(12+$yhtiorow['hintapyoristys']-2)."' value='$hinta'></td>"; // MUOKKAUS: kommentoitu ulos
   }
 
   for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
@@ -150,7 +152,7 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
     echo "<td><span id='kate_rivi_laskenta'></span></td>";
   }
 
-  // MODIFIED, added button id (butAddProduct) on next row:
+  // MUOKKAUS: lisatty button id (butAddProduct):
   echo "  <td valign='top' class='back'><input type='submit' id='butAddProduct' class='lisaa_btn' value='".t("Lisää")."'></td>
       <td valign='top' class='back'>
       <input type='hidden' name='perheid' value = '$perheid'>
@@ -163,8 +165,8 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
       <input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'> <font class='error'>$varaosavirhe</font></td>
     </tr>";
 
-// MODIFIED, added links to JWIO ERP:
-if (file_exists("../../hinnasto")) {
+// MUOKKAUS: JWIO ERP -ohjelmalinkit:
+if (file_exists("../../hinnasto") and isset($laskurow['tunnus'])) {
 	echo "<tr><td colspan='2'>";
 	echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
 	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ikkunalaskuri</a> || ";
@@ -174,9 +176,9 @@ if (file_exists("../../hinnasto")) {
 	//echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
 	echo "</td>";
 }
-                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.05; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.05;\">Hinta +5 %</a></td>"; // MODIFIED: added
-                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.1; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.1;\">Hinta +10 %</a></td>"; // MODIFIED: added
-                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.25; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.25;\">Hinta +25 %</a></td></tr>"; // MODIFIED: added
+                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.05; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.05;\">Hinta +5 %</a></td>"; // MUOKKAUS: lisatty
+                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.1; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.1;\">Hinta +10 %</a></td>"; // MUOKKAUS: lisatty
+                echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.25; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.25;\">Hinta +25 %</a></td></tr>"; // MUOKKAUS: lisatty
 
   // jos meillä on rivi muuttuja täällä, niin ollaan muokkaamassa rivejä..
   if ($rivitunnus != '') {
@@ -318,7 +320,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
       <th align='left'>".t("Määrä")."</th>
       <th align='left'>".t("Tila")."</th>";
 
-  if ($kukarow['hinnat'] == 0) echo "<th align='left'>".t("Hinta")." (ALV 0/24)</th>"; // MODIFIED
+  if ($kukarow['hinnat'] == 0) echo "<th align='left'>".t("Hinta")." (ALV 0/24)</th>"; // MUOKKAUS: lisatty
 
   for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
     echo "<th align='left'>".t("Ale")."{$alepostfix}</th>";
@@ -393,7 +395,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
     echo "<td valign='top'>$ulos</td>";
   }
 
-  echo "<td valign='top'><input type='text' size='5' name='kpl' id='kpl' maxlength='13' value='$kpl' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value, \"$laskurow[tunnus]\");'></td>"; // MODIFIED, added id & cubic/square meter calculation
+  echo "<td valign='top'><input type='text' size='5' name='kpl' id='kpl' maxlength='13' value='$kpl' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value, \"$laskurow[tunnus]\");'></td>"; // MUOKKAUS: lisatty id ja nelio/kuutiolaskenta
 
   $selh = $selj = $selp = $selo = "";
 
@@ -430,10 +432,10 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
 
   if ($kukarow['hinnat'] == 0) {
     $siemenluku = mb_strlen((int) $hinta) > 5 ? mb_strlen((int) $hinta) : 5;
-    $disabled_text = defined("NO_PRICE_WITH_VAT") ? "disabled" : ""; // MODIFIED, added
-$bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.24; document.getElementById('hinta').value = netto;\">/<input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='bruttohinta' id='bruttohinta' $disabled_text value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.80645161; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MODIFIED
+    $disabled_text = defined("NO_PRICE_WITH_VAT") ? "disabled" : ""; // MUOKKAUS: lisatty
+    $bruttohinta = (float)$hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.24; document.getElementById('hinta').value = netto;\">/<input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='bruttohinta' id='bruttohinta' $disabled_text value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.80645161; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MUOKKAUS: lisatty onkeyup()
 
-    //echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' value='$hinta'></td>"; // MODIFIED, removed
+    //echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' value='$hinta'></td>"; // MUOKKAUS: kommentoitu ulos
   }
 
   for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
@@ -508,10 +510,10 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
 
   echo "<td valign='top' class='back'>";
   echo "<input type='hidden' name='aputapa' value='$tapa'>";
-  echo "<input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'> <font class='error'>$varaosavirhe</font></td></tr>"; // MODIFIED, added button id (butAddProduct)
+  echo "<input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'> <font class='error'>$varaosavirhe</font></td></tr>"; // MUOKKAUS: lisatty button id (butAddProduct)
 
   echo "<tr>$jarjlisa";
-  if (file_exists("../../hinnasto")) { // MODIFIED, added links to JWIO ERP
+  if (file_exists("../../hinnasto")) { // MUOKKAUS: JWIO ERP -ohjelmalinkit:
 	echo "<tr><td colspan='2'>";
 	echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
 	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ikkunalaskuri</a> || ";
@@ -526,7 +528,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
 	echo "<td id=\"tdM2\"></td>";
 	echo "<td id=\"tdPostalCode\">" . $laskurow['toim_postino'] . "</td>";
 	echo "<td id=\"Kaukoputki\"><a href=\"https://www.kaukokiito.fi/fi/kaukoputki\" target=\"_blank\">Kaukoputki</a></td>";
-	echo "<td id=\"Hintahaku\"><a href=\"#\" onclick=\"getShippingPrice(document.getElementById('tuotenimitys').value, $laskurow[tunnus], document.getElementById('kpl').value);\">Hintahaku</a></td>";
+    echo "<td id=\"Hintahaku\"><a href=\"#\" onclick=\"getShippingPrice(document.getElementById('tuotenimitys').value, $laskurow[tunnus], document.getElementById('kpl').value);\">Hintahaku</a></td>";
 	echo "</tr>";
   }
   if ($tila == "LISAAKERTARESEPTIIN" or $tila == "LISAAISAKERTARESEPTIIN" or $tila == "LISAARESEPTIIN") {
@@ -575,10 +577,10 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
     $nrospanni_vah += 3;
   }
 
-  echo "<th colspan='".($nrospanni-$nrospanni_vah+1)."' align='left'>".t("Rivikommentti")."</th>"; // MODIFIED, BUGFIX: colspan + 1
+  echo "<th colspan='".($nrospanni-$nrospanni_vah+1)."' align='left'>".t("Rivikommentti")."</th>"; // MUOKKAUS: BUGIKORJAUS: colspan + 1
 
   if ($yhtiorow['rivinumero_syotto'] != '') {
-    echo "<th align='left'><a href='#' onclick='fixRowNumbering(\"{$yhtiorow['yhtio']}\", \"{$laskurow['tunnus']}\", \"$toim\");'>" . t("Rivinro") . "</a></th>"; // MODIFIED, made as link for fixRowNumbering()
+    echo "<th align='left'><a href='#' onclick='fixRowNumbering(\"{$yhtiorow['yhtio']}\", \"{$laskurow['tunnus']}\", \"$toim\");'>" . t("Rivinro") . "</a></th>"; // MUOKKAUS: muutettu linkiksi rivikorjaukseen fixRowNumbering()
   }
 
   echo "<td valign='top' class='back'></td></tr>";
@@ -660,7 +662,7 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
     $kommentit_columns = 75;
   }
 
-  echo "<td valign='top' colspan='".($nrospanni-$nrospanni_vah)."'><textarea name='kommentti' id='kommentti' cols='$kommentit_columns' rows='2' wrap='soft'>$kommentti</textarea></td>"; // MODIFIED, added id
+  echo "<td valign='top' colspan='".($nrospanni-$nrospanni_vah)."'><textarea name='kommentti' id='kommentti' cols='$kommentit_columns' rows='2' wrap='soft'>$kommentti</textarea></td>"; // MUOKKAUS: lisatty id
 
   if ($yhtiorow['rivinumero_syotto'] != '') {
     echo "<td valign='top'><input type='text' size='2' name='tilrivinumero' value='$rivinumero'></td>";
@@ -672,10 +674,10 @@ $bruttohinta = $hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top
         <th colspan='{$nrospanni}' align='left'>".t("Tuotteen nimitys")."</th>
         </tr>
       <tr>$jarjlisa
-        <td valign='top' colspan='{$nrospanni}'><input type='text' maxlength='100' size='75' name='tuotenimitys' id='tuotenimitys' value = '$tuotenimitys' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value, \"$laskurow[tunnus]\");'></td>"; // MODIFIED, added
+        <td valign='top' colspan='{$nrospanni}'><input type='text' maxlength='100' size='75' name='tuotenimitys' id='tuotenimitys' value = '$tuotenimitys' oninput='document.getElementById(\"tdM2\").innerHTML = calculateSquareCubic(document.getElementById(\"tuotenimitys\").value, document.getElementById(\"kpl\").value, \"$laskurow[tunnus]\");'></td>"; // MUOKKAUS: lisatty
   }
 
-  //echo "<td valign='top' class='back'><input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'>"; // MODIFIED, commented out
+  //echo "<td valign='top' class='back'><input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'>"; // MUOKKAUS: kommentoitu ulos
 
   if ($toim == "YLLAPITO") {
 
@@ -766,7 +768,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "SIIRTOLIS
     echo "<td valign='top'>$ulos</td>";
   }
 
-  echo "<td valign='top'><input type='text' size='5' name='kpl' id='kpl' maxlength='13' value='$kpl'></td>"; // MODIFIED, added id
+  echo "<td valign='top'><input type='text' size='5' name='kpl' id='kpl' maxlength='13' value='$kpl'></td>"; // MUOKKAUS: lisatty id
 
   if ($toim == "VALMISTAVARASTOON" and $yhtiorow['valmistuksien_kasittely'] == 'Y') {
     echo "<td>";
@@ -797,8 +799,8 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "SIIRTOLIS
     echo "</td>";
   }
 
-  echo "<td valign='top' class='back'><input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'> <font class='error'>$varaosavirhe</font></td></tr>"; // MODIFIED, added button id
-  echo "<tr><td>"; // MODIFIED, added
+  echo "<td valign='top' class='back'><input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'> <font class='error'>$varaosavirhe</font></td></tr>"; // MUOKKAUS: lisatty button id
+  echo "<tr><td>"; // MUOKKAUS: lisatty
   echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
   //echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 
@@ -948,7 +950,7 @@ elseif (!$variaaritorivi and $miniliittyma == "JOO") {
 
   echo "  <td valign='top'> $varaosavirhe </td> ";
 
-  echo "<td valign='top'><input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'>"; // MODIFIED, added button id
+  echo "<td valign='top'><input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'>"; // MUOKKAUS: lisatty button id
 
   echo "</td></tr></table></form>";
 
@@ -1010,7 +1012,8 @@ elseif (!$variaaritorivi and $kukarow["extranet"] != '') {
     $_th_lisa = "<th></th>";
     $_td_lisa = "<td></td>";
   }
-// MODIFIED, added button id (butAddProduct) on next row:
+  
+  // MUOKKAUS: lisatty button id (butAddProduct):
   echo "
       <td valign='top' class='back'><input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'></td>
       <td valign='top' class='back'><input type='submit' class='poista_btn' name='tyhjenna' value='".t("Tyhjennä")."'> <font class='error'>$varaosavirhe</font></td>

@@ -216,6 +216,7 @@ if (
   }
 }
 
+if (!isset($arow)) $arow = array(); // MUOKKAUS: isset()
 $tilausrivin_kateraja = $yhtiorow["tilausrivin_kateraja"];
 $tilausrivin_kate = laske_tilausrivin_kate($row, $kotisumma_alviton, $row["kehahin"], $kpl, $arow);
 
@@ -327,7 +328,8 @@ if ($_kommentoitava and $row["kommentti"] == "") {
   $tilausok++;
 }
 
-if (!in_array($row["var"], array('', 'P', 'J', 'H', 'S', 'T', 'U', 'V', 'A', 'B', 'R', 'O'))) {
+// MUOKKAUS: BUGIKORJAUS:
+if (!in_array(strtoupper($row["var"]), array('', 'P', 'J', 'H', 'S', 'T', 'U', 'V', 'A', 'B', 'R', 'O'))) {
   // Tässä varrien selitykset
   // P - Puute
   // J - Jt
@@ -540,6 +542,9 @@ if (
             and yhtio = '$kukarow[yhtio]'";
   $varesult = pupe_query($query);
   $varow = mysqli_fetch_assoc($varesult);
+
+  if (!isset($varow)) $varow = array(); // MUOKKAUS: isset()
+  if (!isset($varow["tyyppi"])) $varow["tyyppi"] = ""; // MUOKKAUS: isset()
 
   if ($varow["tyyppi"] == "V" and $laskurow["varasto"] != $varow["tunnus"] and !in_array($row["var2"], array("OK", "PK"))) {
     $varaosavirhe .= t("HUOM: Tuote sijaitsee erikoisvarastossa")."!<br>";

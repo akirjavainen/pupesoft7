@@ -67,7 +67,7 @@ class Image_Barcode extends PEAR
         if (!preg_match('/^[a-zA-Z0-9_-]+$/', $type)) {
             return PEAR::raiseError('Invalid barcode type ' . $type);
         }
-        if (!include_once('Image/Barcode/' . $type . '.php')) {
+        if (!include_once('Barcode/' . $type . '.php')) { // MUOKKAUS: polku korjattu
             return PEAR::raiseError($type . ' barcode is not supported');
         }
 

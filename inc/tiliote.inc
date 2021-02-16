@@ -636,7 +636,7 @@ if ($tunnus != 'T11' and $tunnus != 'T81' and $maksu == 1) {
 
   if ($tiliotekuitti_oikeu and !empty($tiliotekuitti_saajan_nimi)) {
     js_openFormInNewWindow();
-    // MODIFIED 3 x $td_perheid -> $tiliotedatarow['tunnus'] (BUGFIX):
+    // MUOKKAUS: BUGIKORJAUS (3 x $td_perheid -> $tiliotedatarow['tunnus']):
     echo "<br><form id='tulostakopioform_tiliotekuitti_{$tiliotedatarow['tunnus']} name='tulostakopioform_tiliotekuitti_{$tiliotedatarow['tunnus']}' method='post' action='{$palvelin2}tilauskasittely/tulosta_tiliotekuitti.php' autocomplete='off'>
           <input type='hidden' name='tee' value='NAYTATILAUS'>
           <input type='hidden' name='maksupvm' value='{$tiliotekuitti_maksupvm}'>
@@ -932,7 +932,7 @@ case 'T00':
     echo "<tr><td></td><td></td><td></td><td></td>";
     if ($tee == 'S') echo "<td></td>";
     echo "<td>".t("Käyttövara")."</td>";
-    echo "<td style='text-align:right;'>".sprintf("%01.2f", (mb_substr($tietue, 71, 19) / 100)+$tililimiitti)."</td>";
+    echo "<td style='text-align:right;'>".sprintf("%01.2f", (mb_substr($tietue, 71, 19) / 100)+(float)$tililimiitti)."</td>"; // MUOKKAUS: BUGIKORJAUS (string + string)
     echo "<td class='back' style='width:200px;'></td></tr>";
   }
 
@@ -1374,7 +1374,7 @@ case 'T11':
 
     //Tämä on (kai) ongelma Analysten pankkisoftassa. Lisäävät joskus oman tunnuksen
     //ekaan sisäinenviite kenttään, silloin meidän onkin toisessa.
-    if ((trim(mb_substr($arvo, 35, 35))*1 != 0) and (trim(mb_substr($arvo, 0, 35))*1 != 0)) {
+    if (((float)trim(mb_substr($arvo, 35, 35))*1 != 0) and ((float)trim(mb_substr($arvo, 0, 35))*1 != 0)) { // MUOKKAUS: BUGIKORJAUS (string * int)
       $sisviite = trim(mb_substr($arvo, 35, 35));
 
       $tiliotekuitti_sisainen_viite = trim(mb_substr($arvo, 35, 35));

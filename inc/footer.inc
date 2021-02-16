@@ -9,6 +9,7 @@ if (isset($formi) and isset($kentta)) {
   echo "<script LANGUAGE='JavaScript'>window.document.$formi.$kentta.focus();</script>";
 }
 
+if (!isset($starttime)) $starttime = null; // MUOKKAUS: isset()
 $timeparts = explode(" ", microtime());
 $endtime   = $timeparts[1].mb_substr($timeparts[0], 1);
 $aika      = round($endtime-$starttime, 4);

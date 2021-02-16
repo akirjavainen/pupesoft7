@@ -138,7 +138,7 @@ if (isset($toimi_array[2])) $rajattu_nakyma = $toimi_array[2];
 
 if ($toim == "toimi" or $toim == "asiakas" or $toim == "tuote" or $toim == "avainsana") {
 
-// MODIFIED, added:
+// MUOKKAUS: lisatty:
 if (file_exists("../raportit/javascript/jspupesoft.js")) {
 	include("../raportit/includes/phpupesoft.php");
 	include("../raportit/javascript/jspupesoft.js");
@@ -313,7 +313,7 @@ if ($del == 1) {
   $result = pupe_query($query);
   $trow = mysqli_fetch_array($result);
 
-  $query = "DELETE from $toim
+  $query = "DELETE FROM $toim
             WHERE tunnus='$tunnus'";
   $result = pupe_query($query);
 
@@ -1451,7 +1451,8 @@ if (is_array($oletus)) {
 }
 
 // Nyt selataan
-if ($tunnus == 0 and $uusi == 0 and $errori == '') {
+// MUOKKAUS: BUGIKORJAUS (string == int):
+if ((int)$tunnus == 0 and (int)$uusi == 0 and $errori == '') {
   if (($toim == "asiakasalennus" or $toim == "asiakashinta" or $toim == "hinnasto" or $toim == "puun_alkio") and $oikeurow['paivitys'] == 1) {
     print " <SCRIPT TYPE=\"text/javascript\" LANGUAGE=\"JavaScript\">
       <!--
@@ -1793,7 +1794,7 @@ if ($tunnus == 0 and $uusi == 0 and $errori == '') {
         }
         elseif (mb_strpos(mb_strtoupper($array[$i]), "SELECT") === FALSE or ($toim == 'puun_alkio' and mb_strpos(mb_strtoupper($array[$i]), "SELECT") == TRUE)) {
           // jos meidän kenttä ei ole subselect niin tehdään hakukenttä
-          if (!isset($haku[$i])) $haku[$i] = "";
+          //if (!isset($haku[$i])) $haku[$i] = ""; // MUOKKAUS: isset()
 
           echo "<br><input type='text' name='haku[$i]' value='$haku[$i]' size='$size' maxlength='" . mysqli_field_len($result, $i) ."'>";
         }
@@ -1952,7 +1953,8 @@ if ($tunnus == 0 and $uusi == 0 and $errori == '') {
 }
 
 // Nyt näytetään vanha tai tehdään uusi(=tyhjä)
-if ($tunnus > 0 or $uusi != 0 or $errori != '') {
+// MUOKKAUS: BUGIKORJAUS (string == int):
+if ((int)$tunnus > 0 or (int)$uusi != 0 or $errori != '') {
   if ($oikeurow['paivitys'] != 1) {
     echo "<b>".t("Sinulla ei ole oikeuksia päivittää tätä tietoa")."</b><br>";
   }
@@ -2270,7 +2272,8 @@ if ($tunnus > 0 or $uusi != 0 or $errori != '') {
 
   echo "<br><input type = 'submit' name='yllapitonappi' value = '{$nimi}'>";
 
-  if (($toim == "asiakas" or $toim == "yhtio") and $uusi != 1) {
+  // MUOKKAUS: BUGIKORJAUS (string == int):
+  if (($toim == "asiakas" or $toim == "yhtio") and (int)$uusi != 0) {
     echo "<br><br>";
 
     $chktxt = "{$nimi} ".t("ja päivitä tiedot myös avoimille tilauksille");

@@ -54,7 +54,7 @@ if (!isset($summa_valuutassa)) {
 }
 
 list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($tili, $kustp, $kohde, $projekti);
-if (!isset($liitostunnus)) $liitostunnus = ''; // MODIFIED, BUGFIX
+if (!isset($liitostunnus)) $liitostunnus = ''; // MUOKKAUS: isset()
 if (trim($liitostunnus) == '') {
   $liitos = '';
   $liitostunnus = 0;
@@ -120,7 +120,7 @@ if (isset($paivitetaanko) and $paivitetaanko) {
   }
 }
 else {
-  if (!isset($tapahtumatunnus)) $tapahtumatunnus = ""; // MODIFIED, BUGFIX
+  if (!isset($tapahtumatunnus)) $tapahtumatunnus = ""; // MUOKKAUS: isset()
   $query = "INSERT into tiliointi set
             yhtio            = '{$kukarow['yhtio']}',
             ltunnus          = '{$tunnus}',

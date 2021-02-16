@@ -612,7 +612,7 @@ if (!function_exists("verkkolasku_in")) {
       $ytunnus = $trow["ytunnus"];
       $verkapunimi = $trow["nimi"];
 
-      $hyvak = array(); // MODIFIED, BUGFIX
+      $hyvak = array(); // MUOKKAUS: isset()
       $hyvak[1] = $trow['oletus_hyvak1'];
       $hyvak[2] = $trow['oletus_hyvak2'];
       $hyvak[3] = $trow['oletus_hyvak3'];
@@ -852,7 +852,7 @@ if (!function_exists("verkkolasku_in")) {
                 $oletusprojekti = $toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
               }
             }
-            $hyvak = array(); // MODIFIED, BUGFIX
+            $hyvak = array(); // MUOKKAUS: isset()
             if ($tiliointirow['hyvak1'] == 'MAKSUUN') {
               $hyvak[1] = "";
               $hyvak[2] = "";
@@ -1128,7 +1128,7 @@ if (!function_exists("verkkolasku_in")) {
         $result = pupe_query($query);
         $hyvak_row = mysqli_fetch_assoc($result);
 
-	$hyvak[$tuuraaja_i] = (mysqli_num_rows($result) > 0) ? $hyvak_row['kuka'] : ""; // MODIFIED, BUGFIX
+	$hyvak[$tuuraaja_i] = (mysqli_num_rows($result) > 0) ? $hyvak_row['kuka'] : ""; // MUOKKAUS: isset()
       }
 
       if (mb_strlen($hyvak[5]) > 0) {
@@ -1259,7 +1259,7 @@ if (!function_exists("verkkolasku_in")) {
                 lukko            = '1',
                 laatija          = 'verkkolas',
                 laadittu         = now()";
-      $result = pupe_query($query, $GLOBALS["masterlink"]); // MODIFIED, BUGFIX
+      $result = pupe_query($query, $GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
       $ostovelkatiliointitunnus = mysqli_insert_id($GLOBALS["masterlink"]);
 
       // Onko rivikohtaisia tiliöintisääntöjä
@@ -1859,7 +1859,7 @@ if (!function_exists("verkkolasku_in")) {
         // Tallennetaan laskun XML liitetiedostoksi
         $_tmfilename = explode("/", $file);
         $filename = array_pop($_tmfilename);
-        $xmlstr   = mysqli_real_escape_string($GLOBALS["link"], $xmlstr); // MODIFIED, deprecated
+        $xmlstr   = mysqli_real_escape_string($GLOBALS["link"], $xmlstr); // MUOKKAUS: mysqli_real_escape_string()
 
         if ($ebid == "FINVOICEXML" or $ebid == 'MAVENTAXML') {
           $kayttotarkoitus = 'FINVOICE';
@@ -1909,7 +1909,7 @@ if (!function_exists("verkkolasku_in")) {
           if (mb_substr($sisalto, 0, 4) == "%PDF") {
             // tallennetaan kuva
             $filename = $ebid.".pdf";
-            $data = mysqli_real_escape_string($GLOBALS["link"], $sisalto); // MODIFIED, deprecated
+            $data = mysqli_real_escape_string($GLOBALS["link"], $sisalto); // MUOKKAUS: mysqli_real_escape_string()
 
             // lisätään kuva
             $query = "INSERT INTO liitetiedostot SET
@@ -1950,7 +1950,7 @@ if (!function_exists("verkkolasku_in")) {
                 $_pdf_liitteet[] = $liitefile;
 
                 $data = file_get_contents($liitefile);
-                $data = mysqli_real_escape_string($GLOBALS["link"], $data); // MODIFIED, deprecated
+                $data = mysqli_real_escape_string($GLOBALS["link"], $data); // MUOKKAUS: mysqli_real_escape_string()
 
                 $filename = str_replace("maventa_{$match[2]}_maventa-", "", basename($liitefile));
 
@@ -1994,7 +1994,7 @@ if (!function_exists("verkkolasku_in")) {
 
               if (mb_strpos($editilaus_laskulle_data, "OSTOTIL.OT_NRO:".$laskun_asiakkaan_tilausnumero) !== FALSE) {
 
-                $data  = mysqli_real_escape_string($GLOBALS["link"], $editilaus_laskulle_data); // MODIFIED, deprecated
+                $data  = mysqli_real_escape_string($GLOBALS["link"], $editilaus_laskulle_data); // MUOKKAUS: mysqli_real_escape_string()
 
                 $query = "INSERT INTO liitetiedostot SET
                           yhtio           = '$yhtio',

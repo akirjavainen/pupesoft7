@@ -609,6 +609,8 @@ if ($tee == "") {
   }
   echo "</select></td></tr>";
 
+  if (!is_array($yhtiot)) $yhtiot = array(); // MUOKKAUS: isset()
+
   if (count($yhtiot) > 1) {
     echo "<tr><th>".t("Synkronoi").":</th><td><input type='submit' name='synkronoi' value='".t("Synkronoi")."'></td></tr>";
   }

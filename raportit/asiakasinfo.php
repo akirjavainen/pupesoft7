@@ -17,6 +17,11 @@ if (isset($tee) and $tee == "lataa_tiedosto") {
   exit;
 }
 
+// MUOKKAUS: isset():
+foreach (array("tee", "lopetus", "asiakasid", "ytunnus") as $var) {
+  if (!isset(${$var})) ${$var} = null;
+}
+
 $alennuslaji = "";
 
 if ($yhtiorow['myynnin_alekentat'] > 1) {

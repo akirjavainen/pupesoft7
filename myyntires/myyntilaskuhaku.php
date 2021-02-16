@@ -476,7 +476,8 @@ if (!empty($tee)) {
         echo "<td valign='top'>".pupe_DataTablesEchoSort($trow['tapvm']).tv1dateconv($trow["tapvm"])."</td>";
       }
       else {
-        echo "<td valign='top'>".pupe_DataTablesEchoSort($trow['tapvm'])."<a href = '../muutosite.php?tee=E&tunnus={$trow[tunnus]}&lopetus={$lopelisa}'>".tv1dateconv($trow["tapvm"])."</a></td>";
+		// MUOKKAUS: BUGIKORJAUS:
+        echo "<td valign='top'>".pupe_DataTablesEchoSort($trow['tapvm'])."<a href = '../muutosite.php?tee=E&tunnus={$trow['tunnus']}&lopetus={$lopelisa}'>".tv1dateconv($trow["tapvm"])."</a></td>";
       }
       echo "<td valign='top'>".pupe_DataTablesEchoSort($trow['erpcm']).tv1dateconv($trow["erpcm"])."</td>";
 

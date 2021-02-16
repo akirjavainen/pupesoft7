@@ -14,6 +14,11 @@ if ($kukarow["kesken"] == '' or $kukarow["kesken"] == '0') {
   exit;
 }
 
+// MUOKKAUS: isset():
+foreach (array("kertakassa", "keraysvyohyke") as $v) {
+  if (!isset(${$v})) ${$v} = null;
+}
+
 // käytetään laskun varastoa jos se on, muuten varasto alkuperäiseltä tilaukselta
 $vanha_varasto = empty($alkuperainen_varasto) ? 0 : $alkuperainen_varasto;
 $_varasto      = empty($laskurow['varasto']) ? $vanha_varasto : $laskurow['varasto'];
@@ -1708,7 +1713,7 @@ else {
         $tulostusalue = onkotulostusalueita($row["hyllyalue"], $row["hyllynro"], $varasto);
 
         // Mikä keräysvyöhyke
-        $keraysvyohyke = $row['keraysvyohyke'];
+        $keraysvyohyke = isset($row['keraysvyohyke']) ? $row['keraysvyohyke'] : ''; // MUOKKAUS: isset()
 
         // Mikä keräysvyöhyke
         $omalle_tilaukselle = $row['omalle_tilaukselle'];
@@ -1977,7 +1982,8 @@ else {
       $laskurow = palauta_intrastat_tiedot($laskurow, $varasto);
 
       // Rahtivapaat tilaukset lähetetään aina lähettäjän rahtisopimuksella
-      $toimitustapalisa = ($row['erikoistoimitus_myynti'] == 1 and $varaston_row['erikoistoimitus_toimitustapa'] != '') ? ", toimitustapa = '$varaston_row[erikoistoimitus_toimitustapa]', rahtivapaa = 'o', kohdistettu = 'K' " : '';
+      // MUOKKAUS: isset():
+      $toimitustapalisa = (isset($srow) and $row['erikoistoimitus_myynti'] == 1 and $varaston_row['erikoistoimitus_toimitustapa'] != '') ? ", toimitustapa = '$varaston_row[erikoistoimitus_toimitustapa]', rahtivapaa = 'o', kohdistettu = 'K' " : '';
 
       if ($yhtiorow['kerayserat'] == 'K' and isset($toimitustavan_lahto) and isset($toimitustavan_lahto[$varasto]) and $toimitustavan_lahto[$varasto] > 0) {
         $toimitustavan_lahto_arvo = $toimitustavan_lahto[$varasto];

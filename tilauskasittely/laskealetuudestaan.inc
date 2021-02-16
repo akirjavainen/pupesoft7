@@ -50,7 +50,7 @@ while ($jjrow = mysqli_fetch_array($jresultlask)) {
     $alerow = mysqli_fetch_array($aleresult);
 
     //jos rivi on katemyyty tai käyttäjä haluaa, lasketaan ale uudestaan
-    if (($alerow["alennus"]{0} == "-" and $trow["kehahin"] > 0) or $laskeuusix != "") {
+    if (($alerow["alennus"][0] == "-" and $trow["kehahin"] > 0) or $laskeuusix != "") { // MUOKKAUS: deprecated -> []
 
       $debug = 0;
 

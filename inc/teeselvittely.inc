@@ -136,7 +136,7 @@ if (round($maara, 2) != 0) {
                 selite           = '$vientiselite',
                 laatija          = 'tiliote',
                 laadittu         = now()";
-      $result = pupe_query($query, $GLOBALS["masterlink"]); // MODIFIED, BUGFIX
+      $result = pupe_query($query, $GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
     }
 
     $_tiliointi_id = mysqli_insert_id($GLOBALS["masterlink"]);

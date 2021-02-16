@@ -257,15 +257,18 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
 
       //  Samat tiedot tarvitaan myös projektill
       $pvalues = "'".$monistarow2[0]."'";
+      
+      if (!isset($projekti)) $projekti = null; // MUOKKAUS: isset()
 
       for ($i=1; $i < mysqli_num_fields($monistares2)-1; $i++) { // Ei monisteta tunnusta
 
-	$field = mysqli_field_name($monistares2, $i); // MODIFIED, added BUGFIX
-        if ($field != 'tunnus') $fields .= ", " . $field; // MODIFIED, added BUGFIX
+        // MUOKKAUS: BUGIKORJAUS (ei monisteta tunnusta):
+	    $field = mysqli_field_name($monistares2, $i);
+        if ($field != 'tunnus') $fields .= ", " . $field;
 
         switch (mysqli_field_name($monistares2, $i)) {
-	case 'tunnus': // MODIFIED, added BUGFIX
-	  break; // MODIFIED, added BUGFIX
+	    case 'tunnus': // MUOKKAUS: BUGIKORJAUS (ei monisteta tunnusta)
+	      break;
         case 'otunnus':
           $values .= ", '$utunnus'";
           $pvalues .= ", '$ptunnus'";
@@ -343,7 +346,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
 
         while ($liiterow = mysqli_fetch_assoc($liiteres)) {
 
-          $liiterow["data"] = mysqli_real_escape_string($GLOBALS["masterlink"], $liiterow["data"]); // MODIFIED, fixed DEPRECATED
+          $liiterow["data"] = mysqli_real_escape_string($GLOBALS["masterlink"], $liiterow["data"]); // MUOKKAUS: mysqli_real_escape_string()
 
           $query = "INSERT INTO liitetiedostot SET
                     yhtio           = '$kukarow[yhtio]',
@@ -700,7 +703,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
               case 'tilausrivilinkki':
               case 'luontiaika':
               case 'laatija':
-              case 'tunnus': // MODIFIED, added BUGFIX
+              case 'tunnus': // MUOKKAUS: BUGIKORJAUS (ei monisteta tunnusta)
                 $values .= "";
                 break;
               default:
@@ -790,7 +793,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
       $tilauksesta_myyntitilaus .= "<br><br>$linkkilisa<br>";
     }
 
-    if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MODIFIED, added JWIO ERP copy function
+    if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi
     return $tilauksesta_myyntitilaus;
   }
 }

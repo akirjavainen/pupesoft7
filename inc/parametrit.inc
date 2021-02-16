@@ -282,7 +282,7 @@ $aika_debug_array = array();
 $quer_debug_array = array();
 
 require "salasanat.php";
-if (php_sapi_name() == 'cli') $kukarow['yhtio'] = COMPANY_PUPESOFT; // MODIFIED, added CLI pass-through
+if (php_sapi_name() == 'cli') $kukarow['yhtio'] = COMPANY_PUPESOFT; // MUOKKAUS: CLI pass-through
 
 // haetaan jotain tarpeellisia funktioita mukaan..
 if (@include_once "inc/functions.inc") {
@@ -421,7 +421,7 @@ if (isset($_GET["user"]) and $_GET["user"] != "" and $_GET["pass"] != "" and $_G
   }
 }
 // jos sessionia ei ole ja ei olla loginissa, mennään login ruutuun ja exit...
-elseif (php_sapi_name() != 'cli' and $session == '' and $login != 'yes' and (!isset($verkkokauppa) or $verkkokauppa == '')) { // MODIFIED, added CLI pass-through
+elseif (php_sapi_name() != 'cli' and $session == '' and $login != 'yes' and (!isset($verkkokauppa) or $verkkokauppa == '')) { // MUOKKAUS: CLI pass-through
 
   if ($phpnimi != 'index.php') {
     echo "<META HTTP-EQUIV='Refresh'CONTENT='0;URL=$palvelin2'>";

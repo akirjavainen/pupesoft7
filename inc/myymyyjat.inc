@@ -264,10 +264,10 @@ function piirra_myyjien_myynnit($lisa, $pvmalku, $pvmloppu, $toim, $kuluprosentt
         }
 
       if ($konserni == '') {
-        $summa = isset($kausi_array[$kausi][1]) ? $kausi_array[$kausi][1] : "";
+        $summa = isset($kausi_array[$kausi][1]) ? $kausi_array[$kausi][1] : 0; // MUOKKAUS: isset()
 
         if ($toim != "TARKKA") {
-          $kate_summa = isset($kate[$myyja][$kausi][1]) ? $kate[$myyja][$kausi][1] : "";
+          $kate_summa = isset($kate[$myyja][$kausi][1]) ? $kate[$myyja][$kausi][1] : 0; // MUOKKAUS: isset()
           $yhteensa_kate += $kate_summa;
           $yhteensa_kate_kausi[$kausi] += $kate_summa;
         }

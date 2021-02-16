@@ -1269,6 +1269,7 @@ if (!function_exists('rivi_original')) {
 
     if (($laskutyyppi == 19 and (empty($row['perheid']) or $row['tunnus'] == $row['perheid'])) or $laskutyyppi != 19) {
       // A-hinta
+      if (!isset($laskurow['_loppunollat'])) $laskurow['_loppunollat'] = null; // MUOKKAUS: isset()
       $oikpos = $pdf_lasku->strlen(hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $norm);
       $pdf_lasku->draw_text(435-$oikpos, $kala, hintapyoristys(laskuval($veroton_hinta, $kurssi), 0, $laskurow['_loppunollat']), $thispage, $norm);
 
@@ -2870,6 +2871,8 @@ if (!function_exists('alvierittely')) {
 if (!function_exists('PalautaPankkiviivakoodi')) {
   function PalautaPankkiviivakoodi($tilinumero, $laskun_summa = 0, $erapv = "00.00.00", $viitenumero = 0, $versio = 2) {
 
+	if (!isset($laskutyyppi)) $laskutyyppi = null; // MUOKKAUS: isset()
+
     // Fonttimuuttujat
     extract(lasku_fontit($laskutyyppi));
 
@@ -2953,6 +2956,7 @@ if (!function_exists("tulosta_lasku")) {
     global $kukarow, $yhtiorow, $tulosta_lasku_kpl;
 
     // Fonttimuuttujat
+    if (!isset($laskutyyppi)) $laskutyyppi = null; // MUOKKAUS: isset()
     extract(lasku_fontit($laskutyyppi));
 
     if (substr($lasku, 0, 6) == "LASKU:") {
@@ -3508,7 +3512,9 @@ if (!function_exists("tulosta_lasku")) {
         }
 
         $line = exec("$komento $pdf_laskufilenimi");
-	if ($laskurow["maksuehto"] == "Käteinen/kortti" || $laskurow["maksuehto"] == "Paytrail") $line = exec("$komento $pdf_laskufilenimi"); // MODIFIED, doubled
+        
+        // MUOKKAUS: tulosta kateiskuitit kahteen kertaan:
+        if ($laskurow["maksuehto"] == "Käteinen/kortti" || $laskurow["maksuehto"] == "Paytrail") $line = exec("$komento $pdf_laskufilenimi");
       }
 
       // Kuittikopio

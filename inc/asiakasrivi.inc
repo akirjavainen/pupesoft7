@@ -138,7 +138,7 @@ if ($fieldname == "chn") {
 
   $sel = array($trow[$i] => ' selected') + array_fill_keys(array('100', '010', '020', '030', '111', '112', '666', '667', '999', '888'), '');
 
-  $ulos  = "<td class='ctlHighlight'><select name='{$nimi}' ".js_alasvetoMaxWidth($nimi, 300).">"; // MODIFIED; highlighted
+  $ulos  = "<td class='ctlHighlight'><select name='{$nimi}' ".js_alasvetoMaxWidth($nimi, 300).">"; // MUOKKAUS highlighted
   $ulos .= "<option value='100' {$sel['100']}>".hae_chn_teksti('100')."</option>";
   $ulos .= "<option value='010' {$sel['010']}>".hae_chn_teksti('010')."</option>";
   $ulos .= "<option value='020' {$sel['020']}>".hae_chn_teksti('020')."</option>";
@@ -188,7 +188,7 @@ if ($fieldname == "laji") {
     $sel = "SELECTED";
   }
 
-  $ulos  = "<td class='ctlHighlight'><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">"; // MODIFIED, highlighted
+  $ulos  = "<td class='ctlHighlight'><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">"; // MUOKKAUS: highlighted
   $ulos .= "<option value = '' $sel>".t("Yritys")."</option>";
   $ulos .= "<option value = 'K' $sel4>".t("Korjaamo")."</option>";
   $ulos .= "<option value = 'H' $sel1>".t("Yksityishenkilö")."</option>";
@@ -228,7 +228,7 @@ if ($fieldname == "maksuehto") {
             ORDER BY jarjestys, teksti";
   $vresult = pupe_query($query);
 
-  $ulos = "<td class='ctlHighlight'><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">"; // MODIFIED, highlighted
+  $ulos = "<td class='ctlHighlight'><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">"; // MUOKKAUS: highlighted
 
   while ($vrow = mysqli_fetch_assoc($vresult)) {
     $sel="";
@@ -249,7 +249,7 @@ if ($fieldname == "maksuehto") {
 }
 
 if ($fieldname == "asiakasnro") {
-  $ulos  = "<td class='ctlHighlight'>"; // MODIFIED, highlighted
+  $ulos  = "<td class='ctlHighlight'>"; // MUOKKAUS: highlighted
   $ulos .= "<div id='asiakasnumero_etsi'>";
 
   if ($yhtiorow["automaattinen_asiakasnumerointi"] != "" and $trow[$i] == "") {
@@ -306,7 +306,7 @@ if ($fieldname == "asiakasnro") {
 
 if ($fieldname == "ytunnus") {
 
-  $ulos = "<td class='ctlHighlight'>"; // MODIFIED, highlighted
+  $ulos = "<td class='ctlHighlight'>"; // MUOKKAUS: highlighted
   $ulos .= "<div id='ytunnus_etsi'>";
   $ulos .= "<input type='text' name='$nimi' id='$nimi' value='$trow[$i]'>";
 
@@ -368,7 +368,7 @@ if ($fieldname == "toimitustapa") {
             WHERE yhtio = '$kukarow[yhtio]'
             ORDER BY jarjestys, selite";
   $vresult = pupe_query($query);
-  $ulos = "<td class='ctlHighlight'><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">"; // MODIFIED, highlighted
+  $ulos = "<td class='ctlHighlight'><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">"; // MUOKKAUS: highlighted
 
   while ($vrow=mysqli_fetch_array($vresult)) {
     $sel="";
@@ -552,7 +552,7 @@ if ($fieldname == "kerayspoikkeama") {
 if ($fieldname == "toimitusehto") {
   $kires = t_avainsana("TOIMEHTO");
 
-  $ulos = "<td class='ctlHighlight'><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">"; // MODIFIED, highlighted
+  $ulos = "<td class='ctlHighlight'><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 300).">"; // MUOKKAUS: highlighted
   $ulos .= "<option value=''>".t("Ei oletustoimitusehtoa")."</option>";
 
   while ($kirow = mysqli_fetch_array($kires)) {

@@ -350,14 +350,18 @@ if (($laskurow["tila"] == "L" or $laskurow["tila"] == "N") and $kukarow["extrane
       <th>".t("Toimitettu")."</th>
       <th>".t("Laskutettu")."</th>
     </tr>";
-  echo "<tr>
-      <td>".tv1dateconv($laskurow["luontiaika"], "P", "")."</td>
-      <td>".tv1dateconv($laskurow["h1time"], "P", "")."</td>
-      <td>".tv1dateconv($laskurow["lahetepvm"], "P", "")."</td>
-      <td>".tv1dateconv($kerattyaikarow["kerattyaika"], "P", "")."</td>
-      <td>".tv1dateconv($toimitettuaikarow["toimitettuaika"], "P", "")."</td>
-      <td>".tv1dateconv($laskurow["laskutettu"], "P", "")."</td>
-    </tr>";
+
+  // MUOKKAUS: isset():
+  if (is_array($kerattyaikarow) and is_array($toimitettuaikarow)) {
+	  echo "<tr>
+		  <td>".tv1dateconv($laskurow["luontiaika"], "P", "")."</td>
+		  <td>".tv1dateconv($laskurow["h1time"], "P", "")."</td>
+		  <td>".tv1dateconv($laskurow["lahetepvm"], "P", "")."</td>
+		  <td>".tv1dateconv($kerattyaikarow["kerattyaika"], "P", "")."</td>
+		  <td>".tv1dateconv($toimitettuaikarow["toimitettuaika"], "P", "")."</td>
+		  <td>".tv1dateconv($laskurow["laskutettu"], "P", "")."</td>
+		</tr>";
+  }
 }
 
 $komm = "";
@@ -1109,7 +1113,7 @@ else {
     $lopetus_apu .= "//asiakasid=$asiakasid";
     $lopetus_apu .= "//toimittajaid=$toimittajaid";
     $lopetus_apu .= "//laskunro=$laskunro";
-    $lopetus_apu .= "//lasku_yhtio=$row[yhtio]";
+    if (isset($row)) $lopetus_apu .= "//lasku_yhtio=$row[yhtio]"; // MUOKKAUS: isset()
     $lopetus_apu .= "//ytunnus=$ytunnus";
     $lopetus_apu .= "//tunnus=$tunnus";
     $lopetus_apu .= "//ppa=$ppa";
@@ -1599,7 +1603,7 @@ else {
       echo "<td $class align='right' valign='top' nowrap>$myyntihinta</td>";
 
       for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
-        echo "<td $class align='right' valign='top' nowrap>".($row["ale{$alepostfix}"] * 1)."</td>";
+        echo "<td $class align='right' valign='top' nowrap>" . ((float)$row["ale{$alepostfix}"] * 1) . "</td>"; // MUOKKAUS: BUGIKORJAUS (string * int)
       }
 
       echo "<td $class align='right' valign='top' nowrap>".hintapyoristys($row["hinta"]);
@@ -2227,7 +2231,7 @@ if ($tee != "NAYTA") {
 
           $fieldname = mysqli_field_name($result, $i);
 
-          if ($fildname == 'toimaika') {
+          if ($fieldname == 'toimaika') { // MUOKKAUS: typo
             echo "<$ero>".tv1dateconv($row[$fieldname])."</$ero>";
           }
           else {

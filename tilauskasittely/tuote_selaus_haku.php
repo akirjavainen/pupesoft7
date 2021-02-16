@@ -21,9 +21,11 @@ else exit;
 
 enable_ajax();
 
-if ($livesearch_tee == "TUOTEHAKU") {
-  livesearch_tuotehaku();
-  exit;
+if (isset($livesearch_tee)) { // MUOKKAUS: isset()
+  if ($livesearch_tee == "TUOTEHAKU") {
+    livesearch_tuotehaku();
+    exit;
+  }
 }
 
 // Liitetiedostot popup
@@ -401,7 +403,7 @@ if ($verkkokauppa == "") {
         </form>";
     echo "</td></tr></table>";
   }
-  elseif ($kukarow["kuka"] != "" and $laskurow["tila"] == "O") {
+  elseif ($kukarow["kuka"] != "" and isset($laskurow) and $laskurow["tila"] == "O") { // MUOKKAUS: isset()
 
     echo "  <form method='post' action='".$palvelin2."tilauskasittely/tilaus_osto.php'>
         <input type='hidden' name='aktivoinnista' value='true'>
@@ -410,7 +412,7 @@ if ($verkkokauppa == "") {
         <input type='submit' value='".t("Takaisin tilaukselle")."'>
         </form><br><br>";
   }
-  elseif ($kukarow["kuka"] != "" and $laskurow["tila"] != "" and $laskurow["tila"] != "K" and $toim_kutsu != "" and $toim_kutsu != "EXTENNAKKO") {
+  elseif ($kukarow["kuka"] != "" and isset($laskurow) and $laskurow["tila"] != "" and $laskurow["tila"] != "K" and $toim_kutsu != "" and $toim_kutsu != "EXTENNAKKO") { // MUOKKAUS: isset()
 
     if ($kukarow["extranet"] != "") {
       if ($yhtiorow['reklamaation_kasittely'] == 'U' and $toim == 'EXTRANET_REKLAMAATIO') {
@@ -426,6 +428,7 @@ if ($verkkokauppa == "") {
       $tilauskasittely = "tilauskasittely/";
     }
 
+    if (!isset($tyojono)) $tyojono = null; // MUOKKAUS: isset()
     echo "  <form method='post' action='".$palvelin2.$tilauskasittely."tilaus_myynti.php'>
         <input type='hidden' name='toim' value='$toim_kutsu'>
         <input type='hidden' name='tilausnumero' value='$kukarow[kesken]'>
@@ -662,6 +665,7 @@ if ($verkkokauppa == "") {
     echo "<div>";
   }
 
+  if (!isset($valittu_tarjous_tunnus)) $valittu_tarjous_tunnus = ""; // MUOKKAUS: isset()
   echo "<form action = '?toim_kutsu=$toim_kutsu' method = 'post' name='hakuformi'>";
   echo "<input type='hidden' name='tilausnumero' value='$kukarow[kesken]'>";
   echo "<input type='hidden' name='ostoskori' value='$ostoskori'>";
@@ -745,7 +749,9 @@ if ($verkkokauppa == "") {
     echo "<th>".t("Näytä vain saldolliset tuotteet")."</th>";
     echo "<td><input type='checkbox' name='saldotonrajaus' $saldotoncheck></td>";
     echo "</tr>";
-    if (in_array($laskurow['tila'], array('N', 'T')) and $kukarow['kesken'] != 0 and $kukarow['hinnat'] == 0) {
+    
+    // MUOKKAUS: isset():
+    if (isset($laskurow) and in_array($laskurow['tila'], array('N', 'T')) and $kukarow['kesken'] != 0 and $kukarow['hinnat'] == 0) {
       echo "<th>".t("Näytä asiakkaan hinnoilla")."</th>";
       echo "<td><input type='checkbox' name='asiakashinnat' $asiakashinnatcheck></td>";
       echo "</tr>";
@@ -1477,7 +1483,8 @@ if ($submit_button != '' and ($lisa != '' or $lisa_parametri != '')) {
         $hae_ja_selaa_asiakas = (int) $kukarow['oletus_asiakas'];
       }
       else {
-        $hae_ja_selaa_asiakas = (int) $laskurow['liitostunnus'];
+        // MUOKKAUS: isset():
+        $hae_ja_selaa_asiakas = isset($laskurow) ? (int) $laskurow['liitostunnus'] : 0;
       }
 
       $rivin_yksikko = t_avainsana("Y", "", " and avainsana.selite='$row[yksikko]'", "", "", "selite");
@@ -1555,7 +1562,8 @@ if ($submit_button != '' and ($lisa != '' or $lisa_parametri != '')) {
 
       // Peek ahead
       $row_seuraava = current($rows);
-
+      if (!isset($row["osaluettelo"])) $row["osaluettelo"] = null; // MUOKKAUS: isset()
+      
       if ($piilota_tuoteperheen_lapset != '' and $row["tuoteperhe"] == $row["tuoteno"]) {
         $classleft = "style='border-bottom: 1px solid{$bordercolor}; border-left: 1px solid{$bordercolor}; border-top: 1px solid{$bordercolor};' ";
         $classmidl = "style='border-bottom: 1px solid{$bordercolor}; border-top: 1px solid{$bordercolor};' ";
@@ -1905,6 +1913,18 @@ function hae_oletusasiakas($laskurow) {
 
   $oleasres                 = pupe_query($query);
   $oleasrow                 = mysqli_fetch_assoc($oleasres);
+
+  // MUOKKAUS: isset():
+  if (!isset($oleasrow)) $oleasrow = array();
+  if (!isset($laskurow)) $laskurow = array();
+
+  foreach (array("tunnus", "valkoodi", "maa", "toim_maa", "varastomaa") as $v) {
+    if (!isset($oleasrow[$v])) $oleasrow[$v] = "";
+  }
+  foreach (array("toim_maa", "maa") as $v) {
+    if (!isset($laskurow[$v])) $laskurow[$v] = "";
+  }
+
   $oleasrow["liitostunnus"] = $oleasrow["tunnus"];
 
   $query = "SELECT *
@@ -2318,7 +2338,7 @@ function hae_ja_piirra_saldo($row, $yhtiot, $oleasrow) {
 
       $sallitut_maat_lisa = "";
 
-      if ($laskurow["toim_maa"] != '') {
+      if (isset($laskurow) and $laskurow["toim_maa"] != '') { // MUOKKAUS: isset()
         $sallitut_maat_lisa = " and (varastopaikat.sallitut_maat like '%$laskurow[toim_maa]%' or varastopaikat.sallitut_maat = '') ";
       }
 
@@ -2384,10 +2404,12 @@ function hae_ja_piirra_saldo($row, $yhtiot, $oleasrow) {
           if (!isset($saldorow["era"]))
             $saldorow["era"] = "";
 
-          list($saldo, $hyllyssa, $myytavissa, $sallittu) = saldo_myytavissa($saldorow["tuoteno"], '', '', $saldorow["yhtio"], $saldorow["hyllyalue"], $saldorow["hyllynro"], $saldorow["hyllyvali"], $saldorow["hyllytaso"], $laskurow["toim_maa"], $saldoaikalisa, $saldorow["era"]);
+	  if (isset($laskurow)) { // MUOKKAUS: isset()
+            list($saldo, $hyllyssa, $myytavissa, $sallittu) = saldo_myytavissa($saldorow["tuoteno"], '', '', $saldorow["yhtio"], $saldorow["hyllyalue"], $saldorow["hyllynro"], $saldorow["hyllyvali"], $saldorow["hyllytaso"], $laskurow["toim_maa"], $saldoaikalisa, $saldorow["era"]);
+	  }
 
           //  Listataan vain varasto jo se ei ole kielletty
-          if ($sallittu === true) {
+          if (isset($sallittu) and $sallittu === true) { // MUOKKAUS: isset()
             // hoidetaan pois problematiikka jos meillä on orpoja (tuotepaikattomia) tuotteita varaamassa saldoa
             if ($orvot > 0) {
               if ($myytavissa >= $orvot and $saldorow["yhtio"] == $kukarow["yhtio"]) {

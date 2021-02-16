@@ -344,7 +344,8 @@ if ($jtselaus_paivitys_oikeus and $kukarow["extranet"] == "" and $tilaus_on_jo =
     }
 
     //  Katsotaan toimitettiinko jotain mistä meidän tulee laittaa viestiä
-    if (sms_jt == "kaikki_toimitettu") {
+    if (!isset($sms_jt)) $sms_jt = null; // MUOKKAUS: isset()
+    if ($sms_jt == "kaikki_toimitettu") {
       if ($yhtiorow["varaako_jt_saldoa"] != "") {
         $sms_lisavarattu = " + alkup_tilaus.varattu";
       }
@@ -1927,6 +1928,8 @@ if ($tee == "JATKA") {
                 $mita_check = 'checked';
               }
 
+	      // MUOKKAUS: isset():
+	      if (isset($kpl)) $kpl = array();
               if (!isset($kpl[$tunnukset])) $kpl[$tunnukset] = "";
 
               if ($automaaginen == '' and !isset($saapumisajat[$jtrow['tuoteno']])) {
@@ -2661,6 +2664,11 @@ if ($tilaus_on_jo == "" and $from_varastoon_inc == "" and $tee == '') {
   $sel=array();
   $sel[$jarj] = "selected";
 
+  // MUOKKAUS: isset():
+  foreach (array("tuoteno", "ytunnus", "luontiaika", "toimaika", "myytavissasaldo", "hyllysaldo") as $v) {
+    if (!isset($sel[$v])) $sel[$v] = "";
+  }
+
   echo "<tr>
       <th>".t("Järjestys")."</th>
       <td>
@@ -2683,6 +2691,11 @@ if ($tilaus_on_jo == "" and $from_varastoon_inc == "" and $tee == '') {
 
   $selvar=array();
   $selvar[$saldolaskenta] = "SELECTED";
+  
+  // MUOKKAUS: isset():
+  foreach (array("myytavissasaldo", "hyllysaldo") as $v) {
+    if (!isset($selvar[$v])) $selvar[$v] = "";
+  }
 
   echo "  <tr>
       <th>".t("Saldovalinnassa käytetään")."</th>
@@ -2847,7 +2860,7 @@ if ($tilaus_on_jo == "" and $from_varastoon_inc == "" and $tee == '') {
       </td>
       </td>
     </tr>";
-
+  if (!isset($summarajaus)) $summarajaus = ""; // MUOKKAUS: isset()
   echo "<tr>
       <th>", t("Näytä vain jt-rivit jos asiakkaan jälkitoimitusten yhteissumma on yli")."</th>
       <td>

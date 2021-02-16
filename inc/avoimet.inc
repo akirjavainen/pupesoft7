@@ -2,7 +2,7 @@
 
 echo "<font class=head>".t("Avoimet laskut")."</font><hr>";
 
-// MODIFIED, auto-load:
+// MUOKKAUS: $tee oletus:
 if (!isset($tee)) echo "<body onload=\"/*document.getElementsByName('avoimet1_length')[0].selectedIndex = '6';*/ document.getElementsByName('ajaraportti')[0].click();\">\n";
 
 // scripti balloonien tekemiseen
@@ -675,6 +675,7 @@ if ($tee != '' and isset($ajaraportti)) {
       echo "<td class='tumma' align='right' nowrap>$val</td>";
       echo "</tr>";
 
+      if (!isset($kaikkival)) $kaikkival = array(); // MUOKKAUS: isset()
       if (!in_array($val, $kaikkival)) $kaikkival[] = $val;
     }
 
@@ -845,7 +846,7 @@ if ($tee != '' and isset($ajaraportti)) {
           $maalisa
           $tunnuslisa
           $groupby
-          ORDER BY lasku.erpcm, lasku.ytunnus, lasku.laskunro"; // MODIFIED: ORDER BY lasku.erpcm
+          ORDER BY lasku.erpcm, lasku.ytunnus, lasku.laskunro"; // MUOKKAUS: ORDER BY lasku.erpcm
     $result = pupe_query($query);
 
     // poimitaan kuluva päivä, raportin timestampille

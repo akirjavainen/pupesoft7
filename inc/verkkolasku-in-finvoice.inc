@@ -243,7 +243,7 @@ if (count($tuotetiedot) > 0) {
 
       $rtuoteno[$i]["kommentti"] = xml_string($rtuoteno[$i]["kommentti"]);
       $rtuoteno[$i]["kpl"] = xml_float($tuotetieto->DeliveredQuantity);
-      $rtuoteno[$i]["yksikko"] = isset($tuotetieto->DeliveredQuantity) ? xml_string($tuotetieto->DeliveredQuantity->attributes()->QuantityUnitCode) : xml_string("kpl"); // MODIFIED, BUGFIX
+      $rtuoteno[$i]["yksikko"] = isset($tuotetieto->DeliveredQuantity) ? xml_string($tuotetieto->DeliveredQuantity->attributes()->QuantityUnitCode) : xml_string("kpl"); // MUOKKAUS: isset()
       $rtuoteno[$i]["tilaajanrivinro"] = xml_string($tuotetieto->RowIdentifier);
       $rtuoteno[$i]["lapsi"] = "";
     }

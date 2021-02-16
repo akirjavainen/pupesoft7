@@ -495,7 +495,8 @@ while ($trow = mysqli_fetch_assoc($result)) {
   }
 
   if ($trow['korjattu'] == '') {
-    $yhtsum += $trow['summa']; //Riviä ei ole poistettu
+    // MUOKKAUS: BUGIKORJAUS (string + string):
+    $yhtsum = (float)$yhtsum + (float)$trow['summa']; // Riviä ei ole poistettu
   }
 }
 

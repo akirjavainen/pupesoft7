@@ -166,6 +166,14 @@ if (!isset($keratty)) {
   $keratty = "";
 }
 
+// MUOKKAUS: isset():
+foreach (array("toim", "laaja_toim_kasittely", "kutsuja", "tapa", "kvkasittely", 
+	"tuotenimitys_force", "varattu", "kpl2", "jt", "toimitettu", "toimitettuaika", 
+	"toimittajan_tunnus", "varattu", "laaja_toim_kasittely", "kerattyaika", "toimaika", 
+	"kerayspvm", "alv", "varataan_saldoa", "values") as $v) {
+  if (!isset(${$v})) ${$v} = null;
+}
+
 // Haetaan asiakkaan kieli erilaisten systeemikommenttien kääntämistä varten
 $query = "SELECT kieli, kerayserat
           FROM asiakas
@@ -332,7 +340,14 @@ if (empty($rivitunnus) and $laskurow['tila'] == 'O' and $yhtiorow["ostotilauksee
 }
 
 // Päivämäärien oikeellisuustsekki
-list($aikatsk_v, $aikatsk_k , $aikatsk_p) = explode("-", $toimaika);
+// MUOKKAUS: BUGIKORJAUS (array out of bounds):
+if (strpos($toimaika, "-") !== false) {
+  list($aikatsk_v, $aikatsk_k , $aikatsk_p) = explode("-", $toimaika);
+} else {
+  $aikatsk_v = 0;
+  $aikatsk_k = 0;
+  $aikatsk_p = 0;
+}
 
 $aikatsk_k = (int) $aikatsk_k;
 $aikatsk_p = (int) $aikatsk_p;
@@ -345,7 +360,14 @@ if ($toimaika != "0000-00-00" and !checkdate($aikatsk_k, $aikatsk_p, $aikatsk_v)
   }
 }
 
-list($aikatsk_v, $aikatsk_k , $aikatsk_p) = explode("-", $kerayspvm);
+// MUOKKAUS: BUGIKORJAUS (array out of bounds):
+if (strpos($kerayspvm, "-") !== false) {
+  list($aikatsk_v, $aikatsk_k , $aikatsk_p) = explode("-", $kerayspvm);
+} else {
+  $aikatsk_v = 0;
+  $aikatsk_k = 0;
+  $aikatsk_p = 0;
+}
 
 $aikatsk_k = (int) $aikatsk_k;
 $aikatsk_p = (int) $aikatsk_p;
@@ -852,7 +874,7 @@ if ($laskurow["toim_maa"] != "" and $laskurow["tila"] != 'V') {
 }
 
 //Tutkitaan onko tämä hyvitysrivi
-if ((float) $kpl <= 0 and trim($var) == "") { // MODIFIED, < to <= to allow 0 kpl
+if ((float)$kpl <= 0 and trim($var) == "") { // MUOKKAUS: salli miinusmerkkinen kpl (hyvitys)
   //Laitetaan varriksi Y jotta ei tarvitse mennä myyntihaaraan
   $var = "Y";
 }
@@ -931,7 +953,8 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
     }
 
     // Otetaan alkuperäisen tuotteen hinta talteen
-    list($korva_isa_hinta, , $korva_isa_ale_kaikki, , ) = alehinta($laskurow, $trow, $kpl, '', '', '', '', '', ($myy_tyyppi[$indeksi] == 'LAPSITUOTE' ? 'X' : ''));
+    // MUOKKAUS: isset():
+    list($korva_isa_hinta, , $korva_isa_ale_kaikki, , ) = alehinta($laskurow, $trow, $kpl, '', '', '', '', '', (isset($myy_tyyppi[$indeksi]) and $myy_tyyppi[$indeksi] == 'LAPSITUOTE' ? 'X' : ''));
 
     // Tehdään homma siten, että etsitään kaikki korvaavat jo tässä vaiheessa arrayseen
     // Haetaan korvaavuusketju tuotteelle
@@ -2020,12 +2043,12 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
               // Onko tuotteella staattinen tilausrivikommentti
               if ($trow["tilausrivi_kommentti"] != "" and $rivitunnus == 0 and $sallitaanko_rivikommentti) {
                 // Tilausrivin systeemikommentti
-		/* MODIFIED, commented out:
+		        /* MUOKKAUS, kommentoitu ulos:
                 if (mb_stripos($kommentti, $trow["tilausrivi_kommentti"]) === FALSE) {
                   if (trim($kommentti) != "")  $kommentti = "\n".$kommentti;
                   $kommentti = trim($trow["tilausrivi_kommentti"].$kommentti);
-		}
-		 */
+		        }
+		        */
               }
 
               // jos meillä on vanha laadittuaika, niin käytetää sitä
@@ -3240,12 +3263,12 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
     // Onko tuotteella staattinen tilausrivikommentti
     if ($trow["tilausrivi_kommentti"] != "" and $rivitunnus == 0 and $sallitaanko_rivikommentti) {
       // Tilausrivin systeemikommentti
-      /* MODIFIED, commented out:
+      /* MUOKKAUS: kommentoitu ulos:
       if (mb_stripos($kommentti, $trow["tilausrivi_kommentti"]) === FALSE) {
         if (trim($kommentti) != "")  $kommentti = "\n".$kommentti;
         $kommentti = trim($trow["tilausrivi_kommentti"].$kommentti);
       }
-       */
+      */
     }
 
     if ($rivitunnus == 0 and ($trow["status"] == "P" or $trow["status"] == "X")) {
@@ -3417,7 +3440,10 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
     if (isset($GLOBALS['kampanjahinnoitteluntunnus'])) {
       $kampanjatunnus = $GLOBALS['kampanjahinnoitteluntunnus'];
     }
-    $tilausrivi_nimitys = ($_POST['tapa'] == 'VAIHDAJAPOISTA') ? $tilausrivi['nimitys'] : $trow['nimitys']; // MODIFIED, do not lose tilausrivi.nimitys
+    
+    // MUOKKAUS: pida tilausrivi.nimitys mukana:
+    $tilausrivi_nimitys = (isset($_POST['tapa']) and $_POST['tapa'] == 'VAIHDAJAPOISTA') ? $tilausrivi['nimitys'] : $trow['nimitys'];
+    
     // lisätään puuterivi
     $query = "INSERT into tilausrivi set
               hyllyalue       = '$p_hyllyalue',
@@ -3458,7 +3484,7 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
               perheid2        = '$perheid2',
               tunnus          = '$rivitunnus',
               nimitys         = '$tilausrivi_nimitys',
-              jaksotettu      = '$jaksotettu'"; // MODIFIED: trow[nimitys] -> $tilausrivi_nimitys
+              jaksotettu      = '$jaksotettu'"; // MUOKKAUS: trow[nimitys] -> $tilausrivi_nimitys
 
     if ($trow['ei_saldoa'] != '' and $yhtiorow["kerataanko_saldottomat"] == '') {
       $query .= ", keratty = 'saldoton', kerattyaika = now()";
@@ -3582,7 +3608,7 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
                 {$tlisatied_lisa2}
                 {$jt_manual_lisa}";
 
-      if ($trow["sarjanumeroseuranta"] == "S" and $kpl <= 0) { // MODIFIED, < to <= to allow 0 kpl
+      if ($trow["sarjanumeroseuranta"] == "S" and $kpl <= 0) { // MUOKKAUS: salli miinusmerkkinen kpl (hyvitys)
         $query .= " , osto_vai_hyvitys='O' ";
       }
 

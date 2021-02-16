@@ -193,14 +193,14 @@ if (!function_exists("pupe_query")) {
       $res = mysqli_query($link, $query, $link) or pupe_error($query);
     }
     elseif (isset($GLOBALS["pupe_masterdb"]) and $GLOBALS["pupe_masterdb"] > 0) {
-      if ($link == NULL) $link = $GLOBALS["link"]; // MODIFIED, added for PHP 7 compatibility
+      if ($link == NULL) $link = $GLOBALS["link"]; // MUOKKAUS: mysqli_query $link
       $res = mysqli_query($link, $query) or pupe_error($query);
     }
     elseif (isset($GLOBALS["pupe_slavedb"]) and $GLOBALS["pupe_slavedb"] > 0) {
       $res = mysqli_query($link, $query, $GLOBALS["slavelink"]) or pupe_error($query);
     }
     else {
-      if ($link == NULL) $link = $GLOBALS["link"]; // MODIFIED, added for PHP 7 compatibility
+      if ($link == NULL) $link = $GLOBALS["link"]; // MUOKKAUS: mysqli_query $link
       $res = mysqli_query($link, $query) or pupe_error("pupe_query($query, " . mysqli_error($link) . ")");
     }
 
@@ -296,7 +296,7 @@ if (!function_exists("pupe_error")) {
     $puperror .= "\n";
     $puperror .= "Script: {$_SERVER['PHP_SELF']}\n";
     $puperror .= "Toim:   {$toim}\n\n";
-    $puperror .= "Error:  ".mysqli_error()."\n\n";
+    $puperror .= "Error:  ".mysqli_error($GLOBALS["link"])."\n\n";
     $puperror .= "$query\n\n";
 
     // Lähetetään virheviesti meilitse adminille, jos debug ei ole päällä
@@ -306,7 +306,7 @@ if (!function_exists("pupe_error")) {
         "subject" => "{$yhtiorow['nimi']} - SQL Error",
         "body"    => $puperror,
       );
-      echo $puperror; // MODIFIED, added
+      echo $puperror; // MUOKKAUS: echo virhe
       pupesoft_sahkoposti($parametrit);
     }
 
@@ -739,7 +739,8 @@ if (!function_exists("lopetus")) {
           $nlisa = "";
         }
 
-        $row["nimitys"] = trim(str_ireplace("UUSI", "", $row["nimitys"]));
+		if (!isset($row)) $row = array(); // MUOKKAUS: isset()
+        $row["nimitys"] = isset($row["nimitys"]) ? trim(str_ireplace("UUSI", "", $row["nimitys"])) : "";
 
         if ($meta == "") {
           if ($palautavainurli) return $lopetus;
@@ -3661,6 +3662,8 @@ if (!function_exists("tuotteen_myyntihinta")) {
     $hinta       = 0;
     $netto      = "";
     $valuutta    = "";
+    
+    if (!is_array($trow)) return 0; // MUOKKAUS: ei jatketa ilman puuttuvaa rivi-arrayta
 
     // 5. hinnasto.hinta tuotteen nettohinta hinnastosta laskun valuutassa
     if ($hinta == 0 and trim(mb_strtoupper($laskurow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
@@ -6488,6 +6491,8 @@ if (!function_exists("alehinta")) {
 
     $g_ale_peruste        = $aperuste;
     $g_ale_peruste_update = FALSE;
+    if (!isset($ale)) $ale = array();  // MUOKKAUS: isset()
+    if (!is_array($ale)) $ale = array();  // MUOKKAUS: isset()
 
     for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
       if (!isset($ale["ale".$alepostfix])) {
@@ -6566,7 +6571,7 @@ if (!function_exists("alehinta")) {
 
         $palauta = trim($palauta);
 
-        if (mb_substr($palauta, 0, 3) == 'ale' and is_numeric($palauta[mb_strlen($palauta) - 1])) { // MODIFIED, fix DEPRECATED
+        if (mb_substr($palauta, 0, 3) == 'ale' and is_numeric($palauta[mb_strlen($palauta) - 1])) { // MUOKKAUS: deprecated -> []
           extract($ale);
         }
 
@@ -9238,7 +9243,7 @@ if (!function_exists('tallenna_liite')) {
       return false;
     }
 
-    $data     = mysqli_real_escape_string($GLOBALS["link"], file_get_contents($file["tmp_name"])); // MODIFIED, fixed DEPRECATED
+    $data     = mysqli_real_escape_string($GLOBALS["link"], file_get_contents($file["tmp_name"])); // MUOKKAUS, mysqli_real_escape_string()
     $filename   = preg_replace("/[^A-Z0-9\.#_\-%]/i", "", $file["name"]);
     $filetype  = sanitize_string($file["type"]);
     $filesize  = sanitize_string($file["size"]);
@@ -12450,10 +12455,10 @@ if (!function_exists("t_maanimi")) {
     if (mysqli_num_rows($result) > 0) {
       $row = mysqli_fetch_assoc($result);
 
-      $maa_txt = $row["haettu"]; // MODIFIED, fix DEPRECATED
+      $maa_txt = $row["haettu"]; // MUOKKAUS: deprecated -> []
 
       if ($maa_txt == "") {
-        $maa_txt = $row["fi"]; // MODIFIED, fix DEPRECATED
+        $maa_txt = $row["fi"]; // MUOKKAUS: deprecated -> []
       }
 
       $maat[$maa] = mb_substr($maa_txt, 5);
@@ -13529,7 +13534,7 @@ if (!function_exists("tulosta_logo_pdf")) {
     $apu_yhtiorow["nimi"] = $yhtiorow["nimi"];
 
     // varmistetaan, että kopiossakin tulee oikean toimipaikan logo
-    if (isset($laskurow["eta_yhtio"]) and $laskurow["eta_yhtio"] != "") {
+    if (isset($lasku_row) and is_array($lasku_row) and isset($laskurow["eta_yhtio"]) and $laskurow["eta_yhtio"] != "") {
       $query = "SELECT *
                 FROM yhtion_parametrit
                 WHERE yhtio = '$laskurow[eta_yhtio]'";
@@ -13540,7 +13545,7 @@ if (!function_exists("tulosta_logo_pdf")) {
         $apu_yhtiorow["lasku_logo"] = $yhtion_parametritrow["lasku_logo"];
       }
     }
-    elseif ((int) $laskurow["yhtio_toimipaikka"] > 0) {
+    elseif (isset($lasku_row) and is_array($lasku_row) and (int)$laskurow["yhtio_toimipaikka"] > 0) {
       $query = "SELECT *
                 FROM yhtion_toimipaikat
                 WHERE yhtio     = '$kukarow[yhtio]'
@@ -13554,7 +13559,7 @@ if (!function_exists("tulosta_logo_pdf")) {
         $apu_yhtiorow["nimi"] = $yhtion_toimipaikkarow["nimi"];
       }
     }
-    elseif ($laskurow["yhtio"] != "") {
+    elseif (isset($lasku_row) and is_array($lasku_row) and $laskurow["yhtio"] != "") {
       $query = "SELECT *
                 FROM yhtion_parametrit
                 WHERE yhtio = '$laskurow[yhtio]'";
@@ -13911,7 +13916,7 @@ if (!function_exists('liita_tilaus_laskun_liitetiedostoksi')) {
 
           if (mb_strpos($editilaus_laskulle_data, "OSTOTIL.OT_NRO:".$laskun_asiakkaan_tilausnumero) !== FALSE) {
 
-            $data = mysqli_real_escape_string($GLOBALS["link"], $editilaus_laskulle_data); // MODIFIED, fixed DEPRECATED
+            $data = mysqli_real_escape_string($GLOBALS["link"], $editilaus_laskulle_data); // MUOKKAUS: mysqli_real_escape_string()
 
             $query = "INSERT INTO liitetiedostot SET
                       yhtio           = '$kukarow[yhtio]',
@@ -14079,11 +14084,11 @@ if (!function_exists("tarkista_iban")) {
 
     // Muutetaan kirjaimet numeroiksi (A = 10, B = 11, C = 12, jne...)
     for ($i = 0; $i < $pituus; $i++) {
-      if (is_numeric($chk_tilinumero[$i])) { // MODIFIED, fix DEPRECATED
-        $chk_tilinumeronumeric .= $chk_tilinumero[$i]; // MODIFIED, fix DEPRECATED
+      if (is_numeric($chk_tilinumero[$i])) { // MUOKKAUS: deprecated -> []
+        $chk_tilinumeronumeric .= $chk_tilinumero[$i]; // MUOKKAUS: deprecated -> []
       }
       else {
-        $chk_tilinumeronumeric .= ord($chk_tilinumero[$i]) - 55; // MODIFIED, fix DEPRECATED
+        $chk_tilinumeronumeric .= ord($chk_tilinumero[$i]) - 55; // MUOKKAUS: deprecated -> []
       }
     }
 
@@ -14095,7 +14100,7 @@ if (!function_exists("tarkista_iban")) {
     $pituus = mb_strlen($chk_tilinumeronumeric);
 
     for ($i = 0; $i < $pituus; $i++) {
-      $numero = (int) $chk_tilinumeronumeric[$i]; // MODIFIED, fix DEPRECATED
+      $numero = (int) $chk_tilinumeronumeric[$i]; // MUOKKAUS: deprecated -> []
       $mod = (($mod * 10) + $numero) % 97;
     }
 
@@ -14306,7 +14311,7 @@ if (!function_exists("generoi_rfviite")) {
     $pituus = mb_strlen($rf_viite);
 
     for ($i = 0; $i < $pituus; $i++) {
-      $numero = (int) $rf_viite[$i]; // MODIFIED, fix DEPRECATED
+      $numero = (int) $rf_viite[$i]; // MUOKKAUS: deprecated -> []
       $mod = (($mod * 10) + $numero) % 97;
     }
 
@@ -14331,11 +14336,11 @@ if (!function_exists("tarkista_rfviite")) {
 
     // Muutetaan kirjaimet numeroiksi (A = 10, B = 11, C = 12, jne...)
     for ($i = 0; $i < $pituus; $i++) {
-      if (is_numeric($chk_viite[$i])) { // MODIFIED, fix DEPRECATED
-        $chk_viitenumeric .= $chk_viite[$i]; // MODIFIED, fix DEPRECATED
+      if (is_numeric($chk_viite[$i])) { // MUOKKAUS: deprecated -> []
+        $chk_viitenumeric .= $chk_viite[$i]; // MUOKKAUS: deprecated -> []
       }
       else {
-        $chk_viitenumeric .= ord($chk_viite[$i]) - 55; // MODIFIED, fix DEPRECATED
+        $chk_viitenumeric .= ord($chk_viite[$i]) - 55; // MUOKKAUS: deprecated -> []
       }
     }
 
@@ -14347,7 +14352,7 @@ if (!function_exists("tarkista_rfviite")) {
     $pituus = mb_strlen($chk_viitenumeric);
 
     for ($i = 0; $i < $pituus; $i++) {
-      $numero = (int) $chk_viitenumeric[$i]; // MODIFIED, fix DEPRECATED
+      $numero = (int) $chk_viitenumeric[$i]; // MUOKKAUS: deprecated -> []
       $mod = (($mod * 10) + $numero) % 97;
     }
 
@@ -15133,7 +15138,7 @@ if (!function_exists("pupe_DataTables")) {
             \"aLengthMenu\": [[10, 25, 50, 100, 250, 500, -1], [10, 25, 50, 100, 250, 500, \"".t("Kaikki")."\"]],
             \"bInfo\" : parametrit[tableid][4],
             \"bStateSave\" : true,
-            \"iDisplayLength\" : 500, // MODIFIED, 25 -> 500
+            \"iDisplayLength\" : 500, // MUOKKAUS: 25 -> 500
             \"oLanguage\": {
               \"sSearch\" : \"".t("Etsi taulukosta").":\",
               \"sZeroRecords\": \"".t("Ei hakuosumia")."\",
@@ -21239,6 +21244,7 @@ if (!function_exists("pupesoft_tulosta_lahete")) {
     global $kukarow, $yhtiorow;
 
     extract($params);
+    if (!isset($kvaktuotteet)) $kvaktuotteet = ""; // MUOKKAUS: isset()
 
     $otunnus = $laskurow["tunnus"];
 
@@ -21628,7 +21634,7 @@ if (!function_exists("pupeFileReader")) {
 
       while ($rivi = fgets($file)) {
         // luetaan rivi tiedostosta..
-	if ($extension == "TXT") { // MODIFIED, BUGFIX for CSV reader
+	if ($extension == "TXT") { // MUOKKAUS: BUGIKORJAUS CSV-lukuun
           $rivi = explode("\t", pupesoft_cleanstring($rivi));
 	} else {
           $rivi = str_getcsv($rivi);
@@ -21656,7 +21662,7 @@ if (!function_exists("pupeFileReader")) {
         $luku   = 0;
 
         for ($r = 0; $r < mb_strlen($string); $r++) {
-          $luku += (ord($string[$r])-64) * pow(26, $r); // MODIFIED, fix DEPRECATED
+          $luku += (ord($string[$r])-64) * pow(26, $r); // MUOKKAUS: deprecated -> []
         }
 
         return $luku-1;
@@ -22500,7 +22506,8 @@ if (!function_exists("pupesoft_sahkoposti")) {
 
     global $yhtiorow, $kukarow;
 
-    echo $parametrit["body"]; // MODIFIED, added
+    echo $parametrit["body"]; // MUOKKAUS: nayta echo
+    
     // Tarvitaan seuraavat parametrit
     $email_to    = isset($parametrit["to"]) ? $parametrit["to"] : "";
     $email_cc    = isset($parametrit["cc"]) ? $parametrit["cc"] : "";
@@ -23915,7 +23922,7 @@ if (!function_exists('tarkiste')) {
 
     // loopataan luvut oikeelta vasemmalle
     for ($i = 16; $i >= 0; $i--) {
-      $summa += $kerroin * (ord($sscc[$i])-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet ) // MODIFIED, fix DEPRECATED
+      $summa += $kerroin * (ord($sscc[$i])-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet ) // MUOKKAUS: deprecated -> []
       $kerroin = 4 - $kerroin; // kerroin on vuorotellen 3 tai 1
     }
 
@@ -24739,7 +24746,7 @@ if (!function_exists('_xls_jarjestetty_headerit')) {
 }
 
 if (!function_exists('_xls_rivit')) {
-  function _xls_rivit(pupeExcel &$xls, &$rivit, &$rivi_numero, &$sarake_numero, $force_to_string = array(), $sulje_pois) {
+  function _xls_rivit(pupeExcel &$xls, &$rivit, &$rivi_numero, &$sarake_numero, $force_to_string = array(), $sulje_pois = "") { // MUOKKAUS: BUGIKORJAUS puuttuva parametri
     require_once 'ProgressBar.class.php';
 
     $xls_progress_bar = new ProgressBar(t("Tallennetaan exceliin"));
@@ -26643,7 +26650,7 @@ if (!function_exists("lisaa_rivi")) {
     $rekisterinumero    = (!empty($parametrit['rekisterinumero']))    ? $parametrit['rekisterinumero'] : '';     // rekisterinumero
 
     for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
-      $ale_temp = str_replace(',', '.', $parametrit['ale'.$alepostfix]); // MODIFIED, fix DEPRECATED
+      $ale_temp = str_replace(',', '.', $parametrit['ale'.$alepostfix]); // MUOKKAUS: deprecated -> []
       ${'ale'.$alepostfix} = (!empty($ale_temp)) ? $ale_temp : "";
     }
 
@@ -27875,7 +27882,7 @@ if (!function_exists('paivita_ohjausmerkki')) {
 
       $ohjausmerkki_check_row = mysqli_fetch_assoc($ohjausmerkki_check_res);
 
-      if ($ohjausmerkki_check_row['tarkenne'] != "") {
+      if (isset($ohjausmerkki_check_row) and $ohjausmerkki_check_row['tarkenne'] != "") {
 
         // Tarkistetaan löytyykö kyseinen ohjausmerkkiteksti otsikolta
         // Ei haluta lisätä tekstiä kahteen kertaan
@@ -30613,6 +30620,10 @@ if (!function_exists('hae_toimitustavat')) {
   function hae_toimitustavat(array $params) {
     global $kukarow, $yhtiorow;
 
+    // MUOKKAUS: isset():
+    foreach (array('asiakas_tunnus', 'lasku_toimipaikka', 'varasto_toimipaikka') as $v) {
+      if (!isset($params[$v])) $params[$v] = NULL;
+    }
     $asiakas_tunnus = $params['asiakas_tunnus'];
     $lasku_toimipaikka = $params['lasku_toimipaikka'];
     $varasto_toimipaikka = $params['varasto_toimipaikka'];
@@ -30861,7 +30872,7 @@ if (!function_exists('valitse_oletusvarasto')) {
       $laskurow = mysqli_fetch_assoc($laskures);
 
       // Meillä on varasto kannassa
-      if ($laskurow["varasto"] != 0 and in_array($laskurow["varasto"], $varastot)) {
+      if (isset($laskurow) and $laskurow["varasto"] != 0 and in_array($laskurow["varasto"], $varastot)) { // MUOKKAUS: isset()
         return $laskurow["varasto"];
       }
     }
@@ -31086,7 +31097,7 @@ if (!function_exists('tilauksen_toimipaikka')) {
       $laskures = pupe_query($query);
       $laskurow = mysqli_fetch_assoc($laskures);
 
-      return $laskurow['yhtio_toimipaikka'];
+      return isset($laskurow) ? $laskurow['yhtio_toimipaikka'] : ''; // MUOKKAUS: isset()
     }
 
     if ($yhtiorow['myyntitilauksen_toimipaikka'] == 'A' and $asiakasid != 0) {
@@ -31156,11 +31167,13 @@ if (!function_exists('eilahetetta')) {
         and $_yhtiorow['nouto_suoraan_laskutukseen'] == 'K'
       );
 
-      if ($srow['eilahetetta'] != ''
-        or $_eilahetetta_valmistus
-        or $_eilahetetta_tulostustapa
-        or $_eilahetetta_nouto) {
-        return true;
+      if (isset($srow['eilahetetta'])) { // MUOKKAUS: isset()
+          if ($srow['eilahetetta'] != ''
+          or $_eilahetetta_valmistus
+          or $_eilahetetta_tulostustapa
+          or $_eilahetetta_nouto) {
+            return true;
+	}
       }
     }
 
@@ -31182,9 +31195,13 @@ if (!function_exists('osatoimitus')) {
       $_yhtiorow = $poikkeava_yhtiorow;
     }
 
+    // MUOKKAUS: isset()
+    if (!is_array($oletus)) $oletus = array();
+    if (!isset($oletus["osatoimitus"])) $oletus["osatoimitus"] = NULL;
+
     // Tarjouksia ei oletuksena osatoimiteta
     $_osatoimitus_oletus = (
-      (in_array($toim, array("EXTTARJOUS", "PROJEKTI")) or $oletus["osatoimitus"] != "") // MODIFIED: removed "TARJOUS"
+      (in_array($toim, array("EXTTARJOUS", "PROJEKTI")) or $oletus["osatoimitus"] != "") // MUOKKAUS: poistettu "TARJOUS"
       and $kukarow["kesken"] == 0
     );
 
@@ -31202,7 +31219,7 @@ if (!function_exists('osatoimitus')) {
       );
     }
 
-    if (!empty($srow)) {
+    if (isset($srow['osatoimitus']) and !empty($srow)) { // MUOKKAUS: isset()
       if ($srow['osatoimitus'] != '' or $_osatoimitus_oletus or $_osatoimitus_myyntitilaus) {
         return true;
       }
@@ -32521,7 +32538,8 @@ if (!function_exists('aseta_kukarow_kesken')) {
 }
 
 if (!function_exists('ei_huomioida_tuotepaikkoja_avainsanoista')) {
-  function ei_huomioida_tuotepaikkoja_avainsanoista($huomioidaanko = false, $taulu) {
+  // MUOKKAUS, PHP8 vaadittu parametri optionaalisen jalkeen:
+  function ei_huomioida_tuotepaikkoja_avainsanoista($huomioidaanko = false, $taulu = "") {
 
     global $kukarow, $yhtiorow;
 
@@ -33210,6 +33228,7 @@ if (!function_exists("laske_tilausrivin_kate")) {
   function laske_tilausrivin_kate($tilausrivi, $kotisumma_alviton, $kehahinta, $kpl = "",
     $arow = "") {
     global $kukarow, $yhtiorow;
+    $kate = 0; // MUOKKAUS: isset()
 
     if ($kukarow['extranet'] == '' and
       ($tilausrivi["sarjanumeroseuranta"] == "S")
@@ -35328,7 +35347,7 @@ if (!function_exists('sscc_tarkiste')) {
 
     // loopataan luvut oikeelta vasemmalle
     for ($i = 16; $i >= 0; $i--) {
-      $summa += $kerroin * (ord($sscc[$i])-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet ) // MODIFIED, fix DEPRECATED
+      $summa += $kerroin * (ord($sscc[$i])-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet ) // MUOKKAUS: deprecated -> []
       $kerroin = 4 - $kerroin; // kerroin on vuorotellen 3 tai 1
     }
 
@@ -35695,5 +35714,5 @@ if (!function_exists('generoi_sarjanumero')) {
   }
 }
 
-include_once("php7_compatibility_functions.php"); // MODIFIED, added
+include_once("php7_compatibility_functions.php"); // MUOKKAUS: PHP7/8 yhteensopivuus
 

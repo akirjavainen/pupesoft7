@@ -648,6 +648,7 @@ if ($tila == '') {
   echo "</font><br><br>";
 
   $tila = '';
+  if (!is_array($haku)) $haku = array(); // MUOKKAUS: isset()
 
   if (count($haku) > 0) {
     foreach ($haku as $kentta => $arvo) {

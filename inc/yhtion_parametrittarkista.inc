@@ -101,7 +101,8 @@ if (!function_exists("yhtion_parametrittarkista")) {
     }
 
     if ($fieldname == "myynnin_alekentat_muokkaus") {
-      if (count($t[$i]) > 0) {
+      // MUOKKAUS: BUGIKORJAUS (array out of bounds):
+      if (is_array($t[$i]) and count($t[$i]) > 0) {
         if (count($t[$i]) == 1 and $t[$i][0] == 'default') {
           unset($t[$i]);
           $t[$i] = '';

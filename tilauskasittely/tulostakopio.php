@@ -16,6 +16,9 @@ if (@include "../inc/parametrit.inc");
 elseif (@include "parametrit.inc");
 else exit;
 
+// MUOKKAUS: oletuksena haetaan viimeisimmat tarjoukse/tilaukset/laskut:
+if (!isset($tee)) $tee = "ETSILASKU";
+
 if ($tee == 'lataa_tiedosto') {
   $filepath = "/tmp/".$tmpfilenimi;
   if (file_exists($filepath)) {
@@ -29,7 +32,6 @@ if (!isset($logistiikka_yhtio)) $logistiikka_yhtio = "";
 if (!isset($logistiikka_yhtiolisa)) $logistiikka_yhtiolisa = "";
 if (!isset($asiakasid)) $asiakasid = "";
 if (!isset($toimittajaid)) $toimittajaid = "";
-if (!isset($tee)) $tee = "ETSILASKU"; // MODIFIED: Perform default search on load
 if (!isset($laskunro)) $laskunro = "";
 if (!isset($ytunnus)) $ytunnus = "";
 if (!isset($lopetus)) $lopetus = "";
@@ -40,6 +42,12 @@ if (!isset($laskunroloppu)) $laskunroloppu = "";
 if (!isset($kerayseran_numero)) $kerayseran_numero = "";
 if (!isset($kerayseran_tilaukset)) $kerayseran_tilaukset = "";
 if (!isset($toimipaikka)) $toimipaikka = $kukarow['toimipaikka'] != 0 ? $kukarow['toimipaikka'] : "";
+
+// MUOKKAUS: isset():
+foreach (array("kutsuja", "myos_prospektit", "osoite", "postitp", "postino", "lause", 
+	"tilausnumero", "from", "tilaustyyppi", "alatila", "ylatila", "tuoteno") as $v) {
+  if (!isset(${$v})) ${$v} = null;
+}
 
 if (empty($kieli) and $yhtiorow['pdf_ruudulle_kieli'] == "") $kieli = $yhtiorow['kieli'];
 
@@ -227,12 +235,13 @@ if ($tee != 'NAYTATILAUS') {
   echo "<font class='head'>".sprintf(t("Tulosta %s kopioita"), $fuse).":</font><hr><br>";
 }
 
-if ($laskunro <> 0 and $laskunroloppu <> 0 and $laskunro < $laskunroloppu) {
+// MUOKKAUS: BUGIKORJAUS (string <> int):
+if ((int)$laskunro <> 0 and (int)$laskunroloppu <> 0 and (int)$laskunro < (int)$laskunroloppu) {
   $tee = "TULOSTA";
 
   $tulostukseen = array();
 
-  for ($las = $laskunro; $las<=$laskunroloppu; $las++) {
+  for ($las = (int)$laskunro; $las<=(int)$laskunroloppu; $las++) {
     //hateaan laskun kaikki tiedot
     $query = "SELECT tunnus
               FROM lasku
@@ -948,7 +957,7 @@ if ($tee == "ETSILASKU") {
     $use = " use index (yhtio_tila_luontiaika) ";
   }
 
-  if (mb_strlen($laskunro) <> 0 and mb_strpos($laskunro, ",") !== FALSE) {
+  if ((int)mb_strlen($laskunro) <> 0 and mb_strpos($laskunro, ",") !== FALSE) {
     $where2 .= " and lasku.laskunro IN ('".str_replace(",", "','", $laskunro)."') ";
 
     $where3 = "";
@@ -956,7 +965,7 @@ if ($tee == "ETSILASKU") {
     if (!isset($jarj)) $jarj = " lasku.tunnus ";
     $use = " use index (lasno_index) ";
   }
-  elseif ($laskunro <> 0) {
+  elseif ((int)$laskunro <> 0) { // MUOKKAUS: BUGIKORJAUS (string <> int)
     $where2 .= " and lasku.laskunro = '$laskunro' ";
 
     $where3 = "";
@@ -965,7 +974,7 @@ if ($tee == "ETSILASKU") {
     $use = " use index (lasno_index) ";
   }
 
-  if ($otunnus > 0) {
+  if (isset($otunnus)) { // MUOKKAUS: isset()
     //katotaan löytyykö lasku ja sen kaikki tilaukset
     $query = "SELECT l2.laskunro, l2.tapvm
               FROM lasku l1
@@ -976,7 +985,7 @@ if ($tee == "ETSILASKU") {
     $laresult = pupe_query($query);
     $larow = mysqli_fetch_assoc($laresult);
 
-    if ($larow["laskunro"] > 0 and $toim != "DGD") {
+    if (isset($larow) and (int)$larow["laskunro"] > 0 and $toim != "DGD") { // MUOKKAUS: BUGIKORJAUS (string <> int):
       $where2 .= " and lasku.laskunro = '$larow[laskunro]' and lasku.tapvm='$larow[tapvm]' ";
 
       $where3 = "";
@@ -985,7 +994,7 @@ if ($tee == "ETSILASKU") {
       $use = " use index (lasno_index) ";
     }
     else {
-      $where2 .= " and lasku.tunnus = '$otunnus' ";
+      $where2 .= ((int)$otunnus > 0) ? " and lasku.tunnus = '$otunnus' " : ""; // MUOKKAUS: BUGIKORJAUS (string <> int):
 
       $where3 = "";
 
@@ -994,7 +1003,7 @@ if ($tee == "ETSILASKU") {
     }
   }
 
-  if ($kerayseran_numero > 0) {
+  if ((int)$kerayseran_numero > 0) {
     //katotaan löytyykö lasku ja sen kaikki tilaukset
     $query = "SELECT group_concat(otunnus) tilaukset
               FROM kerayserat
@@ -1063,6 +1072,7 @@ if ($tee == "ETSILASKU") {
             {$where4}
             {$jarj}
             LIMIT 300";
+            //echo $query;
   $result = pupe_query($query);
 
   if (mysqli_num_rows($result) > 0) {
@@ -1169,6 +1179,7 @@ if ($tee == "ETSILASKU") {
     echo "</tr>";
 
     $oikmuutosite = tarkista_oikeus("muutosite.php");
+    if (!isset($otunnus)) $otunnus = null; // MUOKKAUS: isset()
 
     while ($row = mysqli_fetch_assoc($result)) {
       echo "<tr>";
@@ -1192,7 +1203,9 @@ if ($tee == "ETSILASKU") {
         echo "<br>$row[laskunro]";
       }
       echo "</$ero>";
-      echo "<$ero valign='top'>", tarkistahetu($row['ytunnus']), "<br>$row[nimi]<br>$row[nimitark]<br>" . $row["viesti"] . "</$ero>"; // MODIFIED, added viesti
+      
+      // MUOKKAUS: lisatty $row["viesti"]:
+      echo "<$ero valign='top'>", tarkistahetu($row['ytunnus']), "<br>$row[nimi]<br>$row[nimitark]<br>" . $row["viesti"] . "</$ero>";
 
       if ($toim == "LAVAKERAYSTARRA" or $toim == "LAVATARRA" or $toim == "LAVAKERAYSLISTA") {
         echo "<$ero valign='top'>$row[toimitustapa]</$ero>";
@@ -1276,10 +1289,9 @@ if ($tee == "ETSILASKU") {
               <input type='hidden' name='mista' value='tulostakopio'>
               <input type='submit' value='".t("Näytä ruudulla")."'></form>";
 
-          // MODIFIED, added JWIO ERP links:
+          // MUOKKAUS: lisatty ikkunoiden ja ovien mittakuviin vieva nappula:
           if (file_exists("../../hinnasto")) {
             echo "<a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
-            //echo "<a href='/raportit/receipt/printreceipt.php?yhtio=$row[yhtio]&order=$row[tunnus]' target='_blank'><input type='submit' value='Kuittitulostus'></a>";
           }
           echo "<br>";
         }
@@ -1294,7 +1306,9 @@ if ($tee == "ETSILASKU") {
             <input type='hidden' name='tee' value='NAYTATILAUS'>
             <input type='hidden' name='mista' value='tulostakopio'>
             <input type='submit' value='".t("Näytä pdf")."' onClick=\"js_openFormInNewWindow('tulostakopioform_$row[tunnus]', 'tulostakopio_$row[tunnus]'); return false;\"></form>";
-            if (file_exists("../../tuotanto")) echo "<a href='/tuotanto/index.php?order=$row[tunnus]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>"; // MODIFIED, added
+            
+            // MUOKKAUS: lisatty tuotantonakyma-linkki:
+            if (file_exists("../../tuotanto")) echo "<a href='/tuotanto/index.php?order=$row[tunnus]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>";
 
         if ($kukarow["extranet"] == "") {
           echo "<br>
@@ -1482,14 +1496,13 @@ if ($tee == "TULOSTA" or $tee == 'NAYTATILAUS') {
     $query .= " tunnus in ($tilausnumero) ";
   }
   else {
-    if ($otunnus > 0) {
+    if ((int)$otunnus > 0) {
       $query .= " tunnus='$otunnus' ";
     }
-    if ($laskunro > 0) {
-      if ($otunnus > 0) {
+    if ((int)$laskunro > 0) {
+      if ((int)$otunnus > 0) {
         $query .= " and laskunro='$laskunro' ";
-      }
-      else {
+      } else {
         $query .= " tila='U' and laskunro='$laskunro' ";
       }
     }
@@ -1716,7 +1729,8 @@ if ($tee == "TULOSTA" or $tee == 'NAYTATILAUS') {
         }
       }
       else {
-        tulosta_lasku($laskurow["tunnus"], $kieli, $tee, $toim, $komento["Lasku"], "", "");
+        // MUOKKAUS: isset():
+        tulosta_lasku($laskurow["tunnus"], $kieli, $tee, $toim, isset($komento) ? $komento["Lasku"] : null, "", "");
 
         if ($tee != 'NAYTATILAUS') {
           echo t("Lasku tulostuu")."...<br>";
@@ -1778,6 +1792,11 @@ if ($tee == "TULOSTA" or $tee == 'NAYTATILAUS') {
         $laskurow['tilausvahvistus'] = $seltvtyyppi;
       }
 
+      // MUOKKAUS: isset():
+	  foreach (array("komento", "naytetaanko_rivihinta", "extranet_tilausvahvistus") as $v) {
+	    if (!isset(${$v})) ${$v} = null;
+	  }
+	  
       if ($kaikkilomakepohjat) {
 
         $tilausvahvistukset = array();
@@ -1824,7 +1843,14 @@ if ($tee == "TULOSTA" or $tee == 'NAYTATILAUS') {
 
     if ($toim == "TARJOUS" or $toim == "TARJOUS!!!VL" or $toim == "TARJOUS!!!BR") {
       $otunnus = $laskurow["tunnus"];
-      list ($toimalku, $hinnat) = explode("!!!", $toim);
+      
+      // MUOKKAUS: BUGIKORJAUS (array out of bounds):
+      if (strpos($toim, "!!!") !== false) {
+		list ($toimalku, $hinnat) = explode("!!!", $toim);
+	  } else {
+		$toimalku = $toim;
+		$hinnat = null;
+      }
 
       require_once "tulosta_tarjous.inc";
 
@@ -1854,6 +1880,14 @@ if ($tee == "TULOSTA" or $tee == 'NAYTATILAUS') {
       }
       else {
 
+	// MUOKKAUS: isset():
+	if (!isset($komento)) {
+      $komento = array();
+	  $komento["Tarjous"] = null;
+    }
+	foreach (array("naytetaanko_rivihinta", "naytetaanko_tuoteno", "liita_tuotetiedot", "naytetaanko_yhteissummarivi") as $v) {
+          if (!isset(${$v})) ${$v} = null;
+	}
         tulosta_tarjous($otunnus, $komento["Tarjous"], $kieli, $tee, $hinnat,
           $verolliset_verottomat_hinnat, $naytetaanko_rivihinta, $naytetaanko_tuoteno,
           $liita_tuotetiedot, $naytetaanko_yhteissummarivi);
@@ -2244,6 +2278,11 @@ if ($tee == "TULOSTA" or $tee == 'NAYTATILAUS') {
       else {
         $koontilahete = 0;
         $koontilahete_tilausrivit = 0;
+      }
+      
+      // MUOKKAUS: isset():
+      foreach (array("sellahetetyyppi", "extranet_tilausvahvistus", "naytetaanko_rivihinta", "kvaktuotteet", "komento") as $v) {
+        if (!isset(${$v})) ${$v} = null;
       }
 
       if ($kaikkilomakepohjat) {

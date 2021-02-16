@@ -250,6 +250,7 @@ $vresult = pupe_query($query);
 
 echo " <select name='laatija'><option value = '' >".t("Valitse laatija")."</option>";
 
+if (!is_array($sel)) $sel = array(); // MUOKKAUS: isset()
 if (isset($laatija)) $sel[$laatija] = "SELECTED";
 
 while ($vrow = mysqli_fetch_assoc($vresult)) {

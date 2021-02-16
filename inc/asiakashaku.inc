@@ -30,6 +30,13 @@ else {
 
 $tp = $kukarow['toimipaikka'];
 
+// MUOKKAUS: isset():
+foreach (array("toimipaikka_rajaus", "myos_poistetut", "lajilisa", "osoite_toim_lisa", "postitp_toim_lisa", 
+  "postino_toim_lisa", "asiakasnro", "toimittajaid", "myyja", "myyjanro", "datatyyppi", "tarra_aineisto", 
+  "vain_toimittamattomat", "varastosta", "oletus") as $v) {
+  if (!isset(${$v})) ${$v} = '';
+}
+
 if (trim($toimipaikka_rajaus) != '') {
   $tp = $toimipaikka_rajaus;
 }
@@ -283,15 +290,16 @@ elseif ($ytunnus != '') {
     $osoitelisa = '';
 
     if (trim($osoite) != '') {
-      $osoitelisa = " and asiakas.osoite like '".mysqli_real_escape_string($osoite)."%' ";
-      $osoite_toim_lisa = " and asiakas.toim_osoite like '".mysqli_real_escape_string($osoite)."%' ";
+      // MUOKKAUS: mysqli_real_escape_string():
+      $osoitelisa = " and asiakas.osoite like '".mysqli_real_escape_string($GLOBALS["link"], $osoite)."%' ";
+      $osoite_toim_lisa = " and asiakas.toim_osoite like '".mysqli_real_escape_string($GLOBALS["link"], $osoite)."%' ";
     }
 
     $postitplisa = '';
 
     // jos on annettu postitoimipaikka, niin lisätää se jokaiseen asiakashakuqueryyn ja ei tehdä erillistä postitoimipaikka unionia
     if (trim($postitp) != '') {
-      $postitp2 = mysqli_real_escape_string($postitp);
+      $postitp2 = mysqli_real_escape_string($GLOBALS["link"], $postitp); // MUOKKAUS: mysqli_real_escape_string():
       $postitplisa = " and asiakas.postitp like '%$postitp2%' ";
       $postitp_toim_lisa = " and asiakas.toim_postitp like '%$postitp2%' ";
     }
@@ -495,12 +503,12 @@ if ($monta == 1 and !$force_selaus) {
   $ytunnus = $asiakasrow['ytunnus'];
 
   if ($asiakasnro != "") {
-    $asiakasnro  = $asiakasrow['asiakasnro'];
+    $asiakasnro  = isset($asiakasrow['asiakasnro']) ? $asiakasrow['asiakasnro'] : ''; // MUOKKAUS: isset()
   }
 
   $asiakasid = $asiakasrow['tunnus'];
 
-  if ($kutsuja == 'otsik.inc' and $asiakasrow['osuma'] == '5') {
+  if ($kutsuja == 'otsik.inc' and isset($asiakasrow['osuma']) and $asiakasrow['osuma'] == '5') { // MUOKKAUS: isset()
     $query = "SELECT avainsana
               FROM asiakkaan_avainsanat
               WHERE yhtio      = '$kukarow[yhtio]'

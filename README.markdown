@@ -1,5 +1,5 @@
 # Pupesoft 7
-Suomalainen, avoimen lähdekoodin toiminnanohjausjärjestelmä PK-yrityksille. PHP 7.4 -yhteensopiva fork. UTF-8 kytketty käyttöön myös tietokannoille ja monia toimintoja muutettu sujuvammiksi. Virallinen asennusohje löytyy GitHubin [Wikistä](https://github.com/devlab-oy/pupesoft/wiki/Asennusohje "Pupesoft - Asennusohje"). Virallinen repository: https://github.com/devlab-oy/pupesoft/
+Suomalainen, avoimen lähdekoodin toiminnanohjausjärjestelmä PK-yrityksille. PHP 8 (ja 7.4) -yhteensopiva fork. UTF-8 kytketty käyttöön myös tietokannoille ja monia toimintoja muutettu sujuvammiksi. Virallinen asennusohje löytyy GitHubin [Wikistä](https://github.com/devlab-oy/pupesoft/wiki/Asennusohje "Pupesoft - Asennusohje"). Virallinen repository: https://github.com/devlab-oy/pupesoft/
 
 Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille, joille LAMP-ympäristö on jo entuudestaan tuttu.
 
@@ -9,7 +9,7 @@ Seuraava pika-asennusohje on tarkoitettu lähinnä muistilistaksi käyttäjille,
 
 2. Kytke palvelut käyttöön: "systemctl enable --now httpd" (tai apache2) ja "systemctl enable --now mysqld"
 
-3. Aja "mysql_secure_installation", poistaen anonyymit käyttäjät ja oletuskannat. Salli yhteydet vain localhostista. Sitten kytke PHP-moduli Apachen käyttöön ("a2enmod enable php7.4" tai muokkaamalla Apachen asetustiedostoja /etc/httpd- tai /etc/apache2-kansioissa). Muista kytkeä myös ainakin PHP-lisäosat "gd" ja "mysqli" käyttöön, esimerkiksi poistamalla kommenttimerkintä ";" php.ini-tiedostosta rivien "extension=gd" ja "extension=mysqli" alusta. Pankkiyhteyksille myös mcrypt vaaditaan.
+3. Aja "mysql_secure_installation", poistaen anonyymit käyttäjät ja oletuskannat. Salli yhteydet vain localhostista. Sitten kytke PHP-moduli Apachen käyttöön ("a2enmod enable php" tai muokkaamalla Apachen asetustiedostoja /etc/httpd- tai /etc/apache2-kansioissa). Muista kytkeä myös ainakin PHP-lisäosat "gd" ja "mysqli" käyttöön, esimerkiksi poistamalla kommenttimerkintä ";" php.ini-tiedostosta rivien "extension=gd" ja "extension=mysqli" alusta. Pankkiyhteyksille myös mcrypt vaaditaan.
 
 4. MySQL:n/MariaDB:n oletusasetukset tavallisesti toimivat, mutta virallisessa asennusohjeessa on tietoa tietokantamoottorin lisäoptimoinnista (myös replikoinnista). Toinen hyvä tietolähde on Arch Linuxin Wiki MariaDB:stä: https://wiki.archlinux.org/index.php/MariaDB
 

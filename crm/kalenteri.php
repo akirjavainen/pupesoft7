@@ -741,7 +741,8 @@ echo "</table>";
 // Työlista
 echo "<table width='100%'>";
 
-if (count($tyolista[date("Y-m-d")]) > 0) {
+// MUOKKAUS: isset():
+if (isset($tyolista[date("Y-m-d")]) and count($tyolista[date("Y-m-d")]) > 0) {
   echo "<tr><th>".t("Tänään")."</th></tr>";
 
   foreach($tyolista[date("Y-m-d")] as $tyot) {
@@ -751,7 +752,8 @@ if (count($tyolista[date("Y-m-d")]) > 0) {
   echo "<tr><td class='back'><br></td></tr>";
 }
 
-if (count($tyolista[date("Y-m-d", strtotime("TOMORROW"))]) > 0) {
+// MUOKKAUS: isset():
+if (isset($tyolista[date("Y-m-d", strtotime("TOMORROW"))]) and count($tyolista[date("Y-m-d", strtotime("TOMORROW"))]) > 0) {
   echo "<tr><th>".t("Huomenna")."</th></tr>";
 
   foreach($tyolista[date("Y-m-d", strtotime("TOMORROW"))] as $tyot) {
@@ -1029,7 +1031,12 @@ function piirra_kalenteripaiva($year, $kuu, $paiva, $aikasarake = TRUE, $aikaval
     $aikalask++;
   }
 
-  $max = max($paallekkaiset);
+  // MUOKKAUS: BUGIKORJAUS: ei max() nollan suuruiselle arraylle:
+  if (count($paallekkaiset) > 0) {
+    $max = max($paallekkaiset);
+  } else {
+    $max = 0;
+  }
 
   $kello_nyt = '';
   list($whalkt, $whalkm) = explode(":", $AIKA_ARRAY[0]);
@@ -1049,7 +1056,14 @@ function piirra_kalenteripaiva($year, $kuu, $paiva, $aikasarake = TRUE, $aikaval
     // lasketaan montako päällekkäistä on tähän kellonaikaan
     $nyt    = $paallekkaiset[$aikalask];
     $tyhjaa = $max - $nyt;
-    $tanaan = count($paivantapahtumat["$year-$kuu-$paiva $kello_nyt:00"]);
+    
+    // MUOKKAUS: isset():
+    $paiva = "$year-$kuu-$paiva $kello_nyt:00";
+    if (!is_null($paivantapahtumat[$paiva])) {
+	  $tanaan = count($paivantapahtumat[$paiva]);
+	} else {
+	  $tanaan = 0;
+    }
 
     echo "<tr>";
 

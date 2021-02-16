@@ -468,10 +468,12 @@ if (mysqli_num_rows($result) > 0) {
       }
     }
 
-    $arvo  += $row["arvo"];
-    $kate  += $row["kate"];
-    $summa += $row["summa"];
-    $ostohinta_yhteesa += $row["ostohinta"];
+	// MUOKKAUS: BUGIKORJAUS (float + string):
+    $arvo  += (float)$row["arvo"];
+    $kate  += (float)$row["kate"];
+    $summa += (float)$row["summa"];
+    $ostohinta_yhteesa = (float)$ostohinta_yhteesa;
+    $ostohinta_yhteesa += (float)$row["ostohinta"];
 
     // jos ollaan muussa tilassa ku tilausnäkymässä tehdää näytä nappi
     if ($tee != "tilaus") {

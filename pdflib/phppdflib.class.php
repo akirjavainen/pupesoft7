@@ -179,7 +179,7 @@ class pdffile {
   }
 
   function draw_line($x, $y, $parent, $attrib = array()) {
-    if ($this->objects[$parent]["type"] != "page") {
+    if (strlen($parent) > 0 && $this->objects[$parent]["type"] != "page") { // MODIFIED: BUGFIX
       $this->_push_std_error(6001);
       return false;
     }
@@ -448,7 +448,7 @@ class pdffile {
         unset($temp);
         $temp['data'] = "";
         reset($temparray);
-        foreach ($temparray as $liboid => $obj) { // MODIFIED, PHP8 each replaced
+        foreach ($temparray as $liboid => $obj) { // MODIFIED: PHP8: each() -> foreach()
           if (isset($obj["parent"]) && $obj["parent"] == $oid) {
             $this->_debug(10, "Adding # $liboid to mstream");
             switch ($obj["type"]) {
@@ -546,7 +546,7 @@ class pdffile {
       $temp["Font"] = $this->_makedictionary($ta);
     }
     reset($this->objects);
-    foreach ($this->objects as $id => $obj) { // MODIFIED, PHP8 each replaced
+    foreach ($this->objects as $id => $obj) { // MODIFIED: PHP8: each() -> foreach()
       if ($obj["type"] == "image") {
         $xol["Img$id"] = $this->libtopdf[$id] . " 0 R";
       }
@@ -934,6 +934,7 @@ class pdffile {
   }
 
   function image_place($oid, $bottom, $left, $parent, $param = array()) {
+    if (!isset($this->objects[$oid])) return false; // MODIFIED: isset()
     if ($this->objects[$oid]["type"] != "image") {
       $this->_push_std_error(6009);
       return false;
@@ -995,10 +996,14 @@ class pdffile {
         break;
       }
     }
-    if ($params["height"] == 0) {
-      $size = $this->default['height'];
+    if ($params != false) { // MODIFIED: BUGFIX
+		if ($params["height"] == 0) {
+		  $size = $this->default['height'];
+		} else {
+		  $size = $params["height"];
+		}
     } else {
-      $size = $params["height"];
+		$size = 0;
     }
     $tab = '';
     for ($i = 0; $i < $tabwidth; $i++) {
@@ -1252,7 +1257,7 @@ class pdffile {
 
   function _resolve_mode($attrib, $mode) {
     $rmode = $attrib[$mode];
-    $r = $rmode; // MODIFIED, BUGFIX
+    $r = $rmode; // MODIFIED: isset()
     if ($rmode != 0) {
       $r = $rmode;
     } else {
@@ -1274,6 +1279,7 @@ class pdffile {
   }
 
   function _adjust_margin(&$x, &$y, $page) {
+	if (strlen($page) <= 0) return; // MODIFIED: BUGFIX
     $x += $this->objects[$page]['margin-left'];
     $y += $this->objects[$page]['margin-bottom'];
   }

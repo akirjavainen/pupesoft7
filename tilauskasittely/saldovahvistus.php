@@ -119,7 +119,7 @@ $request['ryhmittely_tyypit'] = array(
   'asiakasnro' => t('Asiakasnumero'),
 );
 
-$_key = key($_SESSION['valitut_laskut']);
+$_key = isset($_SESSION['valitut_laskut']) ? key($_SESSION['valitut_laskut']) : "";
 
 $request['saldovahvistus_viestit'] = hae_saldovahvistus_viestit($_SESSION['valitut_laskut'][$_key]['asiakas']['kieli']);
 

@@ -741,13 +741,15 @@ if ($tee == 'NAYTA' or $eiliittymaa == 'ON') {
       $maksuehto_chk_res = pupe_query($query);
       $maksuehto_chk_row = mysqli_fetch_assoc($maksuehto_chk_res);
 
-      if ($maksuehto_chk_row['jv'] != '') {
-        $jvvirhe = 'kyllä';
+      if (isset($maksuehto_chk_row)) { // MUOKKAUS: isset()
+        if ($maksuehto_chk_row['jv'] != '') {
+          $jvvirhe = 'kyllä';
 
-        if ($eiliittymaa != 'ON') {
-          echo "<br/>";
-          echo "<font class='error'>", t("HUOM! Tämä on jälkivaatimusasiakas"), "</font>";
-          echo "<br/>";
+          if ($eiliittymaa != 'ON') {
+            echo "<br/>";
+            echo "<font class='error'>", t("HUOM! Tämä on jälkivaatimusasiakas"), "</font>";
+            echo "<br/>";
+          }
         }
       }
 
