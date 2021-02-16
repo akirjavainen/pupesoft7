@@ -342,7 +342,7 @@ if ($otunnus != '' or $laskunro != '') {
   $resultkieli = pupe_query($querykieli);
   $asrow = mysqli_fetch_array($resultkieli);
 
-  if (!is_array($sel)) $sel = array(); // MUOKKAUS: isset()
+  if (!isset($sel) or !is_array($sel)) $sel = array(); // MUOKKAUS: isset()
   if ($asrow["kieli"] != '') {
     $sel[$asrow["kieli"]] = "SELECTED";
   }
