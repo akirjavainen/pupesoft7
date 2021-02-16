@@ -1958,8 +1958,9 @@ if ($tila == "" and !isset($jatka)) {
     $oikea++;
 
     if ($viitten_kasinsyotto_sallittu) {
+      $srow_kasinsyotetty_viite = isset($srow["kasinsyotetty_viite"]) ? $srow["kasinsyotetty_viite"] : ""; // MUOKKAUS: isset()
       $vasen_sarake[$vasen] = "<td>".t("Viitenumero").":</td><td>";
-      $vasen_sarake[$vasen] .= "<input type='text' id='kasinsyotetty_viite' name='kasinsyotetty_viite' value='$srow[kasinsyotetty_viite]' size='20'>";
+      $vasen_sarake[$vasen] .= "<input type='text' id='kasinsyotetty_viite' name='kasinsyotetty_viite' value='$srow_kasinsyotetty_viite' size='20'>";
       $vasen_sarake[$vasen] .= "<a href='' onclick='lisaa_tarkiste(); return false;'><img src='{$palvelin2}pics/lullacons/add.png'>".t("Lisää tarkiste")."</a>";
       $vasen_sarake[$vasen] .= "</td>";
       $vasen++;
@@ -2441,7 +2442,7 @@ if ($tila == "" and !isset($jatka)) {
         $sel = $yhtiotoimipaikka == $yht_toimpaik_row['tunnus'] ? "selected" : "";
         if ($sel != "") $predefined_yhtiotoimipaikka = $yhtiotoimipaikka;
 
-        $t_nimi = $yht_toimpaik_row['nimitys'];
+        $t_nimi = isset($yht_toimpaik_row['nimitys']) ? $yht_toimpaik_row['nimitys'] : ''; // MUOKKAUS: isset()
         if (empty($t_nimi)) {
           $t_nimi = $yht_toimpaik_row['nimi'];
         }
@@ -3375,8 +3376,9 @@ if ($tila == "" and !isset($jatka)) {
     }
 
     if ($toim == "REKLAMAATIO" or ((($toim == 'TARJOUS' or $toim == 'EXTTARJOUS') or $srow["tilaustyyppi"] == "T") and $yhtiorow["tyomaaraystiedot_tarjouksella"] == "")) {
+      $srow_komm1 = isset($srow["komm1"]) ? $srow["komm1"] : ""; // MUOKKAUS: isset()
       echo "  <tr>
-          <td>".t("Työn kuvaus").":</td><td colspan='3'><textarea name='komm1' rows='6' cols='50'>$srow[komm1]</textarea></td>
+          <td>".t("Työn kuvaus").":</td><td colspan='3'><textarea name='komm1' rows='6' cols='50'>$srow_komm1</textarea></td>
           </tr>";
     }
 
