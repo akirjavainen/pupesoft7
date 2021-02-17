@@ -340,7 +340,7 @@ if (!function_exists('alku_kerayslista')) {
 
 			$laskurow['toimitustapa'] = t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli);
 
-			if ($rahtirow["rahtisopimus"] != "") {
+			if (isset($rahtirow) and $rahtirow["rahtisopimus"] != "") { // MUOKKAUS: isset()
 				$laskurow["toimitustapa"] .= " / ".$rahtirow["rahtisopimus"];
 			}
 

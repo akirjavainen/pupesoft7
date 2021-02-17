@@ -702,7 +702,7 @@ elseif ($monta > 1 and $monta <= $limit) {
       }
 
       if ($on_piireja) {
-        if ($asiakas['piiri'] != 0) {
+        if (isset($asiakas['piiri']) and $asiakas['piiri'] != 0) { // MUOKKAUS: isset()
           echo "<td>{$asiakas['piiri']} - {$piirit[$asiakas['piiri']]}</td>";
         }
         else {

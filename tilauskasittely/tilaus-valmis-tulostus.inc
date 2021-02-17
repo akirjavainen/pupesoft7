@@ -3,6 +3,11 @@
 //sisään halutaan $laskurow jossa on tulostettavan tilauksen tiedot
 //jos tilauksia on useita $laskurow muuttujassa on jonkun tilauksen tiedot
 
+// MUOKKAUS: isset():
+foreach (array("vikasivu", "laskuja") as $v) {
+  if (!isset(${$v})) ${$v} = null;
+}
+
 if (isset($laskurow['varasto']) and $laskurow['varasto'] != 0) {
   // katotaan ihan aluksi, että meillä on edellytykset tulostukselle...
   $query  = "SELECT * FROM varastopaikat WHERE yhtio = '{$kukarow['yhtio']}' and tunnus = '{$laskurow['varasto']}'";

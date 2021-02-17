@@ -7,6 +7,7 @@ $luottorajavirhe        = "";
 $ylivito                = 0;
 $jtkielto               = "";
 $myy_varastosta_varasto = $laskurow['varasto'];
+if (!isset($tee_osto)) $tee_osto = null; // MUOKKAUS: isset()
 
 ///* Reload ja back-nappulatsekki *///
 if ($kukarow["kesken"] == '' or $kukarow["kesken"] == '0') {
