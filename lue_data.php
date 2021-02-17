@@ -78,7 +78,13 @@ if (php_sapi_name() == 'cli') {
   if (trim($argv[3]) != '') {
     $path_parts = pathinfo(trim($argv[3]));
     $_FILES['userfile']['name'] = $path_parts['basename'];
-    $_FILES['userfile']['type'] = (strtoupper($path_parts['extension']) == 'TXT' or strtoupper($path_parts['extension']) == 'CSV') ? 'text/plain' : (strtoupper($path_parts['extension']) == 'XLS') ? 'application/vnd.ms-excel' : '';
+
+    // MUOKKAUS: PHP8 yhteensopivuus:
+    $text_plain = 'text/plain';
+    $vnd_ms_excel = 'application/vnc.ms-excel';
+    $extension = strtoupper($path_parts['extension']);
+    $_FILES['userfile']['type'] = ($extension == 'TXT' or $extension == 'CSV') ? $text_plain : (($extension == 'XLS') ? $vnd_ms_excel : '');
+
     $_FILES['userfile']['tmp_name'] = $argv[3];
     $_FILES['userfile']['error'] = 0; // UPLOAD_ERR_OK
     $_FILES['userfile']['size'] = filesize($argv[3]);

@@ -284,8 +284,6 @@ class PHPExcel_Shared_OLE
                 case self::OLE_PPS_TYPE_FILE:
                     $pps = new PHPExcel_Shared_OLE_PPS_File($name);
                     break;
-                default:
-                    continue;
             }
             fseek($fh, 1, SEEK_CUR);
             $pps->Type    = $type;
@@ -443,7 +441,7 @@ class PHPExcel_Shared_OLE
     {
         $rawname = '';
         for ($i = 0; $i < strlen($ascii); ++$i) {
-            $rawname .= $ascii{$i} . "\x00";
+            $rawname .= $ascii[$i] . "\x00";
         }
         return $rawname;
     }
