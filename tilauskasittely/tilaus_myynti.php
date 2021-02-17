@@ -389,7 +389,8 @@ elseif (!isset($tilausrivi_alvillisuus) && !isset($_POST["tilausrivi_alvillisuus
   $tilausrivi_alvillisuus = "";
 }
 else {
-  $tilausrivi_alvillisuus = $_POST["tilausrivi_alvillisuus"];
+  // MUOKKAUS: isset():
+  $tilausrivi_alvillisuus = isset($_POST["tilausrivi_alvillisuus"]) ? $_POST["tilausrivi_alvillisuus"] : "";
 }
 
 if (!isset($valmiste_vai_raakaaine) and $toim == "VALMISTAVARASTOON") {
