@@ -71,7 +71,7 @@ class Image_Barcode_ean128 extends Image_Barcode
    * the image along with the barcode text and display it to the beholder.
    *
    */
-  function &draw($text, $imgtype = 'png', $barwidth, $barcodeheight, $noText) {
+  function &draw($text = '', $imgtype = 'png', $barwidth, $barcodeheight, $noText) {
 
     // We start with the Code128 Start Code character.  We
     // initialize checksum to 104, rather than calculate it.

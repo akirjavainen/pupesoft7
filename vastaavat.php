@@ -6,7 +6,7 @@ require "inc/parametrit.inc";
  * Lisää tuotteen ketjuun
  */
 
-function lisaa_tuote($tuoteno = '', $vastaava, $ketju_id = '') {
+function lisaa_tuote($tuoteno = '', $vastaava = '', $ketju_id = '') {
   global $kukarow;
 
   // Tarkistetaan että tuote on olemassa

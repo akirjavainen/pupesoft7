@@ -885,7 +885,7 @@ echo "</td></tr>";
 echo "</table>";
 
 // Tarvittavat funktiot
-function piirra_kalenteripaiva($year, $kuu, $paiva, $aikasarake = TRUE, $aikavali) {
+function piirra_kalenteripaiva($year, $kuu, $paiva, $aikasarake = TRUE, $aikavali = 15) {
   global $MONTH_ARRAY, $AIKA_ARRAY, $DAY_ARRAY, $konsernit, $vertaa, $valitut, $kenelle, $konserni, $toim, $tyomaarays, $palvelin2, $lopetus,
         $lisays, $lyear, $lkuu, $lpaiva, $kukarow, $yhtiorow, $kons, $viikkonakyma, $maxkokopaivamaara, $asmemolinkki;
 

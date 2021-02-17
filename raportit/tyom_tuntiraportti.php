@@ -8,7 +8,7 @@ include '../inc/parametrit.inc';
 if (!isset($tee)) $tee = '';
 
 if (!function_exists("piirra_tuntiraportti")) {
-  function piirra_tuntiraportti($asentaja = "", $kukarow, $yhtiorow, $vva, $kka, $ppa, $vvl, $kkl, $ppl, $tyom_nro = '', $asiakasid = '', $asiakasosasto = '', $asiakasryhma = '', $tyojono = '', $tyostatus = '', $ytunnus = '') {
+  function piirra_tuntiraportti($asentaja, $kukarow, $yhtiorow, $vva, $kka, $ppa, $vvl, $kkl, $ppl, $tyom_nro = '', $asiakasid = '', $asiakasosasto = '', $asiakasryhma = '', $tyojono = '', $tyostatus = '', $ytunnus = '') {
 
     if (trim($asentaja) != "") {
       $asentaja = sanitize_string($asentaja);
