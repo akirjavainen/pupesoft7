@@ -117,7 +117,8 @@ function hae_halytysraja($tuoteno, $paikka) {
   $result = pupe_query($query);
   $tuotepaikatrow = mysqli_fetch_assoc($result);
 
-  if ($tuotepaikatrow["halytysraja"] != 0) return $tuotepaikatrow["halytysraja"];
+  // MUOKKAUS: isset():
+  if (isset($tuotepaikatrow["halytysraja"]) and $tuotepaikatrow["halytysraja"] != 0) return $tuotepaikatrow["halytysraja"];
 
   $query = "SELECT halytysraja
             FROM tuote
