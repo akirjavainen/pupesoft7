@@ -4,7 +4,6 @@
 function getSerialForOrder($order)
 {
 	$notfound = "Etsi tilausnumerolla";
-	include "/var/www/config/login_jwio.php";
 
 	$db = mysqli_connect(DATABASE_SERVER, DATABASE_USERNAME, DATABASE_PASSWORD, "jwio_employees");
 	$result = mysqli_query($db, "SELECT serial FROM serials WHERE singleorder='$order';");
