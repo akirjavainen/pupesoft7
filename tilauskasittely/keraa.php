@@ -3786,7 +3786,9 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
           echo "<td>$row[tuoteno]<input type='hidden' name='rivin_puhdas_tuoteno[$row[tunnus]]' value='$row[puhdas_tuoteno]'></td>";
           echo $_toimtuoteno_rivi;
           echo "<td>$row[nimitys]</td>";
-          echo "<td class='text-right' id='{$row['tunnus']}_varattu'>".(float) $row[varattu]."<input type='hidden' name='rivin_varattu[$row[tunnus]]' value='$row[varattu]'></td>";
+
+	  // MUOKKAUS: BUGIKORJAUS (puuttuvat lainausmerkit):
+          echo "<td class='text-right' id='{$row['tunnus']}_varattu'>".(float) $row['varattu']."<input type='hidden' name='rivin_varattu[$row[tunnus]]' value='$row[varattu]'></td>";
           echo "<td>";
 
           //  kaikki gruupatut tunnukset mukaan!

@@ -524,7 +524,7 @@ if ($tee == '') {
 
         $kuva = "<img src='view.php?id=$liite[tunnus]' width='130'>";
       }
-      elseif (@fopen($yhtiorow["logo"], "r") and $kuva == '') {
+      elseif (strlen($yhtiorow["logo"]) > 0 and @fopen($yhtiorow["logo"], "r") and $kuva == '') { // MUOKKAUS: strlen()
         $kuva = "<img src='$yhtiorow[logo]' width='130'>";
       }
       elseif (file_exists($yhtiorow["logo"]) and $kuva == '') {
