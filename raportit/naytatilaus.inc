@@ -458,11 +458,13 @@ if ($laskurow['tilaustyyppi'] == 'R' or ($laskurow['tilaustyyppi'] == 'T' and $y
     }
   }
 
-  if (trim($reklarow['komm1']) != '') {
+  // MUOKKAUS: isset():
+  if (isset($reklarow['komm1']) and trim($reklarow['komm1']) != '') {
     $komm .= "\n$komm1_nimi:###".wordwrap(str_replace("\n", "\n###", $reklarow['komm1']), 90, "\n###");
   }
 
-  if (trim($reklarow['komm2']) != '') {
+  // MUOKKAUS: isset():
+  if (isset($reklarow['komm2']) and trim($reklarow['komm2']) != '') {
     $komm .= "\n$komm2_nimi:###".wordwrap(str_replace("\n", "\n###", $reklarow['komm2']), 90, "\n###");
   }
 }
