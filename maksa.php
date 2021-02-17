@@ -1468,17 +1468,17 @@ where lasku.yhtio=tiliointi.yhtio and lasku.tunnus = tiliointi.ltunnus and tilio
 
       echo "<td class='ptop' align='right' nowrap>$trow[ysumma] $yhtiorow[valkoodi]<br>";
 
-      $summa += $trow["ysumma"];
+      $summa = (float)$summa + (float)$trow["ysumma"]; // MUOKKAUS: BUGIKORJAUS (string + string)
 
       if (mb_strtoupper($trow["valkoodi"]) != mb_strtoupper($yhtiorow["valkoodi"])) {
         echo "$trow[summa] $trow[valkoodi]";
 
         if (!isset($valsumma[$trow["valkoodi"]])) $valsumma[$trow["valkoodi"]] = $trow["summa"];
-        else $valsumma[$trow["valkoodi"]] += $trow["summa"];
+        else $valsumma[$trow["valkoodi"]] += (float)$trow["summa"];
       }
       else {
         if (!isset($valsumma[$trow["valkoodi"]])) $valsumma[$trow["valkoodi"]] = $trow["summa"];
-        else $valsumma[$trow["valkoodi"]] += $trow["summa"];
+        else $valsumma[$trow["valkoodi"]] += (float)$trow["summa"];
       }
 
       echo "</td>";
