@@ -192,7 +192,7 @@ if (!function_exists("toimitarkista")) {
 
     if ($fieldname == "ohjeitapankille") {
 
-      if ($tmp_maakoodi=='FI' and mb_strlen($t[$i]) != '') {
+      if ($tmp_maakoodi=='FI' and mb_strlen($t[$i]) > 0) { // MUOKKAUS: BUGIKORJAUS (strlen != string)
         $virhe[$i] = t("Käytössä vain ulkomaisille toimittajille");
       }
       else {
