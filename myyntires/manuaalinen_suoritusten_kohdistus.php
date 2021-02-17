@@ -1294,10 +1294,11 @@ if ($tila == 'tee_kohdistus') {
                   AND yhtio                 = '$kukarow[yhtio]'";
         $result = pupe_query($query);
 
+	// MUOKKAUS: BUGIKORJAUS (puuttuvia lainausmerkkeja):
         $kohdistus_qry = "INSERT INTO suorituksen_kohdistus SET
                           yhtio          = '{$kukarow['yhtio']}',
-                          suoritustunnus = '{$suoritus[tunnus]}',
-                          laskutunnus    = '{$lasku[tunnus]}',
+                          suoritustunnus = '{$suoritus['tunnus']}',
+                          laskutunnus    = '{$lasku['tunnus']}',
                           kohdistuspvm   = NOW(),
                           kirjauspvm     = '{$laskun_maksupvm}'";
         $kohdistus_result = pupe_query($kohdistus_qry);
