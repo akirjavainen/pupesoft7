@@ -1820,6 +1820,10 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
                   $myy_lapsi_ein[$j] = $perherow["ei_nayteta"];
                   $myy_ohita_kerays[$j] = $perherow['ohita_kerays'];
 
+		  // MUOKKAUS: isset():
+                  if (!isset($myy_kpl[$j])) $myy_kpl[$j] = 0;
+                  if (!isset($myy_kpl_myyty[$j])) $myy_kpl_myyty[$j] = 0;
+
                   // jos ei olla vielä toimitettu kaikkea, niin lisätään tilausrivi
                   if ($lapsitoimittamatta != 0 and (($myy_kpl[$j] - $myy_kpl_myyty[$j]) > 0 or $yhtiorow["puute_jt_oletus"] == "O" or $varataan_saldoa == "EI")) {
 
