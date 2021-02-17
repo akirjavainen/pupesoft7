@@ -847,6 +847,7 @@ if (!function_exists('rivi_tarjous')) {
     $row["perhe_kommentti"] = "";
 
     // Info tuoteperheestä
+    if (!isset($perheid)) $perheid = null; // MUOKKAUS: isset()
     if ($row["perheid"] > 0 and $perheid != $row["perheid"]) {
       $numrows = 0;
 
@@ -1124,7 +1125,7 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
       }
     }
 
-    if (trim($row["perhe_kommentti"]) != '' and $yhtiorow['tarjoustyyppi'] != 5) {
+    if (isset($row) and trim($row["perhe_kommentti"]) != '' and $yhtiorow['tarjoustyyppi'] != 5) { // MUOKKAUS: isset()
       $pohja = $pdf_tarjous->draw_paragraph($kala+$norm["height"], 45, 60, 480, $row["perhe_kommentti"] . " ",  $page_tarjous[$sivu], $norm);
       if (is_numeric($pohja)) {
         $kala = $pohja - $rivinkorkeus;
