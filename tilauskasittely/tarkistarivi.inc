@@ -296,7 +296,7 @@ if (in_array($row['var'], array('U', 'T', 'R')) and $trow['epakurantti25pvm'] !=
   $varaosavirhe .= t("HUOM: tuote on epäkurantti!")."<br>";
 }
 
-if ($row["hinta"] < 0) {
+if ((float)$row["hinta"] < 0) { // MUOKKAUS: BUGIKORJAUS (string < 0)
   $varaosavirhe .= t("VIRHE: Hinta ei voi olla negatiivinen!")."<br>";
   $riviok++;
   $tilausok++;
