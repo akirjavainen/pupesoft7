@@ -59,7 +59,7 @@ if ($tee == "CHECK") {
     $error[] = t("Tarkista maksupäivä! Anna maksupäivä muodossa PP.KK.VVVV");
   }
 
-  $errors = count($error);
+  $errors = isset($error) ? count($error) : 0; // MUOKKAUS: isset()
 
   if ($errors > 0) {
     echo "<ul>";
