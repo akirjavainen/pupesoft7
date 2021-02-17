@@ -2577,7 +2577,8 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
       $toimpaikres = pupe_query($query);
       $krow = mysqli_fetch_assoc($toimpaikres);
 
-      if ($kpl > $krow['tehdas_saldo']) {
+      // MUOKKAUS: isset():
+      if (isset($krow) and $kpl > $krow['tehdas_saldo']) {
         $kvkasittely = true;
       }
     }
