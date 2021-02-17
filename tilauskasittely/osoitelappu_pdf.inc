@@ -1,5 +1,5 @@
 <?php
-exit(""); // MODIFIED, do not print this paper at all
+exit(); // MUOKKAUS: ei tulosteta osoitelappua
 
 // tarvitaan tilauksen tunnus muutujassa $tunnus
 // printterin komento muuttujassa $oslapp

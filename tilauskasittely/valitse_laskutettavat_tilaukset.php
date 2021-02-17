@@ -565,7 +565,8 @@ if ($tee == "VALITSE") {
         echo "<td><input type='checkbox' name='tunnus[$row[tunnus]]' value='$row[tunnus]' {$checked}></td>";
       }
 
-      echo "<td><a href='$PHP_SELF?tee=NAYTATILAUS&toim=$toim&tunnukset=$tunnukset&tunnus=$row[tunnus]'>$row[tunnus]<br>$row[viesti]</a> $row[sisviesti3]</td>"; // MODIFIED, added $row[viesti]
+      // MUOKKAUS: lisatty $row[viesti]:
+      echo "<td><a href='$PHP_SELF?tee=NAYTATILAUS&toim=$toim&tunnukset=$tunnukset&tunnus=$row[tunnus]'>$row[tunnus]<br>$row[viesti]</a> $row[sisviesti3]</td>";
 
       // jos veroton summa on nolla ja verollinen summa on myös hyvin lähellä nollaa
       // niin tehdään nollalasku
@@ -1142,7 +1143,7 @@ if ($tee == "") {
 
   $haku='';
 echo "<a href=\"/ebills.php\">L&auml;het&auml; verkkolaskut</a><br><br>\n";
-echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MODIFIED, added
+echo "<b>Nyt on viikko " . date("W") . ".</b><br>"; // MUOKKAUS: lisatty
   if (is_string($etsi)) {
     $haku = "AND (lasku.nimi LIKE '%{$etsi}%'
                   OR lasku.toim_nimi LIKE '%{$etsi}%'
@@ -1162,8 +1163,8 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
   }
 
   // GROUP BY pitää olla sama kun verkkolasku.php:ssä rivi ~1243
-// MODIFIED, added lasku.sisviesti2, lasku.sisviesti3, lasku.toimaika and lasku.toimitustapa in the next query:
   // HUOM LISÄKSI laskutusviikonpäivä mukaan GROUP BY:hin!!!!
+  // MUOKKAUS: lisatty lasku.sisviesti2, lasku.sisviesti3, lasku.toimaika and lasku.toimitustapa kyselyyn:
   $query = "SELECT
             lasku.laskutusvkopv, lasku.ytunnus, lasku.nimi, lasku.nimitark, lasku.osoite, lasku.postino, lasku.postitp, lasku.sisviesti2, lasku.sisviesti3, lasku.toimaika, lasku.toimitustapa, 
             lasku.toim_nimi, lasku.toim_nimitark, lasku.toim_osoite, lasku.toim_postino, lasku.toim_postitp,
@@ -1245,7 +1246,7 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
       if ($tilrow["chn"] == '999') $toimitusselite = t("Laskutuskielto, laskutusta ei tehdä");
 
       $teksti = "";
-      $toimitusselite = "Viikko ".date("W", strtotime($tilrow["toimaika"])); // MODIFIED, added
+      $toimitusselite = "Viikko ".date("W", strtotime($tilrow["toimaika"])); // MUOKKAUS: lisatty
 
       if ($tilrow["laskutusvkopv"] == 0)     $teksti = t("Kaikki");
       elseif ($tilrow["laskutusvkopv"] == 2) $teksti = t("Maanantai");
@@ -1307,11 +1308,11 @@ echo "<b>Nyt on viikko ".date("W", strtotime(date("Y-m-d"))).".</b><br>"; // MOD
         $teksti = tv1dateconv($laskutusvkopv);
       }
 
-// MODIFIED, added link on next line, also added toimitustapa lower:
+      // MUOKKAUS: lisatty linkki ja toimitustapa:
       echo "  <tr class='aktiivi'>
 	  <td valign='top'>";
 
-      // MODIFIED, added:
+      // MUOKKAUS: lisatty:
 	  $tun_array = explode("<br>", $tilrow["tunnukset_ruudulle"]);
 	  foreach($tun_array as $tun) {
 		  echo "<a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tun&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tun</a><br>";
@@ -1373,7 +1374,7 @@ require "inc/footer.inc";
 
 function hae_tilaukset_result($query_ale_lisa, $tunnukset, $alatilat, $vientilisa) {
   global $kukarow, $yhtiorow;
-  // MODIFIED, added lasku.viesti on next line:
+  // MUOKKAUS: lisatty lasku.viesti kyselyyn:
   $query = "SELECT
             if (lasku.ketjutus = '', '', if (lasku.vanhatunnus > 0, lasku.vanhatunnus, lasku.tunnus)) ketjutuskentta,
             if ((((asiakas.koontilaskut_yhdistetaan = '' and ('{$yhtiorow['koontilaskut_yhdistetaan']}' = 'U' or '{$yhtiorow['koontilaskut_yhdistetaan']}' = 'V')) or asiakas.koontilaskut_yhdistetaan = 'U') and lasku.tilaustyyppi in ('R','U')), 1, 0) reklamaatiot_lasku,

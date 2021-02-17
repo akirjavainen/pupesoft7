@@ -6,7 +6,7 @@ ob_start();
 require "inc/parametrit.inc";
 require "inc/pankkiyhteys_functions.inc";
 
-// MODIFIED, do not echo HTML when using CLI interface:
+// MUOKKAUS: ei HTML-koodia CLI-konsoliin:
 if (php_sapi_name() != 'cli') {
 	echo "<font class='head'>" . t('SEPA-pankkiyhteys') . "</font>";
 	echo "<hr>";
@@ -15,7 +15,7 @@ if (php_sapi_name() != 'cli') {
 // Varmistetaan, että sepa pankkiyhteys on kunnossa. Funkio kuolee, jos ei ole.
 sepa_pankkiyhteys_kunnossa();
 
-// MODIFIED, do not create JavaScript functions when using CLI interface:
+// MUOKKAUS: ei JavaScript-funktioita CLI-konsolille:
 if (php_sapi_name() != 'cli') {
 	toggle_all("viite_toggler", "viite_boxes");
 	toggle_all("tiliote_toggler", "tiliote_boxes");
@@ -84,8 +84,9 @@ if ($tee == "kirjaudu") {
   }
   else {
     // Setataan SECURE cookiet, HTTP only
-    setcookie($cookie_secret, $salasana, time() + 300, '/', $pupesoft_server, false, false); // MODIFIED, allow HTTP or HTTPS for cookies
-    setcookie($cookie_tunnus, $pankkiyhteys_tunnus, time() + 300, '/', $pupesoft_server, false, false); // MODIFIED, allow HTTP or HTTPS for cookies
+    // MOKKAUS: salli myos HTTP (ei vain HTTPS) evasteille paikallisverkossa:
+    setcookie($cookie_secret, $salasana, time() + 300, '/', $pupesoft_server, false, false);
+    setcookie($cookie_tunnus, $pankkiyhteys_tunnus, time() + 300, '/', $pupesoft_server, false, false);
 
     // Laitetaan samantien myös globaaliin
     $_COOKIE[$cookie_secret] = $salasana;
@@ -98,8 +99,9 @@ if ($tee == "kirjaudu") {
 // Kirjaudutaan ulos pankista
 if ($tee == "kirjaudu_ulos") {
   // Unsetataan cookiet
-  setcookie($cookie_secret, "deleted", time() - 43200, '/', $pupesoft_server, false, false); // MODIFIED, allow HTTP or HTTPS for cookies
-  setcookie($cookie_tunnus, "deleted", time() - 43200, '/', $pupesoft_server, false, false); // MODIFIED, allow HTTP or HTTPS for cookies
+  // MOKKAUS: salli myos HTTP (ei vain HTTPS) evasteille paikallisverkossa:
+  setcookie($cookie_secret, "deleted", time() - 43200, '/', $pupesoft_server, false, false);
+  setcookie($cookie_tunnus, "deleted", time() - 43200, '/', $pupesoft_server, false, false);
 
   // Poistetaan myös globaalista
   unset($_COOKIE[$cookie_secret]);
@@ -137,7 +139,7 @@ if ($tee == "") {
 
   if ($kaytossa_olevat_pankkiyhteydet) {
 
-    // MODIFIED, do not echo HTML when using CLI interface:
+    // MUOKKAUS: ei HTML-koodia CLI-konsoliin:
     if (php_sapi_name() != 'cli') {
       echo "<form name='pankkiyhteys' method='post' action='pankkiyhteys.php'>";
       echo "<input type='hidden' name='tee' value='kirjaudu'/>";
@@ -156,13 +158,13 @@ if ($tee == "") {
     foreach ($kaytossa_olevat_pankkiyhteydet as $pankkiyhteys) {
       $selected = $pankkiyhteys_tunnus == $pankkiyhteys["tunnus"] ? " selected" : "";
 
-      // MODIFIED, do not echo HTML when using CLI interface:
+      // MUOKKAUS: ei HTML-koodia CLI-konsoliin:
       if (php_sapi_name() != 'cli') {
         echo "<option value='{$pankkiyhteys["tunnus"]}'{$selected}>";
         echo "{$pankkiyhteys["pankin_nimi"]}</option>";
       }
       
-      // MODIFIED, added CLI interface for scheduled retrieving:
+      // MUOKKAUS: CLI-interface ajastetulle cron-ajolle:
       // ---
       if (php_sapi_name() == 'cli') {
 	$viite_references = array();
@@ -265,7 +267,7 @@ if ($tee == "") {
 
     echo "<tr>";
     echo "<th><label for='salasana'>" . t("Salasana") . "</label></th>";
-    echo "<td><input type='password' name='salasana' id='salasana' value='$sepa_pankkiyhteys_salasana'/></td>"; // MODIFIED, added password
+    echo "<td><input type='password' name='salasana' id='salasana' value='$sepa_pankkiyhteys_salasana'/></td>"; // MUOKKAUS: salasana
     echo "</tr>";
 
     echo "</tbody>";

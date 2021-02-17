@@ -11,7 +11,7 @@ if (isset($_REQUEST['kaikki_parametrit_serialisoituna'])) {
   $kaikki_parametrit_serialisoituna = unserialize(urldecode($_REQUEST['kaikki_parametrit_serialisoituna']));
   $kaikki_muuttujat_array = array();
 
-  if (is_array($kaikki_parametrit_serialisoituna)) { // MODIFIED, added BUGFIX
+  if (is_array($kaikki_parametrit_serialisoituna)) { // MUOKKAUS: isset()
     foreach ($kaikki_parametrit_serialisoituna as $parametri_key => $parametri_value) {
       ${$parametri_key} = $parametri_value;
       $_REQUEST[$parametri_key] = $parametri_value;

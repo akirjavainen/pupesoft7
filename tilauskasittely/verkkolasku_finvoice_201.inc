@@ -408,7 +408,9 @@ if (!function_exists('finvoice_otsik')) {
         xml_add("InvoiceRecipientPartyIdentifier", tulosta_ytunnus($lasrow['ytunnus'], $lasrow['maa'], ""), $tootfinvoice, 35);
 
         $laskutus_nimitieto = trim($laskutusosoitetiedot["laskutus_nimi"]." ".$laskutusosoitetiedot["laskutus_nimitark"]);
-        $laskutus_nimitieto_array = mb_str_split($laskutus_nimitieto, 35); // MODIFIED, BUGFIX, removed 3rd parameter: mb_str_split in conflict with stock function (encoding vs. min_length)
+
+	// MUOKKAUS: BUGIKORJAUS: poistettu 3. parametri, koska konfliktissa PHP:n sisaanrakennetun funktion kanssa (encoding vs. min_length):
+        $laskutus_nimitieto_array = mb_str_split($laskutus_nimitieto, 35);
 
         foreach ($laskutus_nimitieto_array as $laskutus_nimi_osa) {
           xml_add("InvoiceRecipientOrganisationName", $laskutus_nimi_osa, $tootfinvoice, 35, 2);
@@ -440,7 +442,9 @@ if (!function_exists('finvoice_otsik')) {
       }
 
       $asiakas_nimitieto = trim($lasrow['nimi']." ".$lasrow['nimitark']);
-      $asiakas_nimitieto_array = mb_str_split($asiakas_nimitieto, $nimikenpit); // MODIFIED, BUGFIX, removed 3rd parameter: mb_str_split in conflict with stock function (encoding vs. min_length)
+
+      // MUOKKAUS: BUGIKORJAUS: poistettu 3. parametri, koska konfliktissa PHP:n sisaanrakennetun funktion kanssa (encoding vs. min_length):
+      $asiakas_nimitieto_array = mb_str_split($asiakas_nimitieto, $nimikenpit);
 
       foreach ($asiakas_nimitieto_array as $asiakas_nimi_osa) {
         xml_add("BuyerOrganisationName", $asiakas_nimi_osa, $tootfinvoice, $nimikenpit, 2);
@@ -510,7 +514,9 @@ if (!function_exists('finvoice_otsik')) {
       xml_add("DeliveryPartyIdentifier", tulosta_ytunnus($lasrow['ytunnus'], $lasrow['maa'], ""), $tootfinvoice, 35);
 
       $asiakas_toimnimitieto = trim($lasrow['toim_nimi']." ".$lasrow['toim_nimitark']);
-      $asiakas_toimnimitieto_array = mb_str_split($asiakas_toimnimitieto, 35); // MODIFIED, BUGFIX, removed 3rd parameter: mb_str_split in conflict with stock function (encoding vs. min_length)
+
+      // MUOKKAUS: BUGIKORJAUS: poistettu 3. parametri, koska konfliktissa PHP:n sisaanrakennetun funktion kanssa (encoding vs. min_length):
+      $asiakas_toimnimitieto_array = mb_str_split($asiakas_toimnimitieto, 35);
 
       foreach ($asiakas_toimnimitieto_array as $asiakas_toimnimi_osa) {
         xml_add("DeliveryOrganisationName", $asiakas_toimnimi_osa, $tootfinvoice, 35, 2);
@@ -582,11 +588,11 @@ if (!function_exists('finvoice_otsik')) {
       }
       elseif (trim($lasrow['asiakkaan_tilausnumero']) != "") {
         xml_add("OrderIdentifier", substr($lasrow['asiakkaan_tilausnumero'], 0, 35), $tootfinvoice, 35);
-        xml_add("BuyerReferenceIdentifier", substr($lasrow['asiakkaan_tilausnumero'], 0, 35), $tootfinvoice, 35); // MODIFIED, added
+        xml_add("BuyerReferenceIdentifier", substr($lasrow['asiakkaan_tilausnumero'], 0, 35), $tootfinvoice, 35); // MUOKKAUS: lisatty
       }
       else {
         xml_add("OrderIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);
-        xml_add("BuyerReferenceIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35); // MODIFIED, added
+        xml_add("BuyerReferenceIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35); // MUOKKAUS: lisatty
       }
 
       xml_add("AgreementIdentifier", substr($lasrow['viesti'], 0, 35), $tootfinvoice, 35);

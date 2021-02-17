@@ -1,6 +1,6 @@
 <?php
 
-if (!isset($_REQUEST["tee"])) $_REQUEST["tee"] = ""; // MODIFIED, BUGFIX
+if (!isset($_REQUEST["tee"])) $_REQUEST["tee"] = ""; // MUOKKAUS: isset()
 if ($_REQUEST["tee"] == "haekeikka") {
   $_GET["ohje"] = "off";
 }
@@ -734,8 +734,8 @@ if ($tee == 'H') {
   }
 
   // Kuka hyväksyi??
-  $kentta = "h1time"; // MODIFIED, BUGFIX
-  $laskurow['h1time'] = "99"; // MODIFIED, BUGFIX
+  $kentta = "h1time"; // MUOKKAUS: BUGIKORJAUS
+  $laskurow['h1time'] = "99"; // MUOKKAUS: BUGIKORJAUS
   if ($laskurow['hyvaksyja_nyt'] == $laskurow['hyvak1'] and $laskurow["h1time"]=="0000-00-00 00:00:00") {
     $kentta = "h1time";
     $laskurow['h1time'] = "99";

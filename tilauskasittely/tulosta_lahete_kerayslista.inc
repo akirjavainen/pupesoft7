@@ -1,17 +1,16 @@
 <?php
 
-// MODIFIED, added:
+// MUOKKAUS: lisatty:
 function getSerialForOrder($order)
 {
 	$notfound = "Etsi tilausnumerolla";
 	include "/var/www/config/login_jwio.php";
 
-	$db = mysqli_connect(DATABASE_SERVER, DATABASE_USERNAME, DATABASE_PASSWORD);
-	mysqli_select_db($db, "jwio_employees");
+	$db = mysqli_connect(DATABASE_SERVER, DATABASE_USERNAME, DATABASE_PASSWORD, "jwio_employees");
+	$result = mysqli_query($db, "SELECT serial FROM serials WHERE singleorder='$order';");
 
-	$result = mysqli_query($db, "SELECT serial FROM Sarjat WHERE singleorder='$order';");
 	mysqli_select_db($db, "pupesoft");
-	if ($result == NULL) return $notfound;
+	if ($result == null) return $notfound;
 
 	while($row = mysqli_fetch_array($result)) {
 		$check = $row["serial"];
@@ -22,7 +21,6 @@ function getSerialForOrder($order)
 	mysqli_select_db($db, "pupesoft");
 	return $notfound;
 }
-// MOD END
 
 
 // jos php-gd on installoitu niin loidataab barcode library
@@ -267,8 +265,10 @@ if (!function_exists('alku_kerayslista')) {
 			else {
 				$pdf->draw_text(310, 792, t("Tilausnumero(t)", $kieli), 			$thispage, $pieni);
 				$pdf->draw_text(310, 782, $tilausnumeroita,							$thispage, $boldi);
-				$pdf->draw_text(430, 792, t("Sarjanumero(t)", $kieli), $thispage, $pieni); // MODIFIED, added
-				$pdf->draw_text(430, 782, getSerialForOrder($laskurow["tunnus"]), $thispage, $boldi); // MODIFIED, added
+
+				// MUOKKAUS: lisatty:
+				$pdf->draw_text(430, 792, t("Sarjanumero(t)", $kieli), $thispage, $pieni);
+				$pdf->draw_text(430, 782, getSerialForOrder($laskurow["tunnus"]), $thispage, $boldi);
 			}
 
 			$pdf->draw_rectangle(779, 300, 758, 580, $thispage, $rectparam);
@@ -1247,8 +1247,11 @@ if (!function_exists('loppu_kerayslista')) {
 
 			$pdf->draw_text(217, 55, t("Puhelin", $kieli).":",			$thispage, $pieni);
 			$pdf->draw_text(270, 55, $y_puhelin,						$thispage, $pieni);
-			//$pdf->draw_text(217, 45, t("Telefax", $kieli).":",			$thispage, $pieni); // MODIFIED, commented out
-			//$pdf->draw_text(270, 45, $y_fax,							$thispage, $pieni); // MODIFIED, commented out
+
+			// MUOKKAUS: kommentoitu ulos:
+			//$pdf->draw_text(217, 45, t("Telefax", $kieli).":",			$thispage, $pieni);
+			//$pdf->draw_text(270, 45, $y_fax,							$thispage, $pieni);
+
 			$pdf->draw_text(217, 45, t("Sähköposti", $kieli).":",		$thispage, $pieni);
 			$pdf->draw_text(270, 45, $y_email,							$thispage, $pieni);
 			$pdf->draw_text(217, 35, t("Web", $kieli).":",				$thispage, $pieni);

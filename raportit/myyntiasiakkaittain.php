@@ -96,8 +96,8 @@ else {
       $group  = "lasku.ytunnus";
     }
 
-// MODIFIED: added asiakas.ryhma = '2' in the next query:
-$total_summa = 0; // MODIFIED, added
+    // MUOKKAUS: lisatty asiakas.ryhma = '2' kyselyyn:
+    $total_summa = 0; // MUOKKAUS: lisatty
     $query = "SELECT $select
               sum(tilausrivi.rivihinta) summa,
               sum(tilausrivi.kate) kate,
@@ -134,8 +134,10 @@ $total_summa = 0; // MODIFIED, added
       if ($summaa == '') echo "<th>".t("Piiri")."</th>";
       echo "<th>".t("Määrä")."</th>";
       echo "<th>".t("Summa")."</th>";
-      //echo "<th>".t("Kate")."</th>"; // MODIFIED, removed
-      //echo "<th>".t("Katepros")."</th>"; // MODIFIED, removed
+
+      // MUOKKAUS: kommentoitu ulos:
+      //echo "<th>".t("Kate")."</th>";
+      //echo "<th>".t("Katepros")."</th>";
     }
     else {
       echo "<br><font class='error'>".t("Hakutulos oli liian suuri")."!</font><br>";
@@ -225,9 +227,11 @@ $total_summa = 0; // MODIFIED, added
         if ($summaa == '') echo "<td align='right'>".$lrow["piiri"]."</td>";
         echo "<td align='right'>".sprintf("%.2f", $lrow["kpl"])."</td>";
         echo "<td align='right'>".sprintf("%.2f", $lrow["summa"])."</td>";
-	$total_summa += $lrow["summa"]; // MODIFIED, added
-        //echo "<td align='right'>".sprintf("%.2f", $lrow["kate"])."</td>"; // MODIFIED, removed
-        //echo "<td align='right'>".sprintf("%.2f", $katepros)."%</td>"; // MODIFIED, removed
+	$total_summa += $lrow["summa"]; // MUOKKAUS: lisatty
+
+	// MUOKKAUS: kommentoitu ulos:
+        //echo "<td align='right'>".sprintf("%.2f", $lrow["kate"])."</td>";
+        //echo "<td align='right'>".sprintf("%.2f", $katepros)."%</td>";
         echo "</tr>";
       }
 
@@ -266,6 +270,6 @@ $total_summa = 0; // MODIFIED, added
     echo "</table><br>";
   }
 
-  echo "<br>Kokonaismyynti: ".round($total_summa, 2)." euroa (ALV 0 %)<br>\n"; // MODIFIED, added
+  echo "<br>Kokonaismyynti: ".round($total_summa, 2)." euroa (ALV 0 %)<br>\n"; // MUOKKAUS: lisatty
   require "inc/footer.inc";
 }

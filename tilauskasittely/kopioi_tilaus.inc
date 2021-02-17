@@ -120,14 +120,14 @@ if (!function_exists("kopioi_tilaus")) {
         $field = mysqli_field_name($lisatiedotres, $i);
         $fields .= ", $field";
 	
-    if ($field != "tunnus") { // MODIFIED, added BUGFIX
-        if ($field == 'otunnus') {
-          $values .= ", '$utunnus'";
+        if ($field != "tunnus") { // MUOKKAUS: BUGIKORJAUS (ei monisteta tunnusta)
+          if ($field == 'otunnus') {
+            $values .= ", '$utunnus'";
+          }
+          else {
+            $values .= ", '$lisatiedotrow[$i]'";
+          }
         }
-        else {
-          $values .= ", '$lisatiedotrow[$i]'";
-        }
-    } // MODIFIED, added
       }
     }
 

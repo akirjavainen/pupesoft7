@@ -72,7 +72,7 @@ else {
       </script>";
 }
 
-$forceta = $php_cli; // MODIFIED, required for pankkiyhteys.php CLI
+$forceta = $php_cli; // MUOKKAUS: salli CLI-interface
 
 // Napataan alkuperäinen kukarow
 $tiliote_kukarow = $kukarow;

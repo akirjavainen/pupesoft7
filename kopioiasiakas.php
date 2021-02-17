@@ -97,7 +97,7 @@ if ($tee == "edit") {
       $ulos = '';
     }
     
-    if (mysqli_field_name($result, $i) == "tunnus") { // MODIFIED, added BUGFIX
+    if (mysqli_field_name($result, $i) == "tunnus") { // MUOKKAUS: BUGIKORJAUS (ei monisteta tunnusta)
       $tyyppi = 0;
       $jatko = 0;
       $ulos = '';

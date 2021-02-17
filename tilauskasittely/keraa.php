@@ -3518,11 +3518,13 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
       }
 
       echo "<table id='maintable'>";
-      if (strlen($otsik_row["viesti"] > 0)) echo "<tr><th colspan='6'>Tilausviite: " . $otsik_row["viesti"] . "</th></tr>"; // MODIFIED, added
-      if (strlen($otsik_row["comments"] > 0)) echo "<tr><th colspan='6'>Kommentti 1: " . $otsik_row["comments"] . "</th></tr>"; // MODIFIED, added
-      if (strlen($otsik_row["sisviesti1"] > 0)) echo "<tr><th colspan='6'>Sisäinen viesti: " . $otsik_row["sisviesti1"] . "</th></tr>"; // MODIFIED, added
-      if (strlen($otsik_row["sisviesti2"] > 0)) echo "<tr><th colspan='6'>Kommentti 2: " . $otsik_row["sisviesti2"] . "</th></tr>"; // MODIFIED, added
-      if (strlen($otsik_row["sisviesti3"] > 0)) echo "<tr><th colspan='6'>Kommentti 3: " . $otsik_row["sisviesti3"] . "</th></tr>"; // MODIFIED, added
+
+      // MUOKKAUS: lisatty:
+      if (strlen($otsik_row["viesti"] > 0)) echo "<tr><th colspan='6'>Tilausviite: " . $otsik_row["viesti"] . "</th></tr>";
+      if (strlen($otsik_row["comments"] > 0)) echo "<tr><th colspan='6'>Kommentti 1: " . $otsik_row["comments"] . "</th></tr>";
+      if (strlen($otsik_row["sisviesti1"] > 0)) echo "<tr><th colspan='6'>Sisäinen viesti: " . $otsik_row["sisviesti1"] . "</th></tr>";
+      if (strlen($otsik_row["sisviesti2"] > 0)) echo "<tr><th colspan='6'>Kommentti 2: " . $otsik_row["sisviesti2"] . "</th></tr>";
+      if (strlen($otsik_row["sisviesti3"] > 0)) echo "<tr><th colspan='6'>Kommentti 3: " . $otsik_row["sisviesti3"] . "</th></tr>";
       echo "<tr>";
 
       if (!empty($rivinumerot)) {
@@ -3534,7 +3536,7 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
             $_toimtuoteno_otsikko
             <th>".t("Nimitys")."</th>
             <th>".t("Määrä")."</th>
-            <th>".t("Poikkeava määrä (kerätään/laskutetaan NYT)")."</th>"; // MODIFIED, clarified
+            <th>".t("Poikkeava määrä (kerätään/laskutetaan NYT)")."</th>"; // MUOKKAUS: tarkennus lisatty
 
       if ($yhtiorow['kerayserat'] == 'P' or ($yhtiorow['kerayserat'] == 'A' and $row_chk['kerayserat'] == 'A')) {
         echo "<th>", t("Pakkaus"), "</th>";
@@ -4457,8 +4459,9 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
       }
     }
     else {
-	  $bugfix_query = "UPDATE lasku SET tila='L', alatila='D' WHERE tunnus='$id' AND yhtio='$kukarow[yhtio]';";
-	  mysqli_query($GLOBALS["masterlink"], $bugfix_query) or die(mysqli_error($GLOBALS["masterlink"])); // MODIFIED, BUGFIX
+      // MUOKKAUS: BUGIKORJAUS:
+      $bugfix_query = "UPDATE lasku SET tila='L', alatila='D' WHERE tunnus='$id' AND yhtio='$kukarow[yhtio]';";
+      mysqli_query($GLOBALS["masterlink"], $bugfix_query) or die(mysqli_error($GLOBALS["masterlink"]));
       echo t("Ei löydetty kerättäviä rivejä, mutta korjattiin mahdollisesti epäonnistunut edellinen keräys.");
     }
   }

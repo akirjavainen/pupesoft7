@@ -5,7 +5,7 @@ $useslave = 1;
 
 if (isset($_POST["tee"])) {
   if ($_POST["tee"] == 'lataa_tiedosto') $lataa_tiedosto=1;
-  if (!isset($_POST["kaunisnimi"])) $_POST["kaunisnimi"] = ""; // MODIFIED, BUGFIX
+  if (!isset($_POST["kaunisnimi"])) $_POST["kaunisnimi"] = ""; // MUOKKAUS: isset()
   if ($_POST["kaunisnimi"] != '') $_POST["kaunisnimi"] = str_replace("/", "", $_POST["kaunisnimi"]);
 }
 
@@ -3179,7 +3179,7 @@ if (mysqli_num_rows($result) != 0) {
       // tehdään alertteja
       if ($row["tila"] == "L" and $row["alatila"] == "A") {
         //$pitaako_varmistaa = t("Keräyslista on jo tulostettu! Oletko varma, että haluat vielä muokata tilausta?");
-	$pitaako_varmistaa = ""; // MODIFIED, verification removed
+	$pitaako_varmistaa = ""; // MUOKKAUS: kommentoitu varmistuskysymys pois
       }
 
       if ($row["tila"] == "G" and $row["alatila"] == "A") {
@@ -3296,13 +3296,16 @@ if (mysqli_num_rows($result) != 0) {
 
       echo "<input type='submit' class='{$_class}' name='$aputoim1' value='$lisa1' $button_disabled>";
       echo "</form>";
-      $toim_link = (strlen($toim) > 0) ? $toim : "TILAUSVAHVISTUS"; // MODIFIED, added
-      echo " <a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$row[tunnus]&lasku_yhtio=sapu&toim=$toim_link&tee=NAYTATILAUS' target='_blank'><input type='submit' name='pdf' value='Näytä PDF'></a>"; // MODIFIED, added
-      if (file_exists("../hinnasto")) echo " <a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'><input type='submit' name='mittakuvat' value='Mittakuvat'></a>"; // MODIFIED, added
-      if (file_exists("../tuotanto")) echo " <a href='/tuotanto/index.php?order=$row[tunnus]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>"; // MODIFIED, added
-      if ($toim != "TARJOUS") { // MODIFIED, added
-        echo " <a href='/pupesoft/tilauskasittely/keraa.php?id=" . $row['tunnus'] . "'><input type='submit' name='keraa' value='Kerää'></a>"; // MODIFIED, added
-        if (file_exists("../toimitusvahvistus")) echo " <a href='/toimitusvahvistus/index.php?nonavi=1&default_order=" . $row['tunnus'] . "'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a>"; // MODIFIED, added
+      $toim_link = (strlen($toim) > 0) ? $toim : "TILAUSVAHVISTUS"; // MUOKKAUS: BUGIKORJAUS
+      
+      // MUOKKAUS: lisatty JWIO ERP -linkit:
+      echo " <a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$row[tunnus]&lasku_yhtio=sapu&toim=$toim_link&tee=NAYTATILAUS' target='_blank'><input type='submit' name='pdf' value='Näytä PDF'></a>";
+      if (file_exists("../hinnasto")) echo " <a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'><input type='submit' name='mittakuvat' value='Mittakuvat'></a>";
+      if (file_exists("../tuotanto")) echo " <a href='/tuotanto/index.php?order=$row[tunnus]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>";
+
+      if ($toim != "TARJOUS") {
+        echo " <a href='/pupesoft/tilauskasittely/keraa.php?id=" . $row['tunnus'] . "'><input type='submit' name='keraa' value='Kerää'></a>";
+        if (file_exists("../toimitusvahvistus")) echo " <a href='/toimitusvahvistus/index.php?nonavi=1&default_order=" . $row['tunnus'] . "'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a>";
       }
       echo "</td>";
 

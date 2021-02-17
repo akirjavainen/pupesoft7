@@ -2,7 +2,7 @@
 
 require "inc/parametrit.inc";
 
-if ($tee == "keraa" && !isset($_GET["auto"])) { // MODIFIED, added automatic mode
+if ($tee == "keraa" && !isset($_GET["auto"])) { // MUOKKAUS: lisatty automaattinen tila
   if (isset($_FILES['userfile']) and (is_uploaded_file($_FILES['userfile']['tmp_name']) === TRUE)) {
 
     if ($_FILES['userfile']['size'] == 0) {
@@ -24,7 +24,7 @@ if ($tee == "keraa" && !isset($_GET["auto"])) { // MODIFIED, added automatic mod
   }
 }
 
-// MODIFIED, added automatic mode:
+// MUOKKAUS: lisatty automaattinen tila:
 if (isset($_GET["auto"])) $excelrivit = pupeFileReader("/tmp/collect.csv", "CSV");
 
 if ($tee == "keraa") {

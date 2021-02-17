@@ -331,7 +331,7 @@ if ($error == 0 and $tee == "file") {
   while ($rivi = fgets($file)) {
     // luetaan rivi tiedostosta..
     $rivi = explode("\t", pupesoft_cleanstring($rivi));
-    if (!isset($rivi[1])) $rivi[1] = ''; // MODIFIED, added BUGFIX
+    if (!isset($rivi[1])) $rivi[1] = ''; // MUOKKAUS: isset()
 
     if (trim($rivi[0]) != '' and trim($rivi[1]) != '') {
 
@@ -781,7 +781,7 @@ if ($tee == "" and $php_cli === false) {
       <tr>
         <th>".t("Valitse vanhan tuotteen status")."</th>
         <td><select name='status'>";
-  if (isset($vrow)) echo product_status_options($vrow["selite"]); // MODIFIED, added BUGFIX
+  if (isset($vrow)) echo product_status_options($vrow["selite"]); // MUOKKAUS: isset()
   echo "</select></td>";
   echo "</tr>";
 

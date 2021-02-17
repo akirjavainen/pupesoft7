@@ -56,17 +56,19 @@ echo "<td><input type='submit' class='hae_btn' value='".t("Etsi")."'></td></tr>"
 
 $row = 0;
 while ($maksurow=mysqli_fetch_array($result)) {
-  $class = $maksurow["erpcm"] < date("Y-m-d") ? " class='spec'" : ""; // MODIFIED, added
+  $class = $maksurow["erpcm"] < date("Y-m-d") ? " class='spec'" : ""; // MUOKKAUS: lisatty
   for ($i=0; $i<mysqli_num_fields($result)-2; $i++) {
     if (mysqli_field_name($result, $i) == 'laskunro') {
       $tunnus = $maksurow[mysqli_num_fields($result)-2];
-      //echo "<td" . $class . "><a href=\"../muutosite.php?tee=E&tunnus=$tunnus\">$maksurow[$i]</a></td>"; // MODIFIED, class
-      echo "<td" . $class . "><a href=\"../tilauskasittely/tulostakopio.php?otunnus=$tunnus&lasku_yhtio=$yhtiorow[yhtio]&toim=LASKU&tee=NAYTATILAUS\">$maksurow[$i]</a></td>"; // MODIFIED, class & link "../muutosite.php?tee=E&tunnus=$tunnus"
+      //echo "<td" . $class . "><a href=\"../muutosite.php?tee=E&tunnus=$tunnus\">$maksurow[$i]</a></td>"; // MUOKKAUS: class
+
+      // MUOKKAUS: class ja linkki:
+      echo "<td" . $class . "><a href=\"../tilauskasittely/tulostakopio.php?otunnus=$tunnus&lasku_yhtio=$yhtiorow[yhtio]&toim=LASKU&tee=NAYTATILAUS\">$maksurow[$i]</a></td>";
     } elseif (mysqli_field_name($result, $i) == 'nimi') {
       /* linkki CRM:aan */
-      echo "<td" . $class . "><a href=\"../crm/asiakasmemo.php?ytunnus=$maksurow[ytunnus]\">$maksurow[$i]</a></td>"; // MODIFIED, class
+      echo "<td" . $class . "><a href=\"../crm/asiakasmemo.php?ytunnus=$maksurow[ytunnus]\">$maksurow[$i]</a></td>"; // MUOKKAUS: class
     } else {
-      echo "<td" . $class . ">$maksurow[$i]</td>"; // MODIFIED, class
+      echo "<td" . $class . ">$maksurow[$i]</td>"; // MUOKKAUS: class
     }
   }
   $asiakas_tunnus=$maksurow[mysqli_num_fields($result)-2];

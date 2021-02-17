@@ -427,7 +427,7 @@ if ($tee == 'YHTEENVETO') {
                 LIMIT 1";
       $insres = pupe_query($query, $GLOBALS["masterlink"]);
       $tulorow = mysqli_fetch_assoc($insres);
-      if (mysqli_num_rows($insres) <= 0) exit(""); // MODIFIED, BUGFIX
+      if (mysqli_num_rows($insres) <= 0) exit(); // MUOKKAUS: BUGIKORJAUS
 
       // katotaan onko kelvollinen tuote, elikkä luokitteluperuste pitää olla > 0
       if ($row["${abcwhat}"] > 0) {

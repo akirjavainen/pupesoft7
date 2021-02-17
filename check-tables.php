@@ -61,7 +61,7 @@ while ($row = mysqli_fetch_row($result)) {
   $_table_broken = ($chkro["Msg_text"] != "OK" and $chkro["Msg_text"] != "Table is already up to date");
 
   if ($_table_broken or $verbose_mode) {
-    //decho("$query -> $chkro[Msg_text]"); // MODIFIED, suppress output
+    //decho("$query -> $chkro[Msg_text]"); // MUOKKAUS: kommentoitu ulos
   }
 
   // varmistetaan vielä indexien käytössäolo

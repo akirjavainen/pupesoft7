@@ -407,7 +407,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 if ($lasktuote > 0) {
   $iltasiivo .= is_log("Poistettiin $lasktuote tuotteelta yhteensä $laskpois duplikaattia toimittajaa");
 }
-/* MODIFIED, commented out:
+/* MUOKKAUS: kommentoitu ulos:
 $kukaquery = "UPDATE kuka
               SET taso = '2'
               WHERE taso   = '3'
