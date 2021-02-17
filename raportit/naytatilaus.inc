@@ -1477,10 +1477,10 @@ else {
       $varesult = pupe_query($query);
       $varow = mysqli_fetch_assoc($varesult);
 
-      if ($varow['maa'] != '' and $yhtiorow['varastopaikan_lippu'] != '') {
+      if (isset($varow) and $varow['maa'] != '' and $yhtiorow['varastopaikan_lippu'] != '') { // MUOKKAUS: isset()
         echo "<td $class align='left' valign='top'><font class='error'><img src='{$palvelin2}pics/flag_icons/gif/".mb_strtolower($varow['maa']).".gif'> $row[hyllyalue] $row[hyllynro] $row[hyllyvali] $row[hyllytaso]</font>";
       }
-      elseif ($varow['maa'] != '' and mb_strtoupper($varow['maa']) != mb_strtoupper($yhtiorow['maa'])) {
+      elseif (isset($varow) and $varow['maa'] != '' and mb_strtoupper($varow['maa']) != mb_strtoupper($yhtiorow['maa'])) { // MUOKKAUS: isset()
         echo "<td $class align='left' valign='top'><font class='error'>".mb_strtoupper($varow['maa'])." $row[hyllyalue] $row[hyllynro] $row[hyllyvali] $row[hyllytaso]</font>";
       }
       else {
