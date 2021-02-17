@@ -4120,10 +4120,16 @@ if (isset($jatka)) {
   $nypaiva  = date("N");
 
   if ($toimvko != '') {
-
-    $toimvuosilaskulla = date("Y", strtotime($apuro["toimaika"]));
-    $toimvkolaskulla = date("W", strtotime($apuro["toimaika"]));
-    $toimvkopvalaskulla = $apuro["toimvko"];
+    // MUOKKAUS: isset():
+    if (isset($apiro["toimaika"])) {
+      $toimvuosilaskulla = date("Y", strtotime($apuro["toimaika"]));
+      $toimvkolaskulla = date("W", strtotime($apuro["toimaika"]));
+      $toimvkopvalaskulla = $apuro["toimvko"];
+    } else {
+      $toimvuosilaskulla = date("Y");
+      $toimvkolaskulla = date("W");
+      $toimvkopvalaskulla = date("W");
+    }
 
     $toimvkopva = $toimvkopva == '' ? 7 : $toimvkopva;
 
