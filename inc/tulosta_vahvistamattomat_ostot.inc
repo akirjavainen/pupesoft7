@@ -4,7 +4,7 @@
 require_once 'pdflib/pupepdf.class.php';
 
 if (!function_exists('tulosta_ostotilaus')) {
-  function tulosta_ostotilaus($otunnus, $komento, $kieli = "", $tee) {
+  function tulosta_ostotilaus($otunnus, $komento, $kieli = "", $tee = "") {
     global $yhtiorow, $kukarow, $fonts, $tulosta_ostotilaus_ulos;
 
     if (mb_strpos($otunnus, ",") !== FALSE) {

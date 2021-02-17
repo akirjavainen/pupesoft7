@@ -236,7 +236,7 @@ function round_time($time, $seconds = 1800) {
 /**
  * Laskee valmistuksen loppumiskohdan alkuajan ja valmistuksen keston mukaan.
  */
-function laske_loppuaika($alkuaika, $minuutit = 0, $valmistuslinja) {
+function laske_loppuaika($alkuaika, $minuutit = 0, $valmistuslinja = "") {
   global $kukarow;
 
   //echo "lasketaan loppuaika: $alkuaika, $minuutit, $valmistuslinja<br>";

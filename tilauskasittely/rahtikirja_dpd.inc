@@ -78,7 +78,7 @@ if ($kollityht > 0) {
 
       // loopataan luvut oikeelta vasemmalle
       for ($i = 16; $i >= 0; $i--) {
-        $summa += $kerroin * (ord($sscc{$i})-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet )
+        $summa += $kerroin * (ord($sscc[$i])-48); // lisätään summaan ko. luku * kerroin (tää hanskaa kirjaimet )
         $kerroin = 4 - $kerroin; // kerroin on vuorotellen 3 tai 1
       }
 

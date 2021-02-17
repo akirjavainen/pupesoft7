@@ -96,5 +96,5 @@ else {
     //päädytään taas selailemaan toimittajia
     echo t("Tuotetarrat tulostuu")."...<br>";
   }
-  unlink({$filenimi_ps});
+  unlink($filenimi_ps);
 }
