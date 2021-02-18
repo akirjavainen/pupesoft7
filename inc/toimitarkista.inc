@@ -147,7 +147,8 @@ if (!function_exists("toimitarkista")) {
 
       if ($t[$i] != '') {
         // Jos SEPA-maa, tarkistetaan BIC
-        if ($swift_virhe or (tarkista_sepa($ibanmaa) and tarkista_bic($t[$i]) === FALSE)) {
+        // MUOKKAUS: PHP8 yhteensopivuus:
+        if ($swift_virhe or (tarkista_sepa($ibanmaa) === FALSE or tarkista_bic($t[$i]) === FALSE)) {
           $virhe[$i] = t("Virheellinen BIC!")." $t[$i]";
         }
       }

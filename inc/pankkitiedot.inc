@@ -77,7 +77,7 @@ if (!function_exists("pankkitiedot")) {
       case (4) : // Danske Bank
         $pankki["rahalaitos"] = '  ';
         $pankki["pankkilaitos"] = "Danske Bank";
-        $pankki["swift"] = "DABAFIHX";
+        $pankki["swift"] = "DABAFIHH"; // MUOKKAUS: DABAFIHH
         break;
       case (7) : // DNB Bank ASA
         $pankki["rahalaitos"] = '  ';

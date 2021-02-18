@@ -14374,9 +14374,11 @@ if (!function_exists("tarkista_bic")) {
       return TRUE;
     }
 
+    $matches = array();
     preg_match("/^[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}$/", $bic, $matches);
 
-    if ($matches[0] == "") {
+    // MUOKKAUS: isset()/count():
+    if (count($matches) <= 0) {
       // BIC on väärin!
       return FALSE;
     }
