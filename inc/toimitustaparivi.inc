@@ -68,9 +68,13 @@ if ($fieldname == "virallinen_selite") {
 
   $ulos .= "<optgroup label='Posti'>";
 
+  // MUOKKAUS: isset():
+  if (!is_array($sel)) $sel = array();
+
   foreach ($pupesoft_posti as $value) {
     $ulos .= "<option value='{$value}' {$sel[$value]}>{$value}</option>";
   }
+  
 
   $ulos .= "</optgroup>";
 
