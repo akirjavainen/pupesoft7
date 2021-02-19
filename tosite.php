@@ -395,7 +395,7 @@ if ($tee == 'I') {
   // MUOKKAUS: string * string:
   $turvasumma = sprintf("%.2f", round((float)$summa * (float)$kurssi, 2));
   // turvasumma valuutassa
-  $turvasumma_valuutassa = $summa;
+  $turvasumma_valuutassa = (float)$summa;
 
   $kuittiok = 0; // Onko joku vienneistä kassa-tili, jotta kuitti voidaan tulostaa
   $isumma_valuutassa = array();
@@ -410,7 +410,7 @@ if ($tee == 'I') {
     // Käsitelläänkö rivi??
     if (mb_strlen($itili[$i]) > 0 or mb_strlen($isumma[$i]) > 0) {
 
-      $isumma[$i] = str_replace(",", ".", $isumma[$i]);
+      $isumma[$i] = (float)str_replace(",", ".", $isumma[$i]);
 
       // Oletussummalla korvaaminen mahdollista
       if ($turvasumma_valuutassa > 0) {
@@ -433,13 +433,13 @@ if ($tee == 'I') {
           $isumma[$i] = 1 * $turvasumma_valuutassa;
         }
         // Kopioidaan summa
-        elseif (mb_strlen($itili[$i]) > 0 and $isumma[$i] == 0) {
+        elseif (mb_strlen($itili[$i]) > 0 and (float)$isumma[$i] == 0) {
           $isumma[$i] = $turvasumma_valuutassa;
         }
       }
 
       // otetaan valuuttasumma talteen
-      $isumma_valuutassa[$i] = $isumma[$i];
+      $isumma_valuutassa[$i] = (float)$isumma[$i];
       // käännetään kotivaluuttaan
       $isumma[$i] = sprintf("%.2f", round((float)$isumma[$i]) * (float)$kurssi, 2); // MUOKKAUS: BUGIKORJAUS (string * string)
 
@@ -452,7 +452,8 @@ if ($tee == 'I') {
         $gok = 1;
       }
 
-      if ($isumma[$i] == 0) { // Summa puuttuu
+      // MUOKKAUS: BUGIKORJAUS (string == 0):
+      if ((float)$isumma[$i] == 0) { // Summa puuttuu
         $ivirhe[$i] .= t('Riviltä puuttuu summa').'<br>';
         $gok = 1;
       }
@@ -460,8 +461,8 @@ if ($tee == 'I') {
       $ulos       = "";
       $virhe       = "";
       $tili       = $itili[$i];
-      $summa       = $isumma[$i];
-      $totsumma       += $summa;
+      $summa       = (float)$isumma[$i];
+      $totsumma       += (float)$summa;
       $selausnimi   = "itili['.$i.']"; // Minka niminen mahdollinen popup on?
       $vero       = "";
       $tositetila   = "X";
@@ -530,7 +531,7 @@ if ($tee == 'I') {
 
   $heittovirhe = 0;
 
-  if (abs($totsumma) >= 0.01 and $heittook == '') {
+  if (abs((float)$totsumma) >= 0.01 and $heittook == '') {
     $heittovirhe = 1;
     $gok = 1;
   }

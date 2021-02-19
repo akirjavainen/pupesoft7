@@ -99,7 +99,7 @@ if ($tee == 'J') {
 // jos loppusumma on isompi kuin tietokannassa oleva tietuen koko (10 numeroa + 2 desimaalia), niin herjataan
 // MUOKKAUS: abs(string):
 if ($tee == 'U' and $summa != '' and abs((float)$summa) > 0) {
-  if (abs($summa) > 9999999999.99) {
+  if (abs((float)$summa) > 9999999999.99) {
     $tee = 'E';
     $tila = '';
     $virhe = t("VIRHE: liian iso summa")."!";
