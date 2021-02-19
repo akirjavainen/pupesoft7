@@ -45,7 +45,8 @@ if (!isset($toimipaikka)) $toimipaikka = $kukarow['toimipaikka'] != 0 ? $kukarow
 
 // MUOKKAUS: isset():
 foreach (array("kutsuja", "myos_prospektit", "osoite", "postitp", "postino", "lause", 
-	"tilausnumero", "from", "tilaustyyppi", "alatila", "ylatila", "tuoteno") as $v) {
+	"tilausnumero", "from", "tilaustyyppi", "alatila", "ylatila", "tuoteno", 
+	"excel_lahete_hinta_muillatiedoilla", "siirtolista_excel", "excel_tarjous") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
