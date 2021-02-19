@@ -602,7 +602,7 @@ if (!function_exists("verkkolasku_in")) {
       }
 
       // Hylätään viite jos se on nollaa
-      if (is_numeric($viite) and (int)$viite == 0) { // MUOKKAUS: BUGIKORJAUS (string == 0)
+      if ((int)$viite == 0) { // MUOKKAUS: BUGIKORJAUS
         $viite = "";
 
         // Setataan viesti
@@ -2098,7 +2098,7 @@ if (!function_exists("verkkolasku_in")) {
       );
 
       pupesoft_sahkoposti($params);
-      return 0;
+      return ""; // MUOKKAUS: BUGIKORJAUS (0 -> "")
     }
     else {
       return array($yhtiorow, $trow);
