@@ -441,7 +441,8 @@ if ($tee == 'I') {
       // otetaan valuuttasumma talteen
       $isumma_valuutassa[$i] = (float)$isumma[$i];
       // käännetään kotivaluuttaan
-      $isumma[$i] = sprintf("%.2f", round((float)$isumma[$i]) * (float)$kurssi, 2); // MUOKKAUS: BUGIKORJAUS (string * string)
+      // MUOKKAUS: BUGIKORJAUS (string * string):
+      $isumma[$i] = (float)sprintf("%.2f", (string)round((float)$isumma[$i] * (float)$kurssi, 2));
 
       if (mb_strlen($selite) > 0 and mb_strlen($iselite[$i]) == 0) { // Siirretään oletusselite tiliöinneille
         $iselite[$i] = $selite;
@@ -537,7 +538,9 @@ if ($tee == 'I') {
   }
 
   // jos loppusumma on isompi kuin tietokannassa oleva tietuen koko (10 numeroa + 2 desimaalia), niin herjataan
-  if ($summa != '' and abs($summa) > 0) {
+  // MUOKKAUS: BUGIKORJAUS (string != 0):
+  $summa = (float)$summa;
+  if ($summa != 0 and abs($summa) > 0) {
     if (abs($summa) > 9999999999.99) {
       echo "<font class='error'>".t("VIRHE: liian iso summa")."!</font><br/>\n";
       $gok=1;
@@ -553,7 +556,7 @@ if ($tee == 'I') {
     $tee = '';
   }
 
-  $summa = $turvasumma;
+  $summa = (float)$turvasumma;
 }
 
 // Kirjoitetaan tosite jos tiedot ok!
