@@ -140,8 +140,9 @@ while ($tilirow = mysqli_fetch_array($result)) {
              GROUP BY DATE_FORMAT(tapvm, '%Y-%m')";
   $aresult = pupe_query($query);
 
-  $kausi='';
-  $summa='';
+  // MUOKKAUS: BUGIKORJAUS (array, EI string):
+  $kausi = array();
+  $summa = array();
 
   while ($tiliointirow=mysqli_fetch_array($aresult)) {
     $kk = mb_substr($tiliointirow['kausi'], 5, 2)*1;

@@ -955,7 +955,7 @@ if ($tee == 'U') {
   }
 }
 
-// Tositeen näyttö muokkausta varten
+// Tositteen näyttö muokkausta varten
 if ($tee == 'E' or $tee == 'F') {
 
   // Näytetään laskun tai tositteen tiedot....

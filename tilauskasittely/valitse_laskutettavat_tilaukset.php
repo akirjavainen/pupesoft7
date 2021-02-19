@@ -839,6 +839,9 @@ if ($tee == "VALITSE") {
       $result = pupe_query($query);
       $asrow = mysqli_fetch_array($result);
 
+      // MUOKKAUS: isset():
+      if (!is_array($sel)) $sel = array();
+
       if ($asrow["kieli"] != '') {
         $sel[$asrow["kieli"]] = "SELECTED";
       }

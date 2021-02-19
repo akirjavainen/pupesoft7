@@ -504,6 +504,9 @@ $yhtok = t("Tiliöinti kesken");
 $class = "error";
 $ok    = 0;
 
+// MUOKKAUS: BUGIKORJAUS round(string):
+$yhtsum = (float)$yhtsum;
+
 if (round($yhtsum, 2) == 0) {
   $yhtok = t("Tiliöinti ok");
   $class = "ok";
