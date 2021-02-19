@@ -175,7 +175,7 @@ if (!function_exists("verkkolasku_in")) {
       }
     }
 
-    if (!isset($yhtiorow) and $verkkotunnus_vas != 0) {
+    if (!isset($yhtiorow) and (int)$verkkotunnus_vas != 0) { // MUOKKAUS: BUGIKORJAUS (string != 0)
       // 4 etsitään vastaanottavaa yritystä ytunnuksella..
       $yyhtio1 = mb_substr(preg_replace("/^0037/", "", $verkkotunnus_vas), 0, 8); // mahdollisella etunollalla
       $yyhtio2 = (int) $yyhtio1; // ilman etunollaa
@@ -188,7 +188,7 @@ if (!function_exists("verkkolasku_in")) {
       }
     }
 
-    if (!isset($yhtiorow) and $yhtio != "" and $yhtio != 0) {
+    if (!isset($yhtiorow) and $yhtio != "" and (int)$yhtio != 0) { // MUOKKAUS: BUGIKORJAUS (string != 0)
       // 5 etsitään vastaanottavaa yritystä ovt-tunnuksella..
       $query = "SELECT * FROM yhtio WHERE ovttunnus = '$yhtio'";
       $result = pupe_query($query);
@@ -215,7 +215,7 @@ if (!function_exists("verkkolasku_in")) {
       }
     }
 
-    if (!isset($yhtiorow) and $yhtio != "" and $yhtio != 0) {
+    if (!isset($yhtiorow) and $yhtio != "" and (int)$yhtio != 0) { // MUOKKAUS: BUGIKORJAUS (string != 0)
       // 7 etsitään vastaanottavaa yritystä ovt-tunnuksella ilman tarkenteita
       $oyhtio2 = mb_substr($yhtio, 0, 12); // Poistetaan mahdolliset ovt-tunnuksen tarkenteet
 
@@ -227,10 +227,10 @@ if (!function_exists("verkkolasku_in")) {
       }
     }
 
-    if (!isset($yhtiorow) and $yhtio != "" and $yhtio != 0) {
+    if (!isset($yhtiorow) and $yhtio != "" and (int)$yhtio != 0) { // MUOKKAUS: BUGIKORJAUS (string != 0)
       // 8 etsitään vastaanottavaa yritystä ytunnuksella..
       $yyhtio3 = mb_substr(preg_replace("/^0037/", "", $yhtio), 0, 8); // mahdollisella etunollalla
-      $yyhtio4 = (int) $yyhtio3; // ilman etunollaa
+      $yyhtio4 = (int)$yyhtio3; // ilman etunollaa
 
       $query = "SELECT * FROM yhtio WHERE ytunnus in ('$yyhtio3', '$yyhtio4')";
       $result = pupe_query($query);
@@ -240,7 +240,7 @@ if (!function_exists("verkkolasku_in")) {
       }
     }
 
-    if (!isset($yhtiorow) and $yhtio != "" and $yhtio != 0) {
+    if (!isset($yhtiorow) and $yhtio != "" and (int)$yhtio != 0) { // MUOKKAUS: BUGIKORJAUS (string != 0)
       // 9 viimeinen hätäkeino, katotaan onko joku lisätieto ongelma
       $query = "SELECT * FROM yhtio WHERE ovttunnus like '$yhtio%'";
       $result = pupe_query($query);
@@ -326,7 +326,7 @@ if (!function_exists("verkkolasku_in")) {
     $laskuttajan_vat          = trim($laskuttajan_vat);
     $laskuttajan_nimi         = trim($laskuttajan_nimi);
     $laskuttajan_toimittajanumero  = trim($laskuttajan_toimittajanumero);
-    $laskun_toimitunnus       = (int) $laskun_toimitunnus;
+    $laskun_toimitunnus       = (int)$laskun_toimitunnus;
 
     if ($laskun_toimitunnus > 0) {
       // 0 etsitään toimittaja tunnuksella
@@ -552,7 +552,8 @@ if (!function_exists("verkkolasku_in")) {
       }
 
       // Perusta lasku
-      $summa = $laskun_summa_eur;
+      $summa = (float)$laskun_summa_eur;
+      $summa = (float)$summa;
       $onko_hyvityslasku = FALSE;
 
       if ($laskun_tyyppi == "381" or $laskun_tyyppi_teksti == 'HYVITYSLASKU' or $laskun_summa_eur < 0) {
@@ -601,7 +602,7 @@ if (!function_exists("verkkolasku_in")) {
       }
 
       // Hylätään viite jos se on nollaa
-      if (is_numeric($viite) and (int) $viite == 0) {
+      if (is_numeric($viite) and (int)$viite == 0) { // MUOKKAUS: BUGIKORJAUS (string == 0)
         $viite = "";
 
         // Setataan viesti
@@ -647,7 +648,7 @@ if (!function_exists("verkkolasku_in")) {
         }
 
         // Jos kustannuspaikka tiliöintisäännön takana ei ole 0
-        if ($tiliointirow['toimipaikka'] != 0) {
+        if ((int)$tiliointirow['toimipaikka'] != 0) { // MUOKKAUS: BUGIKORJAUS (string != 0)
           $_yhtion_toimipaikka = $tiliointirow['toimipaikka'];
 
           // Jos tarkenteiden prioriteetissä toimipaikka ennen toimittajaa, niin katsotaan se tässä
@@ -661,8 +662,10 @@ if (!function_exists("verkkolasku_in")) {
             $toimipaikka_kustp_row = mysqli_fetch_assoc($toimipaikka_kustp_res);
 
             $oletuskust   = $oletuskust == 0               ? $toimipaikka_kustp_row['kustp']     : $oletuskust;
-            $oletuskohde   = $toimipaikka_kustp_row['kohde'] != 0     ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
-            $oletusprojekti = $toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
+
+	    // MUOKKAUS: BUGIKORJAUS (string != 0):
+            $oletuskohde   = (int)$toimipaikka_kustp_row['kohde'] != 0     ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
+            $oletusprojekti = (int)$toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
           }
         }
 
@@ -713,7 +716,8 @@ if (!function_exists("verkkolasku_in")) {
           }
 
           // Jos kustannuspaikka tiliöintisäännön takana ei ole 0
-          if ($tiliointirow['toimipaikka'] != 0) {
+	  // MUOKKAUS: BUGIKORJAUS (string != 0):
+          if ((int)$tiliointirow['toimipaikka'] != 0) {
             $_yhtion_toimipaikka = $tiliointirow['toimipaikka'];
 
             // Jos tarkenteiden prioriteetissä toimipaikka ennen toimittajaa, niin katsotaan se tässä
@@ -726,9 +730,10 @@ if (!function_exists("verkkolasku_in")) {
               $toimipaikka_kustp_res = pupe_query($query);
               $toimipaikka_kustp_row = mysqli_fetch_assoc($toimipaikka_kustp_res);
 
-              $oletuskust   = $oletuskust == 0               ? $toimipaikka_kustp_row['kustp']     : $oletuskust;
-              $oletuskohde   = $toimipaikka_kustp_row['kohde'] != 0     ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
-              $oletusprojekti = $toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
+	      // MUOKKAUS: BUGIKORJAUS (string != 0):
+              $oletuskust   = (int)$oletuskust == 0               ? $toimipaikka_kustp_row['kustp']     : $oletuskust;
+              $oletuskohde   = (int)$toimipaikka_kustp_row['kohde'] != 0     ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
+              $oletusprojekti = (int)$toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
             }
           }
 
@@ -779,7 +784,8 @@ if (!function_exists("verkkolasku_in")) {
           }
 
           // Jos kustannuspaikka tiliöintisäännön takana ei ole 0
-          if ($tiliointirow['toimipaikka'] != 0) {
+	  // MUOKKAUS: BUGIKORJAUS (string != 0):
+          if ((int)$tiliointirow['toimipaikka'] != 0) {
             $_yhtion_toimipaikka = $tiliointirow['toimipaikka'];
 
             // Jos tarkenteiden prioriteetissä toimipaikka ei ole ennen toimittajaa, niin katsotaan se tässä
@@ -792,9 +798,10 @@ if (!function_exists("verkkolasku_in")) {
               $toimipaikka_kustp_res = pupe_query($query);
               $toimipaikka_kustp_row = mysqli_fetch_assoc($toimipaikka_kustp_res);
 
-              $oletuskust   = $oletuskust == 0               ? $toimipaikka_kustp_row['kustp']     : $oletuskust;
-              $oletuskohde   = $toimipaikka_kustp_row['kohde'] != 0     ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
-              $oletusprojekti = $toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
+	      // MUOKKAUS: BUGIKORJAUS (string != 0):
+              $oletuskust   = (int)$oletuskust == 0               ? $toimipaikka_kustp_row['kustp']     : $oletuskust;
+              $oletuskohde   = (int)$toimipaikka_kustp_row['kohde'] != 0     ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
+              $oletusprojekti = (int)$toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
             }
           }
 
@@ -834,7 +841,8 @@ if (!function_exists("verkkolasku_in")) {
             }
 
             // Jos kustannuspaikka tiliöintisäännön takana ei ole 0
-            if ($tiliointirow['toimipaikka'] != 0) {
+	    // MUOKKAUS: BUGIKORJAUS (string != 0):
+            if ((int)$tiliointirow['toimipaikka'] != 0) {
               $_yhtion_toimipaikka = $tiliointirow['toimipaikka'];
 
               // Jos tarkenteiden prioriteetissä toimipaikka ennen toimittajaa, niin katsotaan se tässä
@@ -847,9 +855,10 @@ if (!function_exists("verkkolasku_in")) {
                 $toimipaikka_kustp_res = pupe_query($query);
                 $toimipaikka_kustp_row = mysqli_fetch_assoc($toimipaikka_kustp_res);
 
-                $oletuskust   = $oletuskust == 0               ? $toimipaikka_kustp_row['kustp']     : $oletuskust;
-                $oletuskohde   = $toimipaikka_kustp_row['kohde'] != 0     ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
-                $oletusprojekti = $toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
+	        // MUOKKAUS: BUGIKORJAUS (string != 0):
+                $oletuskust   = (int)$oletuskust == 0               ? $toimipaikka_kustp_row['kustp']     : $oletuskust;
+                $oletuskohde   = (int)$toimipaikka_kustp_row['kohde'] != 0     ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
+                $oletusprojekti = (int)$toimipaikka_kustp_row['projekti'] != 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
               }
             }
             $hyvak = array(); // MUOKKAUS: isset()
@@ -913,9 +922,9 @@ if (!function_exists("verkkolasku_in")) {
       $tillop = explode("-", $yhtiorow["ostoreskontrakausi_loppu"]);
 
       // Verrataan vähän päivämääriä. onpa ikävää PHP:ssä!
-      $ostoresktilalk = (int) date('Ymd', mktime(0, 0, 0, $tilalk[1], $tilalk[2], $tilalk[0]));
-      $ostoresktillop = (int) date('Ymd', mktime(0, 0, 0, $tillop[1], $tillop[2], $tillop[0]));
-      $syotettypvm   = (int) date('Ymd', mktime(0, 0, 0, $tpk, $tpp, $tpv));
+      $ostoresktilalk = (int)date('Ymd', mktime(0, 0, 0, $tilalk[1], $tilalk[2], $tilalk[0]));
+      $ostoresktillop = (int)date('Ymd', mktime(0, 0, 0, $tillop[1], $tillop[2], $tillop[0]));
+      $syotettypvm   = (int)date('Ymd', mktime(0, 0, 0, $tpk, $tpp, $tpv));
 
       if ($syotettypvm > $ostoresktillop) {
         $tpp = $tillop[2];
@@ -956,19 +965,20 @@ if (!function_exists("verkkolasku_in")) {
       }
 
       // Tsekataan laskun eräpäivä
-      $erp = (int) mb_substr($laskun_erapaiva, 6, 2);
-      $erk = (int) mb_substr($laskun_erapaiva, 4, 2);
-      $erv = (int) mb_substr($laskun_erapaiva, 0, 4);
+      $erp = (int)mb_substr($laskun_erapaiva, 6, 2);
+      $erk = (int)mb_substr($laskun_erapaiva, 4, 2);
+      $erv = (int)mb_substr($laskun_erapaiva, 0, 4);
 
       // jos eräpäivää ei tule laskulta, otetaan toimittajan oletus
       if ($erp == 0 and $erk == 0 and $erv == 0) {
         $err = $trow["oletus_erapvm"];
 
         // Jos oletustakaan ei ole, laitetaan lasku erääntymään huomenna...
-        if ($err == 0) {
+	// MUOKKAUS: BUGIKORJAUS (string == 0):
+        if ((int)$err == 0) {
           list($erv, $erk, $erp) = explode("-", strftime("%Y-%m-%d", mktime(0, 0, 0, date("m"), date("d")+1, date("Y"))));
         }
-        elseif ($err > 0) {
+        elseif ((int)$err > 0) {
           $newer = strftime("%Y-%m-%d", mktime(0, 0, 0, $vpk, $vpp+$err, $vpv));
           $erp = (int) mb_substr($newer, 8, 2);
           $erk = (int) mb_substr($newer, 5, 2);
@@ -987,34 +997,36 @@ if (!function_exists("verkkolasku_in")) {
       $kassaale = 0;
 
       // Tsekataan laskun kassa-alepäivä
-      $krp = (int) mb_substr($laskun_kapvm, 6, 2);
-      $krk = (int) mb_substr($laskun_kapvm, 4, 2);
-      $krv = (int) mb_substr($laskun_kapvm, 0, 4);
+      $krp = (int)mb_substr($laskun_kapvm, 6, 2);
+      $krk = (int)mb_substr($laskun_kapvm, 4, 2);
+      $krv = (int)mb_substr($laskun_kapvm, 0, 4);
 
       // Jos kassa-alennusta ei tule laskulta, otetaan toimittajan oletus
       if ($krp == 0 and $krk == 0 and $krv == 0) {
         $krr   = $trow["oletus_kapvm"];
-        $kapro = $trow['oletus_kapro'];
+        $kapro = (float)$trow['oletus_kapro'];
 
-        if ($krr > 0) {
+        // MUOKKAUS: BUGIKORJAUS (string > 0):	
+        if ((int)$krr > 0) {
           $newer = strftime("%Y-%m-%d", mktime(0, 0, 0, $vpk, $vpp+$krr, $vpv));
-          $krp = (int) mb_substr($newer, 8, 2);
-          $krk = (int) mb_substr($newer, 5, 2);
-          $krv = (int) mb_substr($newer, 0, 4);
+          $krp = (int)mb_substr($newer, 8, 2);
+          $krk = (int)mb_substr($newer, 5, 2);
+          $krv = (int)mb_substr($newer, 0, 4);
 
-          if ((float) $kapro != 0 and (float) $summa != 0) {
-            $kassaale = $summa * $kapro / 100;
+          if ((float)$kapro != 0 and (float)$summa != 0) {
+            $kassaale = (float)$summa * $kapro / 100;
           }
         }
       }
-      elseif ((float) $laskun_kasumma != 0) {
-        $kassaale = (float) $laskun_kasumma;
+      elseif ((float)$laskun_kasumma != 0) {
+        $kassaale = (float)$laskun_kasumma;
       }
 
-      if ($kassaale != 0) {
-        $kassaale = abs(round($kassaale, 2));
+      // MUOKKAUS: BUGIKORJAUS (string != 0):  
+      if ((float)$kassaale != 0) {
+        $kassaale = abs(round((float)$kassaale, 2));
 
-        if ($summa < 0) {
+        if ((float)$summa < 0) {
           $kassaale = $kassaale *-1;
         }
       }
@@ -1227,7 +1239,8 @@ if (!function_exists("verkkolasku_in")) {
       $result = pupe_query($query);
       $tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
 
-      $omasumma        = round($summa * $vrow['kurssi'], 2);
+      // MUOKKAUS: BUGIKORJAUS round(string):
+      $omasumma        = round($summa * (float)$vrow['kurssi'], 2);
       $omasumma_valuutassa = $summa;
 
       // Tehdään oletustiliöinnit, ostovelat
@@ -1298,15 +1311,15 @@ if (!function_exists("verkkolasku_in")) {
       // Tehdän pelkät oletustiliöinnit
       if (mysqli_num_rows($result) == 0 and count($ealvi) == 1) {
 
-        if ($oletustili > 0) {
+        if ((int)$oletustili > 0) { // MUOKKAUS: BUGIKORJAUS (string > 0)
           $tili = $oletustili;
         }
         else {
           $tili = $yhtiorow['muutkulut'];
         }
 
-        if ($ealvi[0] != "") $vero = (float) $ealvi[0];
-        else $vero = (float) $oletusalvi;
+        if ($ealvi[0] != "") $vero = (float)$ealvi[0];
+        else $vero = (float)$oletusalvi;
 
         $kirjattava_summa       = $omasumma;
         $summa_varasto         = round($omasumma / (1 + ($vero / 100)), 2);
@@ -1330,8 +1343,9 @@ if (!function_exists("verkkolasku_in")) {
           }
         }
 
-        // Jos on toimipaikat käytössä ja toimipaikan takaa katsotaan tarkenteita toimittajan jälkeen, niin katsotaan ne tässä
-        if ($_yhtion_toimipaikka != 0 and ($oletuskust == 0 or $oletuskohde == 0 or $oletusprojekti == 0) and $yhtiorow['tarkenteiden_prioriteetti'] == "") {
+	// Jos on toimipaikat käytössä ja toimipaikan takaa katsotaan tarkenteita toimittajan jälkeen, niin katsotaan ne tässä
+	// MUOKKAUS: BUGIKORJAUS (string == 0):
+        if ((int)$_yhtion_toimipaikka != 0 and ((int)$oletuskust == 0 or (int)$oletuskohde == 0 or (int)$oletusprojekti == 0) and $yhtiorow['tarkenteiden_prioriteetti'] == "") {
 
           $query = "SELECT kustp, kohde, projekti
                     FROM yhtion_toimipaikat
@@ -1340,9 +1354,10 @@ if (!function_exists("verkkolasku_in")) {
           $toimipaikka_kustp_res = pupe_query($query);
           $toimipaikka_kustp_row = mysqli_fetch_assoc($toimipaikka_kustp_res);
 
-          $oletuskust   = $oletuskust == 0     ? $toimipaikka_kustp_row['kustp']     : $oletuskust;
-          $oletuskohde   = $oletuskohde == 0   ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
-          $oletusprojekti = $oletusprojekti == 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
+	  // MUOKKAUS: BUGIKORJAUS (string == 0):
+          $oletuskust   = (int)$oletuskust == 0     ? $toimipaikka_kustp_row['kustp']     : $oletuskust;
+          $oletuskohde   = (int)$oletuskohde == 0   ? $toimipaikka_kustp_row['kohde']     : $oletuskohde;
+          $oletusprojekti = (int)$oletusprojekti == 0   ? $toimipaikka_kustp_row['projekti']   : $oletusprojekti;
         }
 
         $summa            = $kirjattava_summa;
@@ -1441,10 +1456,10 @@ if (!function_exists("verkkolasku_in")) {
         $count_rtuoteno = count($rtuoteno);
 
         for ($i = 0; $i < $count_rtuoteno; $i++) {
-          $tili = ($oletustili > 0) ? $oletustili : $yhtiorow['muutkulut'];
+          $tili = ((int)$oletustili > 0) ? $oletustili : $yhtiorow['muutkulut'];
           $kustp = $oletuskust;
 
-          if ((float) $rtuoteno[$i]["rivihinta"] != 0) {
+          if ((float)$rtuoteno[$i]["rivihinta"] != 0) {
 
             $rinfo = isset($rtuoteno[$i]["riviinfo"]) ? $rtuoteno[$i]["riviinfo"] : "";
             $tuote = isset($rtuoteno[$i]["tuoteno"]) ? $rtuoteno[$i]["tuoteno"] : "";
@@ -1506,11 +1521,11 @@ if (!function_exists("verkkolasku_in")) {
 
             if ($vrow["kurssi"] != 1) {
               // Laskulla olevat rivihinnat ovat valuutassa
-              $summa_valuutassa = (float) $rtuoteno[$i]["rivihinta"];
+              $summa_valuutassa = (float)$rtuoteno[$i]["rivihinta"];
               $summa = round($summa_valuutassa * $vrow["kurssi"], 2);
             }
             else {
-              $summa = (float) $rtuoteno[$i]["rivihinta"];
+              $summa = (float)$rtuoteno[$i]["rivihinta"];
               $summa_valuutassa = $summa;
             }
 
@@ -1521,8 +1536,8 @@ if (!function_exists("verkkolasku_in")) {
               $summa = $summa * -1;
             }
 
-            if ($rtuoteno[$i]["alv"] != "") $vero = (float) $rtuoteno[$i]["alv"];
-            else $vero = (float) $oletusalvi;
+            if ($rtuoteno[$i]["alv"] != "") $vero = (float)$rtuoteno[$i]["alv"];
+            else $vero = (float)$oletusalvi;
 
             $summa_varasto         = $summa;
             $summa_varasto_valuutassa = $summa_valuutassa;
@@ -1782,7 +1797,7 @@ if (!function_exists("verkkolasku_in")) {
       // Jos meillä on suoraveloitus
       if ($trow['oletus_suoraveloitus'] != '') {
 
-        if ($trow['oletus_suoravel_pankki'] > 0) {
+        if ((int)$trow['oletus_suoravel_pankki'] > 0) { // MUOKKAUS: BUGIKORJAUS (string > 0)
           //Toimittajalla on pankkitili, teemme eräpäivälle suorituksen valmiiksi
 
           list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($ostovelat);
@@ -2024,7 +2039,8 @@ if (!function_exists("verkkolasku_in")) {
                     $ok = 'ok';
 
                     foreach ($loytyy_kummastakin as $tuoteno => $null) {
-                      if (mb_substr($tuoteno, 0, 15) != "Ei_tuotekoodia_" and ($invoice[$tuoteno]['tilattumaara'] != $purchaseorder[$tuoteno]['tilattumaara'] or abs($invoice[$tuoteno]['nettohinta'] - $purchaseorder[$tuoteno]['nettohinta']) > 1)) {
+                      // MUOKKAUS: BUGIKORJAUS abs(string):
+                      if (mb_substr($tuoteno, 0, 15) != "Ei_tuotekoodia_" and ($invoice[$tuoteno]['tilattumaara'] != $purchaseorder[$tuoteno]['tilattumaara'] or abs((float)$invoice[$tuoteno]['nettohinta'] - (float)$purchaseorder[$tuoteno]['nettohinta']) > 1)) {
                         $ok = '';
                         break;
                       }
