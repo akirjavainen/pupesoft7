@@ -392,7 +392,8 @@ if ($tee == 'I') {
   }
 
   // turvasumma kotivaluutassa
-  $turvasumma = sprintf("%.2f", round($summa * $kurssi, 2));
+  // MUOKKAUS: string * string:
+  $turvasumma = sprintf("%.2f", round((float)$summa * (float)$kurssi, 2));
   // turvasumma valuutassa
   $turvasumma_valuutassa = $summa;
 
