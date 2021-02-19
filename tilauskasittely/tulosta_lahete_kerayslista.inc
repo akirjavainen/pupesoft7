@@ -1388,6 +1388,9 @@ if (!function_exists('print_pdf_kerayslista')) {
 
 			//poistetaan tmp file samantien kuleksimasta...
 			unlink($pdffilenimi);
+			
+			// MUOKKAUS: lisatty forwarder laskutukseen kerayksen jalkeen:
+			echo "<meta http-equiv=\"refresh\" content=\"1;URL=valitse_laskutettavat_tilaukset.php?indexvas=1\">\n";
 		}
 	}
 }

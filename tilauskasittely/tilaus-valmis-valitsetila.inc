@@ -343,8 +343,8 @@ elseif ($kerattavia == 0 or $tilaus_toimitetuksi) {
       $result = pupe_query($query);
 
       // Jos meillä on maksupositioita laskulla, tulee se siirtää alatilaan J
-      if ($laskurow['jaksotettu'] != 0) {
-        $tilaus_valmis_alataila = 'J';
+      if ((int)$laskurow['jaksotettu'] != 0) {
+        $tilaus_valmis_alataila = 'D'; // MUOKKAUS: J -> D
       }
       else {
         $tilaus_valmis_alataila = 'D';
@@ -360,6 +360,7 @@ elseif ($kerattavia == 0 or $tilaus_toimitetuksi) {
 
       $tilaus_valmis_message .= "<font class='message'>".sprintf(t("Tilauksella %s ei ollut yhtään kerättävää riviä, se merkattiin toimitetuksi."), $laskurow["tunnus"])."</font><br><br>\n";
       $toimitusvahvitus_laheta = TRUE;
+      echo "<meta http-equiv=\"refresh\" content=\"1;URL=valitse_laskutettavat_tilaukset.php?indexvas=1\">\n";
     }
   }
   else {
