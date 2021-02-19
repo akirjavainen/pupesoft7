@@ -115,16 +115,12 @@ if ($handle = opendir($laskut)) {
     $laskuvirhe = verkkolasku_in($nimi, TRUE);
 
     if ($laskuvirhe == "") {
-      if (!$php_cli) {
-        echo "Verkkolasku vastaanotettu onnistuneesti!<br>\n<br>\n";
-      }
-
+      echo "Verkkolasku vastaanotettu onnistuneesti!<br>\n<br>\n";
       rename($laskut."/".$file, $oklaskut."/".$file);
     }
     else {
-      if (!$php_cli) {
-        echo "<font class='error'>Verkkolaskun vastaanotossa virhe:</font><br>\n<pre>$laskuvirhe</pre><br>\n";
-      }
+      echo "<font class='error'>Verkkolaskun vastaanotossa virhe:</font><br>\n<pre>$laskuvirhe</pre><br>\n";
+
       $alku = $loppu = "";
       list($alku, $loppu) = explode("####", $laskuvirhe);
 
