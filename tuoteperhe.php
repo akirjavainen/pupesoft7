@@ -1301,8 +1301,10 @@ if (($hakutuoteno != '' or $isatuoteno != '') and $tee == "") {
         echo "<input type='hidden' name='hakutuoteno' value='$hakutuoteno'>";
         echo "<input type='hidden' name='hintatyyppi' value='$hintatyyppi'>";
 
-        echo "<tr>";
-        echo "<td>".livesearch_kentta("lisaa", "TUOTEHAKU", "tuoteno", "", '', 'X')."</td>";
+	echo "<tr>";
+
+	// MUOKKAUS: BUGIKORJAUS (width = 140):
+        echo "<td>".livesearch_kentta("lisaa", "TUOTEHAKU", "tuoteno", 140, '', 'X')."</td>";
 
         // Nimitys
         echo "<td></td>";

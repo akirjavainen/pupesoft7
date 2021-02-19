@@ -11305,6 +11305,9 @@ if (!function_exists("livesearch_kentta")) {
       return "<input type='text' id='$hakuID' name='$nimi' autocomplete='off' style='width:".$width."px;' value='$value'>";
     }
 
+    // MUOKKAUS: BUGIKORJAUS (string * int):
+    $width = (float)$width;
+
     if ($tee == 'TUOTEKATEGORIAHAKU' or $tee == 'ASIAKASKATEGORIAHAKU') {
       $result_width = $width * 3;
     }
