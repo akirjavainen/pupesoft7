@@ -6467,6 +6467,9 @@ if (!function_exists("alehinta")) {
       }
 
       // 12. tuote.aleryhmä aleprosentti (tuotealeryhmän perusalennus) (Vain ykköstason alennus voidaan tallentaa tähän)
+      if (!isset($ale)) $ale = array();  // MUOKKAUS: isset()
+      if (!is_array($ale)) $ale = array();  // MUOKKAUS: isset()
+
       if (!isset($ale["ale1"])) {
 
         $query = "SELECT alennus
@@ -6491,8 +6494,6 @@ if (!function_exists("alehinta")) {
 
     $g_ale_peruste        = $aperuste;
     $g_ale_peruste_update = FALSE;
-    if (!isset($ale)) $ale = array();  // MUOKKAUS: isset()
-    if (!is_array($ale)) $ale = array();  // MUOKKAUS: isset()
 
     for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
       if (!isset($ale["ale".$alepostfix])) {

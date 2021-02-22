@@ -752,7 +752,9 @@ if (!function_exists('alku_lahete')) {
       $kal++;
     }
 
-    $tuotenopituus = round($tuotenopituus/($tuotenopituus+$nimityspituus), 2);
+    // MUOKKAUS: BUGIKORJAUS (jako nollalla):
+    $div = $tuotenopituus + $nimityspituus;
+    $tuotenopituus = ($div > 0) ? round($tuotenopituus / $div, 2) : round($tuotenopituus, 2);
 
     // Luodaan palautettavat
     $return = compact(array_keys($params));
