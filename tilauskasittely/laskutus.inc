@@ -35,7 +35,7 @@ else {
   $orow = mysqli_fetch_assoc($laskutusres);
 
   // Tsekataan valuuttakurssi kuntoon
-  if (!empty($yhtiorow['myyntilaskujen_kurssipaiva']) and trim(mb_strtoupper($orow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+  if (!empty($yhtiorow['myyntilaskujen_kurssipaiva']) and trim(strtoupper($orow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
 
     $valpaiva = "";
 
@@ -478,7 +478,7 @@ else {
       $rivihinta_valuutassa  = round((float) laskuval($hinta * $trow["varattu"], $orow["vienti_kurssi"]), $yhtiorow["hintapyoristys"]);                  // Rivihinta alennuksineen valuutassa
 
       // kumuloidaan loppusummia
-      if (mb_strtoupper($yhtiorow['maa']) == 'EE') {
+      if (strtoupper($yhtiorow['maa']) == 'EE') {
         $loppusumma         += $rivihinta * ($trow["alv"] / 100);                                                                    // Kumuloidaan verollinen loppusumma valuutassa
         $loppusumma_valuutassa  += $rivihinta_valuutassa * ($trow["alv"] / 100);                                            // Kumuloidaan verollinen loppusumma
       }
@@ -509,7 +509,7 @@ else {
       $rivihinta_valuutassa  = round((float) laskuval($hinta * $trow["varattu"] / (1 + ($trow["alv"] / 100)), $orow["vienti_kurssi"]), $yhtiorow["hintapyoristys"]);    // Veroton rivihinta alennuksineen valuutassa
 
       // kumuloidaan loppusummia
-      if (mb_strtoupper($yhtiorow['maa']) == 'EE') {
+      if (strtoupper($yhtiorow['maa']) == 'EE') {
         $loppusumma         += $rivihinta * ($trow["alv"] / 100);                                                                    // Kumuloidaan verollinen loppusumma valuutassa
         $loppusumma_valuutassa  += $rivihinta_valuutassa * ($trow["alv"] / 100);                                            // Kumuloidaan verollinen loppusumma
       }
@@ -539,7 +539,7 @@ else {
       $rivihinta_valuutassa  = round((float) laskuval($hinta * $trow["varattu"], $orow["vienti_kurssi"]), $yhtiorow["hintapyoristys"]);                  // Veroton kappalehinta alennuksineen valuutassa
 
       // kumuloidaan loppusummia
-      if (mb_strtoupper($yhtiorow['maa']) == 'EE') {
+      if (strtoupper($yhtiorow['maa']) == 'EE') {
         $loppusumma         += $rivihinta * ($trow["alv"] / 100);                                                                    // Kumuloidaan verollinen loppusumma valuutassa
         $loppusumma_valuutassa  += $rivihinta_valuutassa * ($trow["alv"] / 100);                                            // Kumuloidaan verollinen loppusumma
       }
@@ -651,6 +651,19 @@ else {
                             and sarjanumero      = '$lisa_row[sarjanumero]'
                             and tunnus           = '$erajaljella_row[tunnus]'";
                   $lisa_res = pupe_query($query);
+
+                  // Jos ostorivin (sarjanumeroseuranta taulun rivi) määrä vähenee nollaan,
+                  // poistetaan se ettei jäisi roikkumaan 0 kpl eränumerorivejä
+                  if ($erajaljella_row["era_kpl"] - $eravahennetaan == 0) {
+                    $delete_q = "DELETE FROM sarjanumeroseuranta
+                                 WHERE yhtio          = '$kukarow[yhtio]'
+                                 AND tuoteno          = '$trow[tuoteno]'
+                                 AND ostorivitunnus   = '$erajaljella_row[ostorivitunnus]'
+                                 AND myyntirivitunnus = 0
+                                 AND sarjanumero      = '$lisa_row[sarjanumero]'
+                                 AND tunnus           = '$erajaljella_row[tunnus]'";
+                    pupe_query($delete_q);
+                  }
 
                   // haetaan päivitettävä myyntirivi jotta voidaan kloonata se myöhemmin tarvittaessa
                   $query = "SELECT *
@@ -993,7 +1006,7 @@ else {
 
   // $loppusumma muuttujassa oli vain veron määrä, nyt lisätään siihen veroton summa ja saadaan verollinen loppusumma
   // Vain EE keississä
-  if (mb_strtoupper($yhtiorow['maa']) == 'EE') {
+  if (strtoupper($yhtiorow['maa']) == 'EE') {
     $loppusumma         += $arvosumma;
     $loppusumma_valuutassa  += $arvosumma_valuutassa;
   }
@@ -1062,11 +1075,11 @@ else {
   // jos maksetaan käteisellä pyöristetään lähimpään viiteen senttiin
   if ($xrow["kateinen"] == 'p' and $yhtiorow['maa'] != 'EE') {
     // kotivaluutassa
-    if (trim(mb_strtoupper($orow["valkoodi"])) == trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+    if (trim(strtoupper($orow["valkoodi"])) == trim(strtoupper($yhtiorow["valkoodi"]))) {
       $pyorerotus = round((float) $loppusumma, 2) - round((float) round((float) $loppusumma / 0.05) * 0.05, 2);
     }
     // valuutassa
-    if (trim(mb_strtoupper($orow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+    if (trim(strtoupper($orow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
       $pyorerotus_valuutassa = round((float) $loppusumma_valuutassa, 2) - round((float) round((float) $loppusumma_valuutassa / 0.05) * 0.05, 2);
     }
   }
@@ -1081,12 +1094,12 @@ else {
 
   // käsin syötetty summa johon lasku pyöristetään kotivaluutassa
   if ($orow["hinta"] <> 0) {
-    if (abs($orow["hinta"] - $loppusumma) <= 0.5 and trim(mb_strtoupper($orow["valkoodi"])) == trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+    if (abs($orow["hinta"] - $loppusumma) <= 0.5 and trim(strtoupper($orow["valkoodi"])) == trim(strtoupper($yhtiorow["valkoodi"]))) {
       $pyorerotus = $loppusumma - $orow["hinta"];
     }
 
     // käsin syötetty summa johon lasku pyöristetään valuutassa
-    if (abs($orow["hinta"] - $loppusumma_valuutassa) <= 0.5 and trim(mb_strtoupper($orow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+    if (abs($orow["hinta"] - $loppusumma_valuutassa) <= 0.5 and trim(strtoupper($orow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
       $pyorerotus_valuutassa = $loppusumma_valuutassa - $orow["hinta"];
     }
   }
@@ -1094,11 +1107,11 @@ else {
   // jos halutaan pyöristää laskun loppusumma lähimpään tasalukuun
   if ($yhtiorow["laskunsummapyoristys"] != '' or $asrow["laskunsummapyoristys"] != '') {
     // kotivaluutassa
-    if (trim(mb_strtoupper($orow["valkoodi"])) == trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+    if (trim(strtoupper($orow["valkoodi"])) == trim(strtoupper($yhtiorow["valkoodi"]))) {
       $pyorerotus = $loppusumma - round((float) $loppusumma, 0);
     }
     // valuutassa
-    if (trim(mb_strtoupper($orow["valkoodi"])) != trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+    if (trim(strtoupper($orow["valkoodi"])) != trim(strtoupper($yhtiorow["valkoodi"]))) {
       $pyorerotus_valuutassa = $loppusumma_valuutassa - round((float) $loppusumma_valuutassa, 0);
     }
   }
@@ -1115,7 +1128,7 @@ else {
   $loppusumma_valuutassa = round($loppusumma_valuutassa - $pyorerotus_valuutassa, 2);
 
   // Jos kotivaluutassa niin viedään samat luvut näihin kenttiin
-  if (trim(mb_strtoupper($orow["valkoodi"])) == trim(mb_strtoupper($yhtiorow["valkoodi"]))) {
+  if (trim(strtoupper($orow["valkoodi"])) == trim(strtoupper($yhtiorow["valkoodi"]))) {
     $loppusumma_valuutassa = $loppusumma;
     $pyorerotus_valuutassa = $pyorerotus;
   }
