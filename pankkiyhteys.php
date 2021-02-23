@@ -236,7 +236,7 @@ if ($tee == "") {
 	print_r($tiedostot_tiliote);
 	echo "\n\n";
 
-        if ($tiedostot_viite) {
+        if (is_array($tiedostot_viite)) {
           foreach ($tiedostot_viite as $aineisto) {
             $filenimi = tempnam($sepa_pankkiyhteys_tallennuskansio, date("Y-m-d") . "_viitemaksut_");
             $data = base64_decode($aineisto['data']);
@@ -246,7 +246,7 @@ if ($tee == "") {
 	    echo "Tallennettiin $filenimi.\n";
           }
         }
-        if ($tiedostot_tiliote) {
+        if (is_array($tiedostot_tiliote)) {
           foreach ($tiedostot_tiliote as $aineisto) {
             $filenimi = tempnam($sepa_pankkiyhteys_tallennuskansio, date("Y-m-d") . "_tiliote_");
             $data = base64_decode($aineisto['data']);
