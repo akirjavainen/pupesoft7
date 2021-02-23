@@ -32135,15 +32135,15 @@ if (!function_exists("kasittele_tiliote_viite")) {
       // Setataan kukarow-yhtiö
       $kukarow["yhtio"] = $yritirow["yhtio"];
 
-      if ($tiliotedatarow['tyyppi'] == 1) {
+      if ((int)$tiliotedatarow['tyyppi'] == 1) {
         $tee_selvittely = true;
         require "inc/tiliote.inc";
       }
-      if ($tiliotedatarow['tyyppi'] == 2) {
+      if ((int)$tiliotedatarow['tyyppi'] == 2) {
         $tee_selvittely = true;
         require "inc/LMP.inc";
       }
-      if ($tiliotedatarow['tyyppi'] == 3) {
+      if ((int)$tiliotedatarow['tyyppi'] == 3) {
         $tee_viitemaksu_kohdistus = true;
         require "inc/viitemaksut.inc";
       }

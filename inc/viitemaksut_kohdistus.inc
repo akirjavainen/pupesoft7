@@ -9,8 +9,8 @@
 // Oletuksena asiakkaan maksama summa on oltava täsmälleen oikein
 $Viitemaksujen_kohdistus_sallittu_heitto = 0.01;
 
-if ($yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"] > 0 and $yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"] <= 1.00) {
-  $Viitemaksujen_kohdistus_sallittu_heitto = $yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"];
+if ((float)$yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"] > 0 and (float)$yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"] <= 1.00) {
+  $Viitemaksujen_kohdistus_sallittu_heitto = (float)$yhtiorow["viitemaksujen_kohdistus_sallittu_heitto"];
 }
 
 $maksusopparit = array();
@@ -76,12 +76,12 @@ while ($row = mysqli_fetch_assoc($suorires)) {
   $kukarow["yhtio"] = $row["suoriyhtio"];
 
   if (mb_strtoupper($row["suoritusvaluutta"]) != mb_strtoupper($row['yhtiovaluutta'])) {
-    $alennus = round(($row["laskutettu_valuutassa"] - $row["suoritettu"]) * $row["suorituskurssi"], 2);
-    $alennus_valuutassa = round($row["laskutettu_valuutassa"] - $row["suoritettu"], 2);
+    $alennus = round(((float)$row["laskutettu_valuutassa"] - (float)$row["suoritettu"]) * (float)$row["suorituskurssi"], 2);
+    $alennus_valuutassa = round((float)$row["laskutettu_valuutassa"] - (float)$row["suoritettu"], 2);
   }
   else {
-    $alennus = round($row["laskutettu"] - $row["suoritettu"], 2);
-    $alennus_valuutassa = round($row["laskutettu"] - $row["suoritettu"], 2);
+    $alennus = round((float)$row["laskutettu"] - (float)$row["suoritettu"], 2);
+    $alennus_valuutassa = round((float)$row["laskutettu"] - (float)$row["suoritettu"], 2);
   }
 
   // Katsotaan ensin, ettei tätä laskua ole jo suoritettu/maksettu
@@ -154,12 +154,12 @@ while ($row = mysqli_fetch_assoc($suorires)) {
     pupe_query($query);
 
     if (mb_strtoupper($row["suoritusvaluutta"]) != mb_strtoupper($row['yhtiovaluutta'])) {
-      $suoritettu_kassaan = round($row["suoritettu"] * $row["suorituskurssi"], 2);
-      $suoritettu_kassaan_valuutassa = $row["suoritettu"];
+      $suoritettu_kassaan = round((float)$row["suoritettu"] * (float)$row["suorituskurssi"], 2);
+      $suoritettu_kassaan_valuutassa = (float)$row["suoritettu"];
     }
     else {
-      $suoritettu_kassaan = $row["suoritettu"];
-      $suoritettu_kassaan_valuutassa = $row["suoritettu"];
+      $suoritettu_kassaan = (float)$row["suoritettu"];
+      $suoritettu_kassaan_valuutassa = (float)$row["suoritettu"];
     }
 
     list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($row["kassatili"]);
@@ -231,14 +231,14 @@ while ($row = mysqli_fetch_assoc($suorires)) {
           $alv       = 0;
           $alv_valuutassa = 0;
 
-          $summa         = round($tiliointirow["summa"] * -1 * (1+$tiliointirow["vero"]/100) / $row["laskusumma"] * $alennus, 2);
-          $summa_valuutassa = round($tiliointirow["summa_valuutassa"] * -1 * (1+$tiliointirow["vero"]/100) / $row["laskusumma_valuutassa"] * $alennus_valuutassa, 2);
+          $summa         = round((float)$tiliointirow["summa"] * -1 * (1+(float)$tiliointirow["vero"]/100) / (float)$row["laskusumma"] * $alennus, 2);
+          $summa_valuutassa = round((float)$tiliointirow["summa_valuutassa"] * -1 * (1+(float)$tiliointirow["vero"]/100) / (float)$row["laskusumma_valuutassa"] * $alennus_valuutassa, 2);
 
           if ($tiliointirow["vero"] != 0) {
             // Netotetaan alvi
             // $alv:ssa on alennuksen alv:n maara
-            $alv = round($summa - $summa / (1 + ($tiliointirow["vero"] / 100)), 2);
-            $alv_valuutassa = round($summa_valuutassa - $summa_valuutassa / (1 + ($tiliointirow["vero"]/100)), 2);
+            $alv = round($summa - $summa / (1 + ((float)$tiliointirow["vero"] / 100)), 2);
+            $alv_valuutassa = round($summa_valuutassa - $summa_valuutassa / (1 + ((float)$tiliointirow["vero"]/100)), 2);
 
             //$summa on alviton alennus
             $summa -= $alv;
@@ -315,7 +315,7 @@ while ($row = mysqli_fetch_assoc($suorires)) {
     // tuliko valuuttaeroa?
     if (mb_strtoupper($row["suoritusvaluutta"]) != mb_strtoupper($row['yhtiovaluutta'])) {
 
-      $valero = round($row["laskutettu"] - $suoritettu_kassaan - $alennus, 2);
+      $valero = round((float)$row["laskutettu"] - $suoritettu_kassaan - $alennus, 2);
 
       if (round($valero, 2) != 0) {
 
@@ -357,7 +357,7 @@ while ($row = mysqli_fetch_assoc($suorires)) {
           while ($tiliointirow = mysqli_fetch_assoc($tilres)) {
 
             // Kuinka paljon on tämän viennin osuus
-            $summa = round($tiliointirow['summa'] * (1+$tiliointirow['vero']/100) / $row["laskutettu"] * $vesumma, 2);
+            $summa = round((float)$tiliointirow['summa'] * (1+(float)$tiliointirow['vero']/100) / (float)$row["laskutettu"] * $vesumma, 2);
 
             // Tarkenteet kopsataan alkuperäiseltä tiliöinniltä, mutta jos alkuperäinen tiliöinti on ilman tarkenteita, niin mennään tilin defaulteilla
             list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($row["valuuttaerotili"], $tiliointirow["kustp"], $tiliointirow["kohde"], $tiliointirow["projekti"]);
@@ -403,17 +403,17 @@ while ($row = mysqli_fetch_assoc($suorires)) {
 
     // Vapautetaan holdissa olevat tilaukset, jos niillä on maksupositioita ja ennakkolaskut ovat maksettu
     // Holdissa olevat tilaukset ovat tilassa N B
-    if ($yhtiorow['maksusopimus_toimitus'] == 'X' and $row["jaksotettu"] < 0) {
+    if ($yhtiorow['maksusopimus_toimitus'] == 'X' and (int)$row["jaksotettu"] < 0) {
       $query = "SELECT tunnus
                 FROM lasku
                 WHERE yhtio = '{$kukarow['yhtio']}'
-                AND tunnus  = '".($row['jaksotettu'] * -1)."'
+                AND tunnus  = '".((int)$row['jaksotettu'] * -1)."'
                 AND tila    = 'N'
                 AND alatila = 'B'";
       $pos_chk_result = pupe_query($query);
 
       if (mysqli_num_rows($pos_chk_result)) {
-        $maksusopparit[] = $row['jaksotettu'] * -1;
+        $maksusopparit[] = (int)$row['jaksotettu'] * -1;
       }
     }
 
@@ -471,12 +471,12 @@ $laskut = array();
 while ($row = mysqli_fetch_assoc($suorires)) {
 
   if (mb_strtoupper($row["suoritusvaluutta"]) != mb_strtoupper($row['yhtiovaluutta'])) {
-    $summa = round($row["summa"] * $row["suorituskurssi"], 2);
-    $summa_valuutassa = $row["summa"];
+    $summa = round((float)$row["summa"] * (float)$row["suorituskurssi"], 2);
+    $summa_valuutassa = (float)$row["summa"];
   }
   else {
-    $summa = $row["summa"];
-    $summa_valuutassa = $row["summa"];
+    $summa = (float)$row["summa"];
+    $summa_valuutassa = (float)$row["summa"];
   }
 
   if (!isset($laskut[$row["yhtio"]])) {
