@@ -201,14 +201,15 @@ if ($row["var2"] == "PK" and ($toim == "REKLAMAATIO" or $toim == "EXTRANET_REKLA
   $tilausok++;
 }
 
+// MUOKKAUS: BUGIKORJAUS (2 x string == 0):
 if (
-  $row["hinta"] == 0
+  (float)$row["hinta"] == 0
   and $row["tyyppi"] != "V"
   and !in_array($row["var2"], array("OK", "PK"))
   and !in_array(strtoupper($trow["tuotetyyppi"]), array('R', 'M'))
   and !in_array($toim, array("VALMISTAVARASTOON", "SIIRTOLISTA", "SIIRTOTYOMAARAYS", "MYYNTITILI"))
 ) {
-  if ($trow['ei_saldoa'] == '' and ($row['perheid'] == 0 or $row['perheid'] == $row['tunnus'])) {
+  if ($trow['ei_saldoa'] == '' and ((int)$row['perheid'] == 0 or $row['perheid'] == $row['tunnus'])) {
     $varaosavirhe .= t("HUOM: Hinta puuttuu!")."<br>";
     $riviok++;
     $tilausok++;
