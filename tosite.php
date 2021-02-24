@@ -15,15 +15,35 @@ if (isset($livesearch_tee) and $livesearch_tee == "TILIHAKU") {
 
 // Talletetaan käyttäjän nimellä tositteen/liitteen kuva, jos sellainen tuli
 // koska, jos tulee virheitä tiedosto katoaa. Kun kaikki on ok, annetaan sille oikea nimi
-if ($tee == 'I' and isset($_FILES['userfile']) and is_uploaded_file($_FILES['userfile']['tmp_name'])) {
-  $retval = tarkasta_liite("userfile", array("PNG", "JPG", "GIF", "PDF", "XLS"));
+// MUOKKAUS: multi-file upload (3 kuvaa/liitetta):
+if ($tee == 'I') {
+  if (isset($_FILES['userfile']) and is_uploaded_file($_FILES['userfile']['tmp_name'])) {
+    $retval = tarkasta_liite("userfile", array("PNG", "JPG", "GIF", "PDF", "XLS"));
 
-  if ($retval === true) {
-    $kuva = tallenna_liite("userfile", "lasku", 0, "");
-  }
-  else {
-    echo $retval;
-    $tee = "";
+    if ($retval === true) {
+      $kuva = tallenna_liite("userfile", "lasku", 0, "");
+    } else {
+      echo $retval;
+      $tee = "";
+    }
+  } elseif (isset($_FILES['userfile2']) and is_uploaded_file($_FILES['userfile2']['tmp_name'])) {
+    $retval = tarkasta_liite("userfile2", array("PNG", "JPG", "GIF", "PDF", "XLS"));
+
+    if ($retval === true) {
+      $kuva = tallenna_liite("userfile2", "lasku", 0, "");
+    } else {
+      echo $retval;
+      $tee = "";
+    }
+  } elseif (isset($_FILES['userfile3']) and is_uploaded_file($_FILES['userfile3']['tmp_name'])) {
+    $retval = tarkasta_liite("userfile3", array("PNG", "JPG", "GIF", "PDF", "XLS"));
+
+    if ($retval === true) {
+      $kuva = tallenna_liite("userfile3", "lasku", 0, "");
+    } else {
+      echo $retval;
+      $tee = "";
+    }
   }
 }
 
@@ -1028,13 +1048,19 @@ if ($tee == '') {
   echo "<th>".t("tai")." ".t("Syötä nimi")."</th><td><input type='text' size='20' name='nimi' value='{$nimi}'></td></tr>\n";
 
 
-  echo "<tr><th>".t("Tositteen kuva/liite")."</th>\n";
+  echo "<tr><th>".t("Tositteen kuvat/liitteet")."</th>\n";
 
   if (mb_strlen($kuva) > 0) {
     echo "<td>".t("Kuva jo tallessa")."!<input name='kuva' type='hidden' value = '{$kuva}'></td>\n";
   }
   else {
-    echo "<td><input type='hidden' name='MAX_FILE_SIZE' value='8000000'><input name='userfile' type='file'></td>\n";
+    // MUOKKAUS: multi-file upload (3 kuvaa/liitetta):
+    echo "<td>";
+    echo "<input type='hidden' name='MAX_FILE_SIZE' value='8000000'>";
+    echo "<input name='userfile' type='file'><br>";
+    echo "<input name='userfile2' type='file'><br>";
+    echo "<input name='userfile3' type='file'>";
+    echo "</td>\n";
   }
 
   echo "<th>".t("Tulosta kuitti")."</th><td>";
