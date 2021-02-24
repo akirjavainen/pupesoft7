@@ -32032,7 +32032,7 @@ if (!function_exists("tallenna_tiliote_viite")) {
                   loppu    = '$loppupvm',
                   tyyppi   = '$xtyyppi',
                   tieto    = '$tietue'";
-        $tiliotedataresult = pupe_query($query);
+        $tiliotedataresult = pupe_query($query, $GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
         $tiliote_id = mysqli_insert_id($GLOBALS["masterlink"]);
 
         // Päivitetään perheid
