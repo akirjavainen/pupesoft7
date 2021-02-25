@@ -38,7 +38,7 @@ else {
     else {
       $kerroin = 1;
     }
-    $tulo = $kerroin * mb_substr($pankkitili, $ip, 1);
+    $tulo = $kerroin * (float)mb_substr($pankkitili, $ip, 1); // MUOKKAUS: BUGIKORJAUS (int * string)
     // jos > 10, lasketaan numerot yhteen....
     if ($tulo > 9) {
       $tulo = mb_substr($tulo, 0, 1) + mb_substr($tulo, 1, 1);

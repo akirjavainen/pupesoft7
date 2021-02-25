@@ -2371,6 +2371,7 @@ if (!function_exists('loppu')) {
       $x = 30;
     }
 
+    if (!isset($tileja)) $tileja = 0; // MUOKKAUS: isset()
     $pdf_lasku->draw_rectangle(70 + $tileja + $barcode_korkeus, 20, 20 + $tileja + $barcode_korkeus, 580, $thispage, $rectparam);
     $pdf_lasku->draw_rectangle(70 + $tileja + $barcode_korkeus, 207, 20 + $tileja + $barcode_korkeus, 580, $thispage, $rectparam);
     $pdf_lasku->draw_rectangle(70 + $tileja + $barcode_korkeus, 394, 20 + $tileja + $barcode_korkeus, 580, $thispage, $rectparam);
@@ -2408,17 +2409,22 @@ if (!function_exists('loppu')) {
       $height = $barcode_korkeus-1 * 1.2;
       $style = BCS_IMAGE_JPEG;
 
-      $onko_tili1_iban = tarkista_iban($pankkitiedot["pankkitili1"]);
-      $onko_iban1_iban = tarkista_iban($pankkitiedot["pankkiiban1"]);
+      // MUOKKAUS: isset():
+      $onko_tili1_iban = isset($pankkitiedot) ? tarkista_iban($pankkitiedot["pankkitili1"]) : "";
+      $onko_iban1_iban = isset($pankkitiedot) ? tarkista_iban($pankkitiedot["pankkiiban1"]) : "";
 
-      if ($onko_tili1_iban != "") {
-        $code = PalautaPankkiviivakoodi($onko_tili1_iban, $laskurow['summa'], $laskurow['erpcm'], $laskurow["viite"], 4);
-      }
-      elseif ($onko_iban1_iban != "") {
-        $code = PalautaPankkiviivakoodi($onko_iban1_iban, $laskurow['summa'], $laskurow['erpcm'], $laskurow["viite"], 4);
-      }
-      else {
-        $code = PalautaPankkiviivakoodi($pankkitiedot["pankkitili1"], $laskurow['summa'], $laskurow['erpcm'], $laskurow["viite"], 2);
+      if (isset($pankkitiedot)) {
+        if ($onko_tili1_iban != "") {
+          $code = PalautaPankkiviivakoodi($onko_tili1_iban, $laskurow['summa'], $laskurow['erpcm'], $laskurow["viite"], 4);
+        }
+        elseif ($onko_iban1_iban != "") {
+          $code = PalautaPankkiviivakoodi($onko_iban1_iban, $laskurow['summa'], $laskurow['erpcm'], $laskurow["viite"], 4);
+        }
+        else {
+          $code = PalautaPankkiviivakoodi($pankkitiedot["pankkitili1"], $laskurow['summa'], $laskurow['erpcm'], $laskurow["viite"], 2);
+	}
+      } else {
+        $code = "";
       }
 
       $font = 5;
