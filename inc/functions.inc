@@ -32032,8 +32032,8 @@ if (!function_exists("tallenna_tiliote_viite")) {
                   loppu    = '$loppupvm',
                   tyyppi   = '$xtyyppi',
                   tieto    = '$tietue'";
-        $tiliotedataresult = pupe_query($query, $GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
-        $tiliote_id = mysqli_insert_id($GLOBALS["masterlink"]);
+        $tiliotedataresult = pupe_query($query, $GLOBALS["link"]); // MUOKKAUS: BUGIKORJAUS
+        $tiliote_id = mysqli_insert_id($GLOBALS["link"]);
 
         // Päivitetään perheid
         if ($tietue_type != "T11" and $tietue_type != "T81") {
