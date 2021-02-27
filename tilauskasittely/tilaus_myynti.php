@@ -10248,8 +10248,9 @@ if ($tee == '') {
                       <input type='hidden' name='orig_alatila' value='$orig_alatila'>";
             }
 
-            if ($laskurow["hinta"] != 0 and (($yhtiorow["alv_kasittely"] == "" and abs($jysum - $summa) <= .50) or ($yhtiorow["alv_kasittely"] != "" and abs($jysum - $arvo) <= .50))) {
-              $jysum = $laskurow["hinta"];
+	    $jysum = (float)$jysum; // MUOKKAUS: BUGIKORJAUS (string - float)
+            if ((float)$laskurow["hinta"] != 0 and (($yhtiorow["alv_kasittely"] == "" and abs($jysum - $summa) <= .50) or ($yhtiorow["alv_kasittely"] != "" and abs($jysum - $arvo) <= .50))) {
+              $jysum = (float)$laskurow["hinta"];
             }
             elseif ($tilausrivi_alvillisuus != 'E') {
               $jysum = $summa;

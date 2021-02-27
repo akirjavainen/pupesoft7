@@ -252,7 +252,8 @@ if ($toim == "TILAUSVAHVISTUS"
     $naytatvale = 1; // halutaan nähä alet
   }
 
-  if (mb_strpos($laskurow['tilausvahvistus'], 'V') !== FALSE) {
+  // MUOKKAUS: isset():
+  if (isset($laskurow) and mb_strpos($laskurow['tilausvahvistus'], 'V') !== FALSE) {
     $verollisethinnat = TRUE;
   }
 
@@ -261,7 +262,8 @@ if ($toim == "TILAUSVAHVISTUS"
   echo "<tr><th>".t("Tyyppi")."</th><td><select name='seltvtyyppi'>";
 
   foreach (pupesoft_tilausvahvistustyypit() as $tv_tyyppi => $tv_selite) {
-    echo "<option value = '$tv_tyyppi' $tvsel[$tv_tyyppi]>".t($tv_selite)."</option>";
+    // MUOKKAUS: isset():
+    if (isset($tvsel[$tv_tyyppi])) echo "<option value = '$tv_tyyppi' $tvsel[$tv_tyyppi]>".t($tv_selite)."</option>";
   }
 
   echo "</select></td></tr>";
