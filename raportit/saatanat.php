@@ -124,6 +124,7 @@ if ($eiliittymaa != 'ON') {
   echo "<option value = 'V' $sel1>".t("Laskun valuutassa")."</option>";
   echo "</select></td></tr>";
 
+  if (!is_array($sel)) $sel = array(); // MUOKKAUS: isset()
   $sel[$laji] = " selected ";
 
   echo "<th>".t("Mitkä Laskut Listataan").":</th>";
