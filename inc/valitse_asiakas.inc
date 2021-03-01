@@ -34,6 +34,13 @@ else {
 </script>
 <?php
 
+// MUOKKAUS: isset():
+foreach (array("hakuehto", "mul_asiakasosasto", "mul_asiakasryhma", "mul_asiakasmyyja", 
+	"ext_asiakas_haku_tehty", "action", "valitut_asiakastunnukset", "saate_teksti", 
+	"viesti") as $v) {
+  if (!isset(${$v})) ${$v} = null;
+}
+
 $request = array(
   "toim"             => $toim,
   "hakuehto"           => $hakuehto,
@@ -48,13 +55,6 @@ $request = array(
   "saate_teksti"         => $saate_teksti,
   "viesti"           => $viesti,
 );
-
-// MUOKKAUS: isset():
-foreach (array("hakuehto", "mul_asiakasosasto", "mul_asiakasryhma", "mul_asiakasmyyja", 
-	"ext_asiakas_haku_tehty", "action", "valitut_asiakastunnukset", "saate_teksti", 
-	"viesti") as $v) {
-  if (!isset(${$v})) ${$v} = null;
-}
 
 $asiakasid = $kukarow['tunnus'] * -1;
 
