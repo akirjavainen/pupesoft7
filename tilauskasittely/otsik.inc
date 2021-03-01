@@ -18,6 +18,7 @@ foreach (array("tila", "toimtapa_apuro", "oletus", "toimvko", "keraysvko", "yhte
   "vtoimaika") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
+if (!isset($originaali)) $originaali = array();
 
 $DAY_ARRAY = array(1 => t("Ma"), t("Ti"), t("Ke"), t("To"), t("Pe"), t("La"), t("Su"));
 

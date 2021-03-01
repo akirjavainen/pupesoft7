@@ -7767,7 +7767,7 @@ if (!function_exists("paivita_toimitukset")) {
 
     foreach (array("lasku", "laskun_lisatiedot") as $taulu) {
 
-      if (!is_array($originaali[$taulu]) or (int)$otunnus == 0) {
+      if (!isset($originaali[$taulu]) or !is_array($originaali[$taulu]) or (int)$otunnus == 0) {
         //echo "<font class='error'>".t("Toimitusten päivittäminen EPÄONNISTUI")."!</font><br>";
         return false;
       }
