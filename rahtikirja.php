@@ -246,7 +246,8 @@ if ($tee == 'NAYTATILAUS') {
 if ($id == '') $id = 0;
 
 // jos ollaan lisäämässä rahtikirjaa, niin katsotaan onko valitulla toimitustavalla erikoispakkauskielto
-if (count($erikoispakkaus) > 0) {
+// MUOKKAUS: isset():
+if (is_array($erikoispakkaus) and count($erikoispakkaus) > 0) {
   $query = "SELECT *
             FROM toimitustapa
             WHERE yhtio = '$kukarow[yhtio]'
