@@ -647,7 +647,7 @@ if ($tee == 'NAYTA' or $eiliittymaa == 'ON') {
         }
 
         // Lasketaan yhteen
-        if (!isset($saatavat_yhteensa["alle_$saatavat_array[0]"])) $saatavat_yhteensa["alle_$saatavat_array[0]"] = $row["alle_$saatavat_array[0]"];
+        if (!isset($saatavat_yhteensa["alle_$saatavat_array[0]"])) $saatavat_yhteensa["alle_$saatavat_array[0]"] = (float)$row["alle_$saatavat_array[0]"];
         else (float)$saatavat_yhteensa["alle_$saatavat_array[0]"] += (float)$row["alle_$saatavat_array[0]"]; // MUOKKAUS: BUGIKORJAUS (string + string)
 
         for ($sa = 1; $sa < count($saatavat_array); $sa++) {
