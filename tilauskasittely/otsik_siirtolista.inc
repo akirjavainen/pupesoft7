@@ -500,6 +500,11 @@ if (isset($jatka)) {
   $vtresult = pupe_query($aquery);
   $vtrow = mysqli_fetch_array($vtresult);
 
+  // MUOKKAUS: isset():
+  foreach (array("nimitark", "nimi", "osoite", "postitp", "postino", "maa", "nimitys") as $v) {
+    if (!isset($vtrow[$v])) $vtrow[$v] = null;
+  }
+
   if ($toim_nimitark == '' and $toim_nimi == '') {
     $toim_nimitark = $vtrow['nimitark'];
   }
