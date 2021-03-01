@@ -3787,7 +3787,8 @@ if ($tee == '') {
 
       echo "<th>".t("Ytunnus");
 
-      if ($asiakasrow["asiakasnro"] != "") {
+      // MUOKKAUS: isset():
+      if (isset($asiakasrow) and $asiakasrow["asiakasnro"] != "") {
         echo " / ".t("Asiakasnro");
       }
 
@@ -3801,11 +3802,13 @@ if ($tee == '') {
       else {
         echo "<a href='{$palvelin2}raportit/asiakkaantilaukset.php?toim=MYYNTI&ytunnus={$laskurow['ytunnus']}&asiakasid={$laskurow['liitostunnus']}&lopetus={$tilmyy_lopetus}'>", tarkistahetu($laskurow['ytunnus']), "</a>";
 
-        if ($asiakasrow["asiakasnro"] != "") {
+	// MUOKKAUS: isset():
+        if (isset($asiakasrow) and $asiakasrow["asiakasnro"] != "") {
           echo " / $asiakasrow[asiakasnro]";
         }
 
-        if ($asiakasrow["ryhma"] != "") {
+	// MUOKKAUS: isset():
+        if (isset($asiakasrow) and $asiakasrow["ryhma"] != "") {
           echo " / {$asiakasrow['ryhma']}";
         }
       }
