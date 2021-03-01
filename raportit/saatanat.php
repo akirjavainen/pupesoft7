@@ -657,8 +657,9 @@ if ($tee == 'NAYTA' or $eiliittymaa == 'ON') {
           else $saatavat_yhteensa[($saatavat_array[$sa-1]+1)."_".$saatavat_array[$sa]] += (float)$row[($saatavat_array[$sa-1]+1)."_".$saatavat_array[$sa]];
         }
 
-        if (!isset($saatavat_yhteensa["yli_{$saatavat_array[count($saatavat_array)-1]}"])) $saatavat_yhteensa["yli_{$saatavat_array[count($saatavat_array)-1]}"] = $row["yli_{$saatavat_array[count($saatavat_array)-1]}"];
-        else $saatavat_yhteensa["yli_{$saatavat_array[count($saatavat_array)-1]}"] += $row["yli_{$saatavat_array[count($saatavat_array)-1]}"];
+	// MUOKKAUS: BUGIKORJAUS (string + string):
+        if (!isset($saatavat_yhteensa["yli_{$saatavat_array[count($saatavat_array)-1]}"])) $saatavat_yhteensa["yli_{$saatavat_array[count($saatavat_array)-1]}"] = (float)$row["yli_{$saatavat_array[count($saatavat_array)-1]}"];
+        else $saatavat_yhteensa["yli_{$saatavat_array[count($saatavat_array)-1]}"] += (float)$row["yli_{$saatavat_array[count($saatavat_array)-1]}"];
 
 
 
