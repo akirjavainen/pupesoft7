@@ -3609,6 +3609,9 @@ if ($tila == "" and !isset($jatka)) {
 
       // MUOKKAUS: isset():
       $kuukausi_checked = (isset($sopapurow) and $sopapurow["yllapito_kuukausihinnoittelu"] == "Y") ? "checked" : "";
+      for ($i = 1; $i <= 31; $i++) {
+        $chk[$i] = null;
+      }
 
       echo "<table>";
       echo "<tr><th colspan='2'>".t("Valitse ylläpitosopimuksen laskutusaikataulu").":</th></tr>";
