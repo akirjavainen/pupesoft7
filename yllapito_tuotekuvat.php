@@ -310,6 +310,8 @@ echo "</tr>";
 
 if (isset($kayt) and $kayt != '') {
   $mul_kay = explode(",", $kayt);
+} else { // MUOKKAUS: isset()
+  $mul_kay = array();
 }
 
 $res = t_avainsana("LITETY");
@@ -382,6 +384,8 @@ echo "</tr>";
 
 if (isset($sel) and $sel != '') {
   $mul_sel = explode(",", $sel);
+} else { // MUOKKAUS: isset()
+  $mul_sel = array();
 }
 
 $mul_check = '';
@@ -413,6 +417,8 @@ echo "</tr>";
 
 if (isset($status) and $status != '') {
   $mul_sta = explode(",", $status);
+} else { // MUOKKAUS: isset()
+  $mul_sta = array();
 }
 
 $mul_check = '';
@@ -544,6 +550,8 @@ echo "<tr><td><input type='checkbox' name='mul_siz' onclick='toggleAll(this);'><
 
 if (isset($korkeus) and $korkeus != '') {
   $mul_siz[] = 'korkeus';
+} else { // MUOKKAUS: isset()
+  $mul_size = array();
 }
 
 $mul_check = '';
