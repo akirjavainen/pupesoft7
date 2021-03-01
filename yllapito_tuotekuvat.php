@@ -551,7 +551,7 @@ echo "<tr><td><input type='checkbox' name='mul_siz' onclick='toggleAll(this);'><
 if (isset($korkeus) and $korkeus != '') {
   $mul_siz[] = 'korkeus';
 } else { // MUOKKAUS: isset()
-  $mul_size = array();
+  $mul_siz = array();
 }
 
 $mul_check = '';
