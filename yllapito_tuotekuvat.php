@@ -800,6 +800,9 @@ if ($tee == 'LISTAA') {
     $mul_siz[] = 'leveys';
   }
 
+  // MUOKKAUS: isset():
+  if (!isset($mul_ext)) $mul_ext = array();
+
   if (count($mul_ext) > 0) {
     $lisa .= " and (";
     foreach ($mul_ext as $file_ext) {
