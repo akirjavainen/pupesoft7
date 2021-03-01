@@ -579,7 +579,7 @@ if ($tee == '') {
   $tck = "";
   $chk = "";
   $ack = "";
-  $sel = "";
+  $sel = array(); // MUOKKAUS: BUGIKORJAUS ("" -> array())
 
   if ($toimas != "") {
     $tck = "CHECKED";
