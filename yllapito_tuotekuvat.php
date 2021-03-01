@@ -721,6 +721,8 @@ if ($tee == 'LISTAA') {
     $lisa .= " and tuote.tuotemerkki in $sel_tuotemerkki ";
   }
 
+  if (!isset($mul_kem)) $mul_kem = array(); // MUOKKAUS: isset()
+
   if ($kem != '') {
     $avainsana_lisa = " JOIN tuotteen_avainsanat ON (tuotteen_avainsanat.yhtio = tuote.yhtio and tuotteen_avainsanat.laji = 'KEMOM' and tuotteen_avainsanat.tuoteno = tuote.tuoteno and tuotteen_avainsanat.kieli = '{$kukarow['kieli']}' and tuotteen_avainsanat.selite in ('".str_replace(',', '\',\'', $kem)."')) ";
     $avainsana_selectlisa = ", tuotteen_avainsanat.selite AS kem_selite";
