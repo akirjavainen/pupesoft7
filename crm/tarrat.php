@@ -19,8 +19,8 @@ if (isset($TULOSTA) and $TULOSTA != "") {
   $tee = "TULOSTA";
 }
 
-
-if ($tee == "TULOSTA" and count($otunnus) == 0) {
+// MUOKKAUS: isset():
+if ($tee == "TULOSTA" and is_array($otunnus) and count($otunnus) == 0) {
   $tee = "";
 }
 
