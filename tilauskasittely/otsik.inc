@@ -2023,8 +2023,10 @@ if ($tila == "" and !isset($jatka)) {
       $toimvv = $kervv = date("Y");
     }
     else {
-      list($toimvv, $toimkk, $toimpp) = explode('-', $srow["toimaika"]);
-      list($kervv, $kerkk, $kerpp)    = explode('-', $srow["kerayspvm"]);
+      // MUOKKAUS: isset():
+      if (isset($srow["toimaika"])) list($toimvv, $toimkk, $toimpp) = explode('-', $srow["toimaika"]);
+      if (isset($srow["kerayspvm"])) list($kervv, $kerkk, $kerpp)    = explode('-', $srow["kerayspvm"]);
+
       $kerpp = mb_substr($kerpp, 0, 2);
       $toimpp = mb_substr($toimpp, 0, 2);
     }
