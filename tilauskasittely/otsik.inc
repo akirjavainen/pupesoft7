@@ -13,7 +13,8 @@ foreach (array("tila", "toimtapa_apuro", "oletus", "toimvko", "keraysvko", "yhte
   "liitostunnus", "ohjausmerkki", "asiakkaan_tilausnumero", "comments", "erpcmvv", "erpcmkk", "erpcmpp", 
   "kauppatapahtuman_luonne", "kuljetusmuoto", "sisviesti3", "tilausyhteyshenkilo", "tunnusnippu", "projekti", 
   "tunnusnippu_tarjous", "kuukausihinnoittelu", "yllapito_alkupp", "yllapito_alkukk", "yllapito_alkuvv", 
-  "yllapito_kk", "yllapito_loppupp", "yllapito_loppukk", "yllapito_loppuvv") as $v) {
+  "yllapito_kk", "yllapito_loppupp", "yllapito_loppukk", "yllapito_loppuvv", "sopimus_lisatietoja", 
+  "sopimus_lisatietoja2") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
@@ -3573,7 +3574,8 @@ if ($tila == "" and !isset($jatka)) {
             </script>";
 
       // jos alatila on X niin pitää tehdä hidden muuttujat ettei nollaannu
-      if ($srow["alatila"] == "X") {
+      // MUOKKAUS: isset():
+      if (isset($srow["alatila"]) and $srow["alatila"] == "X") {
         $disable = "disabled";
 
         foreach (explode(',', $sopapurow["sopimus_kk"]) as $numi) {
@@ -3586,13 +3588,17 @@ if ($tila == "" and !isset($jatka)) {
       }
 
       $chk = array();
-      foreach (explode(',', $sopapurow["sopimus_kk"]) as $numi) {
-        $chk[$numi] = "checked";
-      }
 
-      if ($sopapurow["sopimus_kk"] == "") {
-        for ($numi = 1; $numi < 13; $numi++) {
+      // MUOKKAUS: isset():
+      if (isset($sopapurow)) {
+        foreach (explode(',', $sopapurow["sopimus_kk"]) as $numi) {
           $chk[$numi] = "checked";
+        }
+
+        if ($sopapurow["sopimus_kk"] == "") {
+          for ($numi = 1; $numi < 13; $numi++) {
+            $chk[$numi] = "checked";
+          }
         }
       }
 
