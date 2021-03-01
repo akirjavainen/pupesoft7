@@ -4581,7 +4581,7 @@ if ($tee == '') {
   // Tarkastetaan onko asiakas myyntikiellossa
   // MUOKKAUS: isset():
   if (isset($laskurow['liitostunnus']) and $laskurow['liitostunnus'] > 0) {
-    if ($asiakasrow['myyntikielto'] == 'K') {
+    if (isset($asiakasrow) and $asiakasrow['myyntikielto'] == 'K') {
       if ($kukarow['extranet'] != '') {
         echo "<font class='error'>", t("Luottorajasi on täynnä, ota yhteys asiakaspalveluun"), ".</font><br/>";
       }
@@ -11303,7 +11303,7 @@ if ($tee == '') {
     $ei_valmistettu = TRUE;
 
     // MUOKKAUS: isset():
-    if (isset($laskurow) and $laskurow["tila"] == "V" and $row["toimitettuaika"] != "0000-00-00 00:00:00" and isset($row["toimitettuaika"])) $ei_valmistettu = FALSE;
+    if (isset($laskurow) and $laskurow["tila"] == "V" and isset($row) and $row["toimitettuaika"] != "0000-00-00 00:00:00" and isset($row["toimitettuaika"])) $ei_valmistettu = FALSE;
 
     if (($muokkauslukko == "" or $myyntikielto != '') and ($toim != "PROJEKTI" or ($toim == "PROJEKTI" and $projektilask == 0)) and $kukarow["mitatoi_tilauksia"] == "" and $ei_laskutettu and $ei_valmistettu) {
       echo "<SCRIPT LANGUAGE=JAVASCRIPT>
