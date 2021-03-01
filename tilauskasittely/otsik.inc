@@ -14,7 +14,7 @@ foreach (array("tila", "toimtapa_apuro", "oletus", "toimvko", "keraysvko", "yhte
   "kauppatapahtuman_luonne", "kuljetusmuoto", "sisviesti3", "tilausyhteyshenkilo", "tunnusnippu", "projekti", 
   "tunnusnippu_tarjous", "kuukausihinnoittelu", "yllapito_alkupp", "yllapito_alkukk", "yllapito_alkuvv", 
   "yllapito_kk", "yllapito_loppupp", "yllapito_loppukk", "yllapito_loppuvv", "sopimus_lisatietoja", 
-  "sopimus_lisatietoja2") as $v) {
+  "sopimus_lisatietoja2", "toimpp", "toimkk", "toimvv", "kerpp", "kerkk", "kervv") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
