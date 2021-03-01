@@ -248,6 +248,8 @@ if (mysqli_num_rows($res2) > 0) {
 
   if (isset($kem) and $kem != '') {
     $mul_kem = explode(",", $kem);
+  } else { // MUOKKAUS: isset()
+    $mul_kem = array();
   }
 
   while ($rivi = mysqli_fetch_array($res2)) {
