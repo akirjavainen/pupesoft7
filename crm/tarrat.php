@@ -475,7 +475,7 @@ if ($tee == '') {
             ORDER BY $jarjestys
             $limit";
   $result = pupe_query($query);
-  $lim = "";
+  $lim = array(); // MUOKKAUS: BUGIKORJAUS ("" -> array())
   $lim[$limitti] = "SELECTED";
 
   echo "<table>";
