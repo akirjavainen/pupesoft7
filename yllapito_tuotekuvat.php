@@ -648,6 +648,7 @@ echo "</form>";
 
 echo "<br/><br/>";
 
+if (!isset($mul_del)) $mul_del = array(); // MUOKKAUS: isset()
 if ($tee == '' and count($mul_del) > 0) {
 
   echo t('Poistettiin kuvat tuotteista: '), "<br />";
