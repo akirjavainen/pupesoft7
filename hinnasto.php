@@ -51,7 +51,7 @@ if ($kukarow['extranet'] == '') {
       <td><input type='checkbox' name='kl_alenimi'> (".t("muuten näytetään aleryhmän nimi").")</td></tr>";
 }
 
-
+if (!isset($sel)) $sel = array(); // MUOKKAUS: isset()
 $sel[$hinnasto] = "SELECTED";
 
 $saatavuus_select[$saatavuus] = "SELECTED";
