@@ -92,7 +92,7 @@ if ($tee == 'NAYTA') {
   if ($sytunnus != '') {
     $lisa .= " and lasku.ytunnus='$sytunnus' ";
   }
-  if ($yli != 0) {
+  if ((int)$yli != 0) { // MUOKKAUS: BUGIKORJAUS (string != 0)
     $having = " HAVING ll >= $yli ";
   }
   else {
