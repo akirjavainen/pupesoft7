@@ -7762,9 +7762,12 @@ if (!function_exists("paivita_toimitukset")) {
       Functio jolla voidaan syncronoida toimitusten sisältöjä
     */
 
+    // MUOKKAUS: isset():
+    if (!isset($originaali)) $originaali = array();
+
     foreach (array("lasku", "laskun_lisatiedot") as $taulu) {
 
-      if (!is_array($originaali[$taulu]) or (int) $otunnus == 0) {
+      if (!is_array($originaali[$taulu]) or (int)$otunnus == 0) {
         //echo "<font class='error'>".t("Toimitusten päivittäminen EPÄONNISTUI")."!</font><br>";
         return false;
       }

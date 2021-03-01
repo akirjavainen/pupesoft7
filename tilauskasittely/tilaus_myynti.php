@@ -40,7 +40,7 @@ if (isset($_REQUEST['ajax_popup'])) {
 }
 
 // MUOKKAUS: isset():
-foreach (array("perusta_tilaustyyppi", "projekti", "jarjlisa", "yt", "postitp", "kantaasiakastunnus", "ytunnus", "kateinen", "projektilask") as $v) {
+foreach (array("perusta_tilaustyyppi", "projekti", "jarjlisa", "yt", "postitp", "kantaasiakastunnus", "ytunnus", "kateinen", "projektilask", "rivitunnus") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
