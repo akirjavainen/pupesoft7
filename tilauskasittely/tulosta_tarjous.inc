@@ -1125,7 +1125,7 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
       }
     }
 
-    if (isset($row) and trim($row["perhe_kommentti"]) != '' and $yhtiorow['tarjoustyyppi'] != 5) { // MUOKKAUS: isset()
+    if (isset($row) and isset($page_tarjous) and trim($row["perhe_kommentti"]) != '' and $yhtiorow['tarjoustyyppi'] != 5) { // MUOKKAUS: isset()
       $pohja = $pdf_tarjous->draw_paragraph($kala+$norm["height"], 45, 60, 480, $row["perhe_kommentti"] . " ",  $page_tarjous[$sivu], $norm);
       if (is_numeric($pohja)) {
         $kala = $pohja - $rivinkorkeus;
