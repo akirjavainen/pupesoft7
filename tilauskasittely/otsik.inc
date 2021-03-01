@@ -3646,8 +3646,12 @@ if ($tila == "" and !isset($jatka)) {
       echo "<td style='padding:0px;'>";
 
       $chk = array();
-      foreach (explode(',', $sopapurow["sopimus_pp"]) as $numi) {
-        $chk[$numi] = "checked";
+      
+      // MUOKKAUS: isset():
+      if (isset($sopapurow)) {
+        foreach (explode(',', $sopapurow["sopimus_pp"]) as $numi) {
+          $chk[$numi] = "checked";
+        }
       }
 
       echo "<table><tr>";
@@ -3698,11 +3702,14 @@ if ($tila == "" and !isset($jatka)) {
         if ($sopapurow["sopimus_loppupvm"] == "0000-00-00") $sopapurow["sopimus_loppupvm"] = "";
       }
 
-      if (!isset($yllapito_alkuvv) or !isset($yllapito_alkukk) or !isset($yllapito_alkupp))
-        list($yllapito_alkuvv, $yllapito_alkukk, $yllapito_alkupp) = explode('-', $sopapurow["sopimus_alkupvm"]);
+      // MUOKKAUS: isset():
+      if (isset($sopapurow)) {
+        if (!isset($yllapito_alkuvv) or !isset($yllapito_alkukk) or !isset($yllapito_alkupp))
+          list($yllapito_alkuvv, $yllapito_alkukk, $yllapito_alkupp) = explode('-', $sopapurow["sopimus_alkupvm"]);
 
-      if (!isset($yllapito_loppuvv) or !isset($yllapito_loppukk) or !isset($yllapito_loppupp))
-        list($yllapito_loppuvv, $yllapito_loppukk, $yllapito_loppupp) = explode('-', $sopapurow["sopimus_loppupvm"]);
+        if (!isset($yllapito_loppuvv) or !isset($yllapito_loppukk) or !isset($yllapito_loppupp))
+          list($yllapito_loppuvv, $yllapito_loppukk, $yllapito_loppupp) = explode('-', $sopapurow["sopimus_loppupvm"]);
+      }
 
       echo "<td>Alkupäivä:</td>";
       echo "<td>";
