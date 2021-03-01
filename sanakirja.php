@@ -87,6 +87,7 @@ if ($maxtunnus > 0) {
 }
 
 // jos meillä on onnistuneesti valittu kieli
+if (!isset($kieli)) $kieli = array(); // MUOKKAUS: isset()
 if (count($kieli) > 0) {
 
   $query  = "select tunnus, fi ";
