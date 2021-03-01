@@ -3654,6 +3654,11 @@ if ($tila == "" and !isset($jatka)) {
         }
       }
 
+      // MUOKKAUS: isset():
+      for ($i = 1; $i <= 31; $i++) {
+        $chk[$i] = null;
+      }
+
       echo "<table><tr>";
       echo "<td><input name='yllapito_pp[]' $disable type='checkbox' $chk[1] value='1'> 1 </td>";
       echo "<td><input name='yllapito_pp[]' $disable type='checkbox' $chk[2] value='2'> 2 </td>";
