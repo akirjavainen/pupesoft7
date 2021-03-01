@@ -94,6 +94,8 @@ echo "</tr>";
 
 if (isset($osasto) and $osasto != '') {
   $mul_osasto = explode(",", $osasto);
+} else { // MUOKKAUS: isset()
+  $mul_osasto = array();
 }
 
 while ($rivi = mysqli_fetch_array($res2)) {
