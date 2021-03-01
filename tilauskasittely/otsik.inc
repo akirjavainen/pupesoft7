@@ -3401,6 +3401,11 @@ if ($tila == "" and !isset($jatka)) {
     }
 
     if ($toim == "YLLAPITO") {
+      // MUOKKAUS: isset():
+      foreach (array("sopimus_lisatietoja", "sopimus_lisatietoja2") as $v) {
+        if (!isset($srow[$v])) $srow[$v] = null;
+      }
+
       echo "  <tr>
           <td>".t("Sisäiset kommentit").":</td><td colspan='3'><textarea name='sopimus_lisatietoja' rows='6' cols='50'>$srow[sopimus_lisatietoja]</textarea></td>
           </tr>";
@@ -3602,7 +3607,8 @@ if ($tila == "" and !isset($jatka)) {
         }
       }
 
-      $kuukausi_checked = $sopapurow["yllapito_kuukausihinnoittelu"] == "Y" ? "checked" : "";
+      // MUOKKAUS: isset():
+      $kuukausi_checked = (isset($sopapurow) and $sopapurow["yllapito_kuukausihinnoittelu"] == "Y") ? "checked" : "";
 
       echo "<table>";
       echo "<tr><th colspan='2'>".t("Valitse ylläpitosopimuksen laskutusaikataulu").":</th></tr>";
@@ -3686,8 +3692,11 @@ if ($tila == "" and !isset($jatka)) {
       echo "<tr><th colspan='4'>".t("Sopimuksen voimassaoloaika").":</th></tr>";
       echo "<tr>";
 
-      if ($sopapurow["sopimus_alkupvm"] == "0000-00-00") $sopapurow["sopimus_alkupvm"] = "";
-      if ($sopapurow["sopimus_loppupvm"] == "0000-00-00") $sopapurow["sopimus_loppupvm"] = "";
+      // MUOKKAUS: isset():
+      if (isset($sopapurow)) {
+        if ($sopapurow["sopimus_alkupvm"] == "0000-00-00") $sopapurow["sopimus_alkupvm"] = "";
+        if ($sopapurow["sopimus_loppupvm"] == "0000-00-00") $sopapurow["sopimus_loppupvm"] = "";
+      }
 
       if (!isset($yllapito_alkuvv) or !isset($yllapito_alkukk) or !isset($yllapito_alkupp))
         list($yllapito_alkuvv, $yllapito_alkukk, $yllapito_alkupp) = explode('-', $sopapurow["sopimus_alkupvm"]);
