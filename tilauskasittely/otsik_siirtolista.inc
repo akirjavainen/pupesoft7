@@ -6,7 +6,13 @@ if ($tilausnumero != $kukarow["kesken"] and ($tilausnumero!='' or $kukarow["kesk
   exit;
 }
 
-if (!isset($toimitustapa)) $toimitustapa = null; // MUOKKAUS: isset()
+// MUOKKAUS: isset():
+foreach (array("toimitustapa", "clearing", "toim_nimitark", "toim_nimi", "merkki2", 
+	"kotipuh", "tyopuh", "myyjaliike", "ostopvmvv", "ostopvmkk", "ostopvmpp", 
+	"rekno", "mittarilukema", "mallivari", "valmnro", "tuotuvv", "tuotukk", 
+	"tuotupp", "viite") as $v) {
+  if (!isset(${$v})) ${$v} = null;
+}
 
 if (empty($tila)) {
   $tila = 'Muuta';
