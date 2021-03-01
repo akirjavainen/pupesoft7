@@ -12,7 +12,8 @@ if (!function_exists("pupe_strtoupper")) {
 foreach (array("tila", "toimtapa_apuro", "oletus", "toimvko", "keraysvko", "yhteyshenkilo_tilaus", "jaksotettu", 
   "liitostunnus", "ohjausmerkki", "asiakkaan_tilausnumero", "comments", "erpcmvv", "erpcmkk", "erpcmpp", 
   "kauppatapahtuman_luonne", "kuljetusmuoto", "sisviesti3", "tilausyhteyshenkilo", "tunnusnippu", "projekti", 
-  "tunnusnippu_tarjous", "kuukausihinnoittelu", "yllapito_kk") as $v) {
+  "tunnusnippu_tarjous", "kuukausihinnoittelu", "yllapito_alkupp", "yllapito_alkukk", "yllapito_alkuvv", 
+  "yllapito_kk", "yllapito_loppupp", "yllapito_loppukk", "yllapito_loppuvv") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
