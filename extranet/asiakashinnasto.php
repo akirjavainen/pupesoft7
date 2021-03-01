@@ -146,7 +146,7 @@ else {
                   WHERE yhtio = '{$kukarow['yhtio']}'
                   AND laji    = 'THR'";
     $tarkistu2 = pupe_query($tarkistu2);
-    $tarkistu2 = mysqli_fetch_array($tarkistu2, 0);
+    $tarkistu2 = mysqli_fetch_array($tarkistu2); // MUOKKAUS: BUGIKORJAUS (toinen parametri invalid)
 
     if ($tarkistu1 > 0 and $tarkistu2 > 0) {
       echo "<tr><th>".t("Esitystapa").":</th><td><select name='ryhmittely'>";
