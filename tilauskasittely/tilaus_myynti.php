@@ -1038,7 +1038,8 @@ elseif ($toim == "TYOMAARAYS" or $toim == "TYOMAARAYS_ASENTAJA") {
   $otsikko = t("Työmääräys");
 }
 elseif ($toim == "REKLAMAATIO" or $toim == "EXTRANET_REKLAMAATIO") {
-  if ((isset($tilaustyyppi) and $tilaustyyppi == 'U') or $laskurow['tilaustyyppi'] == 'U') {
+  // MUOKKAUS: isset():
+  if ((isset($tilaustyyppi) and $tilaustyyppi == 'U') or (isset($laskurow) and $laskurow['tilaustyyppi'] == 'U')) {
     $otsikko = t("Takuu");
   }
   else {
