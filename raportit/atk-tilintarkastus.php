@@ -6,6 +6,7 @@ $useslave = 2;
 // Ei käytetä pakkausta
 $compression = FALSE;
 
+if (!isset($_POST["kaunisnimi"])) $_POST["kaunisnimi"] = ""; // MUOKKAUS: isset()
 if (isset($_POST["tee"])) {
   if ($_POST["tee"] == 'lataa_tiedosto') $lataa_tiedosto=1;
   if ($_POST["kaunisnimi"] != '') $_POST["kaunisnimi"] = str_replace("/", "", $_POST["kaunisnimi"]);
