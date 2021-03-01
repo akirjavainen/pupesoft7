@@ -3711,7 +3711,7 @@ if ($tila == "" and !isset($jatka)) {
       }
 
       // MUOKKAUS: isset():
-      if (isset($sopapurow)) {
+      if (isset($sopapurow) and count($sopapurow) >= 2) {
         if (!isset($yllapito_alkuvv) or !isset($yllapito_alkukk) or !isset($yllapito_alkupp))
           list($yllapito_alkuvv, $yllapito_alkukk, $yllapito_alkupp) = explode('-', $sopapurow["sopimus_alkupvm"]);
 
