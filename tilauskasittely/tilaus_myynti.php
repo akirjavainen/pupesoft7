@@ -2688,7 +2688,8 @@ if ($kukarow["extranet"] == "" and ($tee == "OTSIK" or ($toim != "PIKATILAUS" an
 // Ja tilaustyyppi ei ole takuu
 // Ja ohitetaan varastoprosessi eli "suoraan laskutukseen" (eilahetetta != '')
 // Halutaan tällöin simuloida lyhyttä reklamaatioprosessia
-if ($toim == "REKLAMAATIO" and $laskurow['eilahetetta'] != '' and $yhtiorow['reklamaation_kasittely'] == 'X' and $laskurow['tilaustyyppi'] != 'U') {
+// MUOKKAUS: isset():
+if (isset($laskurow) and $toim == "REKLAMAATIO" and $laskurow['eilahetetta'] != '' and $yhtiorow['reklamaation_kasittely'] == 'X' and $laskurow['tilaustyyppi'] != 'U') {
   $yhtiorow['reklamaation_kasittely'] = '';
 }
 
