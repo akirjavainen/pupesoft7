@@ -3712,12 +3712,12 @@ if ($tila == "" and !isset($jatka)) {
       }
 
       // MUOKKAUS: isset():
-      if (isset($sopapurow) and count($sopapurow["sopimus_alkupvm"]) >= 2) {
+      if (isset($sopapurow) and isset($sopapurow["sopimus_alkupvm"]) and count($sopapurow["sopimus_alkupvm"]) >= 2) {
         if (!isset($yllapito_alkuvv) or !isset($yllapito_alkukk) or !isset($yllapito_alkupp))
           list($yllapito_alkuvv, $yllapito_alkukk, $yllapito_alkupp) = explode('-', $sopapurow["sopimus_alkupvm"]);
       }
 
-      if (isset($sopapurow) and count($sopapurow["sopimus_loppupvm"]) >= 2) {
+      if (isset($sopapurow) and isset($sopapurow["sopimus_loppupvm"]) and count($sopapurow["sopimus_loppupvm"]) >= 2) {
         if (!isset($yllapito_loppuvv) or !isset($yllapito_loppukk) or !isset($yllapito_loppupp))
           list($yllapito_loppuvv, $yllapito_loppukk, $yllapito_loppupp) = explode('-', $sopapurow["sopimus_loppupvm"]);
       }
