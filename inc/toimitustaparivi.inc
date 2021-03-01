@@ -43,7 +43,7 @@ if ($fieldname == "smarten_partycode" or $fieldname == "smarten_serviceid") {
 
 if ($fieldname == "virallinen_selite") {
 
-  $sel = '';
+  $sel = array(); // MUOKKAUS: BUGIKORJAUS ('' -> array())
   if ($trow[$i] != '') $sel[$trow[$i]] = 'SELECTED';
 
   $ulos  = "<td><select name='$nimi'>";
