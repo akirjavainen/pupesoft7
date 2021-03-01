@@ -1183,8 +1183,9 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
         if ($naytetaanko_rivihinta != 'ei_rivihintaa') $hinta = hintapyoristys($row["hinta"]);
       }
 
-      $oikpos = $pdf_tarjous->mb_strlen($hinta, $norm);
-      if (isset($page_tarjous)) $pdf_tarjous->draw_text(420 - $oikpos, $kala, $hinta, $page_tarjous[$sivu], $norm); // MUOKKAUS: isset()
+      // MUOKKAUS: isset():
+      if (isset($hinta)) $oikpos = $pdf_tarjous->mb_strlen($hinta, $norm);
+      if (isset($page_tarjous) and isset($hinta)) $pdf_tarjous->draw_text(420 - $oikpos, $kala, $hinta, $page_tarjous[$sivu], $norm);
     }
 
     $ed_ale = array();
