@@ -5,6 +5,7 @@ $_GET["no_css"] = 'yes';
 
 $mobile = true;
 $valinta = "Etsi";
+if (!isset($browkieli)) $browkieli = ""; // MUOKKAUS: isset()
 
 if (@include_once "../inc/parametrit.inc");
 elseif (@include_once "inc/parametrit.inc");
