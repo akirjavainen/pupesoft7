@@ -4,7 +4,8 @@
 $useslave = 1;
 
 //Tehdään tällanen replace jotta parametric.inc ei poista merkkejä
-$sqlapu = $_POST["sqlhaku"];
+// MUOKKAUS: isset():
+$sqlapu = isset($_POST["sqlhaku"]) ? $_POST["sqlhaku"] : "";
 
 if (isset($_POST["tee"])) {
   if ($_POST["tee"] == 'lataa_tiedosto') $lataa_tiedosto=1;
