@@ -3681,7 +3681,7 @@ if ($tee == '') {
 
     //  Tarkistetaan, ettei asiakas ole prospekti, tarjoukselle voi liittää prospektiasiakkaan, josta voi tehdä suoraan tilauksen. Herjataan siis jos asiakas pitää päivittää ja tarkistaa
     if (($toim != "TARJOUS" and $toim != "EXTTARJOUS")) {
-      if ($asiakasrow['laji'] == "R") {
+      if (isset($asiakasrow) and $asiakasrow['laji'] == "R") { // MUOKKAUS: isset()
         $asiakasOnProspekti = "JOO";
         echo "<br><font class='error'>".t("HUOM: Asiakas on prospektiasiakas, tarkista asiakasrekisterissä asiakkaan tiedot ja päivitä tiedot tilauksen otsikolle.")."</font>";
       }
@@ -3700,7 +3700,7 @@ if ($tee == '') {
   $meapurow = mysqli_fetch_assoc($meapu);
 
   // MUOKKAUS: isset():
-  if (isset($laskurow["liitostunnus"]) and $laskurow["liitostunnus"] != 0 and $meapurow["kateinen"] == "" and ($laskurow["laskutus_nimi"] == '' or $laskurow["laskutus_osoite"] == '' or $laskurow["laskutus_postino"] == '' or $laskurow["laskutus_postitp"] == '')) {
+  if (isset($laskurow["liitostunnus"]) and $laskurow["liitostunnus"] != 0 and isset($meapurow) and $meapurow["kateinen"] == "" and ($laskurow["laskutus_nimi"] == '' or $laskurow["laskutus_osoite"] == '' or $laskurow["laskutus_postino"] == '' or $laskurow["laskutus_postitp"] == '')) {
     if ($toim != 'VALMISTAVARASTOON' and $toim != 'SIIRTOLISTA' and $toim != 'SIIRTOTYOMAARAYS' and ($toim != "TARJOUS" and $toim != "EXTTARJOUS")) {
       echo "<font class='error'>".t("VIRHE: Tilauksen laskutusosoitteen tiedot ovat puutteelliset")."!</font><br><br>";
       $tilausok++;
@@ -4197,7 +4197,8 @@ if ($tee == '') {
       echo $options;
       echo "</select></td></tr>";
 
-      if (trim($asiakasrow["fakta"]) != "" and $toim != "SIIRTOTYOMAARAYS"  and $toim != "SIIRTOLISTA" and $toim != "VALMISTAVARASTOON") {
+      // MUOKKAUS: isset():
+      if (isset($asiakasrow) and trim($asiakasrow["fakta"]) != "" and $toim != "SIIRTOTYOMAARAYS"  and $toim != "SIIRTOLISTA" and $toim != "VALMISTAVARASTOON") {
         echo "<tr>$jarjlisa<th>".t("Asiakasfakta").":</th><td colspan='3'>";
         echo "<font class='asiakasfakta'>".str_replace("\n", "<br>", $asiakasrow['fakta'])."</font>&nbsp;</td></tr>\n";
       }
@@ -4381,7 +4382,8 @@ if ($tee == '') {
         }
       }
 
-      if ($asiakasrow["laji"] == "K" and $yhtiorow["yhtio"] == "artr") {
+      // MUOKKAUS: isset():
+      if (isset($asiakasrow) and $asiakasrow["laji"] == "K" and $yhtiorow["yhtio"] == "artr") {
         echo "<tr>$jarjlisa<td class='back'></td>";
         echo "<td colspan='3' class='back'>";
         echo "<p class='error'>".t("HUOM: Tämä on korjaamo-asiakas, älä myy tälle asiakkaalle")."</p>";
@@ -11299,7 +11301,9 @@ if ($tee == '') {
 	  $ei_laskutettu = false;
 	}
     $ei_valmistettu = TRUE;
-    if ($laskurow["tila"] == "V" and $row["toimitettuaika"] != "0000-00-00 00:00:00" and isset($row["toimitettuaika"])) $ei_valmistettu = FALSE;
+
+    // MUOKKAUS: isset():
+    if (isset($laskurow) and $laskurow["tila"] == "V" and $row["toimitettuaika"] != "0000-00-00 00:00:00" and isset($row["toimitettuaika"])) $ei_valmistettu = FALSE;
 
     if (($muokkauslukko == "" or $myyntikielto != '') and ($toim != "PROJEKTI" or ($toim == "PROJEKTI" and $projektilask == 0)) and $kukarow["mitatoi_tilauksia"] == "" and $ei_laskutettu and $ei_valmistettu) {
       echo "<SCRIPT LANGUAGE=JAVASCRIPT>

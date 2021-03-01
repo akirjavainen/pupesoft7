@@ -6,6 +6,8 @@ if ($tilausnumero != $kukarow["kesken"] and ($tilausnumero!='' or $kukarow["kesk
   exit;
 }
 
+if (!isset($toimitustapa)) $toimitustapa = null; // MUOKKAUS: isset()
+
 if (empty($tila)) {
   $tila = 'Muuta';
 }
