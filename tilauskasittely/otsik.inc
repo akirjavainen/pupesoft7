@@ -2347,7 +2347,7 @@ if ($tila == "" and !isset($jatka)) {
 
     $vasen++;
 
-    if ($tilaustyyppi == 'E' and $srow["clearing"] != '') {
+    if ($tilaustyyppi == 'E' and isset($srow["clearing"]) and $srow["clearing"] != '') {
       $vasen_sarake[$vasen] .= "<input type='hidden' name='clearing' value='$srow[clearing]'>";
     }
 
