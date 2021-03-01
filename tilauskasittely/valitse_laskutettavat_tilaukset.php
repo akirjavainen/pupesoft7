@@ -528,7 +528,7 @@ if ($tee == "VALITSE") {
     }
 
     echo "<th>".t("Tilaus")."</th>";
-    echo "<th>".t("Arvo")."<br>".t("Summa")."</th>";
+    echo "<th>".t("Arvo (ALV 0%)")."<br>".t("Summa")."</th>";
     echo "<th>".t("Tyyppi")."</th>";
     echo "<th>".t("Laatija")."<br>".t("Laadittu")."</th>";
     echo "<th>".t("Laskutuspäivä")."</th>";
@@ -1220,7 +1220,7 @@ echo "<b>Nyt on viikko " . date("W") . ".</b><br>"; // MUOKKAUS: lisatty
         <th>".t("Tilaukset")."</th>
         <th>".t("Asiakas")."</th>
         <th>".t("Tilauksia")."<br>".t("Rivejä")."</th>
-        <th>".t("Arvo")."</th>
+        <th>".t("Arvo (ALV 0%)")."</th>
         <th>".t("Maksuehto")."</th>
         <th>".t("Laskutuspäivä")."<br>".t("Toimitus")."</th>
         <th>".t("Tila")."</th></tr>";
@@ -1355,8 +1355,8 @@ echo "<b>Nyt on viikko " . date("W") . ".</b><br>"; // MUOKKAUS: lisatty
 
     if ($arvoyhteensa != 0) {
       echo "<br><table>";
-      echo "<tr><th>".t("Tilausten arvo yhteensä")." ($tilauksiayhteensa ".t("kpl")."): </th><td align='right'>".sprintf('%.2f', $arvoyhteensa)." $yhtiorow[valkoodi]</td></tr>";
-      echo "<tr><th>".t("Tilausten summa yhteensä").": </th><td align='right'>".sprintf('%.2f', $summayhteensa)." $yhtiorow[valkoodi]</td></tr>";
+      echo "<tr><th>".t("Tilausten arvo ALV 0%")." ($tilauksiayhteensa ".t("kpl")."): </th><td align='right'>".sprintf('%.2f', $arvoyhteensa)." $yhtiorow[valkoodi]</td></tr>";
+      echo "<tr><th>".t("Tilausten verollinen arvo").": </th><td align='right'>".sprintf('%.2f', $summayhteensa)." $yhtiorow[valkoodi]</td></tr>";
       echo "</table>";
     }
   }
