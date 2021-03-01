@@ -1070,7 +1070,8 @@ elseif ($tee != '') {
 
   $myyntisaamiset_tilit = "'$yhtiorow[kassa]','$yhtiorow[pankkikortti]','$yhtiorow[luottokortti]',";
 
-  if (count($kassakone) > 0) {
+  // MUOKKAUS: isset():
+  if (is_array($kassakone) and count($kassakone) > 0) {
     $kassat_temp = "";
 
     foreach ($kassakone as $var) {
