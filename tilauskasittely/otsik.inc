@@ -3391,6 +3391,7 @@ if ($tila == "" and !isset($jatka)) {
     }
 
     if ($toim == 'REKLAMAATIO') {
+      if (!isset($srow["komm2"])) $srow["komm2"] = ""; // MUOKKAUS: isset()
       echo "  <tr>
           <td>".t("Sisäiset kommentit").":</td><td colspan='3'><textarea name='komm2' rows='6' cols='50'>$srow[komm2]</textarea></td>
           </tr>";
