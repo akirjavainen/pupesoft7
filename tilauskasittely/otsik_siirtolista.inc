@@ -280,7 +280,7 @@ if ($tila == 'Muuta' and !isset($jatka)) {
       echo "<input type='hidden' name='eilahe' value='o'>";
     }
     else {
-      if ($srow['eilahetetta'] != '') $eilah = 'CHECKED';
+      $eilah = ($srow['eilahetetta'] != '') ? 'CHECKED' : ''; // MUOKKAUS: isset()
       echo "<tr><th>".t("Ohita keräys")."</th><td><input type='checkbox' name='eilahe' $eilah></td></tr>";
     }
   }
@@ -426,6 +426,7 @@ if ($tila == 'Muuta' and !isset($jatka)) {
 
   echo "<br><input type='submit' name='jatka' value='".t("Jatka")."'></form>";
 
+  if (!isset($tt_vaihdettu)) $tt_vaihdettu = false; // MUOKKAUS: isset()
   if ($tt_vaihdettu === true) {
     echo "<font class='error' style='margin-left:10px;'>", t("Toimitustapa vaihdettiin automaattisesti"), "!</font><br />";
   }
