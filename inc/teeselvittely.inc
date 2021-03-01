@@ -19,8 +19,8 @@ if (round($maara, 2) != 0) {
               tila       = 'X',
               laatija    = 'tiliote',
               luontiaika = now()";
-    $result = pupe_query($query);
-    $laskuid = mysqli_insert_id($GLOBALS["masterlink"]);
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $laskuid = mysqli_insert_id($GLOBALS["link"]);
 
     echo "<font class='message'>*** ".t("Tositteen otsikko luotu")." ***</font><br>\n";
   }
