@@ -339,7 +339,8 @@ if ($tee == "1") {
     $myyntirow = mysqli_fetch_array($myyntires);
 
     // Näytä asiakkaat, joiden luottorajaa tulisi tarkistaa (myynnin/luottorajan ero yli muutosprosentin)
-    if ($luottorajauksia == "A" and (abs(100 - ($myyntirow["summa"] / $asiakasrow["luottoraja"] * 100)) < $muutosprosentti or $asiakasrow["luottoraja"] == 0)) {
+    // MUOKKAUS: BUGIKORJAUS (jako nollalla):
+    if ((float)$asiakasrow["luottoraja"] > 0 and $luottorajauksia == "A" and (abs(100 - ((float)$myyntirow["summa"] / (float)$asiakasrow["luottoraja"] * 100)) < $muutosprosentti or $asiakasrow["luottoraja"] == 0)) {
       continue;
     }
 
