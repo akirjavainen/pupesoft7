@@ -1,5 +1,7 @@
 <?php
 
+if (!isset($komento)) $komento = array(); // MUOKKAUS: isset()
+
 if ($tee ==  "VALMIS" or $tee == "LEPAA") {
   //tulostetaan tilaus kun se on valmis
   $otunnus = $laskurow["tunnus"];
