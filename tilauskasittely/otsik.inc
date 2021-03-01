@@ -12,7 +12,7 @@ if (!function_exists("pupe_strtoupper")) {
 foreach (array("tila", "toimtapa_apuro", "oletus", "toimvko", "keraysvko", "yhteyshenkilo_tilaus", "jaksotettu", 
   "liitostunnus", "ohjausmerkki", "asiakkaan_tilausnumero", "comments", "erpcmvv", "erpcmkk", "erpcmpp", 
   "kauppatapahtuman_luonne", "kuljetusmuoto", "sisviesti3", "tilausyhteyshenkilo", "tunnusnippu", "projekti", 
-  "tunnusnippu_tarjous") as $v) {
+  "tunnusnippu_tarjous", "kuukausihinnoittelu", "yllapito_kk") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
@@ -677,7 +677,8 @@ if ($toim == "YLLAPITO") {
       "</font>";
   }
 
-  if ((count($yllapito_kk) == 0 or count($yllapito_pp) == 0) and isset($jatka)) {
+  // MUOKKAUS: isset():
+  if (isset($yllapito_kk) and isset($yllapito_pp) and (count($yllapito_kk) == 0 or count($yllapito_pp) == 0) and isset($jatka)) {
     echo "<font class='error'>".t("VIRHE: Laskutusaikataulu on syötettävä")."!</font><br>";
     $tee = "OTSIK";
     unset($jatka);
