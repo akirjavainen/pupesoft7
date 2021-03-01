@@ -354,7 +354,7 @@ if ($tee == "synkronoi" or $tee == "synkronoimaat") {
     $result = pupe_query($query);
   }
 
-  fclose($file);
+  if (isset($file)) fclose($file); // MUOKKAUS: isset()
 
   echo t("Päivitys referenssistä valmis")."...<br>";
   unset($tee);

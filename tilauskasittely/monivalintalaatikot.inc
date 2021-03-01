@@ -2242,6 +2242,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
 
           $sel = '';
           $tunnukset .= "$sxrow[tunnus],";
+	  if (!isset($mul_kustp)) $mul_kustp = array(); // MUOKKAUS: isset()
 
           if (count($mul_kustp) > 0) {
             if (in_array(trim($sxrow['tunnus']), $mul_kustp)) {
