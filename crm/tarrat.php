@@ -65,6 +65,7 @@ if ($tee == "TULOSTA") {
 
   $rajaus = urlencode(serialize($rajaus));
 
+  if (!isset($komento)) $komento = array(); // MUOKKAUS: isset()
   if ($raportti != "EX" and count($komento) == 0) {
     require "inc/valitse_tulostin.inc";
   }
