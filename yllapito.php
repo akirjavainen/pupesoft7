@@ -1678,6 +1678,7 @@ if ((int)$tunnus == 0 and (int)$uusi == 0 and $errori == '') {
         else $size='10';
 
         if ($toim == 'varaston_hyllypaikat' and ($i == 1 or $i == 2)) {
+	  if (!is_array($haku)) $haku = array(); // MUOKKAUS: isset()
           if (!isset($haku[$i])) $haku[$i] = "";
 
           echo "<br />";
