@@ -1,5 +1,6 @@
 <?php
 
+if (!isset($_POST["tee"])) $_POST["tee"] = ""; // MUOKKAUS: isset()
 if ($_POST["tee"] == 'lataa_tiedosto') {
   $lataa_tiedosto = 1;
 }
