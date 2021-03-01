@@ -620,8 +620,10 @@ if ($tee == 'I' and isset($teetosite)) {
               comments   = '{$comments}',
               laatija    = '{$kukarow['kuka']}',
               luontiaika = now()";
-    $result = pupe_query($query);
-    $tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $tunnus = mysqli_insert_id($GLOBALS["link"]);
   }
 
   if (isset($avaavatase) and $avaavatase == 'joo') {

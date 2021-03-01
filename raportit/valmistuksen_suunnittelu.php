@@ -442,8 +442,10 @@ if (isset($tee) and $tee == "TEE_VALMISTUKSET") {
                   clearing      = '{$kohde_varasto}',
                   tilaustyyppi  = 'W',
                   liitostunnus  = '9999999999'";
-        $result = pupe_query($query);
-        $otunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+        // MUOKKAUS: mysqli_insert_id():
+        $result = pupe_query($query, $GLOBALS["link"]);
+        $otunnus = mysqli_insert_id($GLOBALS["link"]);
 
         $query = "SELECT *
                   FROM lasku

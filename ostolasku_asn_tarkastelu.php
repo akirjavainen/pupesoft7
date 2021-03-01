@@ -450,9 +450,11 @@ if ($tee == 'vahvistakolli' or $tee == 'vahvistavakisinkolli') {
                                hyllyvali   = '{$lapsitieto['hyllyvali']}',
                                uusiotunnus = '{$isa_chk_row['uusiotunnus']}',
                                perheid     = '{$isa_chk_row['tunnus']}'";
-                $inskres = pupe_query($lisainsert);
 
-                $id = mysqli_insert_id($GLOBALS["masterlink"]);
+                // MUOKKAUS: mysqli_insert_id():
+                $inskres = pupe_query($lisainsert, $GLOBALS["link"]);
+                $id = mysqli_insert_id($GLOBALS["link"]);
+
                 $paketin_rivit[] = $id;
 
                 // päivitetään isä
@@ -499,8 +501,10 @@ if ($tee == 'vahvistakolli' or $tee == 'vahvistavakisinkolli') {
                 }
 
                 $kysely  = "INSERT INTO asn_sanomat ({$fields}) VALUES ({$values})";
-                $uusires = pupe_query($kysely);
-                $asn_lapsi_uusi_id = mysqli_insert_id($GLOBALS["masterlink"]);
+		
+		// MUOKKAUS: mysqli_insert_id():
+                $uusires = pupe_query($kysely, $GLOBALS["link"]);
+                $asn_lapsi_uusi_id = mysqli_insert_id($GLOBALS["link"]);
 
                 $paketin_tunnukset[] = $asn_lapsi_uusi_id;
               }
@@ -1190,8 +1194,10 @@ if ($tee == 'kohdista_tilausrivi') {
         }
 
         $kysely  = "INSERT INTO tilausrivi ({$fields}) VALUES ({$values})";
-        $uusires = pupe_query($kysely);
-        $tilausrivi_id = mysqli_insert_id($GLOBALS["masterlink"]);
+        
+        // MUOKKAUS: mysqli_insert_id():
+        $uusires = pupe_query($kysely, $GLOBALS["link"]);
+        $tilausrivi_id = mysqli_insert_id($GLOBALS["link"]);
 
         if ($ostotilausrivirow['kpl'] != 0) {
 
@@ -1227,8 +1233,10 @@ if ($tee == 'kohdista_tilausrivi') {
           }
 
           $kysely  = "INSERT INTO tapahtuma ({$fields}) VALUES ({$values})";
-          $uusires = pupe_query($kysely);
-          $tapahtuma_id = mysqli_insert_id($GLOBALS["masterlink"]);
+	
+	  // MUOKKAUS: mysqli_insert_id():
+          $uusires = pupe_query($kysely, $GLOBALS["link"]);
+          $tapahtuma_id = mysqli_insert_id($GLOBALS["link"]);
 
           $query = "UPDATE tapahtuma SET
                     kpl            = '{$upd_kpl}'

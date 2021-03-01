@@ -290,8 +290,10 @@ else {
                 }
 
                 $kysely_insertti = "INSERT into tilausrivi ($rfields) VALUES ($rvalues)";
-                $insresultti = pupe_query($kysely_insertti);
-                $insid_uusi  = mysqli_insert_id($GLOBALS["masterlink"]);
+
+		// MUOKKAUS: mysqli_insert_id():
+                $insresultti = pupe_query($kysely_insertti, $GLOBALS["link"]);
+                $insid_uusi  = mysqli_insert_id($GLOBALS["link"]);
 
                 $pantti_kpl -= $vanhin_pantti_row['kpl'];
 

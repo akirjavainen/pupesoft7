@@ -142,9 +142,10 @@ while (false !== ($file = readdir($handle))) {
                   hyllynro  = '$lahdepaikkarow[alkuhyllynro]',
                   hyllytaso = '0',
                   hyllyvali = '0'";
-        pupe_query($query);
 
-        $lahdepaikkarow['tuotepaikkatunnus'] = mysqli_insert_id($GLOBALS["masterlink"]);
+        // MUOKKAUS: mysqli_insert_id():
+        pupe_query($query, $GLOBALS["link"]);
+        $lahdepaikkarow['tuotepaikkatunnus'] = mysqli_insert_id($GLOBALS["link"]);
       }
     }
     else {
@@ -178,9 +179,10 @@ while (false !== ($file = readdir($handle))) {
                   hyllynro  = '$kohdepaikkarow[alkuhyllynro]',
                   hyllytaso = '0',
                   hyllyvali = '0'";
-        pupe_query($query);
-
-        $kohdepaikkarow['tuotepaikkatunnus'] = mysqli_insert_id($GLOBALS["masterlink"]);
+	
+	// MUOKKAUS: mysqli_insert_id():
+        pupe_query($query, $GLOBALS["link"]);
+        $kohdepaikkarow['tuotepaikkatunnus'] = mysqli_insert_id($GLOBALS["link"]);
       }
     }
     else {

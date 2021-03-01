@@ -126,9 +126,10 @@ if ($tee == 'PERUSTA') {
         }
       }
       $query = mb_substr($query, 0, -1);
-      $stresult = pupe_query($query);
 
-      $tuote_id = mysqli_insert_id($GLOBALS["masterlink"]);
+      // MUOKKAUS: mysqli_insert_id():
+      $stresult = pupe_query($query, $GLOBALS["link"]);
+      $tuote_id = mysqli_insert_id($GLOBALS["link"]);
 
       //  Tämä funktio tekee myös oikeustarkistukset!
       synkronoi($kukarow["yhtio"], "tuote", $tuote_id, "", "");
@@ -178,8 +179,9 @@ if ($tee == 'PERUSTA') {
             $query .= " ON DUPLICATE KEY UPDATE ";
             $query .= mb_substr($query_fields, 0, -1);
 
-            $astresult = pupe_query($query);
-            $id2 = mysqli_insert_id($GLOBALS["masterlink"]);
+            // MUOKKAUS: mysqli_insert_id():
+            $astresult = pupe_query($query, $GLOBALS["link"]);
+            $id2 = mysqli_insert_id($GLOBALS["link"]);
 
             synkronoi($kukarow["yhtio"], "tuotteen_toimittajat", $id2, "", "");
           }
@@ -233,9 +235,10 @@ if ($tee == 'PERUSTA') {
           $query .= " ON DUPLICATE KEY UPDATE ";
           $query .= mb_substr($query_fields, 0, -1);
 
-          $puunalkio_result = pupe_query($query);
-
-          $id2 = mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+	  // MUOKKAUS: mysqli_insert_id():
+          $puunalkio_result = pupe_query($query, $GLOBALS["link"]);
+          $id2 = mysqli_insert_id($GLOBALS["link"]);
 
           synkronoi($kukarow["yhtio"], "puun_alkio", $id2, "", "");
         }

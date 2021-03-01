@@ -706,12 +706,13 @@ function jaa_valmistus($tunnus, $params) {
                        lasku (".implode(", ", array_keys($copy)).", luontiaika, kate_korjattu, lahetetty_ulkoiseen_varastoon)
                        VALUES('".implode("', '", array_values($copy))."', now(), NULL, NULL)";
 
-        if (!pupe_query($copy_query)) {
+        // MUOKKAUS: mysqli_insert_id():
+        if (!pupe_query($copy_query, $GLOBALS["link"])) {
           exit("Virhe laskun kopioinnissa, uutta laskua ei luotu");
         }
 
         // Kopioidun laskun tunnus talteen
-        $copy['tunnus'] = mysqli_insert_id($GLOBALS["masterlink"]);
+        $copy['tunnus'] = mysqli_insert_id($GLOBALS["link"]);
       }
 
       // Kopioidaan valmiste

@@ -265,8 +265,10 @@ if (isset($tee) and trim($tee) == 'aja') {
                      comments      = '$e3ostotilausnumero',
                      laatija       = 'E3',
                      luontiaika    = now()";
-        $otsikkoinsert = pupe_query($insquery);
-        $id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+        // MUOKKAUS: mysqli_insert_id():
+        $otsikkoinsert = pupe_query($insquery, $GLOBALS["link"]);
+        $id = mysqli_insert_id($GLOBALS["link"]);
 
         // Luetaan tilauksen rivit
         datansisalto_e3($e3_ehdotuskansio, $dfile, $id, $toimituspaiva);

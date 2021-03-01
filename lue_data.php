@@ -2484,11 +2484,12 @@ if ($kasitellaan_tiedosto) {
             $tpupque = "";
 
             // Itse lue_datan päivitysquery
-            $iresult = pupe_query($query);
+	    // MUOKKAUS: mysqli_insert_id():
+            $iresult = pupe_query($query, $GLOBALS["link"]);
 
             // Haetaan tunnus, jos oli INSERT
             if ($taulunrivit[$taulu][$eriviindex][$postoiminto] == 'LISAA') {
-              $tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+              $tunnus = mysqli_insert_id($GLOBALS["link"]);
             }
 
             generoi_hinnastot($tunnus);

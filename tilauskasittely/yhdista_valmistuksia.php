@@ -73,8 +73,10 @@ if ($tee=='YHDISTA') {
                 ytunnus           = 'Valmistusajo',
                 laatija           = '$kukarow[kuka]',
                 luontiaika        = NOW()";
-      $result = pupe_query($query);
-      $otunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $otunnus = mysqli_insert_id($GLOBALS["link"]);
 
       echo "<font class='message'>".t("Luotiin uusi otsikko")." $otunnus</font><br>";
 

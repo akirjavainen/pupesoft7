@@ -557,10 +557,12 @@ if ($tee == "paalle" or $tee == "25paalle" or $tee == "puolipaalle" or $tee == "
             selite   = '$epakurantti_selite',
             laatija  = '{$kukarow["kuka"]}',
             laadittu = $updatepvm";
-  $result = pupe_query($query);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
 
   // otetaan tapahtuman tunnus, laitetaan se tiliöinnin otsikolle
-  $tapahtumaid = mysqli_insert_id($GLOBALS["masterlink"]);
+  $tapahtumaid = mysqli_insert_id($GLOBALS["link"]);
 
   if (!isset($php_cli) or !$php_cli) {
     echo "<font class='message'>";
@@ -711,10 +713,12 @@ if ($toim == "VAIHDAKEHAHIN" and $tee == "vaihda_kehahin") {
             selite   = '{$epakurantti_selite}',
             laatija  = '$kukarow[kuka]',
             laadittu = '$luontiaika1'";
-  $result = pupe_query($query);
+  
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
 
   // otetaan tapahtuman tunnus, laitetaan se tiliöinnin otsikolle
-  $tapahtumaid = mysqli_insert_id($GLOBALS["masterlink"]);
+  $tapahtumaid = mysqli_insert_id($GLOBALS["link"]);
 
   mysqli_data_seek($paikatres, 0);
 
@@ -802,10 +806,12 @@ if ($tee == "sarjanro_paalle") {
             selite            = '$epakurantti_selite',
             laatija           = '$kukarow[kuka]',
             luontiaika        = now()";
-  $result = pupe_query($query);
+  
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
 
   // otetaan tapahtuman tunnus, laitetaan se tiliöinnin otsikolle
-  $tapahtumaid = mysqli_insert_id($GLOBALS["masterlink"]);
+  $tapahtumaid = mysqli_insert_id($GLOBALS["link"]);
 
   if (!isset($php_cli) or !$php_cli) {
     echo "<font class='message'>";
@@ -832,8 +838,10 @@ if ($varaston_muutos != 0 and (in_array($tee, array("paalle", "25paalle", "puoli
               viite      = '$tapahtumaid',
               laatija    = '$kukarow[kuka]',
               luontiaika = now()";
-    $result = pupe_query($query);
-    $laskuid = mysqli_insert_id($GLOBALS["masterlink"]);
+  
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $laskuid = mysqli_insert_id($GLOBALS["link"]);
   }
 
   if ($yhtiorow["raaka_aine_tiliointi"] == "Y" and $tuoterow["tuotetyyppi"] == "R") {

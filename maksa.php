@@ -502,8 +502,10 @@ if ($tee == 'G') {
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
                     laadittu         = now()";
-          $xresult = pupe_query($query);
-          $isa = mysqli_insert_id($GLOBALS["masterlink"]); // Näin löydämme tähän liittyvät alvit....
+
+          // MUOKKAUS: mysqli_insert_id():
+          $xresult = pupe_query($query, $GLOBALS["link"]);
+          $isa = mysqli_insert_id($GLOBALS["link"]); // Näin löydämme tähän liittyvät alvit....
 
           if ($tiliointirow['vero'] != 0) {
             // Kassa-alen alv
@@ -582,8 +584,10 @@ if ($tee == 'G') {
                         lukko    = '',
                         laatija  = '$kukarow[kuka]',
                         laadittu = now()";
-              $xresult = pupe_query($query);
-              $isa = mysqli_insert_id($GLOBALS["masterlink"]);
+		    
+	      // MUOKKAUS: mysqli_insert_id():
+              $xresult = pupe_query($query, $GLOBALS["link"]);
+              $isa = mysqli_insert_id($GLOBALS["link"]);
 
               $totvesumma += $summa;
             }

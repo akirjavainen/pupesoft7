@@ -240,8 +240,10 @@ if ($kukarow['kuka'] == 'admin' and (isset($synkronoireferenssi) or isset($synkr
                   luontiaika    = now(),
                   muutospvm     = now(),
                   muuttaja      = '{$kukarow['kuka']}'";
-        pupe_query($query);
-        $insid = mysqli_insert_id($GLOBALS["masterlink"]);
+
+        // MUOKKAUS: mysqli_insert_id():
+        pupe_query($query, $GLOBALS["link"]);
+        $insid = mysqli_insert_id($GLOBALS["link"]);
 
         if (isset($synkronoireferenssialapaivita)) {
           // Jos lisätään uusi väliin, niin loput pitää työntää vähän eteenpäin

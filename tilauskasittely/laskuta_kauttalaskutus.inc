@@ -55,8 +55,10 @@ if ((int) $tilausnumero == 0) {
             alv               = '".alv_oletus()."',
             laatija           = 'verkkolas',
             luontiaika        = now()";
-  $result = pupe_query($query);
-  $tilausnumero = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $tilausnumero = mysqli_insert_id($GLOBALS["link"]);
 }
 
 // Viritetään kukarow kesken

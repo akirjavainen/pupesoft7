@@ -199,8 +199,10 @@ if ($tee == "UUSI") {
                 suoraveloitus     = '',
                 tilaustyyppi      = 'M',
                 laskunro          = '$maxmatkalasku'";
-      $result = pupe_query($query);
-      $tilausnumero = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $tilausnumero = mysqli_insert_id($GLOBALS["link"]);
 
       //  Tänne voisi laittaa myös tuon asiakasidn jos tästä voitaisiin lähettää myös lasku asiakkaalle
       $query = "INSERT into laskun_lisatiedot set
@@ -2935,8 +2937,10 @@ function erittele_rivit($tilausnumero) {
                     nimitys        = '',
                     kerattyaika    = '$alkuaika',
                     toimitettuaika = '$loppuaika'";
-          $insres = pupe_query($query);
-          $lisatty_tun = mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+	  // MUOKKAUS: mysqli_insert_id():
+          $insres = pupe_query($query, $GLOBALS["link"]);
+          $lisatty_tun = mysqli_insert_id($GLOBALS["link"]);
 
           //  Päivitetään perheid2
           $query = "UPDATE tilausrivi
@@ -2961,8 +2965,10 @@ function erittele_rivit($tilausnumero) {
                     tosite   = '$tositenro',
                     laatija  = '$kukarow[kuka]',
                     laadittu = now()";
-          $result = pupe_query($query);
-          $isa = mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+	  // MUOKKAUS: mysqli_insert_id():
+          $result = pupe_query($query, $GLOBALS["link"]);
+          $isa = mysqli_insert_id($GLOBALS["link"]);
 
           $query = "INSERT INTO tilausrivin_lisatiedot SET
                     yhtio               = '$kukarow[yhtio]',
@@ -3074,10 +3080,12 @@ function tee_matkalaskurivin_kirjaukset($variables) {
             nimitys        = '$nimitys',
             kerattyaika    = '$_alkuaika',
             toimitettuaika = '$_loppuaika'";
-  $insres = pupe_query($query);
+  
+  // MUOKKAUS: mysqli_insert_id():
+  $insres = pupe_query($query, $GLOBALS["link"]);
 
-  $perhe_id = ($perhe_id == null) ? mysqli_insert_id($GLOBALS["masterlink"]) : $perhe_id;
-  $lisatty_tun = mysqli_insert_id($GLOBALS["masterlink"]);
+  $perhe_id = ($perhe_id == null) ? mysqli_insert_id($GLOBALS["link"]) : $perhe_id;
+  $lisatty_tun = mysqli_insert_id($GLOBALS["link"]);
 
   //  Jos meillä on splitattu rivi niin pidetään nippu kasassa
   if (count($tuoteno_array) > 1) {
@@ -3137,8 +3145,10 @@ function tee_matkalaskurivin_kirjaukset($variables) {
             tosite   = '$tositenro',
             laatija  = '$kukarow[kuka]',
             laadittu = now()";
-  $result = pupe_query($query);
-  $isa = mysqli_insert_id($GLOBALS["masterlink"]); // Näin löydämme tähän liittyvät alvit....
+  
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $isa = mysqli_insert_id($GLOBALS["link"]); // Näin löydämme tähän liittyvät alvit....
 
   if ($vero != 0) {
     // jos tilausrivillä on alvi tehdään sille oma tiliointi

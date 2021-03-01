@@ -900,9 +900,10 @@ function pupe_rahtikirja_insert($data) {
   $query = "INSERT INTO rahtikirjat
             (yhtio, merahti, rahtisopimus, pakkaus, pakkauskuvaus, toimitustapa, otsikkonro, rahtikirjanro, viitelah, viitevas, kilot, kollit, kuutiot, lavametri, pakkauskuvaustark, viesti, tulostuspaikka)
             values('".implode("','", array_values($data))."')";
-  pupe_query($query);
 
-  return mysqli_insert_id($GLOBALS["masterlink"]);
+  // MUOKKAUS: mysqli_insert_id():
+  pupe_query($query, $GLOBALS["link"]);
+  return mysqli_insert_id($GLOBALS["link"]);
 }
 
 

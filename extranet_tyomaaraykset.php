@@ -567,8 +567,10 @@ function tallenna_tyomaarays($request) {
              tilaustyyppi        = 'A',
              tila                = 'A',
              sisviesti2          = '{$request['osoite_parametrit']['tilausyhteyshenkilo']}'";
-  $result = pupe_query($query);
-  $utunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $utunnus = mysqli_insert_id($GLOBALS["link"]);
 
   $query = "INSERT INTO laskun_lisatiedot SET
             laskutus_nimi     = '{$request['osoite_parametrit']['laskutus_nimi']}',

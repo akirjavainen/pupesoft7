@@ -382,8 +382,10 @@ if ($tee == 'UUSI') {
               luontiaika                    = now(),
               budjetti                      = '{$budjetti}',
               yhtio                         = '{$yhtio}'";
-    $result = pupe_query($query);
-    $selkuka = mysqli_insert_id($GLOBALS["masterlink"]);
+
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $selkuka = mysqli_insert_id($GLOBALS["link"]);
 
     echo "<font class='message'>", t("Käyttäjä perustettu"), "! ({$selkuka})</font><br><br>";
     echo "<font class='error'>", t("Valitse nyt käyttäjän oletusasiakas"), "!</font><br><br>";

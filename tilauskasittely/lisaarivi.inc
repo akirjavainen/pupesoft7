@@ -2144,8 +2144,9 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
                 $query .= ", keratty = '{$keratty}', kerattyaika = '{$kerattyaika}'";
               }
 
-              $result = pupe_query($query);
-              $lisatty_tun = mysqli_insert_id($GLOBALS["masterlink"]);
+	      // MUOKKAUS: mysqli_insert_id():
+              $result = pupe_query($query, $GLOBALS["link"]);
+              $lisatty_tun = mysqli_insert_id($GLOBALS["link"]);
 
               $trivtyrow = array("selite" => "");
 
@@ -3498,8 +3499,9 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
       $query .= ", keratty = '{$keratty}', kerattyaika = '{$kerattyaika}'";
     }
 
-    $result = pupe_query($query);
-    $lisatty_tun = mysqli_insert_id($GLOBALS["masterlink"]);
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $lisatty_tun = mysqli_insert_id($GLOBALS["link"]);
 
     if (($suoratoimitus_splittaus or $paivita_myyntitilaus) and $rivitunnus == $lisatty_tun) {
       // Päivitetään suoratoimitus-myyntitilausrivin määrät

@@ -11,8 +11,10 @@ if (!function_exists("uusi_karhukierros")) {
 
     if (!mysqli_num_rows($result)) {
       $query = "INSERT INTO karhukierros (pvm,yhtio) values (current_date,'$yhtio')";
-      $result = pupe_query($query);
-      $uusid = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $uusid = mysqli_insert_id($GLOBALS["link"]);
     }
     else {
       $row = mysqli_fetch_assoc($result);

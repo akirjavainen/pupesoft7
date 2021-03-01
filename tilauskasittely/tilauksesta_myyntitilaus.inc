@@ -179,23 +179,29 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
 
       if ($perusta == "PROJEKTI" and $monistarow["tunnusnippu"] > 0 and $monistarow["tila"] == "T") {
         $kysely  = "INSERT into lasku ($fields) VALUES ($values)";
-        $insres  = pupe_query($kysely);
-        $ptunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+	// MUOKKAUS: mysqli_insert_id():
+        $insres  = pupe_query($kysely, $GLOBALS["link"]);
+        $ptunnus = mysqli_insert_id($GLOBALS["link"]);
 
         $kysely = "UPDATE lasku SET tunnusnippu='$ptunnus', tila='R', alatila='' WHERE yhtio='$kukarow[yhtio]' and tunnus='$ptunnus'";
         $updres=pupe_query($kysely);
 
         // avataan projekti kirjanpitoon
         $query = " INSERT into kustannuspaikka set yhtio  = '$kukarow[yhtio]', nimi = '$ptunnus - $monistarow[nimi]', tyyppi = 'P', kaytossa = 'o', luontiaika = now(), laatija = '$kukarow[kuka]'";
-        $result = pupe_query($query);
-        $projekti = mysqli_insert_id($GLOBALS["masterlink"]);
+	
+	// MUOKKAUS: mysqli_insert_id():
+        $result = pupe_query($query, $GLOBALS["link"]);
+        $projekti = mysqli_insert_id($GLOBALS["link"]);
 
         $tilauksesta_myyntitilaus = "<font class='message'>".t("PERUSTETTIIN PROJEKTI").": $ptunnus</font><br><br>";
       }
 
       $kysely  = "INSERT into lasku ($fields) VALUES ($values)";
-      $insres  = pupe_query($kysely);
-      $utunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $insres  = pupe_query($kysely, $GLOBALS["link"]);
+      $utunnus = mysqli_insert_id($GLOBALS["link"]);
 
       if ($perusta == "TYOMAARAYS") {
         // Kopioidaan työmääräys

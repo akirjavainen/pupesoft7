@@ -1260,10 +1260,12 @@ if ($tee == 'VALMIS') {
                       selite    = '$selite',
                       laatija   = '$kukarow[kuka]',
                       laadittu  = {$laadittuaikalisa}";
-            $result = pupe_query($query);
+
+            // MUOKKAUS: mysqli_insert_id():
+            $result = pupe_query($query, $GLOBALS["link"]);
 
             // otetaan tapahtuman tunnus, laitetaan se tiliöinnin otsikolle
-            $tapahtumaid = mysqli_insert_id($GLOBALS["masterlink"]);
+            $tapahtumaid = mysqli_insert_id($GLOBALS["link"]);
 
             $query = "UPDATE inventointilistarivi SET
                       aika            = now(),
@@ -1324,8 +1326,10 @@ if ($tee == 'VALMIS') {
                         laatija    = '$kukarow[kuka]',
                         viite      = '$tapahtumaid',
                         luontiaika = now()";
-              $result = pupe_query($query);
-              $laskuid = mysqli_insert_id($GLOBALS["masterlink"]);
+	      
+	      // MUOKKAUS: mysqli_insert_id():
+              $result = pupe_query($query, $GLOBALS["link"]);
+              $laskuid = mysqli_insert_id($GLOBALS["link"]);
 
               // Seuraako myyntitiliöinti tuotteen tyyppiä ja onko kyseessä raaka-aine?
               $raaka_aine_tiliointi = $yhtiorow["raaka_aine_tiliointi"];

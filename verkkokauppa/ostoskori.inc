@@ -53,8 +53,10 @@ if (!function_exists("check_ostoskori")) {
                 liitostunnus = '$liitostunnus',
                 tila         = 'B',
                 alatila      = '$ostoskori'";
-      $koriin = pupe_query($query);
-      $tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      $koriin = pupe_query($query, $GLOBALS["link"]);
+      $tunnus = mysqli_insert_id($GLOBALS["link"]);
 
       // haetaan kori
       $query = "select * from lasku where yhtio='$kukarow[yhtio]' and tunnus='$tunnus'";

@@ -695,8 +695,10 @@ if (isset($jatka)) {
         ytunnus        = '$ytunnus',
         erikoisale      = '$erikoisale'";
   $query .= $postquery;
-  $result = pupe_query($query);
-  $id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $id = mysqli_insert_id($GLOBALS["link"]);
 
   // Jos erikoisalennus muuttuu
   if ($laskurow["erikoisale"] != $erikoisale) {

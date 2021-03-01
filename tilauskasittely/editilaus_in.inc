@@ -1922,8 +1922,10 @@ while ($tietue = fgets($fd)) {
                 yhtio_toimipaikka       = '$kukarow[toimipaikka]',
                 ytunnus                 = '$arow[ytunnus]',
                 ohjelma_moduli          = '$ohjelmamoduli'";
-      $result = pupe_query($query);
-      $id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $id = mysqli_insert_id($GLOBALS["link"]);
 
       $query = "INSERT INTO laskun_lisatiedot SET
                 laskutus_nimi       = '$arow[laskutus_nimi]',

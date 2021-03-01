@@ -116,8 +116,10 @@ if (mysqli_num_rows($result) == 1) {
             piiri           = '$asrow[piiri]',
             olmapvm         = now(),
             luontiaika      = now()";
-  $result = pupe_query($query);
-  $otunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $otunnus = mysqli_insert_id($GLOBALS["link"]);
 
   if (mb_strlen(trim($asrow['laskutus_nimi'])) == 0) {
     $asrow['laskutus_nimi']     = $asrow['nimi'];

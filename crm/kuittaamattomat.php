@@ -122,8 +122,10 @@ if ($tee == "LISAAMUISTUTUS") {
                kuittaus = '$kuittaus',
                pvmalku  = $pvmalku,
                pvmloppu = date_add($pvmalku, INTERVAL 30 MINUTE)";
-    $result = pupe_query($kysely);
-    $muist = mysqli_insert_id($GLOBALS["masterlink"]);
+
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($kysely, $GLOBALS["link"]);
+    $muist = mysqli_insert_id($GLOBALS["link"]);
 
     echo t("Lisätty muistutus päivälle:")."  <b>$pvmalku</b><br><br>";
 

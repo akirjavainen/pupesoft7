@@ -117,8 +117,10 @@ else {
               tapvm        = '$tanaan',
               luontiaika   = now(),
               laatija      = 'Invent'";
-    $result = pupe_query($query);
-    $lid = mysqli_insert_id($GLOBALS["masterlink"]);
+
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $lid = mysqli_insert_id($GLOBALS["link"]);
 
     $query  = "SELECT *
                from lasku
@@ -190,8 +192,10 @@ else {
             nimitys        = '$trow[nimitys]',
             tyyppi         = 'O',
             kommentti      = '$kukarow[nimi] lisäsi inventoimalla.'";
-  $result = pupe_query($query);
-  $lid = mysqli_insert_id($GLOBALS["masterlink"]);
+  
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $lid = mysqli_insert_id($GLOBALS["link"]);
 
   $ostorivitunnus = $lid;
   $toiminto     = "";

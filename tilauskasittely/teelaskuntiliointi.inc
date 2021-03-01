@@ -146,8 +146,10 @@ else {
                 lukko            = '1',
                 laatija          = '$kukarow[kuka]',
                 laadittu         = now()";
-      pupe_query($query);
-      $margmyynti = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      pupe_query($query, $GLOBALS["link"]);
+      $margmyynti = mysqli_insert_id($GLOBALS["link"]);
 
       // Päivitetään tilausriville tieto myyntitiliöinnistä:
       if (!empty($xrow['tilausrivin_lisatietotunnukset'])) {
@@ -276,8 +278,10 @@ else {
                 lukko            = '$lukko',
                 laatija          = '$kukarow[kuka]',
                 laadittu         = now()";
-      pupe_query($query);
-      $isa = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      pupe_query($query, $GLOBALS["link"]);
+      $isa = mysqli_insert_id($GLOBALS["link"]);
 
       // Päivitetään tilausriville tieto myyntitiliöinnistä:
       if (!empty($xrow['tilausrivin_lisatietotunnukset'])) {
@@ -336,8 +340,10 @@ else {
                   lukko            = '$lukko',
                   laatija          = '$kukarow[kuka]',
                   laadittu         = now()";
-        pupe_query($query);
-        $isa = mysqli_insert_id($GLOBALS["masterlink"]);
+        
+        // MUOKKAUS: mysqli_insert_id():
+        pupe_query($query, $GLOBALS["link"]);
+        $isa = mysqli_insert_id($GLOBALS["link"]);
 
         if ($xrow["alv"] != 0) {
 

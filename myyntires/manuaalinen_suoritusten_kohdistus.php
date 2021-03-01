@@ -651,8 +651,10 @@ if ($tila == 'tee_kohdistus') {
                       projekti = '{$projekti_ins}',
                       summa    = $summa,
                       selite   = 'Manuaalisesti kohdistettu suoritus (osasuoritus) $suoritus[viesti]'";
-            $result = pupe_query($query);
-            $isa = mysqli_insert_id($GLOBALS["masterlink"]);
+
+            // MUOKKAUS: mysqli_insert_id():
+            $result = pupe_query($query, $GLOBALS["link"]);
+            $isa = mysqli_insert_id($GLOBALS["link"]);
 
             $totvesumma += $summa;
           }
@@ -1047,8 +1049,10 @@ if ($tila == 'tee_kohdistus') {
                         valkoodi         = '$tiliointirow[valkoodi]',
                         selite           = 'Manuaalisesti kohdistettu suoritus $suoritus[viesti]',
                         vero             = '$tiliointirow[vero]'";
-              $result = pupe_query($query);
-              $isa = mysqli_insert_id($GLOBALS["masterlink"]);
+	      
+	      // MUOKKAUS: mysqli_insert_id():
+              $result = pupe_query($query, $GLOBALS["link"]);
+              $isa = mysqli_insert_id($GLOBALS["link"]);
 
               if ($tiliointirow['vero'] != 0) {
                 // Kassa-ale alv
@@ -1234,8 +1238,10 @@ if ($tila == 'tee_kohdistus') {
                           projekti = '$projekti_ins',
                           summa    = $summa,
                           selite   = 'Manuaalisesti kohdistettu suoritus (osasuoritus) $suoritus[viesti]'";
-                $result = pupe_query($query);
-                $isa = mysqli_insert_id($GLOBALS["masterlink"]);
+	      
+	        // MUOKKAUS: mysqli_insert_id():
+                $result = pupe_query($query, $GLOBALS["link"]);
+                $isa = mysqli_insert_id($GLOBALS["link"]);
 
                 $totvesumma += $summa;
               }

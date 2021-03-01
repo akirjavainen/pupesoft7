@@ -569,8 +569,10 @@ if ($tee == 'UV') { //Tehdään tuotteet!
                 selite     = '$selite',
                 laatija    = '$kukarow[kuka]',
                 laadittu   = now()";
-      $result = pupe_query($query);
-      $tapahtumaid = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $tapahtumaid = mysqli_insert_id($GLOBALS["link"]);
 
       $query = "UPDATE tuote
                 SET kehahin  = $kehahin,
@@ -633,8 +635,10 @@ if ($tee == 'UV') { //Tehdään tuotteet!
                     hyllynro    = '$tilrivirow[hyllynro]',
                     hyllytaso   = '$tilrivirow[hyllytaso]',
                     hyllyvali   = '$tilrivirow[hyllyvali]'";
-          $insresult = pupe_query($query);
-          $valmistettavat .= ",".mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+	  // MUOKKAUS: mysqli_insert_id():
+          $insresult = pupe_query($query, $GLOBALS["link"]);
+          $valmistettavat .= ",".mysqli_insert_id($GLOBALS["link"]);
         }
 
         //  Kaikille sarjanumeroille tehdään varastoon saavutettu O-rivi, muuten mm keräys ei toimi ja ehkä se on myös loogisempaa?
@@ -683,8 +687,10 @@ if ($tee == 'UV') { //Tehdään tuotteet!
                   hyllytaso   = '$tilrivirow[hyllytaso]',
                   hyllyvali   = '$tilrivirow[hyllyvali]'
                   $laskutettuLisa";
-        $insresult = pupe_query($query);
-        $uusrivitunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+	// MUOKKAUS: mysqli_insert_id():
+        $insresult = pupe_query($query, $GLOBALS["link"]);
+        $uusrivitunnus = mysqli_insert_id($GLOBALS["link"]);
         $valmistettavat .= ",".$uusrivitunnus;
 
         $jaljella = round($tilrivirow["varattu"] - $isavarattu, 2);
@@ -758,8 +764,10 @@ if ($tee == 'UV') { //Tehdään tuotteet!
               $query = "INSERT INTO sarjanumeroseuranta
                         (yhtio, tuoteno, sarjanumero, ostorivitunnus, myyntirivitunnus, laatija, luontiaika, hyllyalue, hyllynro, hyllyvali, hyllytaso)
                         VALUES ('$kukarow[yhtio]', '$tilrivirow[tuoteno]', '$sarjanro', '$uusrivitunnus', 0, '$kuka[kuka]', now(), '$tilrivirow[hyllyalue]', '$tilrivirow[hyllynro]', '$tilrivirow[hyllyvali]', '$tilrivirow[hyllytaso]')";
-              $sarjares1 = pupe_query($query);
-              $uusisarjatunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+	      // MUOKKAUS: mysqli_insert_id():
+              $sarjares1 = pupe_query($query, $GLOBALS["link"]);
+              $uusisarjatunnus = mysqli_insert_id($GLOBALS["link"]);
             }
           }
 

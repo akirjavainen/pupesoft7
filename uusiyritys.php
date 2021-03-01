@@ -277,8 +277,10 @@ if ($tila == 'kayttaja') {
             salasana  = '$salasana',
             kuka      = '$kuka',
             profiilit = '$profile'";
-  $result = pupe_query($query);
-  $kuka_id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $kuka_id = mysqli_insert_id($GLOBALS["link"]);
 
   //Insertoidaan ainakin oikeudet käyttäjähallintaan
   $query = "INSERT into oikeu

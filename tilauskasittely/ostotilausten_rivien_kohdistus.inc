@@ -630,8 +630,10 @@ if ($tila == 'tee_siirto') {
                 }
 
                 $kysely = "INSERT into tilausrivi ($rfields) VALUES ($rvalues)";
-                $insres = pupe_query($kysely);
-                $insid  = mysqli_insert_id($GLOBALS["masterlink"]);
+
+		// MUOKKAUS: mysqli_insert_id():
+                $insres = pupe_query($kysely, $GLOBALS["link"]);
+                $insid  = mysqli_insert_id($GLOBALS["link"]);
 
                 $query = "SELECT *
                           FROM tilausrivin_lisatiedot

@@ -584,8 +584,10 @@ if (!function_exists("tee_jt_tilaus")) {
         }
 
         $query = mb_substr($query, 0, -1);
-        $stresult = pupe_query($query);
-        $id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+	// MUOKKAUS: mysqli_insert_id():
+        $stresult = pupe_query($query, $GLOBALS["link"]);
+        $id = mysqli_insert_id($GLOBALS["link"]);
 
         $query = "INSERT INTO laskun_lisatiedot SET ";
 

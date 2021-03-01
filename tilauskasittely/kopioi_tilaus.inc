@@ -105,8 +105,10 @@ if (!function_exists("kopioi_tilaus")) {
     }
 
     $kysely  = "INSERT into lasku ($fields) VALUES ($values)";
-    $insres  = pupe_query($kysely);
-    $utunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+    // MUOKKAUS: mysqli_insert_id():
+    $insres  = pupe_query($kysely, $GLOBALS["link"]);
+    $utunnus = mysqli_insert_id($GLOBALS["link"]);
 
     // laskun_lisatiedot
     if (mysqli_num_rows($lisatiedotres) > 0) {
@@ -166,8 +168,10 @@ if (!function_exists("kopioi_tilaus")) {
       }
 
       $kysely = "INSERT into tilausrivi ($rfields) VALUES ($rvalues)";
-      $insres = pupe_query($kysely);
-      $insid  = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $insres = pupe_query($kysely, $GLOBALS["link"]);
+      $insid  = mysqli_insert_id($GLOBALS["link"]);
 
       // Kopioidaan tilausrivin lisatiedot
       $query = "SELECT *

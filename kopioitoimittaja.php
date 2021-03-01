@@ -34,8 +34,9 @@ if ($tee == "write") {
     }
     $query .= ")";
 
-    $result = pupe_query($query);
-    $uusiidee = mysqli_insert_id($GLOBALS["masterlink"]);
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $uusiidee = mysqli_insert_id($GLOBALS["link"]);
 
     //  Tämä funktio tekee myös oikeustarkistukset!
     synkronoi($kukarow["yhtio"], "toimi", $uusiidee, "", "");

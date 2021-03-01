@@ -264,9 +264,10 @@ if ($tee == 'LISAA') {
                kentta04 = '$paivarahat',
                tapa     = '$tapa',
                tyyppi   = 'kalenteri'";
-    pupe_query($query);
 
-    $uusi_tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+    // MUOKKAUS: mysqli_insert_id():
+    pupe_query($query, $GLOBALS["link"]);
+    $uusi_tunnus = mysqli_insert_id($GLOBALS["link"]);
 
     // Päivitetään liitetiedosto uudelle tunnukselle,
     // mikäli aikaisempi kalenterimerkintä päivittyi.

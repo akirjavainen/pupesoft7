@@ -1473,9 +1473,10 @@ else {
             }
 
             $kysely  = "INSERT INTO tilausrivi ({$fields}) VALUES ({$values})";
-            $uusires = pupe_query($kysely);
 
-            $split_tilausrivin_tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+	    // MUOKKAUS: mysqli_insert_id():
+            $uusires = pupe_query($kysely, $GLOBALS["link"]);
+            $split_tilausrivin_tunnus = mysqli_insert_id($GLOBALS["link"]);
 
             $query = "SELECT *
                       FROM tilausrivin_lisatiedot
@@ -1550,9 +1551,10 @@ else {
                 }
 
                 $kysely  = "INSERT INTO tilausrivi ({$fields}) VALUES ({$values})";
-                $uusires = pupe_query($kysely);
-
-                $split_tilausrivin_tunnus_lapsi = mysqli_insert_id($GLOBALS["masterlink"]);
+	        
+		// MUOKKAUS: mysqli_insert_id():
+                $uusires = pupe_query($kysely, $GLOBALS["link"]);
+                $split_tilausrivin_tunnus_lapsi = mysqli_insert_id($GLOBALS["link"]);
 
                 $query = "SELECT *
                           FROM tilausrivin_lisatiedot
@@ -1861,9 +1863,10 @@ else {
           }
 
           $kysely  = "INSERT into lasku ($fields) VALUES ($values)";
-          $uusires = pupe_query($kysely);
-
-          $laskurow['tunnus'] = mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+	  // MUOKKAUS: mysqli_insert_id():
+          $uusires = pupe_query($kysely, $GLOBALS["link"]);
+          $laskurow['tunnus'] = mysqli_insert_id($GLOBALS["link"]);
 
           // Tallennetaan kaikki splitit
           $tilausnumerot[] = $laskurow["tunnus"];

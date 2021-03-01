@@ -4773,8 +4773,10 @@ if (isset($jatka)) {
 
   $query .= ", tila = '$ylatila'";
   $query .= $postquery;
-  $result = pupe_query($query);
-  $id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $id = mysqli_insert_id($GLOBALS["link"]);
 
   // Setataan laskun aluperäiset tilat
   $orig_tila    = $ylatila;
@@ -4877,8 +4879,10 @@ if (isset($jatka)) {
 
           //   Ja insertoidaan rivit kantaan
           $query = "  INSERT INTO tilausrivi ($fields) VALUES $values";
-          $insres=pupe_query($query);
-          $lisattyRivitunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+	  // MUOKKAUS: mysqli_insert_id():
+          $insres = pupe_query($query, $GLOBALS["link"]);
+          $lisattyRivitunnus = mysqli_insert_id($GLOBALS["link"]);
 
           //  Otetaan korjattava perheid talteen
           if ($monistarow["perheid"] > 0 and $monistarow["perheid"] == $monistarow["tunnus"]) {
@@ -4967,8 +4971,10 @@ if (isset($jatka)) {
       if ($toim == "PROJEKTI") {
         // avataan projekti kirjanpitoon
         $query = " INSERT into kustannuspaikka set yhtio  = '$kukarow[yhtio]', nimi = '$id - $nimi', tyyppi = 'P', kaytossa = 'o', luontiaika = now(), laatija = '$kukarow[kuka]'";
-        $result = pupe_query($query);
-        $projekti = mysqli_insert_id($GLOBALS["masterlink"]);
+	
+	// MUOKKAUS: mysqli_insert_id():
+        $result = pupe_query($query, $GLOBALS["link"]);
+        $projekti = mysqli_insert_id($GLOBALS["link"]);
 
         $projektilla = $tilausnumero;
       }

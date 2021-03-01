@@ -619,8 +619,10 @@ if ($toiminto == 'LISAA' and (trim($sarjanumero) != '' or $is_uploaded_file === 
       $query = "INSERT into sarjanumeroseuranta
                 (yhtio, tuoteno, sarjanumero, lisatieto, $tunnuskentta, kaytetty, era_kpl, laatija, luontiaika, takuu_alku, takuu_loppu, hyllyalue, hyllynro, hyllyvali, hyllytaso, parasta_ennen)
                 VALUES ('$kukarow[yhtio]','$rivirow[tuoteno]','$sarjanumero','$lisatieto','','$kaytetty','$era_kpl','$kukarow[kuka]',now(),'$tvva-$tkka-$tppa','$tvvl-$tkkl-$tppl', '$rivirow[hyllyalue]', '$rivirow[hyllynro]', '$rivirow[hyllyvali]', '$rivirow[hyllytaso]', '$pevva-$pekka-$peppa')";
-      $sarjares = pupe_query($query);
-      $tun = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      $sarjares = pupe_query($query, $GLOBALS["link"]);
+      $tun = mysqli_insert_id($GLOBALS["link"]);
 
       if ($sarjanumeronLisatiedot and $oletussarja == "JOO" and ($rivirow["sarjanumeroseuranta"] == "S" or $rivirow["sarjanumeroseuranta"] == "T" or $rivirow["sarjanumeroseuranta"] == "V")) {
         $query = "SELECT *

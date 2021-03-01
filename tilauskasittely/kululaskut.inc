@@ -38,9 +38,10 @@ else {
               alatila      = '$keikanalatila',
               luontiaika   = now(),
               laatija      = '$kukarow[kuka]'";
-    $result = pupe_query($query);
 
-    $otunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $otunnus = mysqli_insert_id($GLOBALS["link"]);
 
     $query  = "SELECT *
                from lasku

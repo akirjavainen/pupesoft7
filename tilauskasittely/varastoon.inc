@@ -225,10 +225,12 @@ elseif ($toiminto == "kalkyyli" and $tee == "varastoon") {
                        perheid     = '{$chk_row['tunnus']}',
                        suuntalava  = '{$chk_row['suuntalava']}',
                        uusiotunnus = '{$chk_row['uusiotunnus']}'";
-        $inskres = pupe_query($lisainsert);
+
+        // MUOKKAUS: mysqli_insert_id():
+        $inskres = pupe_query($lisainsert, $GLOBALS["link"]);
 
         if (!empty($varastoon_tilausrivirajaus)) {
-          $runkoinsert = mysqli_insert_id($GLOBALS["masterlink"]);
+          $runkoinsert = mysqli_insert_id($GLOBALS["link"]);
           $runkotunnukset .= $runkoinsert . ",";
         }
 
@@ -933,8 +935,10 @@ while ($tilrivirow = mysqli_fetch_assoc($presult)) {
               laatija    = '$kukarow[kuka]',
               rivitunnus = '$tilrivirow[tunnus]',
               laadittu   = '$varastoonvientipva'";
-    $result = pupe_query($query);
-    $tapahtumaid = mysqli_insert_id($GLOBALS["masterlink"]);
+    
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $tapahtumaid = mysqli_insert_id($GLOBALS["link"]);
 
     // Viedään koko suuntalava varastoon. Eli kaikille suuntalavalla oleville tuotteille päivitetään sama tuotepaikka
     if ($yhtiorow['suuntalavat'] == 'S' and is_numeric($suuntalavan_tunnus) and trim($koko_suuntalava) == 'X') {

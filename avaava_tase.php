@@ -115,8 +115,10 @@ if (isset($tee) and $tee == 'I') {
               comments   = '{$iselite[$maara]}',
               laatija    = '{$kukarow['kuka']}',
               luontiaika = now()";
-    $result = pupe_query($query);
-    $tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $tunnus = mysqli_insert_id($GLOBALS["link"]);
   }
   else {
     $tulos_row = mysqli_fetch_assoc($result);

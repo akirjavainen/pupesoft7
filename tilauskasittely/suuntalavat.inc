@@ -197,8 +197,9 @@ if (!function_exists('lisaa_suuntalava')) {
                 muuttaja           = '{$kukarow['kuka']}',
                 muutospvm          = now()";
 
-      $insert_result = pupe_query($query);
-      $uusi_suuntalavan_tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+      // MUOKKAUS: mysqli_insert_id():
+      $insert_result = pupe_query($query, $GLOBALS["link"]);
+      $uusi_suuntalavan_tunnus = mysqli_insert_id($GLOBALS["link"]);
 
       // Jos tehdään uusi lava ilman saapumista, ei tehdä liitosta suuntalava_saapuminen tauluun
       if ($otunnus != '') {

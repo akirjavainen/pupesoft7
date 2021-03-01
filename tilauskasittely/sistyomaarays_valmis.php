@@ -170,8 +170,10 @@ if ($tee == "VALMIS") {
               }
 
               $kysely  = mb_substr($kysely, 0, -1);
-              $insres2 = pupe_query($kysely);
-              $insid   = mysqli_insert_id($GLOBALS["masterlink"]);
+
+	      // MUOKKAUS: mysqli_insert_id():
+              $insres2 = pupe_query($kysely, $GLOBALS["link"]);
+              $insid   = mysqli_insert_id($GLOBALS["link"]);
 
               //Haetaan alkuperäisen ostorivin tapahtuma
               $query = "SELECT *
@@ -474,8 +476,10 @@ if ($tee == "VALMIS") {
                           alatila      = 'S',
                           luontiaika   = now(),
                           laatija      = '$kukarow[kuka]'";
-                $result = pupe_query($query);
-                $otunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+		
+		// MUOKKAUS: mysqli_insert_id():
+                $result = pupe_query($query, $GLOBALS["link"]);
+                $otunnus = mysqli_insert_id($GLOBALS["link"]);
               }
 
               $query = "INSERT into lasku set
@@ -491,8 +495,10 @@ if ($tee == "VALMIS") {
                         summa         = $tyokulut,
                         vienti        = 'B',
                         luontiaika    = now()";
-              $result = pupe_query($query);
-              $laskuid = mysqli_insert_id($GLOBALS["masterlink"]);
+		
+              // MUOKKAUS: mysqli_insert_id():
+              $result = pupe_query($query, $GLOBALS["link"]);
+              $laskuid = mysqli_insert_id($GLOBALS["link"]);
 
               list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($yhtiorow["varasto"]);
 

@@ -1608,8 +1608,10 @@ else {
                           kerattyaika     = now(),
                           toimitettu      = 'saldoton',
                           toimitettuaika  = now()";
-                $addtil = pupe_query($query);
-                $lisatty_tun = mysqli_insert_id($GLOBALS["masterlink"]);
+
+                // MUOKKAUS: mysqli_insert_id():
+                $addtil = pupe_query($query, $GLOBALS["link"]);
+                $lisatty_tun = mysqli_insert_id($GLOBALS["link"]);
 
                 $query = "INSERT INTO tilausrivin_lisatiedot
                           SET yhtio           = '$kukarow[yhtio]',
@@ -1850,8 +1852,10 @@ else {
                         kerattyaika     = now(),
                         toimitettu      = 'saldoton',
                         toimitettuaika  = now()";
-              $addtil = pupe_query($query);
-              $lisatty_tun = mysqli_insert_id($GLOBALS["masterlink"]);
+              
+	      // MUOKKAUS: mysqli_insert_id():
+              $addtil = pupe_query($query, $GLOBALS["link"]);
+              $lisatty_tun = mysqli_insert_id($GLOBALS["link"]);
 
               $query = "INSERT INTO tilausrivin_lisatiedot
                         SET yhtio           = '$kukarow[yhtio]',

@@ -57,8 +57,10 @@ while ($yhtio = mysqli_fetch_assoc($row)) {
               laatija    = '$tapahtumarow[laatija]',
               viite      = '$tapahtumaid',
               luontiaika = '$tapahtumarow[laadittu]'";
-    $result = pupe_query($query);
-    $laskuid = mysqli_insert_id($GLOBALS["masterlink"]);
+
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $laskuid = mysqli_insert_id($GLOBALS["link"]);
 
     // Seuraako myyntitiliöinti tuotteen tyyppiä ja onko kyseessä raaka-aine?
     $raaka_aine_tiliointi = $yhtiorow["raaka_aine_tiliointi"];

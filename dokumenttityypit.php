@@ -85,8 +85,10 @@ elseif ($tee == "LISAA") {
             luontiaika = now(),
             muuttaja   = '{$kukarow['kuka']}',
             muutospvm  = now()";
-  pupe_query($query);
-  $tyyppiid = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  pupe_query($query, $GLOBALS["link"]);
+  $tyyppiid = mysqli_insert_id($GLOBALS["link"]);
 
   foreach ($sel_hyvaksyjat as $hyvak) {
     $query = "INSERT into hyvaksyttavat_dokumenttityypit_kayttajat set

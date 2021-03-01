@@ -127,9 +127,10 @@ if ($tee == "valmis") {
               }
 
               $insert_query = mb_substr($insert_query, 0, -1);
-              $insert_res = pupe_query($insert_query);
 
-              $tilausrivirow['tunnus'] = mysqli_insert_id($GLOBALS["masterlink"]);
+	      // MUOKKAUS: mysqli_insert_id():
+              $insert_res = pupe_query($insert_query, $GLOBALS["link"]);
+              $tilausrivirow['tunnus'] = mysqli_insert_id($GLOBALS["link"]);
             }
 
             unset($result);

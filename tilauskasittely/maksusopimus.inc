@@ -136,8 +136,10 @@ function maksusopimus_uusi($laskurow) {
             maksuehto = '$mrow[tunnus]',
             luotu     = now(),
             luonut    = '$kukarow[kuka]'";
-  $result = pupe_query($query);
-  $lisatty_maksupositio = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $lisatty_maksupositio = mysqli_insert_id($GLOBALS["link"]);
 
   return array($laskurow, $lisatty_maksupositio);
 }

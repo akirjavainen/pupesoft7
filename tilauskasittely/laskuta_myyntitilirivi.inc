@@ -104,8 +104,9 @@ if ($tilatapa == "PAIVITA") {
 
         $kysely  = "INSERT into tilausrivi ($fields) VALUES ($values)";
 
-        $insres  = pupe_query($kysely);
-        $utunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+	// MUOKKAUS: mysqli_insert_id():
+        $insres  = pupe_query($kysely, $GLOBALS["link"]);
+        $utunnus = mysqli_insert_id($GLOBALS["link"]);
 
         if ($uuden_perheen_perheid == 0) {
           $uuden_perheen_perheid = $utunnus;

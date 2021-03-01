@@ -1132,8 +1132,10 @@ if ($tee == 'P') {
                   }
 
                   $kysely  = "INSERT INTO lasku ($fields) VALUES ($values)";
-                  $insres  = pupe_query($kysely);
-                  $tilausnumerot[$tilrivirow["otunnus"]] = mysqli_insert_id($GLOBALS["masterlink"]);
+
+		  // MUOKKAUS: mysqli_insert_id():
+                  $insres  = pupe_query($kysely, $GLOBALS["link"]);
+                  $tilausnumerot[$tilrivirow["otunnus"]] = mysqli_insert_id($GLOBALS["link"]);
 
                   $kysely2 = "SELECT laskutus_nimi, laskutus_nimitark, laskutus_osoite, laskutus_postino, laskutus_postitp, laskutus_maa, laatija, luontiaika, otunnus
                               FROM laskun_lisatiedot
@@ -1231,8 +1233,10 @@ if ($tee == 'P') {
                          perheid2        = '$tilrivirow[perheid2]',
                          nimitys         = '$tilrivirow[nimitys]',
                          jaksotettu      = '$tilrivirow[jaksotettu]'";
-              $riviresult = pupe_query($querys);
-              $lisatty_tun = mysqli_insert_id($GLOBALS["masterlink"]);
+	      
+	      // MUOKKAUS: mysqli_insert_id():
+              $riviresult = pupe_query($querys, $GLOBALS["link"]);
+              $lisatty_tun = mysqli_insert_id($GLOBALS["link"]);
 
               //Kopioidaan tilausrivin lisatiedot
               $querys = "SELECT *

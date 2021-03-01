@@ -283,9 +283,10 @@ function tee_laskuotsikko($kassalipas, $summa, $yleinen_kommentti, $date) {
             tapvm      = '{$date}',
             kassalipas = '{$kassalipas['tunnus']}',
             nimi       = '".t("Käteisotto kassalippaasta").": {$kassalipas['nimi']}'";
-  pupe_query($query);
 
-  return mysqli_insert_id($GLOBALS["masterlink"]);
+  // MUOKKAUS: mysqli_insert_id():
+  pupe_query($query, $GLOBALS["link"]);
+  return mysqli_insert_id($GLOBALS["link"]);
 }
 
 function tee_tiliointi($params, $kulu_tiliointi = false, $alv_tiliointi = false) {
@@ -334,9 +335,9 @@ function tee_tiliointi($params, $kulu_tiliointi = false, $alv_tiliointi = false)
             {$lukko}
             vero             = {$vero}";
 
-  pupe_query($query);
-
-  return mysqli_insert_id($GLOBALS["masterlink"]);
+  // MUOKKAUS: mysqli_insert_id():
+  pupe_query($query, $GLOBALS["link"]);
+  return mysqli_insert_id($GLOBALS["link"]);
 }
 
 function tarkista_saako_laskua_muuttaa($tapahtumapaiva) {

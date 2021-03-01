@@ -280,8 +280,10 @@ if (mb_strpos($_SERVER['SCRIPT_NAME'], "asiakasmemo.php") !== FALSE and $ytunnus
                    kuittaus = '$kuittaus',
                    laatija = '$kukarow[kuka]',
                    luontiaika = now()";
-        $result = pupe_query($kysely);
-        $muist = mysqli_insert_id($GLOBALS["masterlink"]);
+
+        // MUOKKAUS: mysqli_insert_id():
+        $result = pupe_query($kysely, $GLOBALS["link"]);
+        $muist = mysqli_insert_id($GLOBALS["link"]);
 
         if ($tyyppi == "Muistutus") {
 

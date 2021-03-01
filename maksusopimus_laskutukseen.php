@@ -187,8 +187,10 @@ if (!function_exists("ennakkolaskuta")) {
     }
 
     $query = substr($query, 0, -1);
-    $stresult = pupe_query($query);
-    $id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+    // MUOKKAUS: mysqli_insert_id():
+    $stresult = pupe_query($query, $GLOBALS["link"]);
+    $id = mysqli_insert_id($GLOBALS["link"]);
 
     // tehdään vanhan laskun lisätiedoista 1:1 kopio...
     $query = "SELECT *

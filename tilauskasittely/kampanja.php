@@ -304,9 +304,10 @@ function luo_kampanja_otsikko($kampanja_nimi) {
             nimi       = '{$kampanja_nimi}',
             laatija    = '{$kukarow['kuka']}',
             luontiaika = CURRENT_DATE";
-  pupe_query($query);
 
-  return mysqli_insert_id($GLOBALS["masterlink"]);
+  // MUOKKAUS: mysqli_insert_id():
+  pupe_query($query, $GLOBALS["link"]);
+  return mysqli_insert_id($GLOBALS["link"]);
 }
 
 function luo_kampanja_ehto($kampanja_ehto, $kampanja_tunnus) {
@@ -321,9 +322,10 @@ function luo_kampanja_ehto($kampanja_ehto, $kampanja_tunnus) {
             arvo       = '{$kampanja_ehto['arvo']}',
             laatija    = '{$kukarow['kuka']}',
             luontiaika = CURRENT_DATE";
-  pupe_query($query);
-
-  return mysqli_insert_id($GLOBALS["masterlink"]);
+  
+  // MUOKKAUS: mysqli_insert_id():
+  pupe_query($query, $GLOBALS["link"]);
+  return mysqli_insert_id($GLOBALS["link"]);
 }
 
 function luo_kampanja_aliehto($kampanja_aliehto, $kampanja_ehto_tunnus) {
@@ -338,9 +340,10 @@ function luo_kampanja_aliehto($kampanja_aliehto, $kampanja_ehto_tunnus) {
             arvo       = '{$kampanja_aliehto['arvo']}',
             laatija    = '{$kukarow['kuka']}',
             luontiaika = CURRENT_DATE";
-  pupe_query($query);
-
-  return mysqli_insert_id($GLOBALS["masterlink"]);
+  
+  // MUOKKAUS: mysqli_insert_id():
+  pupe_query($query, $GLOBALS["link"]);
+  return mysqli_insert_id($GLOBALS["link"]);
 }
 
 function luo_palkinto_rivi($palkinto_rivi, $kampanja_tunnus) {

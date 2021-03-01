@@ -311,8 +311,10 @@ if (!function_exists("tilauksesta_ostotilaus")) {
                       yhtio               = '$kukarow[yhtio]',
                       ytunnus             = '$tiltoi[ytunnus]'
                       {$suoratoimitus}";
-            pupe_query($query);
-            $tunnus = (string) mysqli_insert_id($GLOBALS["masterlink"]);
+
+	    // MUOKKAUS: mysqli_insert_id():
+            pupe_query($query, $GLOBALS["link"]);
+            $tunnus = (string) mysqli_insert_id($GLOBALS["link"]);
 
             // hintojen ja alennuksien hakuun tarvitaan laskurow, tehdään tässä array kuntoon alehinta_osto() funktiota varten
             $jtsro = array(
@@ -457,8 +459,10 @@ if (!function_exists("tilauksesta_ostotilaus")) {
                         perheid2        = '{$pid2}',
                         nimitys         = '$tilrivirow[nimitys]',
                         jaksotettu      = ''";
-              pupe_query($query);
-              $lisatty_tun = mysqli_insert_id($GLOBALS["masterlink"]);
+	      
+	      // MUOKKAUS: mysqli_insert_id():
+              pupe_query($query, $GLOBALS["link"]);
+              $lisatty_tun = mysqli_insert_id($GLOBALS["link"]);
 
               // Lisätään ostorivin lisätiedot
               $query = "INSERT INTO tilausrivin_lisatiedot

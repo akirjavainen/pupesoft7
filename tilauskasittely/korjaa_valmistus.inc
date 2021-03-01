@@ -66,8 +66,10 @@ while ($raakaainerow = mysqli_fetch_assoc($raakaaineres)) {
               selite     = '".t("Käytettiin tuotteen")." $tilrivirow[tuoteno] ".t("valmistamiseen")." ".t("työmääräyksellä")." $tilrivirow[otunnus]',
               laatija    = '$kukarow[kuka]',
               laadittu   = now()";
-    $tapahtumaresult = pupe_query($query);
-    $tapahtumaid = mysqli_insert_id($GLOBALS["masterlink"]);
+
+    // MUOKKAUS: mysqli_insert_id():
+    $tapahtumaresult = pupe_query($query, $GLOBALS["link"]);
+    $tapahtumaid = mysqli_insert_id($GLOBALS["link"]);
 
     $query = "SELECT *
               FROM tapahtuma

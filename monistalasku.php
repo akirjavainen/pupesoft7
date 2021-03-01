@@ -1444,8 +1444,10 @@ if ($tee == 'MONISTA') {
       }
 
       $kysely  = "INSERT into lasku ({$fields}) VALUES ({$values})";
-      $insres  = pupe_query($kysely);
-      $utunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      $insres  = pupe_query($kysely, $GLOBALS["link"]);
+      $utunnus = mysqli_insert_id($GLOBALS["link"]);
 
       // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi:
       if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus");
@@ -1875,8 +1877,10 @@ if ($tee == 'MONISTA') {
         }
 
         $kysely = "INSERT INTO tilausrivi ({$rfields}) VALUES ({$rvalues})";
-        $insres = pupe_query($kysely);
-        $insid = mysqli_insert_id($GLOBALS["masterlink"]);
+        
+	// MUOKKAUS: mysqli_insert_id():
+        $insres = pupe_query($kysely, $GLOBALS["link"]);
+        $insid = mysqli_insert_id($GLOBALS["link"]);
 
         //Kopioidaan tilausrivin lisatiedot
         $query = "SELECT *

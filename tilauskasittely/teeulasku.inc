@@ -474,10 +474,12 @@ for ($teeulasku_i=1; $teeulasku_i < mysqli_num_fields($laskusplitres)-1; $teeula
 }
 
 $kysely  = "INSERT into lasku ($fields) VALUES ($values)";
-$uusiotsikko = pupe_query($kysely);
+
+// MUOKKAUS: mysqli_insert_id():
+$uusiotsikko = pupe_query($kysely, $GLOBALS["link"]);
 
 // otetaan uuden otsikon tunnus talteen
-$uusiotunnus = (string) mysqli_insert_id($GLOBALS["masterlink"]);
+$uusiotunnus = (string)mysqli_insert_id($GLOBALS["link"]);
 
 // haetaan laskun lisätiedot ketjun ekalta laskulta
 $query = "SELECT *

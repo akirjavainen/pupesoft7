@@ -125,8 +125,10 @@ if ($tee == 'VALMIS') {
                           selite    = '".t("Varastonarvon muutos").": $edarvo -> $uuarvo. $lisaselite',
                           laatija   = '$kukarow[kuka]',
                           laadittu  = now()";
-                $result = pupe_query($query);
-                $tapahtumaid = mysqli_insert_id($GLOBALS["masterlink"]);
+
+                // MUOKKAUS: mysqli_insert_id():
+                $result = pupe_query($query, $GLOBALS["link"]);
+                $tapahtumaid = mysqli_insert_id($GLOBALS["link"]);
 
                 $query = "INSERT into lasku set
                           yhtio      = '$kukarow[yhtio]',
@@ -135,8 +137,10 @@ if ($tee == 'VALMIS') {
                           laatija    = '$kukarow[kuka]',
                           viite      = '$tapahtumaid',
                           luontiaika = now()";
-                $result = pupe_query($query);
-                $laskuid = mysqli_insert_id($GLOBALS["masterlink"]);
+		
+		// MUOKKAUS: mysqli_insert_id():
+                $result = pupe_query($query, $GLOBALS["link"]);
+                $laskuid = mysqli_insert_id($GLOBALS["link"]);
 
                 if ($yhtiorow["tarkenteiden_prioriteetti"] == "T") {
 

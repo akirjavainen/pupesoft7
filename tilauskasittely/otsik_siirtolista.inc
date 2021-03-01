@@ -608,8 +608,10 @@ if (isset($jatka)) {
   }
 
   $query .= $postquery;
-  $result = pupe_query($query);
-  $id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $id = mysqli_insert_id($GLOBALS["link"]);
 
   if (!isset($nokeskupdate) and (int) $kukarow["kesken"] == 0 and $id != 0 and $id !== FALSE and $session != "") {
     $query = "UPDATE kuka

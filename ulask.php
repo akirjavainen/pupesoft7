@@ -2137,8 +2137,10 @@ if ($tee == 'I') {
             osto_rahti_alv     = '{$osto_rahti_alv}',
             osto_kulu_alv      = '{$osto_kulu_alv}',
             osto_rivi_kulu_alv = '{$osto_rivi_kulu_alv}'";
-  $result = pupe_query($query);
-  $tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $tunnus = mysqli_insert_id($GLOBALS["link"]);
 
   if ($kuva1 or $kuva2 or $kuva3) {
     $tunnarit = "";
@@ -2308,11 +2310,13 @@ if ($tee == 'I') {
                 tosite           = '$tositenro',
                 laatija          = '$kukarow[kuka]',
                 laadittu         = now()";
-      $result = pupe_query($query);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
 
       // Tiliöidään alv
       if ($ivero[$i] != 0) {
-        $isa = mysqli_insert_id($GLOBALS["masterlink"]); // Näin löydämme tähän liittyvät alvit....
+        $isa = mysqli_insert_id($GLOBALS["link"]); // Näin löydämme tähän liittyvät alvit....
 
         // Kulun alv
         $query = "INSERT INTO tiliointi SET
@@ -2602,8 +2606,10 @@ if ($tee == 'I') {
         }
 
         $query       = mb_substr($query, 0, -1);
-        $insresult   = pupe_query($query);
-        $kopiotunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+        // MUOKKAUS: mysqli_insert_id():
+        $insresult   = pupe_query($query, $GLOBALS["link"]);
+        $kopiotunnus = mysqli_insert_id($GLOBALS["link"]);
 
         //Kopioidaan tiliöinnit
         mysqli_data_seek($tilresult, 0);
@@ -2634,8 +2640,10 @@ if ($tee == 'I') {
           }
 
           $query         = mb_substr($query, 0, -1);
-          $insresult     = pupe_query($query);
-          $kopiotiltunnus= mysqli_insert_id($GLOBALS["masterlink"]);
+
+          // MUOKKAUS: mysqli_insert_id():
+          $insresult     = pupe_query($query, $GLOBALS["link"]);
+          $kopiotiltunnus= mysqli_insert_id($GLOBALS["link"]);
         }
         echo "<font class='message'>".t("Tehtiin kopio päivälle")." $kopiotpv-$kopiotpk-$kopiotpp</font><br>";
       }
