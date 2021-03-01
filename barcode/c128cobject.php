@@ -225,6 +225,7 @@ class C128CObject extends BarcodeObject {
 
 
     for ($i=0;$i<6;$i++) {
+      if (!isset($cset[$i])) return 0; // MODIFIED: do not cause errors if barcode creation fails
       $CheckSize += $this->GetBarSize($cset[$i], $xres);
     }
 
@@ -257,6 +258,7 @@ class C128CObject extends BarcodeObject {
     }
 
     $check  = $sum % 103;
+    if (!isset($this->mCharSet[$check])) return array(); // MODIFIED: do not cause errors if barcode creation fails
     $setcheck = $this->mCharSet[$check];
     //echo "#CHECK=$check($sum % 103) CHAR=$setcheck<br>";
 
