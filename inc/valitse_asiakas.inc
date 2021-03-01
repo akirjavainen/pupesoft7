@@ -49,6 +49,13 @@ $request = array(
   "viesti"           => $viesti,
 );
 
+// MUOKKAUS: isset():
+foreach (array("hakuehto", "mul_asiakasosasto", "mul_asiakasryhma", "mul_asiakasmyyja", 
+	"ext_asiakas_haku_tehty", "action", "valitut_asiakastunnukset", "saate_teksti", 
+	"viesti") as $v) {
+  if (!isset(${$v})) ${$v} = null;
+}
+
 $asiakasid = $kukarow['tunnus'] * -1;
 
 if ($request['toim'] == 'EXTTARJOUS') {
@@ -209,7 +216,8 @@ function echo_asiakas_table($request) {
 
   $tarjouspohjan_asiakkaat = explode(",", $request['dummytarjous']['sopimus_lisatietoja']);
 
-  if (count($request['asiakkaat']) > 0) {
+  // MUOKKAUS: isset():
+  if (isset($request['asiakkaat']) and count($request['asiakkaat']) > 0) {
 
     echo "<form method='post' action='tilaus_myynti.php'>";
     echo "<input type='hidden' name='tilausnumero' value='{$request['tilausnumero']}'/>";
