@@ -63,7 +63,7 @@ echo "<tr><td class='ptop'>".t("Huomioi pankkitilin maksulimitti alkusaldona")."
 
  while ($yrow = mysqli_fetch_assoc($yres)) {
 
-  $chk = (!empty($pankkisaldo[$yrow[tunnus]])) ? "CHECKED" : "";
+  $chk = (!empty($pankkisaldo[$yrow["tunnus"]])) ? "CHECKED" : ""; // MUOKKAUS: BUGIKORJAUS (puuttuvat lainausmerkit)
 
   echo "<tr>
         <td><input type = 'checkbox' name = 'pankkisaldo[$yrow[tunnus]]' value='$yrow[tunnus]' $chk></td>
