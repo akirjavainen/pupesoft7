@@ -3,7 +3,7 @@
 // Datatables päälle
 $pupe_DataTables = array("raportti_valmistuksista");
 
-if (!isset($_POST["kaunisnimi"])) $_POST["kaunisnimi"] = ""; // MUOKKAUS: isset()
+if (!isset($_REQUEST["kaunisnimi"])) $_REQUEST["kaunisnimi"] = ""; // MUOKKAUS: isset()
 if (isset($_REQUEST["tee"])) {
   if ($_REQUEST["tee"] == 'lataa_tiedosto') $lataa_tiedosto=1;
   if ($_REQUEST["kaunisnimi"] != '') $_REQUEST["kaunisnimi"] = str_replace("/", "", $_REQUEST["kaunisnimi"]);
