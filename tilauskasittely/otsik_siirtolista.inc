@@ -92,6 +92,11 @@ if ($tila == 'Muuta' and !isset($jatka)) {
     foreach ($srow as $key => $value) {
       $srow[$key] = '';
     }
+
+    // MUOKKAUS: isset():
+    foreach (array("luvattu", "suorittaja", "komm1", "komm2") as $v) {
+      if (!isset($srow[$v])) $srow[$v] = null;
+    }
   }
 
   echo "<table>";
