@@ -325,10 +325,11 @@ function yhdista_asiakkaita($jataminut, $yhdista) {
                          loppupvm          = '$ahrow[loppupvm]',
                          laji              = '$ahrow[laji]',
                          laatija           = '$kukarow[kuka]',
-                         luontiaika        = now()";
-            $ahinsertresult = pupe_query($ahinsert);
+			 luontiaika        = now()";
 
-            synkronoi($kukarow["yhtio"], "asiakashinta", mysqli_insert_id($GLOBALS["masterlink"]), "", "");
+            // MUOKKAUS: mysqli_insert_id():
+            $ahinsertresult = pupe_query($ahinsert, $GLOBALS["link"]);
+            synkronoi($kukarow["yhtio"], "asiakashinta", mysqli_insert_id($GLOBALS["link"]), "", "");
           }
         }
       }
@@ -387,9 +388,10 @@ function yhdista_asiakkaita($jataminut, $yhdista) {
                          laji              = '$ahrow[laji]',
                          laatija           = '$kukarow[kuka]',
                          luontiaika        = now()";
-            $ahinsertresult = pupe_query($ahinsert);
 
-            synkronoi($kukarow["yhtio"], "asiakashinta", mysqli_insert_id($GLOBALS["masterlink"]), "", "");
+            // MUOKKAUS: mysqli_insert_id():
+            $ahinsertresult = pupe_query($ahinsert, $GLOBALS["link"]);
+            synkronoi($kukarow["yhtio"], "asiakashinta", mysqli_insert_id($GLOBALS["link"]), "", "");
           }
         }
       }
@@ -443,9 +445,10 @@ function yhdista_asiakkaita($jataminut, $yhdista) {
                          loppupvm          = '$alrow[loppupvm]',
                          laatija           = '$kukarow[kuka]',
                          luontiaika        = now()";
-            $alinsertresult = pupe_query($alinsert);
-
-            synkronoi($kukarow["yhtio"], "asiakasalennus", mysqli_insert_id($GLOBALS["masterlink"]), "", "");
+		  
+            // MUOKKAUS: mysqli_insert_id():
+            $alinsertresult = pupe_query($alinsert, $GLOBALS["link"]);
+            synkronoi($kukarow["yhtio"], "asiakasalennus", mysqli_insert_id($GLOBALS["link"]), "", "");
           }
         }
       }
@@ -501,9 +504,10 @@ function yhdista_asiakkaita($jataminut, $yhdista) {
                          loppupvm          = '$alrow[loppupvm]',
                          laatija           = '$kukarow[kuka]',
                          luontiaika        = now()";
-            $alinsertresult = pupe_query($alinsert);
-
-            synkronoi($kukarow["yhtio"], "asiakasalennus", mysqli_insert_id($GLOBALS["masterlink"]), "", "");
+	    
+	    // MUOKKAUS: mysqli_insert_id():
+            $alinsertresult = pupe_query($alinsert, $GLOBALS["link"]);
+            synkronoi($kukarow["yhtio"], "asiakasalennus", mysqli_insert_id($GLOBALS["link"]), "", "");
           }
         }
       }
@@ -540,9 +544,10 @@ function yhdista_asiakkaita($jataminut, $yhdista) {
                          tyyppi     = '$ahrow[tyyppi]',
                          laatija    = '$kukarow[kuka]',
                          luontiaika = now()";
-            $ahinsertresult = pupe_query($ahinsert);
-
-            synkronoi($kukarow["yhtio"], "asiakaskommentti", mysqli_insert_id($GLOBALS["masterlink"]), "", "");
+	    
+	    // MUOKKAUS: mysqli_insert_id():
+            $ahinsertresult = pupe_query($ahinsert, $GLOBALS["link"]);
+            synkronoi($kukarow["yhtio"], "asiakaskommentti", mysqli_insert_id($GLOBALS["link"]), "", "");
           }
         }
       }
@@ -585,9 +590,10 @@ function yhdista_asiakkaita($jataminut, $yhdista) {
                          muumaksaja   = '$ahrow[muumaksaja]',
                          laatija      = '$kukarow[kuka]',
                          luontiaika   = now()";
-            $ahinsertresult = pupe_query($ahinsert);
-
-            synkronoi($kukarow["yhtio"], "rahtisopimukset", mysqli_insert_id($GLOBALS["masterlink"]), "", "");
+	    
+	    // MUOKKAUS: mysqli_insert_id():
+            $ahinsertresult = pupe_query($ahinsert, $GLOBALS["link"]);
+            synkronoi($kukarow["yhtio"], "rahtisopimukset", mysqli_insert_id($GLOBALS["link"]), "", "");
           }
         }
       }
@@ -627,9 +633,10 @@ function yhdista_asiakkaita($jataminut, $yhdista) {
                          muumaksaja   = '$ahrow[muumaksaja]',
                          laatija      = '$kukarow[kuka]',
                          luontiaika   = now()";
-            $ahinsertresult = pupe_query($ahinsert);
-
-            synkronoi($kukarow["yhtio"], "rahtisopimukset", mysqli_insert_id($GLOBALS["masterlink"]), "", "");
+	    
+	    // MUOKKAUS: mysqli_insert_id():
+            $ahinsertresult = pupe_query($ahinsert, $GLOBALS["link"]);
+            synkronoi($kukarow["yhtio"], "rahtisopimukset", mysqli_insert_id($GLOBALS["link"]), "", "");
           }
         }
       }
@@ -688,9 +695,10 @@ function yhdista_asiakkaita($jataminut, $yhdista) {
                          oletusyhteyshenkilo = '$ahrow[oletusyhteyshenkilo]',
                          laatija             = '$kukarow[kuka]',
                          luontiaika          = now()";
-            $ahinsertresult = pupe_query($ahinsert);
-
-            synkronoi($kukarow["yhtio"], "yhteyshenkilo", mysqli_insert_id($GLOBALS["masterlink"]), "", "");
+	    
+	    // MUOKKAUS: mysqli_insert_id():
+            $ahinsertresult = pupe_query($ahinsert, $GLOBALS["link"]);
+            synkronoi($kukarow["yhtio"], "yhteyshenkilo", mysqli_insert_id($GLOBALS["link"]), "", "");
           }
         }
       }
@@ -730,9 +738,10 @@ function yhdista_asiakkaita($jataminut, $yhdista) {
                          tarkenne     = '$ahrow[tarkenne]',
                          laatija      = '$kukarow[kuka]',
                          luontiaika   = now()";
-            $ahinsertresult = pupe_query($ahinsert);
-
-            synkronoi($kukarow["yhtio"], "asiakkaan_avainsanat", mysqli_insert_id($GLOBALS["masterlink"]), "", "");
+	    
+	    // MUOKKAUS: mysqli_insert_id():
+            $ahinsertresult = pupe_query($ahinsert, $GLOBALS["link"]);
+            synkronoi($kukarow["yhtio"], "asiakkaan_avainsanat", mysqli_insert_id($GLOBALS["link"]), "", "");
           }
         }
       }

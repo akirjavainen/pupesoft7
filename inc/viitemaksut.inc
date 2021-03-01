@@ -150,8 +150,10 @@ elseif ($type == '3' or ($type == 'S' and
               kurssi       = '$kurssi',
               maksupvm     = '$payment_date',
               kirjpvm      = '$entry_date'";
-    $result = pupe_query($query, $GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
-    $tiliointitunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+    
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
+    $tiliointitunnus = mysqli_insert_id($GLOBALS["link"]);
 
     // päivitetään suorituksen tunnnus tiliotedataan ja tiliotedata käsitellyksi
     $query = "UPDATE tiliotedata SET

@@ -19,6 +19,7 @@ if (round($maara, 2) != 0) {
               tila       = 'X',
               laatija    = 'tiliote',
 	      luontiaika = now()";
+
     // MUOKKAUS: mysqli_insert_id():
     $result = pupe_query($query, $GLOBALS["link"]);
     $laskuid = mysqli_insert_id($GLOBALS["link"]);
@@ -137,10 +138,11 @@ if (round($maara, 2) != 0) {
                 selite           = '$vientiselite',
                 laatija          = 'tiliote',
                 laadittu         = now()";
-      $result = pupe_query($query, $GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
+      $result = pupe_query($query, $GLOBALS["link"]);
     }
 
-    $_tiliointi_id = mysqli_insert_id($GLOBALS["masterlink"]);
+    // MUOKKAUS: mysqli_insert_id():
+    $_tiliointi_id = mysqli_insert_id($GLOBALS["link"]);
 
     $query = "UPDATE tiliotedata
               SET kasitelty = now(),

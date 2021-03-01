@@ -18,8 +18,10 @@ $query = "INSERT into lasku set
           tila          = 'X',
           laatija       = 'tiliote',
           luontiaika    = now()";
-$result = pupe_query($query);
-$kulutunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+
+// MUOKKAUS: mysqli_insert_id():
+$result = pupe_query($query, $GLOBALS["link"]);
+$kulutunnus = mysqli_insert_id($GLOBALS["link"]);
 
 list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($yritirow["oletus_rahatili"]);
 
@@ -58,8 +60,10 @@ $query = "INSERT into tiliointi set
           selite   = '$selite',
           laatija  = 'tiliote',
           laadittu = now()";
-$result = pupe_query($query, $GLOBALS["masterlink"]); // MUOKKAUS: BUGFIX
-$_tiliointi_id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+// MUOKKAUS: mysqli_insert_id():
+$result = pupe_query($query, $GLOBALS["link"]);
+$_tiliointi_id = mysqli_insert_id($GLOBALS["link"]);
 
 $query = "UPDATE tiliotedata SET
           kasitelty       = now(),

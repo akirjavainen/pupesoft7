@@ -600,10 +600,11 @@ if ($upd == 1) {
       $query .= " where yhtio='$kukarow[yhtio]' and tunnus = $tunnus";
     }
 
-    $result = pupe_query($query);
+    // MUOKKAUS: mysqli_insert_id():
+    $result = pupe_query($query, $GLOBALS["link"]);
 
     if ($onko_tama_insert) {
-      $tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+      $tunnus = mysqli_insert_id($GLOBALS["link"]);
     }
 
     if ($tunnus > 0 and $toim == "tuotteen_toimittajat_tuotenumerot") {

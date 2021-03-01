@@ -350,8 +350,10 @@ if (!function_exists("asn_kohdistus")) {
                          hyllytaso             = '{$tilausrivirow['hyllytaso']}',
                          hyllyvali             = '{$tilausrivirow['hyllyvali']}',
                          tilaajanrivinro       = '{$tilausrivirow['tilaajanrivinro']}'";
-          $inskres = pupe_query($lisaaquery);
-          $extraa = mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+	  // MUOKKAUS: mysqli_insert_id():
+          $inskres = pupe_query($lisaaquery, $GLOBALS["link"]);
+          $extraa = mysqli_insert_id($GLOBALS["link"]);
 
           $kaytetyt_tilausrivit  = array_unique(array_merge($kaytetyt_tilausrivit, $lisa_array));
           $paketin_rivit      = array_unique(array_merge($paketin_rivit, $lisa_array));
@@ -503,8 +505,10 @@ if (!function_exists("asn_kohdistus")) {
                     hyllytaso             = '{$split_row['hyllytaso']}',
                     hyllyvali             = '{$split_row['hyllyvali']}',
                     tilaajanrivinro       = '{$split_row['tilaajanrivinro']}'";
-          $inskres = pupe_query($query);
-          $tilausrivi_id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+          // MUOKKAUS: mysqli_insert_id():
+          $inskres = pupe_query($query, $GLOBALS["link"]);
+          $tilausrivi_id = mysqli_insert_id($GLOBALS["link"]);
 
           // etsitään ja splitataan myös myyntitilausrivi ISÄ
           $query = "SELECT tilausrivi.tunnus
@@ -651,8 +655,10 @@ if (!function_exists("asn_kohdistus")) {
                   }
 
                   $kysely  = "INSERT INTO tapahtuma ({$fields}) VALUES ({$values})";
-                  $uusires = pupe_query($kysely);
-                  $tapahtuma_id = mysqli_insert_id($GLOBALS["masterlink"]);
+                  
+		  // MUOKKAUS: mysqli_insert_id():
+                  $uusires = pupe_query($kysely, $GLOBALS["link"]);
+                  $tapahtuma_id = mysqli_insert_id($GLOBALS["link"]);
 
                   $query = "UPDATE tapahtuma
                             SET kpl = '{$erotus}'
@@ -733,8 +739,10 @@ if (!function_exists("asn_kohdistus")) {
                   hyllytaso             = '{$tilausrivirow['hyllytaso']}',
                   hyllyvali             = '{$tilausrivirow['hyllyvali']}',
                   tilaajanrivinro       = '{$tilausrivirow['tilaajanrivinro']}'";
-        $inskres = pupe_query($query);
-        $tilausrivi_id = mysqli_insert_id($GLOBALS["masterlink"]);
+		  
+	// MUOKKAUS: mysqli_insert_id():
+        $inskres = pupe_query($query, $GLOBALS["link"]);
+        $tilausrivi_id = mysqli_insert_id($GLOBALS["link"]);
 
         // etsitään ja splitataan myös myyntitilausrivi ISÄ
         $query = "SELECT tilausrivi.tunnus
@@ -887,8 +895,10 @@ if (!function_exists("asn_kohdistus")) {
                 }
 
                 $kysely  = "INSERT INTO tapahtuma ({$fields}) VALUES ({$values})";
-                $uusires = pupe_query($kysely);
-                $tapahtuma_id = mysqli_insert_id($GLOBALS["masterlink"]);
+	
+                // MUOKKAUS: mysqli_insert_id():
+                $uusires = pupe_query($kysely, $GLOBALS["link"]);
+                $tapahtuma_id = mysqli_insert_id($GLOBALS["link"]);
 
                 $query = "UPDATE tapahtuma
                           SET kpl = '{$row['kappalemaara']}'
@@ -1013,8 +1023,10 @@ if (!function_exists("asn_kohdista_suuntalava")) {
                   tila                    = 'K',
                   luontiaika              = now(),
                   laatija                 = '{$kukarow['kuka']}'";
-        $insertres = pupe_query($query);
-        $keikan_tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+		
+        // MUOKKAUS: mysqli_insert_id():
+        $insertres = pupe_query($query, $GLOBALS["link"]);
+        $keikan_tunnus = mysqli_insert_id($GLOBALS["link"]);
 
         $query  = "UNLOCK TABLE";
         $result = pupe_query($query);

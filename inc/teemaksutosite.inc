@@ -91,8 +91,10 @@ if ($teemaksutosite) {
                 lukko    = '',
                 laatija  = 'tiliote',
                 laadittu = now()";
-      $xresult = pupe_query($query);
-      $isa = mysqli_insert_id($GLOBALS["masterlink"]); // Näin löydämme tähän liittyvät alvit....
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $xresult = pupe_query($query, $GLOBALS["link"]);
+      $isa = mysqli_insert_id($GLOBALS["link"]); // Näin löydämme tähän liittyvät alvit....
 
       if ($tiliointirow['vero'] != 0) {
         // Kassa-alen alv
@@ -170,8 +172,10 @@ if ($teemaksutosite) {
                     lukko    = '',
                     laatija  = 'tiliote',
                     laadittu = now()";
-          $xresult = pupe_query($query);
-          $isa = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+          // MUOKKAUS: mysqli_insert_id():
+          $xresult = pupe_query($query, $GLOBALS["link"]);
+          $isa = mysqli_insert_id($GLOBALS["link"]);
 
           $totvesumma += $summa;
         }
@@ -237,8 +241,10 @@ if ($teemaksutosite) {
             lukko            = '',
             laatija          = 'tiliote',
             laadittu         = now()";
-  $result = pupe_query($query, $GLOBALS["masterlink"]);
-  $_tiliointi_id = mysqli_insert_id($GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
+	  
+   // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $_tiliointi_id = mysqli_insert_id($GLOBALS["link"]);
 
   $query = "UPDATE tiliotedata
             SET kasitelty = now(),

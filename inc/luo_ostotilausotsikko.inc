@@ -200,8 +200,10 @@ if (!function_exists('luo_ostotilausotsikko')) {
                 viikorkopros        = '{$yhtiorow['viivastyskorko']}',
                 yhtio               = '{$kukarow['yhtio']}',
                 ytunnus             = '{$tiltoi['ytunnus']}'";
-      pupe_query($query);
-      $ostotilaus_tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      pupe_query($query, $GLOBALS["link"]);
+      $ostotilaus_tunnus = mysqli_insert_id($GLOBALS["link"]);
 
       $query = "SELECT *
                 FROM lasku

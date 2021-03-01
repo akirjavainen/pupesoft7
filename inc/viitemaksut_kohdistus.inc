@@ -268,8 +268,10 @@ while ($row = mysqli_fetch_assoc($suorires)) {
                     vero             = '$tiliointirow[vero]',
                     valkoodi         = '$row[suoritusvaluutta]',
                     selite           = 'Automaattikohdistettu asiakkaan suoritus (Kassa-Alennus)'";
-          pupe_query($query);
-          $aputunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+	  // MUOKKAUS: mysqli_insert_id():
+          pupe_query($query, $GLOBALS["link"]);
+          $aputunnus = mysqli_insert_id($GLOBALS["link"]);
 
           // Etsitään korjattava vienti
           if ($alv != 0) {
@@ -374,8 +376,10 @@ while ($row = mysqli_fetch_assoc($suorires)) {
                       projekti = '{$projekti_ins}',
                       summa    = $summa,
                       selite   = 'Automaattikohdistettu asiakkaan suoritus'";
-            pupe_query($query);
-            $isa = mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+            // MUOKKAUS: mysqli_insert_id():
+            pupe_query($query, $GLOBALS["link"]);
+            $isa = mysqli_insert_id($GLOBALS["link"]);
 
             $totvesumma += $summa;
           }
@@ -486,9 +490,10 @@ while ($row = mysqli_fetch_assoc($suorires)) {
               tila       = 'X',
               laatija    = 'viitesiirrot',
               luontiaika = now()";
-    pupe_query($query);
-
-    $laskut[$row["yhtio"]] = mysqli_insert_id($GLOBALS["masterlink"]);
+	    
+    // MUOKKAUS: mysqli_insert_id():
+    pupe_query($query, $GLOBALS["link"]);
+    $laskut[$row["yhtio"]] = mysqli_insert_id($GLOBALS["link"]);
   }
 
   if ($laskut[$row["yhtio"]] > 0) {
@@ -523,8 +528,10 @@ while ($row = mysqli_fetch_assoc($suorires)) {
               valkoodi         = '$row[suoritusvaluutta]',
               selite           = '$maksaja_espattu maksoi viitteellä väärin',
               lukko            = '1'";
-    pupe_query($query);
-    $tlast_id = mysqli_insert_id($GLOBALS["masterlink"]);
+    
+    // MUOKKAUS: mysqli_insert_id():
+    pupe_query($query, $GLOBALS["link"]);
+    $tlast_id = mysqli_insert_id($GLOBALS["link"]);
 
     list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($row["oletus_rahatili"]);
 

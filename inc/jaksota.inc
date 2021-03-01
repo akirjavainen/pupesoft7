@@ -128,8 +128,10 @@ elseif (count($kausi) > 0) {
                 lukko    = '',
                 laatija  = '$kukarow[kuka]',
                 laadittu = now()";
-      $result = pupe_query($query);
-      $jisa = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $jisa = mysqli_insert_id($GLOBALS["link"]);
       $viimeinen1 = $jisa;
 
       // Tehdään vastaava siirtosaaminen
@@ -149,8 +151,10 @@ elseif (count($kausi) > 0) {
                 aputunnus = '$jisa',
                 laatija   = '$kukarow[kuka]',
                 laadittu  = now()";
-      $result = pupe_query($query);
-      $viimeinen2 = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $viimeinen2 = mysqli_insert_id($GLOBALS["link"]);
 
       $ok = 1; // Ensimmäinen on käsitelty
       $tsumma += $asumma; // Kuinka paljon olemme tiliöinneet
@@ -184,8 +188,10 @@ elseif (count($kausi) > 0) {
                 aputunnus = '$jisa',
                 laatija   = '$kukarow[kuka]',
                 laadittu  = now()";
-      $result = pupe_query($query);
-      $viimeinen1 = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $viimeinen1 = mysqli_insert_id($GLOBALS["link"]);
 
       $query = "INSERT INTO tiliointi SET
                 yhtio     = '$kukarow[yhtio]',
@@ -202,8 +208,10 @@ elseif (count($kausi) > 0) {
                 aputunnus = '$jisa',
                 laatija   = '$kukarow[kuka]',
                 laadittu  = now()";
-      $result = pupe_query($query);
-      $viimeinen2 = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $viimeinen2 = mysqli_insert_id($GLOBALS["link"]);
 
       $tsumma += $summa;
     }

@@ -637,8 +637,10 @@ if (!function_exists('kopioi_tapahtuma')) {
       }
 
       $kysely  = "INSERT INTO tapahtuma ({$fields}) VALUES ({$values})";
-      $uusires = pupe_query($kysely);
-      $tapahtuma_id = mysqli_insert_id($GLOBALS["masterlink"]);
+
+      // MUOKKAUS: mysqli_insert_id():
+      $uusires = pupe_query($kysely, $GLOBALS["link"]);
+      $tapahtuma_id = mysqli_insert_id($GLOBALS["link"]);
 
       $query = "UPDATE tapahtuma
                 SET kpl = '{$kpl}'
@@ -957,9 +959,10 @@ if (($osrow['ebid'] == "FINVOICEXML" and $trow['asn_sanomat'] == 'F') or $osrow[
             tila                    = 'K',
             luontiaika              = now(),
             laatija                 = 'verkkolas'";
-  $result = pupe_query($query);
-
-  $keikantunnus = mysqli_insert_id($GLOBALS["masterlink"]); // tätä tarvitaan tilausrivien uusiotunnukseen
+  
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $keikantunnus = mysqli_insert_id($GLOBALS["link"]); // tätä tarvitaan tilausrivien uusiotunnukseen
   $laskuvirhe .= "\n".t("Perustettiin saapuminen").": $id $trow[nimi]\n";
 
   $query  = "UNLOCK TABLE";
@@ -1526,8 +1529,10 @@ for ($i = 0; $i < count($rtuoteno); $i++) {
             echo "<pre>$kysely</pre>";
           }
 
-          $uusires = pupe_query($kysely);
-          $extraa = mysqli_insert_id($GLOBALS["masterlink"]);
+
+          // MUOKKAUS: mysqli_insert_id():
+          $uusires = pupe_query($kysely, $GLOBALS["link"]);
+          $extraa = mysqli_insert_id($GLOBALS["link"]);
           $lisa_array[]      = $extraa;
 
           // Tarkistetaan onko tämä isärivi ($i+1 tarkoittaa sitä että ollaan laitettu lapsialkiolle isän tunnus talteen "isa_olemassa"-kenttään)
@@ -1748,8 +1753,10 @@ if (($osrow["ebid"] == "TECCOM-INVOICE"  and $trow['asn_sanomat'] == 'K') or ($o
               tila                    = 'K',
               luontiaika              = now(),
               laatija                 = '$kukarow[kuka]'";
-    $insertres = pupe_query($query);
-    $keikan_tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+	  
+    // MUOKKAUS: mysqli_insert_id():
+    $insertres = pupe_query($query, $GLOBALS["link"]);
+    $keikan_tunnus = mysqli_insert_id($GLOBALS["link"]);
     if ($debug == 1) {
       echo "<pre>", str_replace("\t", "", $query), "</pre>Keikan tunnus:$keikan_tunnus<br><br>";
       echo "<font class='message'>Liitetty saapumiseen {$id}</font><br><br>";
@@ -1847,8 +1854,10 @@ if (($osrow["ebid"] == "TECCOM-INVOICE"  and $trow['asn_sanomat'] == 'K') or ($o
                 tila                    = 'K',
                 luontiaika              = now(),
                 laatija                 = '$kukarow[kuka]'";
-      $insertres = pupe_query($query);
-      $keikan_tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+    
+      // MUOKKAUS: mysqli_insert_id():
+      $insertres = pupe_query($query, $GLOBALS["link"]);
+      $keikan_tunnus = mysqli_insert_id($GLOBALS["link"]);
       if ($debug == 1) {
         echo "<pre>", str_replace("\t", "", $query), "</pre>Keikan tunnus:$keikan_tunnus<br><br>";
       }

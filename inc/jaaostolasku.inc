@@ -122,8 +122,10 @@ function jaalasku($jaettavalasku, $vahennettavasumma_valuutassa) {
 
   // Lisätään uusi lasku
   $query = "INSERT into lasku ($fields) VALUES ($values)";
-  $result = pupe_query($query);
-  $utunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+ 
+  // MUOKKAUS: mysqli_insert_id():
+  $result = pupe_query($query, $GLOBALS["link"]);
+  $utunnus = mysqli_insert_id($GLOBALS["link"]);
 
   // Lasketaan vanhalle laskulle uusi kasumma
   $kasumma_vanha = $jaettavalaskurow["kasumma"] - $kasumma_uusi;
@@ -201,8 +203,10 @@ function jaalasku($jaettavalasku, $vahennettavasumma_valuutassa) {
                 aputunnus        = '',
                 laatija          = '$kukarow[kuka]',
                 laadittu         = now()";
-      $result = pupe_query($query);
-      $uusi_id = mysqli_insert_id($GLOBALS["masterlink"]);
+  
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $uusi_id = mysqli_insert_id($GLOBALS["link"]);
 
       // jos aputunnus ei ole tyhjä, otetaan se avaimeksi taulukkoon ja laitetaan uuden aputunnusrivin id sen alle
       if ($tiliointirow['aputunnus'] > 0) {
@@ -237,8 +241,10 @@ function jaalasku($jaettavalasku, $vahennettavasumma_valuutassa) {
                 aputunnus        = '',
                 laatija          = '$kukarow[kuka]',
                 laadittu         = now()";
-      $result = pupe_query($query);
-      $uusi_id = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $uusi_id = mysqli_insert_id($GLOBALS["link"]);
 
       if ($tiliointirow['aputunnus'] != '') {
         $aputunnukset_uusi[$tiliointirow['aputunnus']] = $uusi_id;

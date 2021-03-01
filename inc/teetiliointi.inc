@@ -143,8 +143,9 @@ else {
             laadittu         = now()";
 }
 
-$result = pupe_query($query);
-$isa = mysqli_insert_id($GLOBALS["masterlink"]);
+// MUOKKAUS: mysqli_insert_id():
+$result = pupe_query($query, $GLOBALS["link"]);
+$isa = mysqli_insert_id($GLOBALS["link"]);
 
 // Tiliöidään alv
 if ($vero != 0) {

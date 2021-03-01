@@ -1236,8 +1236,10 @@ if (!function_exists("verkkolasku_in")) {
                 osto_rahti_alv         = '{$osto_rahti_alv}',
                 osto_kulu_alv          = '{$osto_kulu_alv}',
                 osto_rivi_kulu_alv     = '{$osto_rivi_kulu_alv}'";
-      $result = pupe_query($query);
-      $tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $tunnus = mysqli_insert_id($GLOBALS["link"]);
 
       // MUOKKAUS: BUGIKORJAUS round(string):
       $omasumma        = round($summa * (float)$vrow['kurssi'], 2);
@@ -1272,8 +1274,10 @@ if (!function_exists("verkkolasku_in")) {
                 lukko            = '1',
                 laatija          = 'verkkolas',
                 laadittu         = now()";
-      $result = pupe_query($query, $GLOBALS["masterlink"]); // MUOKKAUS: BUGIKORJAUS
-      $ostovelkatiliointitunnus = mysqli_insert_id($GLOBALS["masterlink"]);
+      
+      // MUOKKAUS: mysqli_insert_id():
+      $result = pupe_query($query, $GLOBALS["link"]);
+      $ostovelkatiliointitunnus = mysqli_insert_id($GLOBALS["link"]);
 
       // Onko rivikohtaisia tiliöintisääntöjä
       $query = "SELECT *
@@ -1722,8 +1726,10 @@ if (!function_exists("verkkolasku_in")) {
                             tuoteno            = '',
                             vastaanottaja      = '{$ostaja_asiakkaantiedot['nimi']}',
                             yhtio              = '{$yhtio}'";
-            $asn_ins_res = pupe_query($insertquery);
-            $rtuoteno[$i]["insert_id"] = mysqli_insert_id($GLOBALS["masterlink"]);
+
+            // MUOKKAUS: mysqli_insert_id():
+            $asn_ins_res = pupe_query($insertquery, $GLOBALS["link"]);
+            $rtuoteno[$i]["insert_id"] = mysqli_insert_id($GLOBALS["link"]);
           }
         }
       }
