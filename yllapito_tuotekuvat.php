@@ -144,6 +144,8 @@ echo "</tr>";
 
 if (isset($try) and $try != '') {
   $mul_try = explode(",", $try);
+} else { // MUOKKAUS: isset()
+  $mul_try = array();
 }
 
 while ($rivi = mysqli_fetch_array($res2)) {
