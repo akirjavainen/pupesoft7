@@ -6,6 +6,11 @@ $useslave = 2;
 // Ei käytetä pakkausta
 $compression = FALSE;
 
+// MUOKKAUS: isset():
+foreach (array("ytunnus", "tee", "asiakas") as $v) {
+  if (!isset(${$v})) ${$v} = null;
+}
+
 if (isset($_POST["tee_lataa"])) {
   if ($_POST["tee_lataa"] == 'lataa_tiedosto') $lataa_tiedosto = 1;
   if ($_POST["kaunisnimi"] != '') $_POST["kaunisnimi"] = str_replace("/", "", $_POST["kaunisnimi"]);
@@ -134,7 +139,7 @@ else {
                   WHERE yhtio = '{$kukarow['yhtio']}'
                   AND laji    = 'hinnastoryhmittely'";
     $tarkistu1 = pupe_query($tarkistu1);
-    $tarkistu1 = mysqli_fetch_array($tarkistu1, 0);
+    $tarkistu1 = mysqli_fetch_array($tarkistu1); // MUOKKAUS: BUGIKORJAUS (toinen parametri invalid)
 
     $tarkistu2 = "SELECT count(tunnus)
                   FROM avainsana
