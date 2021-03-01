@@ -107,7 +107,7 @@ if ($tee == '1') {
     echo "<th>".t("Projekti")."</font></th>";
   }
   echo "<th>".t("Vientejä")."</font></th>";
-  echo "<th>".t("Saldo")." ".$MONTH_ARRAY[($alvk*1)]."</font></th>";
+  echo "<th>".t("Saldo")." ".$MONTH_ARRAY[((float)$alvk*1)]."</font></th>"; // MUOKKAUS: BUGIKORJAUS (string * 1)
   echo "<th>".t("Kumulatiivinen")."</font></th>";
   echo "<th>".t("Summa valuutassa")."</font></th>";
 
@@ -133,7 +133,7 @@ if ($tee == '1') {
     }
     $worksheet->write($excelrivi, $iiiiii, t("Vientejä"), $format_bold);
     $iiiiii++;
-    $worksheet->write($excelrivi, $iiiiii, t("Saldo")." ".$MONTH_ARRAY[($alvk*1)], $format_bold);
+    $worksheet->write($excelrivi, $iiiiii, t("Saldo")." ".$MONTH_ARRAY[((float)$alvk*1)], $format_bold); // MUOKKAUS: BUGIKORJAUS (string * 1)
     $iiiiii++;
     $worksheet->write($excelrivi, $iiiiii, t("Kumulatiivinen"), $format_bold);
     $iiiiii++;
