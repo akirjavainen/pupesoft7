@@ -194,6 +194,8 @@ echo "</tr>";
 
 if (isset($tmr) and $tmr != '') {
   $mul_tmr = explode(",", $tmr);
+} else { // MUOKKAUS: isset()
+  $mul_tmr = array();
 }
 
 while ($rivi = mysqli_fetch_array($res2)) {
