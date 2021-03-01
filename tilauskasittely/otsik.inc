@@ -3646,17 +3646,17 @@ if ($tila == "" and !isset($jatka)) {
       echo "<td style='padding:0px;'>";
 
       $chk = array();
+
+      // MUOKKAUS: isset():
+      for ($i = 1; $i <= 31; $i++) {
+        $chk[$i] = null;
+      }
       
       // MUOKKAUS: isset():
       if (isset($sopapurow)) {
         foreach (explode(',', $sopapurow["sopimus_pp"]) as $numi) {
           $chk[$numi] = "checked";
         }
-      }
-
-      // MUOKKAUS: isset():
-      for ($i = 1; $i <= 31; $i++) {
-        $chk[$i] = null;
       }
 
       echo "<table><tr>";
