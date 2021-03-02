@@ -367,7 +367,8 @@ if (!function_exists('alku_tarjous')) {
       $myyresult = pupe_query($query);
       $myyrow = mysqli_fetch_array($myyresult);
 
-      $pdf_tarjous->draw_text(310, 740, $myyrow["nimi"],                     $page_tarjous[$sivu], $norm);
+      // MUOKKAUS: isset():
+      if (isset($myyrow)) $pdf_tarjous->draw_text(310, 740, $myyrow["nimi"],                     $page_tarjous[$sivu], $norm);
 
       $pdf_tarjous->draw_rectangle(737, 300, 716, 580, $page_tarjous[$sivu], $rectparam);
       $pdf_tarjous->draw_text(310, 729, t("Toimitustapa", $kieli)." / ".t("Rahtisopimus", $kieli),     $page_tarjous[$sivu], $pieni);
@@ -2244,8 +2245,12 @@ if (!function_exists('tulosta_tarjous')) {
     $querykiel = "SELECT kieli FROM asiakas WHERE yhtio = '$kukarow[yhtio]' and tunnus = '$laskurow[liitostunnus]'";
     $kielresult = pupe_query($querykiel);
     $kielrow = mysqli_fetch_array($kielresult);
-    if ($kielrow['kieli'] != '') {
+
+    // MUOKKAUS: isset():
+    if (isset($kielrow) and $kielrow['kieli'] != '') {
       $kieli = mb_strtolower($kielrow['kieli']);
+    } else {
+      $kieli = '';
     }
 
     // Vientitilauksilla AINA verottomat

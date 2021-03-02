@@ -1520,8 +1520,12 @@ if ($tee == "TULOSTA" or $tee == 'NAYTATILAUS') {
       $query = "SELECT kieli from asiakas WHERE yhtio = '$kukarow[yhtio]' and tunnus='$laskurow[liitostunnus]'";
       $kielires = pupe_query($query);
       $kielirow = mysqli_fetch_assoc($kielires);
-      if ($kielirow['kieli'] != '') {
+
+      // MUOKKAUS: isset():
+      if (isset($kielirow) and $kielirow['kieli'] != '') {
         $kieli = $kielirow['kieli'];
+      } else {
+        $kieli = '';
       }
     }  
 
