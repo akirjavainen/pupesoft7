@@ -998,7 +998,10 @@ if (!function_exists('rivi_tarjous')) {
 
           $row["hinta"]     = $perherow["hinta"];
           $row["rivihinta"] = $perherow["rivihinta"];
-          $row["ale1"]      = round(100 * (1 - ($perherow["rivihinta"] / ($perherow["hinta"] * ($row["kpl"]+$row["varattu"]+$row["jt"])))), 2);
+
+	  // MUOKKAUS: BUGIKORJAUS (jako nollalla):
+	  $k = (float)$row["kpl"] + (float)$row["varattu"] + (float)$row["jt"];
+          $row["ale1"]      = ($k > 0) ? round(100 * (1 - ($perherow["rivihinta"] / ($perherow["hinta"] * ($row["kpl"]+$row["varattu"]+$row["jt"])))), 2) : 0;
 
           if ($yhtiorow['alv_kasittely'] != '' and trim($verolliset_verottomat_hinnat) == 'verolliset') {
             $row["hinta"]     = $perherow["hinta_verolli"];
