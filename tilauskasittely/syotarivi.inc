@@ -14,8 +14,11 @@ if (!isset($toimitettuaika)) $toimitettuaika = "";
 if (!isset($toimaika)) $toimaika = "";
 if (!isset($var)) $var = "";
 if (!isset($varaosavirhe)) $varaosavirhe = "";
-if (!isset($takaisin)) $takaisin = null; // MUOKKAUS: isset()
-if (!isset($jaksotettu)) $jaksotettu = null; // MUOKKAUS: isset()
+
+// MUOKKAUS: isset():
+foreach (array("takaisin", "jaksotettu", "rivilaadittu") as $v) {
+	if (!isset(${$v})) ${$v} = null;
+}
 
 $debug = 0;
 
