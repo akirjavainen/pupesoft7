@@ -850,6 +850,8 @@ if (!function_exists("tee_jt_tilaus")) {
               $kieli = $kielirow["kieli"];
 
               // Joitain tietoja alkuperäiseltä tilaukselta, vain jos osatoimitus ei ole estetty ja jtrivit yhdistetään samalle otsikolle ja kyseessä ei ole ennakkotilaus
+	      // MUOKKAUS: kommentoitu ulos:
+	      /*
               if ($otsikkorivi["osatoimitus"] == "" and $toim != "ENNAKKO" and $otsikkorivi['jtkielto'] != "Y") {
 
                 if (mb_strpos($kommentti, t("Alkuperäinen tilaus", $kieli).": ".trim($orig_laskurow['tunnus'])) === FALSE) {
@@ -903,13 +905,17 @@ if (!function_exists("tee_jt_tilaus")) {
                   $kommentti .= t("Ennakkotilaus", $kieli).": ".trim($orig_laskurow['tunnus']);
                 }
               }
+              */
             }
 
+	    /*
+	    // MUOKKAUS: kommentoitu ulos:
             if ($automaattinen_poiminta != "" and $toim != "ENNAKKO" and $tilaus_on_jo == "KYLLA" and mb_strpos($kommentti, t("Toimitettavissa oleva JT-rivi", $kieli)."!") === FALSE) {
               if (trim($kommentti) != "") $kommentti .= " / ";
               // Tilausrivin systeemikommentti
               $kommentti .= t("Toimitettavissa oleva JT-rivi", $kieli)."!";
             }
+            */
 
             if ($jt_huomioi_pvm != "") {
               // Jos JT-rivit varaavat saldoa, niin tulevaisuudessa toimitettavat rivit varaavat nykyhetken saldoa vaikka "JTSPEC" tarkoittaa, että JT-rivien varauksia ei huomioida
@@ -1096,6 +1102,9 @@ if (!function_exists("tee_jt_tilaus")) {
                   $kysely  = mb_substr($kysely, 0, -1);
                   $kysely .= " WHERE yhtio='$kukarow[yhtio]' and tilausrivitunnus='$lisrow[tunnus]'";
                   $insres2 = pupe_query($kysely);
+
+                  // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi:
+                  if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=" . $orig_laskurow["tunnus"] . "&to_order=$id");
                 }
 
                 // jos alkuperäinen rivi oli suoratoimitettu asiakkaalle, merkataan rivit kerätyksi ja toimitetuksi
@@ -1181,11 +1190,12 @@ if (!function_exists("tee_jt_tilaus")) {
                   }
                 }
 
+		// MUOKKAUS: ei muokata rivikommenttia:
                 $uusi_kommentti = t("Toimitettu tilauksella", $kieli).": " . $kukarow['kesken'];
+                          //kommentti   = IF(kommentti = '', '$uusi_kommentti', CONCAT(kommentti, ' / ', '$uusi_kommentti'))
 
                 $query = "UPDATE tilausrivi SET
-                          tyyppi      = 'D',
-                          kommentti   = IF(kommentti = '', '$uusi_kommentti', CONCAT(kommentti, ' / ', '$uusi_kommentti'))
+                          tyyppi      = 'D' 
                           $poista_update_lisa
                           WHERE yhtio = '$kukarow[yhtio]'
                           and tunnus  = '$tunnus_nyt'
@@ -1296,8 +1306,6 @@ if (!function_exists("tee_jt_tilaus")) {
       }
     }
   }
-
-  if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=" . $otsikkorivi["tunnus"] . "&to_order=$id"); // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi
 }
 
 if (!function_exists("hae_toimitettavat_tilausrivit")) {
