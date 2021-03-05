@@ -1,5 +1,8 @@
 <?php
 
+// MUOKKAUS: lisatty:
+$total_kpl = 0;
+
 if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php") !== FALSE) {
   require "../inc/parametrit.inc";
 
@@ -3609,6 +3612,9 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
 
         $poikkeava_maara_disabled = "";
 
+        // MUOKKAUS: yhteensa kpl laskenta:
+        $total_kpl += $row['tilkpl'];
+
         // Verkkokaupassa etukäteen maksettu tuote!
         if ($otsik_row["mapvm"] != '' and $otsik_row["mapvm"] != '0000-00-00') {
           $row["varattu"] = $row["tilkpl"];
@@ -4219,6 +4225,14 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
         if (mb_strpos($tila, 'G') !== false) {
           $lahetekpl = $yhtiorow["oletus_lahetekpl_siirtolista"];
         }
+
+        // MUOKKAUS: kokonais-kpl:
+	echo "<tr>";
+	echo "<th colspan='2' style='text-align: right;'> </th>";
+	echo "<th style='text-align: right;'>Yhteensä:</th>";
+	echo "<th style='text-align: right;'>$total_kpl</th>";
+	echo "<th colspan='2'> </th>";
+	echo "</tr>";
 
         echo "<tr><th>".t("Lähete").":</th><th colspan='$spanni'>";
 
