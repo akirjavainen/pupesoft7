@@ -619,11 +619,11 @@ if (!function_exists("tee_jt_tilaus")) {
       $alkuperainen_varasto = $otsikkorivi['varasto'];
 
       ///* Tässä meillä on otsikko hallussa se on $id muuttujassa*///
-
-      $kpl[$tunnukset] = str_replace(",", ".", $kpl["$tunnukset"]);
+      // MUOKKAUS: isset():
+      if (isset($kpl[$tunnukset])) $kpl[$tunnukset] = str_replace(",", ".", $kpl["$tunnukset"]);
 
       // Tässä haarassa käyttäjä on syöttänyt jonkun kappalemäärän
-      if ($kpl[$tunnukset] > 0 or $loput[$tunnukset] == 'KAIKKI' or $loput[$tunnukset] == 'VAKISIN') {
+      if (isset($kpl[$tunnukset]) and $kpl[$tunnukset] > 0 or $loput[$tunnukset] == 'KAIKKI' or $loput[$tunnukset] == 'VAKISIN') {
 
         $jt_vakisin = FALSE;
 

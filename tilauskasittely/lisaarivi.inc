@@ -3135,8 +3135,9 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
             if ($laskurow['varasto'] != 0) {
               $_varasto = $laskurow['varasto'];
             }
-            else {
-              $_varasto = $varasto[0];
+	    else {
+	      // MUOKKAUS: isset():
+              $_varasto = isset($varasto[0]) ? $varasto[0] : null;
             }
 
             $query = "SELECT alkuhyllyalue, alkuhyllynro
@@ -3146,10 +3147,17 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
             $oletus_tuotepaikka_res = pupe_query($query);
             $oletus_tuotepaikka_row = mysqli_fetch_assoc($oletus_tuotepaikka_res);
 
-            lisaa_tuotepaikka($trow['tuoteno'], $oletus_tuotepaikka_row['alkuhyllyalue'], $oletus_tuotepaikka_row['alkuhyllynro'], 0, 0, "Tuotetta lisättäessä", "", 0, 0, 0);
+	    // MUOKKAUS: isset():
+	    if (isset($oletus_tuotepaikka_row)) {
+              lisaa_tuotepaikka($trow['tuoteno'], $oletus_tuotepaikka_row['alkuhyllyalue'], $oletus_tuotepaikka_row['alkuhyllynro'], 0, 0, "Tuotetta lisättäessä", "", 0, 0, 0);
 
-            $p_hyllyalue  = $oletus_tuotepaikka_row["alkuhyllyalue"];
-            $p_hyllynro    = $oletus_tuotepaikka_row["alkuhyllynro"];
+              $p_hyllyalue  = $oletus_tuotepaikka_row["alkuhyllyalue"];
+	      $p_hyllynro    = $oletus_tuotepaikka_row["alkuhyllynro"];
+	    } else {
+              $p_hyllyalue = null;
+	      $p_hyllynro = null;
+            }
+
             $p_hyllyvali  = '0';
             $p_hyllytaso  = '0';
 
