@@ -8923,8 +8923,10 @@ if ($tee == '') {
                 <input type='hidden' name='orig_alatila' value = '$orig_alatila'>
                 <input type='hidden' name='tila'         value = 'MUUTA'>
                 <input type='hidden' name='tapa'         value = 'POISJTSTA'>
-                <input type='submit' value = '".t("Toimita")."'>
                 </form> ";
+
+                // MUOKKAUS: JavaScript-nappulaksi:
+                echo "<input type='submit' id='butJT_$row[tunnus]' value='Toimita' onclick='httpGet(\"tilaus_myynti.php?toim=RIVISYOTTO&tilausnumero=$tilausnumero&rivitunnus=$row[tunnus]&tila=MUUTA&tapa=POISJTSTA\"); document.getElementById(\"butJT_$row[tunnus]\").style.backgroundColor = \"green\"; return false;'>";
           }
 
           if ($yhtiorow['tilausrivin_korvamerkinta'] == 'K') {
@@ -9007,8 +9009,10 @@ if ($tee == '') {
                   <input type='hidden' name='jt_muidenmukana' value = 'EI'>
                   <input type='hidden' name='orig_tila'     value = '$orig_tila'>
                   <input type='hidden' name='orig_alatila'   value = '$orig_alatila'>
-                  <input type='submit' value='{$napinnimi}'>
                   </form> ";
+
+                  // MUOKKAUS: JavaScript-nappulaksi:
+                  echo "<input type='submit' id='butJT_$row[tunnus]' value='{$napinnimi}' onclick='httpGet(\"tilaus_myynti.php?toim=RIVISYOTTO&tilausnumero=$tilausnumero&rivitunnus=$row[tunnus]&tila=MUUTA&tapa=JT&var=J\"); document.getElementById(\"butJT_$row[tunnus]\").style.backgroundColor = \"red\"; return false;'>";
 
             if (!empty($yhtiorow['jt_automatiikka']) and $yhtiorow['automaattinen_jt_toimitus'] == 'A' and $laskurow["tila"] != 'G') {
               echo " <form method='post' action='{$palvelin2}{$tilauskaslisa}tilaus_myynti.php' name='jalkitoimita'>
@@ -9127,8 +9131,10 @@ if ($tee == '') {
                   <input type='hidden' name='tapa'       value = 'VAIHDAJAPOISTA'>
                   <input type='hidden' name='var'       value = 'J'>
                   <input type='hidden' name='jt_muidenmukana' value = 'EI'>
-                  <input type='submit' value='{$napinnimi}'>
-                  </form> ";
+                  </form>";
+
+                  // MUOKKAUS: JavaScript-nappulaksi:
+                  echo "<input type='submit' id='butJT_$row[tunnus]' value='{$napinnimi}' onclick='httpGet(\"tilaus_myynti.php?toim=RIVISYOTTO&tilausnumero=$tilausnumero&rivitunnus=$row[tunnus]&tila=MUUTA&tapa=JT&var=J\"); document.getElementById(\"butJT_$row[tunnus]\").style.backgroundColor = \"red\"; return false;'>";
           }
 
           if (!empty($yhtiorow['jt_automatiikka']) and $yhtiorow['automaattinen_jt_toimitus'] == 'A' and $row['var'] == 'J' and strtotime($row['kerayspvm']) == strtotime($laskurow['kerayspvm']) and !$_luottoraja_ylivito and $laskurow["tila"] != 'G') {
