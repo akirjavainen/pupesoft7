@@ -448,6 +448,8 @@ if (!function_exists("tee_jt_tilaus")) {
             $query .= $fieldname."='$otsikkorivi[tunnus]',";
           }
           // nämä kentät tyhjennetään jos jtrivit kootaan yhdelle otsikolle (siis normikeissi)
+	  // MUOKKAUS: kommentoitu ulos:
+	  /*
           elseif ($fieldname == 'sisviesti1' or
             $fieldname == 'tilausyhteyshenkilo' or
             $fieldname == 'asiakkaan_tilausnumero' or
@@ -464,7 +466,8 @@ if (!function_exists("tee_jt_tilaus")) {
             else {
               $query .= $fieldname."='',";
             }
-          }
+	  }
+	   */
           elseif ($fieldname == 'sisviesti2') {
 
             if ($mista_tullaan == "TULLAAN_VALMISTUKSESTA") {
@@ -475,6 +478,8 @@ if (!function_exists("tee_jt_tilaus")) {
             }
           }
           // kommentti speciaalia
+	  // MUOKKAUS: kommentoitu ulos:
+	  /*
           elseif ($fieldname == 'comments') {
             if ($toim == "ENNAKKO" or $otsikkorivi['jtkielto'] == "Y") {
               if ($toim == "ENNAKKO") {
@@ -492,7 +497,8 @@ if (!function_exists("tee_jt_tilaus")) {
                 $query .= $fieldname."='".t("JÄLKITOIMITUS")."',";
               }
             }
-          }
+	  }
+	   */
           //HUOM: Laitetaan clearing kenttään jotain speciaalia
           elseif ($fieldname == 'clearing') {
             if ($toim == "ENNAKKO") {
