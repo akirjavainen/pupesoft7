@@ -1296,6 +1296,8 @@ if (!function_exists("tee_jt_tilaus")) {
       }
     }
   }
+
+  if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=" . $otsikkorivi["tunnus"] . "&to_order=$id"); // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi
 }
 
 if (!function_exists("hae_toimitettavat_tilausrivit")) {
