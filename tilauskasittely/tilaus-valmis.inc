@@ -16,7 +16,7 @@ if ($kukarow["kesken"] == '' or $kukarow["kesken"] == '0') {
 }
 
 // MUOKKAUS: isset():
-foreach (array("kertakassa", "keraysvyohyke") as $v) {
+foreach (array("kertakassa", "keraysvyohyke", "kieli") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
@@ -2290,7 +2290,12 @@ else {
             }
 
             $content_body .= "$jt_chk_row[kpl] kpl ".t("jälkitoimituksen tuotenumerosta")." $jt_chk_row[tuoteno] ".t("tilauksella")." $tilausnumero\n\n";
-            $content_body .= t("Tuotepaikka").": $jt_chk_row[hyllyalue]-$jt_chk_row[hyllynro]-$jt_chk_row[hyllyvali]-$jt_chk_row[hyllyvtaso]\n\n";
+
+	    // MUOKKAUS: isset():
+	    if (isset($jt_chk_row["hyllyalue"]) and isset($jt_chk_row["hyllynro"]) and isset($jt_chk_row["hyllyvali"]) and isset($jt_chk_row["hyllyvtaso"])) {
+              $content_body .= t("Tuotepaikka").": $jt_chk_row[hyllyalue]-$jt_chk_row[hyllynro]-$jt_chk_row[hyllyvali]-$jt_chk_row[hyllyvtaso]\n\n";
+	    }
+
             $content_body .= t("Nimitys").": $jt_chk_row[nimitys]\n";
             $content_body .= t("Tuotemerkki").": $jt_chk_row[tuotemerkki]\n";
             $content_body .= t("Tahtituote").": $jt_chk_row[tahtituote]\n";
