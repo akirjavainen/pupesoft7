@@ -3350,10 +3350,12 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
       $pjat_sortlisa = "tilausrivin_lisatiedot.alunperin_puute,lavasort,";
     }
 
+    // MUOKKAUS: tilausrivi.kommentti lisatty kyselyyn:
     $query = "SELECT
               tilausrivi.tyyppi,
               tilausrivi.tuoteno,
               tilausrivi.nimitys,
+              tilausrivi.kommentti,
               tilausrivi.tuoteno puhdas_tuoteno,
               tilausrivi.hyllyalue hyllyalue,
               tilausrivi.hyllynro hyllynro,
@@ -3795,7 +3797,7 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
           echo "</td>";
           echo "<td>$row[tuoteno]<input type='hidden' name='rivin_puhdas_tuoteno[$row[tunnus]]' value='$row[puhdas_tuoteno]'></td>";
           echo $_toimtuoteno_rivi;
-          echo "<td>$row[nimitys]</td>";
+          echo "<td>$row[nimitys]<br>$row[kommentti]</td>"; // MUOKKAUS: rivikommentti lisatty
 
 	  // MUOKKAUS: BUGIKORJAUS (puuttuvat lainausmerkit):
           echo "<td class='text-right' id='{$row['tunnus']}_varattu'>".(float) $row['varattu']."<input type='hidden' name='rivin_varattu[$row[tunnus]]' value='$row[varattu]'></td>";
