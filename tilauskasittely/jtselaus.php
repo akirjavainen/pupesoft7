@@ -1096,8 +1096,10 @@ if ($tee == "JATKA") {
     else {
       // Manuaalinen jt-rivien poiminta
       // Eriävä toimitusosoite hyväksytään mutta siitä ilmoitetaan
+      // MUOKKAUS: lisatty tilausrivi.kommentti kyselyyn:
       $query = "SELECT tilausrivi.tuoteno,
                 tilausrivi.nimitys,
+                tilausrivi.kommentti,
                 tilausrivi.tilaajanrivinro,
                 lasku.ytunnus,
                 tilausrivi.jt $lisavarattu jt,
@@ -1741,6 +1743,7 @@ if ($tee == "JATKA") {
               }
 
               echo "<br>$jtrow[nimitys]";
+	      echo "<br>$jtrow[kommentti]"; // MUOKKAUS: lisatty rivikommentti
               echo "</td>";
 
               if ($tilaus_on_jo == "") {
