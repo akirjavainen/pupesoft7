@@ -277,7 +277,7 @@ if (!function_exists('alku_lahete')) {
         $toimaikares = pupe_query($query);
 
         if (mysqli_num_rows($toimaikares) > 1) {
-          //$useita = "JOO"; // MUOKKAUS: kommentoitu ulos
+          $useita = "JOO"; // MUOKKAUS: kommentoi ulos jos ei rivikohtaisia toimitusaikoja
         }
       }
 
@@ -1649,7 +1649,8 @@ if (!function_exists('rivi_lahete')) {
     }
 
     if ($useita == "JOO" and $row["toimaika"] != "0000-00-00") {
-      $row["kommentti"] .= "\n".t("Toimitusaika", $kieli).": ".tv1dateconv($row["toimaika"]);
+      // MUOKKAUS: riveilla toimitusviikko paivan sijaan:
+      $row["kommentti"] .= "\n" .t("Toimitusaika", $kieli) . ": vko " . date("W", strtotime((string)$row["toimaika"]));
     }
 
     $row["tilkpl"]   = ($row["tilkpl"]*1);
