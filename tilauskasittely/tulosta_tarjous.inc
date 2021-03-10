@@ -28,8 +28,12 @@ if (!isset($verolliset_verottomat_hinnat)) $verolliset_verottomat_hinnat = null;
 if (strlen($verolliset_verottomat_hinnat) === 0) $verolliset_verottomat_hinnat = "verottomat";
 //$naytetaanko_tuoteno = "ei";
 
-if ($kielrow['kieli'] != '') {
-  $kieli = mb_strtolower($kielrow['kieli']);
+if (isset($kielrow)) {
+  if ($kielrow['kieli'] != '') {
+    $kieli = mb_strtolower($kielrow['kieli']);
+  }
+} else {
+  $kieli = null;
 }
 
 $norm["height"]        = 10;
