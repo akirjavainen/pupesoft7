@@ -40,7 +40,7 @@ if (isset($_REQUEST['ajax_popup'])) {
 }
 
 // MUOKKAUS: isset():
-foreach (array("perusta_tilaustyyppi", "projekti", "jarjlisa", "yt", "postitp", "kantaasiakastunnus", "ytunnus", "kateinen", "projektilask", "rivitunnus") as $v) {
+foreach (array("perusta_tilaustyyppi", "projekti", "jarjlisa", "yt", "postitp", "kantaasiakastunnus", "ytunnus", "kateinen", "projektilask", "rivitunnus", "kplmaara") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
@@ -10842,19 +10842,23 @@ if ($tee == '') {
       // jos kyseessä on käteiskauppaa
       $kateinen = "";
 
-      if ($maksuehtorow['kateinen'] != '') {
-        $kateinen = "X";
+      // MUOKKAUS: isset():
+      if (isset($maksuehtorow)) {
+        if ($maksuehtorow['kateinen'] != '') {
+          $kateinen = "X";
+        }
+
+        if ($maksuehtorow['jaksotettu'] != '') {
+          $query = "SELECT yhtio
+                    FROM maksupositio
+                    WHERE yhtio = '$kukarow[yhtio]'
+                    AND otunnus = '$laskurow[jaksotettu]'";
+          $jaksoresult = pupe_query($query);
+        }
       }
 
-      if ($maksuehtorow['jaksotettu'] != '') {
-        $query = "SELECT yhtio
-                  FROM maksupositio
-                  WHERE yhtio = '$kukarow[yhtio]'
-                  AND otunnus = '$laskurow[jaksotettu]'";
-        $jaksoresult = pupe_query($query);
-      }
-
-      if ($laskurow['sisainen'] != '' and $maksuehtorow['jaksotettu'] != '') {
+      // MUOKKAUS: isset():
+      if ($laskurow['sisainen'] != '' and isset($maksuehtorow) and $maksuehtorow['jaksotettu'] != '') {
         echo "<font class='error'>".t("VIRHE: Sisäisellä laskulla ei voi olla maksusopimusta!")."</font>";
       }
       elseif ($maksuehtorow['jaksotettu'] != '' and mysqli_num_rows($jaksoresult) == 0 and $kukarow["extranet"] == "") {

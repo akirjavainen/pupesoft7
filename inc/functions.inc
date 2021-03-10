@@ -35096,7 +35096,7 @@ if (!function_exists('kpl_ruudulle')) {
     }
     elseif ($row["var"] == 'P' or
       ($kukarow['extranet'] != '' and $row['positio'] == 'Ei varaa saldoa') or
-      (((isset($asiakasrow) and $asiakasrow['extranet_tilaus_varaa_saldoa'] == "" and // MUOKKAUS: isset()
+      ((isset($asiakasrow) and ($asiakasrow['extranet_tilaus_varaa_saldoa'] == "" and // MUOKKAUS: isset()
             $yhtiorow["extranet_tilaus_varaa_saldoa"] == "E") or
           $asiakasrow["extranet_tilaus_varaa_saldoa"] == "E") and
         ($laskurow["tilaustyyppi"] == "H"))
