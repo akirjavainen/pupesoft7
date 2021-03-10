@@ -2314,8 +2314,8 @@ if (!function_exists('tulosta_tarjous')) {
               LEFT JOIN tilausrivin_lisatiedot ON tilausrivi.yhtio = tilausrivin_lisatiedot.yhtio and tilausrivi.tunnus = tilausrivin_lisatiedot.tilausrivitunnus
               WHERE tilausrivi.otunnus in ($laskurow[tunnus])
               and tilausrivi.yhtio     = '$kukarow[yhtio]'
-              and tilausrivi.tyyppi    in  ('L','T','U')
-              ORDER BY tilausrivi.tilaajanrivinro, $pjat_sortlisa sorttauskentta $yhtiorow[tarjouksen_jarjestys_suunta], tilausrivi.tunnus";
+              and tilausrivi.tyyppi    in  ('L','T','U','D')
+              ORDER BY tilausrivi.tilaajanrivinro, $pjat_sortlisa sorttauskentta $yhtiorow[tarjouksen_jarjestys_suunta], tilausrivi.tunnus"; // MUOKKAUS: lisatty 'D' hylattyjen tarjousten rivien nakemiseksi
     $riresult = pupe_query($query);
 
     $row = mysqli_fetch_assoc($riresult);
