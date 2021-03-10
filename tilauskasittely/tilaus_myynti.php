@@ -7459,16 +7459,19 @@ if ($tee == '') {
           $row["hinta"] = hintapyoristys(laskuval($row["hinta"], $laskurow["vienti_kurssi"]));
         }
 
-        if ((($asiakasrow['extranet_tilaus_varaa_saldoa'] == "" and
-              $yhtiorow["extranet_tilaus_varaa_saldoa"] == "E") or
-            $asiakasrow["extranet_tilaus_varaa_saldoa"] == "E") and
-          $laskurow["tilaustyyppi"] == "H"
-        ) {
-          $kplmaara = $row["tilkpl"];
-        }
-        else {
-          $kplmaara = $row["varattu"] + $row["jt"];
-        }
+	// MUOKKAUS: isset():
+	if (isset($asiakasrow)) {
+          if ((($asiakasrow['extranet_tilaus_varaa_saldoa'] == "" and
+                $yhtiorow["extranet_tilaus_varaa_saldoa"] == "E") or
+              $asiakasrow["extranet_tilaus_varaa_saldoa"] == "E") and
+            $laskurow["tilaustyyppi"] == "H"
+          ) {
+            $kplmaara = $row["tilkpl"];
+          }
+          else {
+            $kplmaara = $row["varattu"] + $row["jt"];
+	  }
+	}
 
         // Tän rivin rivihinta
         $summa =
