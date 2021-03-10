@@ -3350,12 +3350,13 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
       $pjat_sortlisa = "tilausrivin_lisatiedot.alunperin_puute,lavasort,";
     }
 
-    // MUOKKAUS: tilausrivi.kommentti lisatty kyselyyn:
+    // MUOKKAUS: tilausrivi.kommentti, tilausrivi.toimaika lisatty kyselyyn:
     $query = "SELECT
               tilausrivi.tyyppi,
               tilausrivi.tuoteno,
               tilausrivi.nimitys,
               tilausrivi.kommentti,
+              tilausrivi.toimaika, 
               tilausrivi.tuoteno puhdas_tuoteno,
               tilausrivi.hyllyalue hyllyalue,
               tilausrivi.hyllynro hyllynro,
@@ -3795,7 +3796,7 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
 
           echo "<input type='hidden' name='vertaus_hylly[$row[tunnus]]' value='$row[varastopaikka_rekla]'>";
           echo "</td>";
-          echo "<td>$row[tuoteno]<input type='hidden' name='rivin_puhdas_tuoteno[$row[tunnus]]' value='$row[puhdas_tuoteno]'></td>";
+          echo "<td>$row[tuoteno]<input type='hidden' name='rivin_puhdas_tuoteno[$row[tunnus]]' value='$row[puhdas_tuoteno]'><br>vko " . date("W", strtotime($row["toimaika"])) . "</td>"; // MUOKKAUS: toimitusviikko lisatty
           echo $_toimtuoteno_rivi;
           echo "<td>$row[nimitys]<br>$row[kommentti]</td>"; // MUOKKAUS: rivikommentti lisatty
 
