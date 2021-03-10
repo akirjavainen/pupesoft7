@@ -35085,6 +35085,9 @@ if (!function_exists('kpl_ruudulle')) {
   function kpl_ruudulle($row, $laskurow, $asiakasrow) {
     global $kukarow, $yhtiorow;
 
+    // MUOKKAUS: isset():
+    if (!isset($asiakasrow)) return (float)$row['tilkpl'];
+
     // $row = tilausrivi
     if (in_array($row["var"], array('S', 'U', 'T', 'R', 'J'))) {
       if ($yhtiorow["varaako_jt_saldoa"] == "") {
@@ -35096,7 +35099,7 @@ if (!function_exists('kpl_ruudulle')) {
     }
     elseif ($row["var"] == 'P' or
       ($kukarow['extranet'] != '' and $row['positio'] == 'Ei varaa saldoa') or
-      ((isset($asiakasrow) and ($asiakasrow['extranet_tilaus_varaa_saldoa'] == "" and // MUOKKAUS: isset()
+      ((($asiakasrow['extranet_tilaus_varaa_saldoa'] == "" and
             $yhtiorow["extranet_tilaus_varaa_saldoa"] == "E") or
           $asiakasrow["extranet_tilaus_varaa_saldoa"] == "E") and
         ($laskurow["tilaustyyppi"] == "H"))

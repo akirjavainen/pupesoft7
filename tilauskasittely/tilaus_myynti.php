@@ -9508,7 +9508,8 @@ if ($tee == '') {
           $query_ale_lisa = generoi_alekentta('M');
           $query_ale_lisa_ei_erik = generoi_alekentta('M', '', 'ei_erikoisale');
 
-          if ((($asiakasrow['extranet_tilaus_varaa_saldoa'] == "" and
+	  // MUOKKAUS: isset():
+          if (isset($asiakasrow) and (($asiakasrow['extranet_tilaus_varaa_saldoa'] == "" and
                 $yhtiorow["extranet_tilaus_varaa_saldoa"] == "E") or
               $asiakasrow["extranet_tilaus_varaa_saldoa"] == "E") and
             $laskurow["tilaustyyppi"] == "H"
@@ -9867,9 +9868,12 @@ if ($tee == '') {
         }
 
         // Jos laskun loppusumma pyöristetään lähimpään tasalukuun
-        if ($yhtiorow["laskunsummapyoristys"] == 'o' or $asiakasrow["laskunsummapyoristys"] == 'o') {
-          $summa = sprintf("%.2f", round($summa , 0));
-        }
+	// MUOKKAUS: isset():
+	if (isset($asiakasrow)) {
+          if ($yhtiorow["laskunsummapyoristys"] == 'o' or $asiakasrow["laskunsummapyoristys"] == 'o') {
+            $summa = sprintf("%.2f", round($summa , 0));
+	  }
+	}
 
         if ($toim != 'SIIRTOLISTA') {
           echo "<tr>$jarjlisa
@@ -10861,7 +10865,7 @@ if ($tee == '') {
       if ($laskurow['sisainen'] != '' and isset($maksuehtorow) and $maksuehtorow['jaksotettu'] != '') {
         echo "<font class='error'>".t("VIRHE: Sisäisellä laskulla ei voi olla maksusopimusta!")."</font>";
       }
-      elseif ($maksuehtorow['jaksotettu'] != '' and mysqli_num_rows($jaksoresult) == 0 and $kukarow["extranet"] == "") {
+      elseif (isset($maksuehtorow) and $maksuehtorow['jaksotettu'] != '' and mysqli_num_rows($jaksoresult) == 0 and $kukarow["extranet"] == "") {
         echo "<font class='error'>".t("VIRHE: Tilauksella ei ole maksusopimusta!")."</font>";
       }
       elseif ($kukarow["extranet"] == "" and $toim == 'REKLAMAATIO' and
