@@ -7807,6 +7807,7 @@ if ($tee == '') {
 
             if (($yhtiorow["salli_jyvitys_myynnissa"] == "V" and $kukarow['jyvitys'] == 'S') or $yhtiorow["salli_jyvitys_myynnissa"] == "S" or ($toim == 'TARJOUS' and $yhtiorow['salli_jyvitys_tarjouksella'] == 'S')) {
               echo "<input type='checkbox' class='valitut_rivit' name='valitut_rivit[]' value='{$row['tunnus']}' />";
+	      echo "<br><br>vko " . date("W", strtotime($row["toimaika"])); // MUOKKAUS: lisatty toimitusviikko
             }
           }
           elseif ($tilauksen_jarjestys == '1' and $row['perheid'] != 0) {
