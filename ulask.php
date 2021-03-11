@@ -452,7 +452,7 @@ if ($tee == 'I') {
       $osto_rahti = 0;
     }
     else {
-      $osto_rahti = round((float)$osto_rahti, 2);
+      $osto_rahti = round((float)$osto_rahti, 2); // MUOKKAUS: BUGIKORJAUS (round(string))
     }
     if (!isset($osto_kulu)) {
       $osto_kulu = 0;
@@ -586,7 +586,7 @@ if ($tee == 'I') {
     }
     else {
       $kapro = str_replace(",", ".", trim($kapro));
-      $kassaale = (float)$summa * (float)$kapro / 100;
+      $kassaale = (float)$summa * (float)$kapro / 100; // MUOKKAUS: BUGIKORJAUS (string * string)
       $kapro = 0;
     }
   }
