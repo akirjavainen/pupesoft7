@@ -586,7 +586,7 @@ if ($tee == 'I') {
     }
     else {
       $kapro = str_replace(",", ".", trim($kapro));
-      $kassaale = $summa * $kapro / 100;
+      $kassaale = (float)$summa * (float)$kapro / 100;
       $kapro = 0;
     }
   }
