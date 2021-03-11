@@ -7807,7 +7807,7 @@ if ($tee == '') {
 
             if (($yhtiorow["salli_jyvitys_myynnissa"] == "V" and $kukarow['jyvitys'] == 'S') or $yhtiorow["salli_jyvitys_myynnissa"] == "S" or ($toim == 'TARJOUS' and $yhtiorow['salli_jyvitys_tarjouksella'] == 'S')) {
               echo "<input type='checkbox' class='valitut_rivit' name='valitut_rivit[]' value='{$row['tunnus']}' />";
-	      echo "<br><br>vko " . date("W", strtotime($row["toimaika"])); // MUOKKAUS: lisatty toimitusviikko
+	      if ($toim != 'TARJOUS') echo "<br><br>vko " . date("W", strtotime($row["toimaika"])); // MUOKKAUS: lisatty toimitusviikko
             }
           }
           elseif ($tilauksen_jarjestys == '1' and $row['perheid'] != 0) {
@@ -10195,6 +10195,7 @@ if ($tee == '') {
             
             // MUOKKAUS: lisatty:
             if (file_exists("../../hinnasto")) echo "<a href='/hinnasto/printable.php?pupeorder=$laskurow[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
+	    if (file_exists("../../toimitusvahvistus") and $toim != 'TARJOUS') echo "<a href='/toimitusvahvistus/?nonavi=1&default_order=$laskurow[tunnus]'>input type='submit' value='Kuljetustilaus'></a>";
             echo "</td>";
 
             if ($sarakkeet_alku-9 > 0) {
