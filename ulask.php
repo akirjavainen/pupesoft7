@@ -452,19 +452,19 @@ if ($tee == 'I') {
       $osto_rahti = 0;
     }
     else {
-      $osto_rahti = round($osto_rahti, 2);
+      $osto_rahti = round((float)$osto_rahti, 2);
     }
     if (!isset($osto_kulu)) {
       $osto_kulu = 0;
     }
     else {
-      $osto_kulu = round($osto_kulu, 2);
+      $osto_kulu = round((float)$osto_kulu, 2);
     }
     if (!isset($osto_rivi_kulu)) {
       $osto_rivi_kulu = 0;
     }
     else {
-      $osto_rivi_kulu = round($osto_rivi_kulu, 2);
+      $osto_rivi_kulu = round((float)$osto_rivi_kulu, 2);
     }
     if (abs($summa) - abs($osto_rahti) - abs($osto_kulu) - abs($osto_rivi_kulu) < 0) {
       $errormsg .= "<font class='error'>".t("Kulut ylittävät laskun summan")."!</font><br>";
@@ -591,7 +591,7 @@ if ($tee == 'I') {
     }
   }
 
-  $kassaale = round($kassaale, 2);
+  $kassaale = round((float)$kassaale, 2);
 
   if ($kak > 0) {
     $kak += 0;
@@ -2157,7 +2157,7 @@ if ($tee == 'I') {
   }
 
   // Tehdään oletustiliöinnit
-  $omasumma = round($summa * $vrow['kurssi'], 2);
+  $omasumma = round((float)$summa * (float)$vrow['kurssi'], 2);
   $omasumma_valuutassa = $summa;
 
   $vassumma = -1 * $omasumma;
