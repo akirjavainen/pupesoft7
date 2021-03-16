@@ -927,10 +927,11 @@ if ($tila == 'tee_kohdistus') {
             echo "<font class='message'>".t("Uusi kassa-ale").": $lasku[alennus] $suoritus[valkoodi]</font> ";
           }
 
+	  // MUOKKAUS: puuttuneet lainausmerkit:
           $kohdistus_qry = "INSERT INTO suorituksen_kohdistus SET
                             yhtio          = '{$kukarow['yhtio']}',
-                            suoritustunnus = '{$suoritus[tunnus]}',
-                            laskutunnus    = '{$lasku[tunnus]}',
+                            suoritustunnus = '{$suoritus['tunnus']}',
+                            laskutunnus    = '{$lasku['tunnus']}',
                             kaatosumma     = $kaatosumma * -1,
                             kohdistuspvm   = NOW(),
                             kirjauspvm     = NOW()";
