@@ -428,7 +428,7 @@ if (!function_exists('alku')) {
 
     $pdf_lasku->draw_text(430, $otsik[$rivi_ind], t("Asiakasnumero", $kieli), $page_lasku[$sivu], $pieni);
 
-    if (trim($asiakasrow["asiakasnro"]) != "") {
+    if (isset($asiakasrow["asiakasnro"]) and trim($asiakasrow["asiakasnro"]) != "") {
       $pdf_lasku->draw_text(430, $arvo[$rivi_ind], $asiakasrow["asiakasnro"], $page_lasku[$sivu], $norm);
     }
     else {
