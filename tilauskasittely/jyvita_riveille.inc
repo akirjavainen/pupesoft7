@@ -19,6 +19,9 @@ if (mb_strpos($jysum, "%") !== false and empty($valitut_tilausrivi_tunnukset)) {
   $anna_ea = "TOKI";
 }
 
+// MUOKKAUS: isset();
+if (!isset($anna_ea)) $anna_ea = null;
+
 $jysum = round(str_replace(",", ".", $jysum), 2);
 $jyvitetaan_ristiin = "";
 
