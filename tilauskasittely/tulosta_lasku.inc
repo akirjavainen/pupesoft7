@@ -2963,7 +2963,11 @@ if (!function_exists("tulosta_lasku")) {
     global $kukarow, $yhtiorow, $tulosta_lasku_kpl;
 
     // Fonttimuuttujat
-    if (!isset($laskutyyppi)) $laskutyyppi = null; // MUOKKAUS: isset()
+    // MUOKKAUS: isset():
+    foreach (array("laskutyyppi", "barcode_korkeus") as $v) {
+	    if (!isset(${$v})) ${$v} = null;
+    }
+
     extract(lasku_fontit($laskutyyppi));
 
     if (substr($lasku, 0, 6) == "LASKU:") {
