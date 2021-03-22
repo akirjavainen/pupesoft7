@@ -200,6 +200,7 @@ if (!function_exists('alku')) {
 
     if ($yhtiorow['maa'] != $laskurow['toim_maa']) {
       $maan_tiedot = hae_maa(array('maakoodi' => $laskurow['toim_maa']));
+      if (!isset($maan_tiedot["nimi"])) $maan_tiedot["nimi"] = null; // MUOKKAUS: isset()
       $pdf_lasku->draw_text(50, $toim_kala-52, $maan_tiedot["nimi"], $page_lasku[$sivu], $norm);
     }
 
@@ -2179,8 +2180,8 @@ if (!function_exists('loppu')) {
         $pankkitiedot["pankkitili3"] = "";
         $pankkitiedot["pankkiiban3"] = "";
         $pankkitiedot["pankkiswift3"] = "";
-      }
-      elseif ($masrow["pankkinimi1"] != "") {
+      } // MUOKKAUS: isset():
+      elseif (isset($masrow["pankkinimi1"]) and $masrow["pankkinimi1"] != "") {
         $pankkitiedot["pankkinimi1"] = $masrow["pankkinimi1"];
         $pankkitiedot["pankkitili1"] = $masrow["pankkitili1"];
         $pankkitiedot["pankkiiban1"] = $masrow["pankkiiban1"];
@@ -2382,6 +2383,7 @@ if (!function_exists('loppu')) {
     $pdf_lasku->draw_text($x, 35 + $tileja + $barcode_korkeus, $y_postino."  ".$y_postitp, $thispage, $pieni);
 
     $maan_tiedot = hae_maa(array('maakoodi' => $y_maa));
+    if (!isset($maan_tiedot["nimi"])) $maan_tiedot["nimi"] = "FI - SUOMI"; // MUOKKAUS: isset()
     $pdf_lasku->draw_text($x, 25 + $tileja + $barcode_korkeus, $maan_tiedot['nimi'], $thispage, $pieni);
 
     $pdf_lasku->draw_text(217, 55 + $tileja + $barcode_korkeus, t("Puhelin", $kieli).": $y_puhelin", $thispage, $pieni);
@@ -2964,7 +2966,7 @@ if (!function_exists("tulosta_lasku")) {
 
     // Fonttimuuttujat
     // MUOKKAUS: isset():
-    foreach (array("laskutyyppi", "barcode_korkeus") as $v) {
+    foreach (array("laskutyyppi", "barcode_korkeus", "devnull") as $v) {
 	    if (!isset(${$v})) ${$v} = null;
     }
 
@@ -3054,6 +3056,7 @@ if (!function_exists("tulosta_lasku")) {
 
     // Maksuehto tekstinä
     $laskurow["maksuehto"] = $masrow["teksti"] = t_tunnus_avainsanat($masrow, "teksti", "MAKSUEHTOKV", $kieli);
+    if (!isset($masrow["kateinen"])) $masrow["kateinen"] = null; // MUOKKAUS: isset()
     $laskurow["kateistyyppi"] = $masrow["kateinen"];
 
     if (kyseessa_eramaksu($laskurow) and !$tulosta_lasku_kpl) {
@@ -3333,7 +3336,8 @@ if (!function_exists("tulosta_lasku")) {
 
     $kala = alvierittely($laskurow, $asiakasrow, $kieli, $pdf_lasku, $page_lasku[$sivu], $toim, $kala, $summa, $arvo, $laskutyyppi, "", $yhteensamaara);
 
-    if ($masrow['kassa_alepros'] > 0) {
+    // MUOKKAUS: isset():
+    if (isset($masrow['kassa_alepros']) and $masrow['kassa_alepros'] > 0) {
 
       // Mahtuuko erittely samalle sivulle?
       $devnullkala = alvierittely($laskurow, $asiakasrow, $kieli, $pdf_lasku, $devnull, $toim, $kala, $summa, $arvo, $laskutyyppi, $masrow['kassa_alepros'], $yhteensamaara);
