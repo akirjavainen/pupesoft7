@@ -49,7 +49,8 @@ if (!function_exists("toimitustapatarkista")) {
         $query = "UPDATE toimitustapa set selite='$toita' where selite='$trow[$i]' and yhtio='$kukarow[yhtio]'";
         $updre = pupe_query($query);
 
-        echo "<font class='message'>".t("Päivitettiin")." ".mysqli_affected_rows($link)." ".t("toimitustapa");
+	// MUOKKAUS: isset():
+        if (isset($link)) echo "<font class='message'>".t("Päivitettiin")." ".mysqli_affected_rows($link)." ".t("toimitustapa");
 
         $query = "UPDATE toimitustapa
                   SET vak_kielto='{$toita}'
