@@ -13,6 +13,9 @@ else {
   $summa_valutuassa = NULL;
 }
 
+// MUOKKAUS: BUGIKORJAUS (string + int):
+$mav = (float)$mav;
+
 if ($tee == 'W') {
   // Tarkistetaan oliko syötteet tilinvalinnasta oiekin....
   if ($mav < 1000) $mav += 2000;
