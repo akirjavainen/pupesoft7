@@ -172,10 +172,10 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
 // MUOKKAUS: JWIO ERP -ohjelmalinkit:
 if (file_exists("../../hinnasto") and isset($laskurow['tunnus'])) {
 	echo "<tr><td colspan='2'>";
-	echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
+	echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
 	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ikkunalaskuri</a> || ";
 	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ovilaskuri</a>";
-	//echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
+	//echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 	//echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
 	//echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
 	echo "</td>";
@@ -519,10 +519,10 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
   echo "<tr>$jarjlisa";
   if (file_exists("../../hinnasto")) { // MUOKKAUS: JWIO ERP -ohjelmalinkit:
 	echo "<tr><td colspan='2'>";
-	echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
+	echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
 	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ikkunalaskuri</a> || ";
 	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ovilaskuri</a>";
-	//echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
+	//echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 	//echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
 	//echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
 	echo "</td>";
@@ -805,8 +805,8 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "SIIRTOLIS
 
   echo "<td valign='top' class='back'><input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'> <font class='error'>$varaosavirhe</font></td></tr>"; // MUOKKAUS: lisatty button id
   echo "<tr><td>"; // MUOKKAUS: lisatty
-  echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
-  //echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
+  echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
+  //echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
 
   if (($toim == "VALMISTAVARASTOON" and $yhtiorow['valmistuksien_kasittely'] == 'Y') or $yhtiorow["splittauskielto"] == "K") {
 
