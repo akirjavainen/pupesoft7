@@ -13,8 +13,10 @@ else {
   $summa_valutuassa = NULL;
 }
 
-// MUOKKAUS: BUGIKORJAUS (string + int):
-$mav = (float)$mav;
+// MUOKKAUS: BUGIKORJAUS (string + int, checkdate() vaatii int):
+$mak = (int)$mak;
+$map = (int)$map;
+$mav = (int)$mav;
 
 if ($tee == 'W') {
   // Tarkistetaan oliko syötteet tilinvalinnasta oiekin....
