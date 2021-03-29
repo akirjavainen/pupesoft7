@@ -23238,6 +23238,9 @@ if (!function_exists('lisaa_tuotepaikka')) {
     $hyllyvali   = mb_strtoupper(trim($hyllyvali));
     $hyllytaso   = mb_strtoupper(trim($hyllytaso));
 
+    // MUOKKAUS: isset():
+    if (!isset($yhtiorow)) return;
+
     if ($hyllyalue == '' and !empty($varasto)) {
       //Hyllyä ei ole annettu mutta varasto on. Luodaan annettuun varastoon tuotteelle default-tuotepaikka.
       $varasto = hae_varasto($varasto);
