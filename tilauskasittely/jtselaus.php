@@ -1744,6 +1744,7 @@ if ($tee == "JATKA") {
 
               echo "<br>$jtrow[nimitys]";
 	      echo "<br>$jtrow[kommentti]"; // MUOKKAUS: lisatty rivikommentti
+	      echo "<br><br>vko " . date("W", strtotime($jtrow["ttoimaika"])); // MUOKKAUS: lisatty toimitusviikko
               echo "</td>";
 
               if ($tilaus_on_jo == "") {
