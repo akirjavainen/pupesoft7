@@ -16,7 +16,7 @@ if ($kukarow["kesken"] == '' or $kukarow["kesken"] == '0') {
 }
 
 // MUOKKAUS: isset():
-foreach (array("kertakassa", "keraysvyohyke", "kieli", "omalle_tilaukselle") as $v) {
+foreach (array("kertakassa", "keraysvyohyke", "kieli", "omalle_tilaukselle", "kateisohitus") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
