@@ -1169,7 +1169,7 @@ echo "<b>Nyt on viikko " . date("W") . ".</b><br>"; // MUOKKAUS: lisatty
   // HUOM LISÄKSI laskutusviikonpäivä mukaan GROUP BY:hin!!!!
   // MUOKKAUS: lisatty lasku.sisviesti2, lasku.sisviesti3, lasku.toimaika and lasku.toimitustapa kyselyyn:
   $query = "SELECT
-            lasku.laskutusvkopv, lasku.ytunnus, lasku.nimi, lasku.nimitark, lasku.osoite, lasku.postino, lasku.postitp, lasku.sisviesti2, lasku.sisviesti3, lasku.toimaika, lasku.toimitustapa, 
+            lasku.laskutusvkopv, lasku.ytunnus, lasku.nimi, lasku.nimitark, lasku.osoite, lasku.postino, lasku.postitp, lasku.viesti, lasku.sisviesti2, lasku.sisviesti3, lasku.toimaika, lasku.toimitustapa, 
             lasku.toim_nimi, lasku.toim_nimitark, lasku.toim_osoite, lasku.toim_postino, lasku.toim_postitp,
             lasku.maksuehto, lasku.chn,
             lasku.tila, lasku.alatila,
@@ -1315,14 +1315,14 @@ echo "<b>Nyt on viikko " . date("W") . ".</b><br>"; // MUOKKAUS: lisatty
       echo "  <tr class='aktiivi'>
 	  <td valign='top'>";
 
-      // MUOKKAUS: lisatty:
+      // MUOKKAUS: lisatty, myös tilrow[viesti]:
 	  $tun_array = explode("<br>", $tilrow["tunnukset_ruudulle"]);
 	  foreach($tun_array as $tun) {
 		  echo "<a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tun&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS' target='_blank'>$tun</a><br>";
       }
       
 		  echo "</td>
-          <td valign='top'>$tilrow[ytunnus]<br><a href='/raportit/nimihaku.php?search=$tilrow[nimi]'>$tilrow[nimi]</a> $tilrow[nimitark]</td>
+          <td valign='top'>$tilrow[ytunnus]<br><a href='/raportit/nimihaku.php?search=$tilrow[nimi]'>$tilrow[nimi]</a> $tilrow[nimitark]<br>$tilrow[viesti]</td>
           <td valign='top'>$tilrow[tilauksia]<br>$tilrow[riveja]
           <td valign='top' align='right' nowrap>$tilrow[arvo]</td>
 <td valign='top'>$tilrow[meh]<br>$tilrow[toimitustapa]</td>
