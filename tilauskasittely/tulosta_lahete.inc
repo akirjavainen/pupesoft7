@@ -453,7 +453,11 @@ if (!function_exists('alku_lahete')) {
           $rahtirow = hae_rahtisopimusnumero($laskurow["toimitustapa"], $laskurow["ytunnus"], $laskurow["liitostunnus"], false, $laskurow["rahtisopimus"]);
 
           // MUOKKAUS: rahtisopimusnumero muumaksaja-kentasta tarvittaessa:
-          $sopimusnumero = empty($rahtirow["muumaksaja"]) ? $rahtirow["rahtisopimus"] : $rahtirow["muumaksaja"];
+	  if (isset($rahtirow)) {
+            $sopimusnumero = empty($rahtirow["muumaksaja"]) ? $rahtirow["rahtisopimus"] : $rahtirow["muumaksaja"];
+	  } else {
+            $sopimusnumero = "";
+          }
 
           $pdf->draw_text(310, 708, t("Toimitustapa", $kieli)." / ".t("Rahtisopimus", $kieli), $thispage, $pieni);
           $toimitustapateksti = t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli)." ".t($rahtivapaa, $kieli);
@@ -483,7 +487,11 @@ if (!function_exists('alku_lahete')) {
         }
         
 	// MUOKKAUS: rahtisopimusnumero muumaksaja-kentasta tarvittaessa:
-        $sopimusnumero = empty($rahtirow["muumaksaja"]) ? $rahtirow["rahtisopimus"] : $rahtirow["muumaksaja"];
+	if (isset($rahtirow)) {
+          $sopimusnumero = empty($rahtirow["muumaksaja"]) ? $rahtirow["rahtisopimus"] : $rahtirow["muumaksaja"];
+	} else {
+          $sopimusnumero = "";
+        }
 
         $pdf->draw_rectangle(695, 420, 674, 580, $thispage, $rectparam);
         $pdf->draw_text(430, 687, t("Rahtisopimusnumero", $kieli), $thispage, $pieni);

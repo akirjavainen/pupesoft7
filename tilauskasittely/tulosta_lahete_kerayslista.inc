@@ -336,8 +336,13 @@ if (!function_exists('alku_kerayslista')) {
 
 			//etsitään löytyykö rahtisopimusta
 			$rahtirow = hae_rahtisopimusnumero($laskurow["toimitustapa"], $laskurow["ytunnus"], $laskurow["liitostunnus"]);
+
                         // MUOKKAUS: rahtisopimusnumero muumaksaja-kentasta tarvittaessa:
-                        $sopimusnumero = empty($rahtirow["muumaksaja"]) ? $rahtirow["rahtisopimus"] : $rahtirow["muumaksaja"];
+			if (isset($rahtirow)) {
+                          $sopimusnumero = empty($rahtirow["muumaksaja"]) ? $rahtirow["rahtisopimus"] : $rahtirow["muumaksaja"];
+			} else {
+			  $sopimusnumero = "";
+			}
 
 			$laskurow['toimitustapa'] = t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli);
 
