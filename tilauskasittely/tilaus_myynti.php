@@ -3970,11 +3970,13 @@ if ($tee == '') {
           if (mysqli_num_rows($rahsop) > 0) {
             echo " <select name='rahtisopimus' onchange='submit()' {$state_chk} ".js_alasvetoMaxWidth("rahtisopimus", 200).">";
 
+	    // MUOKKAUS: rahtisopimusnumero muumaksaja-kentasta tarvittaessa:
             while ($rahsoprow = mysqli_fetch_assoc($rahsop)) {
               $sel = "";
+	      $sopimusnumero = empty($rahsoprow['muumaksaja']) ? $rahsoprow['rahtisopimus'] : $rahsoprow['muumaksaja'];
               if ($rahsoprow['rahtisopimus'] == $laskurow['rahtisopimus']) $sel = "SELECTED";
 
-              echo "<option value='{$rahsoprow['rahtisopimus']}' $sel>{$rahsoprow['rahtisopimus']} {$rahsoprow['selite']}</option>";
+              echo "<option value='{$rahsoprow['rahtisopimus']}' $sel>$sopimusnumero {$rahsoprow['selite']}</option>";
             }
 
             echo "</select>";

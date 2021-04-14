@@ -336,11 +336,13 @@ if (!function_exists('alku_kerayslista')) {
 
 			//etsitään löytyykö rahtisopimusta
 			$rahtirow = hae_rahtisopimusnumero($laskurow["toimitustapa"], $laskurow["ytunnus"], $laskurow["liitostunnus"]);
+                        // MUOKKAUS: rahtisopimusnumero muumaksaja-kentasta tarvittaessa:
+                        $sopimusnumero = empty($rahtirow["muumaksaja"]) ? $rahtirow["rahtisopimus"] : $rahtirow["muumaksaja"];
 
 			$laskurow['toimitustapa'] = t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli);
 
 			if (isset($rahtirow) and $rahtirow["rahtisopimus"] != "") { // MUOKKAUS: isset()
-				$laskurow["toimitustapa"] .= " / ".$rahtirow["rahtisopimus"];
+				$laskurow["toimitustapa"] .= " / ".$sopimusnumero;
 			}
 
 			$pdf->draw_rectangle(716, 300, 695, 580, $thispage, $rectparam);

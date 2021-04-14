@@ -256,7 +256,10 @@ if (!function_exists('alku_tarjous')) {
 
       //etsitään löytyykö rahtisopimusta
       $rahtirow = hae_rahtisopimusnumero($laskurow["toimitustapa"], $laskurow["ytunnus"], $laskurow["liitostunnus"], false, $laskurow["rahtisopimus"]);
-      $pdf_tarjous->draw_text(310, 698, t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli)." ".$rahtirow["rahtisopimus"],     $page_tarjous[$sivu], $norm);
+      
+      // MUOKKAUS: rahtisopimusnumero muumaksaja-kentasta tarvittaessa:
+      $sopimusnumero = empty($rahtirow["muumaksaja"]) ? $rahtirow["rahtisopimus"] : $rahtirow["muumaksaja"];
+      $pdf_tarjous->draw_text(310, 698, t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli)." ".$sopimusnumero,     $page_tarjous[$sivu], $norm);
 
       $pdf_tarjous->draw_rectangle(695, 300, 674, 580, $page_tarjous[$sivu], $rectparam);
       $pdf_tarjous->draw_text(310, 687, t("Toimitusehto", $kieli),     $page_tarjous[$sivu], $pieni);
@@ -380,12 +383,15 @@ if (!function_exists('alku_tarjous')) {
       //etsitään löytyykö rahtisopimusta
       $rahtirow = hae_rahtisopimusnumero($laskurow["toimitustapa"], $laskurow["ytunnus"], $laskurow["liitostunnus"], false, $laskurow["rahtisopimus"]);
       
+      // MUOKKAUS: rahtisopimusnumero muumaksaja-kentasta tarvittaessa:
+      $sopimusnumero = empty($rahtirow["muumaksaja"]) ? $rahtirow["rahtisopimus"] : $rahtirow["muumaksaja"];
+
       // MUOKKAUS: isset():
-	  if (is_null($rahtirow)) {
+      if (is_null($rahtirow)) {
 		  $rahtirow = array();
 		  $rahtirow["rahtisopimus"] = null;
       }
-      $pdf_tarjous->draw_text(310, 719, t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli)." ".$rahtirow["rahtisopimus"],     $page_tarjous[$sivu], $norm);
+      $pdf_tarjous->draw_text(310, 719, t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli)." ".$sopimusnumero,     $page_tarjous[$sivu], $norm);
 
       $pdf_tarjous->draw_rectangle(716, 300, 695, 580, $page_tarjous[$sivu], $rectparam);
       $pdf_tarjous->draw_text(310, 708, t("Toimitusehto", $kieli),     $page_tarjous[$sivu], $pieni);
