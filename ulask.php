@@ -2178,7 +2178,7 @@ if ($tee == 'I') {
   for ($i=1; $i<$maara; $i++) {
     $ivero[$i]        = (float) $ivero[$i];
     $isumma_valuutassa[$i]  = (float) $isumma[$i];
-    $isumma[$i]       = (float) round($isumma[$i] * $vrow['kurssi'], 2);
+    $isumma[$i]       = (float) round((float)$isumma[$i] * (float)$vrow['kurssi'], 2); // MUOKKAUS: BUGIKORJAUS (string * string)
 
     // Laitetaan oletuskustannuspaikat kuntoon
     list($ikustp[$i], $ikohde[$i], $iprojekti[$i]) = kustannuspaikka_kohde_projekti($itili[$i], $ikustp[$i], $ikohde[$i], $iprojekti[$i]);
