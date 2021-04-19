@@ -33,7 +33,7 @@ if (isset($suljettu_tilikausi) and $suljettu_tilikausi) {
 // jos ollaan muokkaamassa tiliöintiä ja se on ollut valuutassa
 if (isset($vanhasumma) and isset($vanhasumma_valuutassa) and isset($vanhasumma_valkoodi) and $vanhasumma != "" and $vanhasumma_valuutassa != "" and $vanhasumma_valkoodi != "") {
   // lasketaan kurssi
-  $vanhasumma_kurssi = $vanhasumma_valuutassa / $vanhasumma;
+  $vanhasumma_kurssi = ($vanhasumma > 0) ? $vanhasumma_valuutassa / $vanhasumma : 0; // MUOKKAUS: BUGIKORJAUS (jako nollalla)
   // ja uudet arvot valuutassa
   $summa_valuutassa = round($summa * $vanhasumma_kurssi, 2);
   $alv_valuutassa = round($alv * $vanhasumma_kurssi, 2);
