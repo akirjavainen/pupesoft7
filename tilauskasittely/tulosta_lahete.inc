@@ -602,6 +602,7 @@ if (!function_exists('alku_lahete')) {
 
       if (trim($laskurow['comments']) != '') {
         $komm .= "\n".t("Kommentti", $kieli).":###".wordwrap(str_replace("\n", "\n###", $laskurow['comments']), 90, "\n###");
+	if ($kukarow['yhtio'] == "sapu") $komm = ""; // MUOKKAUS: ei kommentteja lahetteeseen
       }
       if (trim($laskurow['ohjausmerkki']) != '') {
         $komm .= "\n".t("Ohjausmerkki", $kieli).":###".wordwrap(str_replace("\n", "\n###", $laskurow['ohjausmerkki']), 90, "\n###");
