@@ -121,6 +121,21 @@ class MyCashflowTilaukset {
 
     foreach ($xml->Order as $order) {
 
+      // Ohitetaan duplikaatit
+      $query = "SELECT asiakkaan_tilausnumero
+                FROM lasku
+                WHERE yhtio = '{$GLOBALS["yhtiorow"]['yhtio']}'
+                AND asiakkaan_tilausnumero = '{$order->OrderNumber}'
+                AND ohjelma_moduli = 'MAGENTO'";
+      $result = pupe_query($query);
+
+      if (mysqli_num_rows($result)) {
+        $this->logger->log("Duplikaattitilaus ohitettiin: '{$order->OrderNumber}'");
+        $tilausaika = $order->OrderedAt->attributes()->timestamp;
+        cron_aikaleima("MYCF_ORDR_CRON", $tilausaika);
+        continue;
+      }
+
       // Kaupan tiedot
       $kauppaversio = (int) $order->OrderVersionID;
 
@@ -144,7 +159,7 @@ class MyCashflowTilaukset {
       // Toimitusosoitteen tiedot
       $tilaus['shipping_address']['city'] = $order->ShippingAddress->City;
       $tilaus['shipping_address']['company'] = "";
-      $tilaus['shipping_address']['country_id'] = mb_strtoupper($order->ShippingAddress->Country);
+      $tilaus['shipping_address']['country_id'] = strtoupper($order->ShippingAddress->Country);
       $tilaus['shipping_address']['firstname'] = $order->ShippingAddress->FirstName;
       $tilaus['shipping_address']['lastname'] = $order->ShippingAddress->LastName;
       $tilaus['shipping_address']['postcode'] = $order->ShippingAddress->ZipCode;
