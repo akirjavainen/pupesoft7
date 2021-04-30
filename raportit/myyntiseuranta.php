@@ -822,6 +822,7 @@ if ($lopetus == "") {
   echo "<br>";
   echo "<input type='submit' name='aja_raportti' value='", t("Aja raportti"), "'>";
   echo "</form><br><br>";
+  echo "Summat ALV 0 %<br>"; // MUOKKAUS: lisatty
 }
 
 if ((isset($aja_raportti) or isset($valitse_asiakas)) and count($_REQUEST) > 0) {
