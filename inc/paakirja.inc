@@ -594,6 +594,7 @@ if ($tee != "") {
     $konsernilisa = " and asiakas.konserniyhtio != '' ";
   }
 
+  // MUOKKAUS: lisatty lasku.tunnus kyselyyn:
   $query = "SELECT concat_ws(' ', tiliointi.tilino, tili.nimi) AS tili,
             tiliointi.tapvm,
             kustp.nimi AS kustp,
@@ -614,6 +615,7 @@ if ($tee != "") {
             lasku.tapvm AS laskutapvm,
             lasku.mapvm AS laskumapvm,
             lasku.summa AS laskusumma,
+            lasku.tunnus AS laskutunnus,
             lasku.tila
             FROM tiliointi
             LEFT JOIN tili ON (tili.tilino = tiliointi.tilino and tili.yhtio = tiliointi.yhtio)
@@ -836,16 +838,19 @@ if ($tee != "") {
 
           $virhe = "";
 
-          if ($tapvm_clean != $trow["laskutapvm"] and $tapvm_clean != $trow["laskumapvm"]) {
-            $virhe  .= t("Ostovelkatiliöinnin päivämäärä virheellinen")."!";
+	  if ($tapvm_clean != $trow["laskutapvm"] and $tapvm_clean != $trow["laskumapvm"]) {
+            // MUOKKAUS: lisatty paivamaarat:
+            $virhe  .= t("Ostovelkatiliöinnin päivämäärä virheellinen")."!<br>(lasku.tunnus: " . $trow["laskutunnus"] . ", tiliointi.tunnus: " . $trow["rivitunnus"] . ", tapvm: " . $tapvm_clean . ", tapvm: " .  $trow["laskutapvm"] . ", mapvm: " . $trow["laskumapvm"] . ")";
           }
 
           if ($tapvm_clean == $trow["laskumapvm"] and (($trow["valkoodi"] == "" and $trow["summa"] != $trow["laskusumma"]) or ($trow["valkoodi"] != "" and $trow["summa_valuutassa"] != $trow["laskusumma"]))) {
-            $virhe  .= t("Ostovelkatiliöinnin summa virheellinen")."!";
+            // MUOKKAUS: lisatty lasku.tunnus ja summat:
+            $virhe  .= t("Ostovelkatiliöinnin summa virheellinen")."!<br>(lasku.tunnus: " . $trow["laskutunnus"] . ", tiliointi.tunnus: " . $trow["rivitunnus"] . ", tiliointi.summa: " . $trow["summa"] . ", lasku.summa: " . $trow["laskusumma"] . ", tiliointi.summa_valuutassa: " . $trow["summa_valuutassa"] . ")";
           }
 
           if ($tapvm_clean == $trow["laskutapvm"] and (($trow["valkoodi"] == "" and $trow["summa"] != ($trow["laskusumma"]*-1)) or ($trow["valkoodi"] != "" and $trow["summa_valuutassa"] != ($trow["laskusumma"]*-1)))) {
-            $virhe  .= t("Ostovelkatiliöinnin summa virheellinen")."!";
+            // MUOKKAUS: lisatty lasku.tunnus ja summat:
+            $virhe  .= t("Ostovelkatiliöinnin summa virheellinen")."!<br>(lasku.tunnus: " . $trow["laskutunnus"] . ", tiliointi.tunnus: " . $trow["rivitunnus"] . ", tiliointi.summa: " . $trow["summa"] . ", lasku.summa: " . $trow["laskusumma"] . ", tiliointi.summa_valuutassa: " . $trow["summa_valuutassa"] . ")";
           }
 
           if ($virhe != "") echo "<td class='spec'><font class='error'>$virhe</font></td>";
