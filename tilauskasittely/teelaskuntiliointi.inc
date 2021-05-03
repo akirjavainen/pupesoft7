@@ -382,8 +382,9 @@ else {
     $vastasumma_valuutassa += $tiliointisumma_valuutassa + $alv_valuutassa;
 
     //Lasketaan varastonmuutos
-    $varmuutos = $xrow["varmuutos"];
-    $varmuutos_valuutassa = round($xrow["varmuutos"] / $lasku['vienti_kurssi'], 2); // ei osata paremmin, pitää kääntää kurssilla
+    $varmuutos = 0; // MUOKKAUS: poistettu kaytosta
+    //$varmuutos = $xrow["varmuutos"];
+    //$varmuutos_valuutassa = round($xrow["varmuutos"] / $lasku['vienti_kurssi'], 2); // ei osata paremmin, pitää kääntää kurssilla
 
     // Kirjataan varastonmuutos, jos sita on
     if ($varmuutos != 0) {
