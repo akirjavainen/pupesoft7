@@ -753,7 +753,7 @@ if ($tee == 'I') {
     $tee = 'E';
   }
 
-  if (abs($yleissumma - $summa) >= 0.01 ) {
+  if (abs((float)$yleissumma - (float)$summa) >= 0.01 ) { // MUOKKAUS: BUGIKORJAUS (float - string)
     $errormsg .= "<font class='error'>".t("Tiliöinti heittää")." $summa != $yleissumma</font><br>";
     $tee = 'E';
   }
