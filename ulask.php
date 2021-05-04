@@ -466,7 +466,7 @@ if ($tee == 'I') {
     else {
       $osto_rivi_kulu = round((float)$osto_rivi_kulu, 2);
     }
-    if (abs($summa) - abs($osto_rahti) - abs($osto_kulu) - abs($osto_rivi_kulu) < 0) {
+    if (abs((float)$summa) - abs((float)$osto_rahti) - abs((float)$osto_kulu) - abs((float)$osto_rivi_kulu) < 0) { // MUOKKAUS: BUGIKORJAUS (abs(string))
       $errormsg .= "<font class='error'>".t("Kulut ylittävät laskun summan")."!</font><br>";
       $tee = 'E';
     }
