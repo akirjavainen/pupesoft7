@@ -741,7 +741,7 @@ if ($tee == 'I') {
 
       $ivirhe[$i]  = $virhe;
       $iulos[$i]    = $ulos;
-      if (!isset($yleissumma)) $yleissumma = 0; // MUOKKAUS: isset()
+      if (!isset($yleissumma)) $yleissumma = (float)$turvasumma; // MUOKKAUS: isset()
       $yleissumma += (float)$isumma[$i]; // MUOKKAUS: BUGIKORJAUS (null + string)
       $summa      = $turvasumma;
     }
