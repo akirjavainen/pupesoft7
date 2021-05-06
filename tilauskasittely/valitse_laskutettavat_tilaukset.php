@@ -1342,7 +1342,7 @@ echo "<b>Nyt on viikko " . date("W") . ".</b><br>"; // MUOKKAUS: lisatty
  <a href='/hinnasto/printable.php?pupeorder=$tilrow[tunnukset_ruudulle]' target='_blank'><input type='submit' value='Mittakuvat'></a>
  <a href='/tuotanto/index.php?order=$tilrow[tunnukset_ruudulle]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>
  <a href='/raportit/ehtokorjaus.php?order=$tilrow[tunnukset_ruudulle]'><input type='submit' name='ehtokorjaus' value='Ehtokorjaus'></a>
- <a href='/toimitusvahvistus/index.php?nonavi=1&default_order=$tilrow[tunnukset_ruudulle]'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a></td>
+ <a href='/toimitusvahvistus/index.php?nonavi=1&summary=1&order=$tilrow[tunnukset_ruudulle]'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a></td>
           </td>
           </tr>";
 

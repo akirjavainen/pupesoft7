@@ -10197,7 +10197,7 @@ if ($tee == '') {
             
             // MUOKKAUS: lisatty:
             if (file_exists("../../hinnasto")) echo "<a href='/hinnasto/printable.php?pupeorder=$laskurow[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
-	    if (file_exists("../../toimitusvahvistus") and $toim != 'TARJOUS') echo "<a href='/toimitusvahvistus/?nonavi=1&default_order=$laskurow[tunnus]'><input type='submit' value='Kuljetustilaus'></a>";
+	    if (file_exists("../../toimitusvahvistus") and $toim != 'TARJOUS') echo "<a href='/toimitusvahvistus/?nonavi=1&summary=1&order=$laskurow[tunnus]'><input type='submit' value='Kuljetustilaus'></a>";
             echo "</td>";
 
             if ($sarakkeet_alku-9 > 0) {
