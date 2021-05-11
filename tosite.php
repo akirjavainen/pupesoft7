@@ -26,20 +26,22 @@ if ($tee == 'I') {
       echo $retval;
       $tee = "";
     }
-  } elseif (isset($_FILES['userfile2']) and is_uploaded_file($_FILES['userfile2']['tmp_name'])) {
+  }
+  if (isset($_FILES['userfile2']) and is_uploaded_file($_FILES['userfile2']['tmp_name'])) {
     $retval = tarkasta_liite("userfile2", array("PNG", "JPG", "GIF", "PDF", "XLS"));
 
     if ($retval === true) {
-      $kuva = tallenna_liite("userfile2", "lasku", 0, "");
+      $kuva2 = tallenna_liite("userfile2", "lasku", 0, "");
     } else {
       echo $retval;
       $tee = "";
     }
-  } elseif (isset($_FILES['userfile3']) and is_uploaded_file($_FILES['userfile3']['tmp_name'])) {
+  }
+  if (isset($_FILES['userfile3']) and is_uploaded_file($_FILES['userfile3']['tmp_name'])) {
     $retval = tarkasta_liite("userfile3", array("PNG", "JPG", "GIF", "PDF", "XLS"));
 
     if ($retval === true) {
-      $kuva = tallenna_liite("userfile3", "lasku", 0, "");
+      $kuva3 = tallenna_liite("userfile3", "lasku", 0, "");
     } else {
       echo $retval;
       $tee = "";
@@ -653,6 +655,15 @@ if ($tee == 'I' and isset($teetosite)) {
     $query = "UPDATE liitetiedostot
               set liitostunnus = '{$tunnus}', selite = '{$selite} {$summa}'
               where tunnus = '{$kuva}'";
+    $result = pupe_query($query);
+    // MUOKKAUS: multi-file upload (3 kuvaa/liitetta):
+    $query = "UPDATE liitetiedostot
+              set liitostunnus = '{$tunnus}', selite = '{$selite} {$summa}'
+              where tunnus = '{$kuva2}'";
+    $result = pupe_query($query);
+    $query = "UPDATE liitetiedostot
+              set liitostunnus = '{$tunnus}', selite = '{$selite} {$summa}'
+              where tunnus = '{$kuva3}'";
     $result = pupe_query($query);
   }
 
