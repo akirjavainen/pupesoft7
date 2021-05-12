@@ -84,7 +84,7 @@ if ($tee == "kirjaudu") {
   }
   else {
     // Setataan SECURE cookiet, HTTP only
-    // MOKKAUS: salli myos HTTP (ei vain HTTPS) evasteille paikallisverkossa:
+    // MUOKKAUS: salli myos HTTP (ei vain HTTPS) evasteille paikallisverkossa:
     setcookie($cookie_secret, $salasana, time() + 300, '/', $pupesoft_server, false, false);
     setcookie($cookie_tunnus, $pankkiyhteys_tunnus, time() + 300, '/', $pupesoft_server, false, false);
 
@@ -99,7 +99,7 @@ if ($tee == "kirjaudu") {
 // Kirjaudutaan ulos pankista
 if ($tee == "kirjaudu_ulos") {
   // Unsetataan cookiet
-  // MOKKAUS: salli myos HTTP (ei vain HTTPS) evasteille paikallisverkossa:
+  // MUOKKAUS: salli myos HTTP (ei vain HTTPS) evasteille paikallisverkossa:
   setcookie($cookie_secret, "deleted", time() - 43200, '/', $pupesoft_server, false, false);
   setcookie($cookie_tunnus, "deleted", time() - 43200, '/', $pupesoft_server, false, false);
 
