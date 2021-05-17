@@ -204,9 +204,9 @@ if ($tee == 'I') {
   $totsumma = 0;
   $summa = str_replace(",", ".", $summa);
   $gok  = 0;
-  $tpk += 0;
-  $tpp += 0;
-  $tpv += 0;
+  $tpk = 0; // MUOKKAUS: BUGIKORJAUS (string + int)
+  $tpp = 0;
+  $tpv = 0;
 
   if (isset($gokfrom) and ($gokfrom == "palkkatosite" or $gokfrom == "avaavatase")) {
     $gok = 1;

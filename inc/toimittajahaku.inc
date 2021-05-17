@@ -292,7 +292,7 @@ if ($tee == 'A') {
 
       $alku += 0;
 
-      if (@checkdate($kk1, $pp1, $vv1)) {
+      if (@checkdate((int)$kk1, (int)$pp1, (int)$vv1)) { // MUOKKAUS: BUGIKORJAUS (string -> int)
         $aikalisa = " AND lasku.tapvm >='$vv1-$kk1-$pp1' ";
         $limit = "NO";
       }
