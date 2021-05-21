@@ -893,7 +893,8 @@ function sepa_file_type_check($bank, $file_type) {
     }
     // Lähtevät verkkolaskut
     if ($file_type == 'LAHLASKUT') {
-      $file_type = 'XS';
+      //$file_type = 'XS';
+      $file_type = 'pain.001.001.02'; // MUOKKAUS: kaytetaan manuaalisiin tilisiirtoihin
     }
   }
 
