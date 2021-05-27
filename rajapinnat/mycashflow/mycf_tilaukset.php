@@ -79,10 +79,10 @@ class MyCashflowTilaukset {
     $this->mycf_kaupat = $value;
   }
 
-  public function get_asiakastiedot($asiakasnro, $etsi_asiakas) {
+  public function get_asiakastiedot($kauppaversio, $etsi_asiakas) {
 
     // vain version 6 asiakkaan tiedot haetaan
-    if(!in_array($asiakasnro, array(99999))) {
+    if(!in_array($kauppaversio, array(6))) {
       return;
     }
     
@@ -102,22 +102,55 @@ class MyCashflowTilaukset {
     // saadaan kurssit avainsanoista.
     $kurssi_avainsanat = t_avainsana("VERKKOKAUKURSSI");
     $kurssi_kerroin = 1;
+    $asiakaskurssi=false;
     while ($kurssi = mysqli_fetch_assoc($kurssi_avainsanat)) {
       if($kurssi['selite'] == $loydetty_asiakas['valkoodi']) {
         // saadaan kerroin
-        $kurssi_filteroity = floatval(str_replace(",", ".", $kurssi['selitetark']));
-        $kurssi_kerroin = 1/$kurssi_filteroity;
-        if($kurssi_kerroin > 1) { 
-          $kurssi_kerroin = 1-$kurssi_kerroin;
-        }
+        $kurssi_kerroin = floatval(str_replace(",", ".", $kurssi['selitetark']));
         $kurssi_kerroin = round($kurssi_kerroin, 9);
+        $asiakaskurssi = round(1/$kurssi_kerroin, 9);
         break;
+      }
+    }
+
+    // jos kurssi ei löydy - haetaan pupeesta kurssi.
+    if(!$asiakaskurssi) {
+      $query = "SELECT kurssi
+                  FROM valuu
+                  WHERE yhtio = '{$GLOBALS["yhtiorow"]['yhtio']}'
+                  AND nimi    = '{$loydetty_asiakas['valkoodi']}'";
+      $valres = pupe_query($query);
+
+      if ($valrow = mysqli_fetch_assoc($valres)) {
+        $kurssi_kerroin = floatval(str_replace(",", ".", $valrow['kurssi']));
+        $kurssi_kerroin = round($kurssi_kerroin*100, 9);
+        $asiakaskurssi = round(1/$kurssi_kerroin, 9);
+      } else {
+        return;
+      }
+    }
+
+    // haetaan asiakkaan maksuehto
+    $asiakasmaksuehto = false;
+    if(!empty($loydetty_asiakas['maksuehto'])) {
+      $query = "SELECT teksti 
+                  FROM maksuehto 
+                  WHERE yhtio = '{$GLOBALS["yhtiorow"]['yhtio']}' 
+                  AND tunnus = '{$loydetty_asiakas['maksuehto']}'
+                ";
+      $result = pupe_query($query);
+      if (mysqli_num_rows($result)) {
+        $loydetty_asiakasmaksuehto = mysqli_fetch_assoc($result);
+        $asiakasmaksuehto = $loydetty_asiakasmaksuehto['teksti'];
       }
     }
 
     return array(
       'asiakasnro' => $loydetty_asiakas['asiakasnro'],
-      'kurssi_kerroin' => $kurssi_kerroin
+      'kurssi_kerroin' => $kurssi_kerroin,
+      'asiakasvaluuta' => $loydetty_asiakas['valkoodi'],
+      'maksuehto' => $asiakasmaksuehto,
+      'asiakaskurssi' => $asiakaskurssi
     );
   }
 
@@ -162,7 +195,7 @@ class MyCashflowTilaukset {
     $tilaus = array();
 
     foreach ($xml->Order as $order) {
-
+      
       // Ohitetaan duplikaatit
       $query = "SELECT asiakkaan_tilausnumero
                 FROM lasku
@@ -249,19 +282,31 @@ class MyCashflowTilaukset {
       // Valuutan kurssi. 1 on EUR
       $kurssi_kerroin = 1;
 
+      //Kustomoitu maksutapa oletuksena pois
+      $custom_payment_method = false;
+
       // Tuotteet
       $tilaus['items'] = array();
 
       // Yritetään hakea erikoisasiakastiedot ja muut tiedot
-      if($asiakastiedot = $this->get_asiakastiedot($options['asiakasnro'], $order->CustomerInformation)) {
+      if($asiakastiedot = $this->get_asiakastiedot($kauppaversio, $order->CustomerInformation)) {
         $options['asiakasnro'] = $asiakastiedot['asiakasnro'];
         $kurssi_kerroin = $asiakastiedot['kurssi_kerroin'];
+        $custom_payment_method = (array) $order->PaymentMethod;
+        if($asiakastiedot['maksuehto']) {
+          $tilaus['payment']['method'] = $asiakastiedot['maksuehto'];
+        } else {
+          $tilaus['payment']['method'] = $custom_payment_method[0];
+        }
+        $options['oma_kurssi'] = "JOO";
+        $options['asiakasvaluuta'] = $asiakastiedot['asiakasvaluuta'];
+        $options['asiakaskurssi'] = $asiakastiedot['asiakaskurssi'];
       }
 
       foreach ($order->Products->Product as $product) {
 
         // Maksutavan hinta
-        if (!empty($product->ProductID->attributes()->PaymentID)) {
+        if (!$custom_payment_method and !empty($product->ProductID->attributes()->PaymentID)) {
           $tilaus['payment']['method'] = "";
           continue;
         }

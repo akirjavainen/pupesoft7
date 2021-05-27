@@ -34,6 +34,14 @@ class Edi {
       die("EDI -hakemistoon ei voida kirjoittaa\n");
     }
 
+    if(isset($options['oma_kurssi']) && isset($options['asiakasvaluuta']) && isset($options['asiakaskurssi'])) {
+      $oma_kurssi = $options['oma_kurssi'];
+      $oma_asiakasvaluuta = $options['asiakasvaluuta'];
+      $oma_asiakaskurssi = $options['asiakaskurssi'];
+    } else {
+      $oma_kurssi = false;
+    }
+
     // Tilauksella käytetyt lahjakortit ei saa vehentää myynti pupen puolella
     $giftcards = empty($order['webtex_giftcard']) ? null : json_decode($order['webtex_giftcard']);
 
@@ -42,7 +50,7 @@ class Edi {
 
       foreach ($giftcards as $giftcard_values) {
         foreach ($giftcard_values as $index => $value) {
-          if (!mb_stristr($index, 'classname')) {
+          if (!stristr($index, 'classname')) {
             $giftcard_sum += $value;
           }
         }
@@ -72,11 +80,11 @@ class Edi {
         // 6 = Tyhjennetäänkö OSTOTIL.OT_MAKSETTU EDI tiedostossa (tyhjä ei, kaikki muut arvot kyllä)
         // 7 = Vaihtoehtoinen asiakasnro
 
-        if (mb_strpos($edi_store, $verkkokauppaparametrit[0]) !== false) {
+        if (strpos($edi_store, $verkkokauppaparametrit[0]) !== false) {
           $vaihtoehtoinen_ovt = $verkkokauppaparametrit[4];
         }
 
-        if (mb_strpos($edi_store, $verkkokauppaparametrit[0]) !== false and !empty($verkkokauppaparametrit[7])) {
+        if (strpos($edi_store, $verkkokauppaparametrit[0]) !== false and !empty($verkkokauppaparametrit[7])) {
           $vaihtoehtoinen_asiakasnro = $verkkokauppaparametrit[7];
         }
       }
@@ -120,7 +128,7 @@ class Edi {
     $tunnisteosa = 'matkahuoltoNearbyParcel_';
 
     // Jos shipping_method sisältää tunnisteosan ja sen perässä on numero niin otetaan talteen
-    if (!empty($order['shipping_method']) and mb_strpos($order['shipping_method'], $tunnisteosa) !== false) {
+    if (!empty($order['shipping_method']) and strpos($order['shipping_method'], $tunnisteosa) !== false) {
       $tunnistekoodi = str_replace($tunnisteosa, '', $order['shipping_method']);
       $noutopistetunnus = is_numeric($tunnistekoodi) ? $tunnistekoodi : '';
     }
@@ -173,6 +181,9 @@ class Edi {
     $edi_order .= "OSTOTIL.OT_TOIMITUSAIKA:{$toimaika}\n";
     $edi_order .= "OSTOTIL.OT_TOIMITUSTAPA:{$order['shipping_description']}\n";
     $edi_order .= "OSTOTIL.OT_TOIMITUSEHTO:\n";
+    if($oma_kurssi) { 
+      $edi_order .= "OSTOTIL.OT_OMA_KURSSI:{$oma_kurssi}\n"; 
+    }
     $edi_order .= "OSTOTIL.OT_MAKSETTU:{$order['status']}\n";
     $edi_order .= "OSTOTIL.OT_MAKSUEHTO:{$maksuehto}\n";
     $edi_order .= "OSTOTIL.OT_VIITTEEMME:\n";
@@ -181,6 +192,10 @@ class Edi {
     $edi_order .= "OSTOTIL.OT_VEROMAARA:{$order['tax_amount']}\n";
     $edi_order .= "OSTOTIL.OT_SUMMA:{$grand_total}\n";
     $edi_order .= "OSTOTIL.OT_VALUUTTAKOODI:{$order['order_currency_code']}\n";
+    if($oma_kurssi) { 
+      $edi_order .= "OSTOTIL.OT_OMA_ASIAKASVAL:{$oma_asiakasvaluuta}\n";
+      $edi_order .= "OSTOTIL.OT_OMA_ASIAKASKUR:{$oma_asiakaskurssi}\n";
+    }
     $edi_order .= "OSTOTIL.OT_KLAUSUULI1:\n";
     $edi_order .= "OSTOTIL.OT_KLAUSUULI2:\n";
     $edi_order .= "OSTOTIL.OT_KULJETUSOHJE:\n";
@@ -222,7 +237,7 @@ class Edi {
       if ($item['product_type'] != "configurable") {
         // Tuoteno
         $tuoteno = $item['sku'];
-        if (mb_substr($tuoteno, 0, 4) == "SKU_") $tuoteno = mb_substr($tuoteno, 4);
+        if (substr($tuoteno, 0, 4) == "SKU_") $tuoteno = substr($tuoteno, 4);
 
         // Nimitys
         $nimitys = $item['name'];
