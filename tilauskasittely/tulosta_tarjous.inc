@@ -1908,7 +1908,7 @@ if (!function_exists('loppu_tarjous')) {
         $voimassa = tv1dateconv($tvva . "-" . $tkka . "-" . $tppa);
 
         $pdf_tarjous->draw_text(30, $kuha,
-          t("Tarjous on voimassa %s saakka", $kieli, $voimassa) . ". " .
+          t("Tarjous on voimassa %s saakka, minkä jälkeen hinta ja toimitusaika saattavat muuttua", $kieli, $voimassa) . ". " .
           t("Maksuehtomme on", $kieli) . " " .
           trim($laskurow["maksuehto"]) . ".", $page_tarjous[$sivu],
           $norm);
@@ -2063,7 +2063,7 @@ if (!function_exists('loppu_tarjous')) {
             $voimassa = tv1dateconv($tvva . "-" . $tkka . "-" . $tppa);
 
             $pdf_tarjous->draw_text(30, $kuha - 48,
-              t("Tarjous on voimassa %s saakka", $kieli, $voimassa) . ". " .
+              t("Tarjous on voimassa %s saakka, minkä jälkeen hinta ja toimitusaika saattavat muuttua", $kieli, $voimassa) . ". " .
               t("Maksuehtomme on", $kieli) . " " .
               trim($laskurow["maksuehto"]) . ".", $page_tarjous[$sivu],
               $norm);
