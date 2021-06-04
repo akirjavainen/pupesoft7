@@ -6,6 +6,11 @@ else exit;
 
 require_once "pdflib/phppdflib.class.php";
 
+// MUOKKAUS: isset():
+foreach (array("maksajan_tilinumero", "maksupvm", "arvopvm", "saajan_nimi", "saajan_tilinumero", "viite", "arkistointitunnus", "kirjausselite", "sisainen_viite", "rahamaara") as $v) {
+	if (!isset(${$v})) ${$v} = NULL;
+}
+
 //PDF parametrit
 $pdf = new pdffile;
 
