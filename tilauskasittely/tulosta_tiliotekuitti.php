@@ -82,6 +82,7 @@ $fh = fopen($pdffilenimi, "w");
 if (fwrite($fh, $pdf->generate()) === FALSE) die("PDF kirjoitus epäonnistui {$pdffilenimi}");
 fclose($fh);
 
+header("Content-Type: application/pdf");
 echo file_get_contents($pdffilenimi);
 
 //poistetaan tmp file samantien kuleksimasta...
