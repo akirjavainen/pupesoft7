@@ -82,7 +82,10 @@ $fh = fopen($pdffilenimi, "w");
 if (fwrite($fh, $pdf->generate()) === FALSE) die("PDF kirjoitus epäonnistui {$pdffilenimi}");
 fclose($fh);
 
+// MUOKKAUS: BUGIKORJAUS (puuttuva header):
 header("Content-Type: application/pdf");
+header("Content-Disposition: inline; filename=\"$pdffilenimi\"");
+//header("Content-Disposition: attachment; filename=\"$pdffilenimi\"");
 echo file_get_contents($pdffilenimi);
 
 //poistetaan tmp file samantien kuleksimasta...
