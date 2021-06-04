@@ -48,8 +48,8 @@ if ($type == '0' and substr($tietue, 0, 3) != "\$\$E" and substr($tietue, 0, 3) 
   echo "<th>".t("Tila")."</th></tr>";
 }
 elseif ($type == '3' or $type == 'S') {
-
-  $viiteaineisto_summa = sprintf('%01.2f', substr($tietue, 77, 10) / 100);
+  // MUOKKAUS: BUGIKORJAUS (string / int):
+  $viiteaineisto_summa = sprintf('%01.2f', (float)substr($tietue, 77, 10) / 100);
 
   if (substr($tietue, 87, 1) == '1') {
     $viiteaineisto_summa = sprintf('%.2f', $viiteaineisto_summa * -1);
