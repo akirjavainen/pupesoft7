@@ -1395,7 +1395,8 @@ if ($tila == "" and !isset($jatka)) {
 
     echo "</select></td></tr>";
 
-    if ($yhtiorow['myyntitilaus_ytunnus_syotto'] == 'K' and $asiarow['laji'] != 'H') {
+    // MUOKKAUS: isset():
+    if (isset($asiarow) and $yhtiorow['myyntitilaus_ytunnus_syotto'] == 'K' and $asiarow['laji'] != 'H') {
       echo "<tr>";
       echo "<td valign='top'>", t("Ytunnus"), ":</td>";
       echo "<td><input type='text' name='ytunnus' value='{$srow['ytunnus']}' /></td>";
@@ -1423,7 +1424,8 @@ if ($tila == "" and !isset($jatka)) {
     $result = pupe_query($query);
     $eakas = mysqli_fetch_assoc($result);
 
-    if ($eakas["laji"] == 'H') {
+    // MUOKKAUS: isset():
+    if (isset($eakas) and $eakas["laji"] == 'H') {
       $ealisa = "asiakas!!!VAHITTAISMYYNTI!!!true";
     }
     else {
@@ -1499,7 +1501,8 @@ if ($tila == "" and !isset($jatka)) {
         <input type='hidden' name='tyojono'                 value = '$tyojono'>
         <input type='hidden' name='liitostunnus'            value = '$srow[liitostunnus]'>";
 
-    if ($yhtiorow['myyntitilaus_ytunnus_syotto'] == '' or $asiarow['laji'] == 'H') {
+    // MUOKKAUS: isset():
+    if ($yhtiorow['myyntitilaus_ytunnus_syotto'] == '' or (isset($asiarow) and $asiarow['laji'] == 'H')) {
       echo "<input type='hidden' name='ytunnus'              value = '$srow[ytunnus]'>";
     }
 

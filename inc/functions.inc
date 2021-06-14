@@ -11917,6 +11917,7 @@ if (!function_exists("laheta_tilausvahvistus")) {
               AND tunnus  = '{$laskurow['liitostunnus']}'";
     $asiakasres = pupe_query($query);
     $asiakasrow = mysqli_fetch_assoc($asiakasres);
+    if (!isset($asiakasrow)) return; // MUOKKAUS: isset()
 
     // Jos laskulla ei oo tilausvahvistustyyppiä niin katotaan asiakkaan oletus
     if (trim($laskurow['tilausvahvistus']) == '') {

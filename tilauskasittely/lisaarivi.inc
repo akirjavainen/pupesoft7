@@ -180,7 +180,7 @@ $query = "SELECT kieli, kerayserat
           WHERE yhtio = '{$kukarow['yhtio']}'
           AND tunnus  = '{$laskurow['liitostunnus']}'";
 $askielirow = mysqli_fetch_assoc(pupe_query($query));
-$kieli = $askielirow["kieli"];
+$kieli = isset($askielirow) ? $askielirow["kieli"] : "fi"; // MUOKKAUS: isset()
 
 if ($rekisterinumero == '') {
   //Kun yhtion_parametri myyntitilausrivi_rekisterinumero == K, käyttöliittymästä on mahdollisuus syöttää tilausriville rekisterinumero.
