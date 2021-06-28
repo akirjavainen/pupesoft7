@@ -294,6 +294,7 @@ if ($tila == 'tee_kohdistus') {
         $query   = "UNLOCK TABLES";
         $result = pupe_query($query);
       }
+      if (!isset($lasku_tunnukset_kale)) $lasku_tunnukset_kale = array(); // MUOKKAUS: isset()
       if (count($lasku_tunnukset_kale) > 0) {
         echo "<font class='error'>".t("Jos osasuoritus, ei voi valita kassa-alennusta")."</font><br><br>";
 
@@ -748,11 +749,12 @@ if ($tila == 'tee_kohdistus') {
     );
 
     kopioitiliointi($tiliointi2['tunnus'], "", $params);
-
+    
+    // MUOKKAUS: BUGIKORJAUS (puuttuvat lainausmerkit):
     $kohdistus_qry = "INSERT INTO suorituksen_kohdistus SET
                       yhtio          = '{$kukarow['yhtio']}',
-                      suoritustunnus = '{$suoritus[tunnus]}',
-                      laskutunnus    = '{$lasku[tunnus]}',
+                      suoritustunnus = '{$suoritus['tunnus']}',
+                      laskutunnus    = '{$lasku['tunnus']}',
                       kohdistuspvm   = NOW(),
                       kirjauspvm     = '{$laskun_maksupvm}'";
     $kohdistus_result = pupe_query($kohdistus_qry);
