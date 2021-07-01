@@ -21138,6 +21138,7 @@ if (!function_exists("pupesoft_laskutyypit")) {
   function pupesoft_laskutyypit() {
     return array(
       99 => "Normaali laskupohja",
+      25  => "Normaali laskupohja (Tilausrivien viite ja tilausnumerot pois)",
       2  => "Normaali laskupohja (Tuoteperheet yhdistetty)",
       5  => "Normaali laskupohja (Ei näytetä verollista rivihintaa)",
       6  => "Normaali laskupohja (Ei näytetä tilausnumeroa/toimitusaikaa)",
