@@ -42,6 +42,7 @@ if ($vain_monista == "") {
   }
 }
 
+if (!isset($monistettavat)) $monistettavat = array(); // MUOKKAUS: isset()
 if ($tee == 'MONISTA' and count($monistettavat) == 0) {
   echo "<font class='error'>", t("Et valinnut yhtään laskua monistettavaksi/hyvitettäväksi"), "</font><br>";
   $tee = "";
