@@ -748,7 +748,8 @@ if (isset($ajax)) {
 
         if ($prow["laji"] == "laskutus") {
           $kate = $prow["kplhinta"] - $kehahinta;
-          $katepros = 100 * ($kate/$prow['kplhinta']);
+	  $prow_kplhinta = (float)$prow['kplhinta']; // MUOKKAUS: BUGIKORJAUS (jako nollalla)
+          $katepros = ($prow_kplhinta > 0) ? 100 * ($kate/$prow_kplhinta) : 100; // MUOKKAUS: BUGIKORJAUS (jako nollalla)
           $_return .= "<td nowrap align='right' valign='top'>".round($katepros, 2)."%</td>";
         }
         else {
