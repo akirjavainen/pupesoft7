@@ -1,5 +1,10 @@
 <?php
 
+// MUOKKAUS: isset():
+foreach (array("css", "css_classic", "css_extranet", "css_verkkokauppa", "web_seuranta") as $v) {
+  if (!isset(${$v})) ${$v} = null;
+}
+
 if (isset($_POST["toim"]) and $_POST["toim"] == "yhtion_parametrit") {
   $apucss             = $_POST["css"];
   $apucssclassic      = $_POST["css_classic"];
