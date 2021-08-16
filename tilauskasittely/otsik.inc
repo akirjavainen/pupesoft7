@@ -847,6 +847,17 @@ if ($tila == "" and !isset($jatka)) {
       } else {
 		  $tilausyhteyshenkilo = "";
       }
+
+      // MUOKKAUS: trim():
+      foreach (array("nimi", "nimitark", "osoite", "postino", "postitp", "maa", 
+	      "toim_nimi", "toim_nimitark", "toim_osoite", "toim_postitp", "toim_postino", "toim_maa", "toim_puh", "toim_email", 
+	      "laskutus_nimi", "laskutus_nimitark", "laskutus_osoite", "laskutus_postitp", "laskutus_postino", "laskutus_maa", 
+	      "kolm_nimi", "kolm_nimitark", "kolm_osoite", "kolm_postitp", "kolm_postino", "kolm_maa", 
+	      "tilaus_viesti", "myynti_kommentti1", "sisviesti1", "sisviesti2") as $v) {
+        if (isset($assrow[$v])) $assrow[$v] = trim($assrow[$v]);
+      }
+      $tilausyhteyshenkilo = trim($tilausyhteyshenkilo);
+
       $query = "UPDATE lasku
                 SET liitostunnus   = '$assrow[tunnus]',
                 ytunnus             = '$assrow[ytunnus]',
