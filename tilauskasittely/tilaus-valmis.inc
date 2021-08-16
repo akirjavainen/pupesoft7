@@ -1857,12 +1857,30 @@ else {
             case 'lahetetty_ulkoiseen_varastoon':
               $values .= ", NULL";
               break;
+	      
+	    // MUOKKAUS: TRIM():
+	    case 'nimi':
+	    case 'nimitark':
+	    case 'osoite':
+	    case 'postino':
+	    case 'postitp':
+	    case 'toim_nimi':
+	    case 'toim_nimitark':
+	    case 'toim_osoite':
+	    case 'toim_postino':
+	    case 'toim_postitp':
+	    case 'asiakkaan_tilausnumero':
+	    case 'viesti':
+	    case 'tilausyhteyshenkilo':
+              $values .= ", TRIM('" . $laskurow[$fieldname] . "')";
+              break;
+
             default:
               $values .= ", '".$laskurow[$fieldname]."'";
             }
           }
 
-          $kysely  = "INSERT into lasku ($fields) VALUES ($values)";
+          $kysely  = "INSERT INTO lasku ($fields) VALUES ($values)";
 	  
 	  // MUOKKAUS: mysqli_insert_id():
           $uusires = pupe_query($kysely, $GLOBALS["link"]);
@@ -1885,12 +1903,22 @@ else {
             case 'otunnus':
               $values .= ", '$laskurow[tunnus]'";
               break;
+
+	    // MUOKKAUS: TRIM():
+	    case 'laskutus_nimi':
+	    case 'laskutus_nimitark':
+	    case 'laskutus_osoite':
+	    case 'laskutus_postino':
+	    case 'laskutus_postitp':
+              $values .= ", TRIM('" . $lisatiedot_row[$fieldname] . "')";
+              break;
+
             default:
               $values .= ", '".$lisatiedot_row[$fieldname]."'";
             }
           }
 
-          $query = "INSERT into laskun_lisatiedot ($fields) VALUES ($values)";
+          $query = "INSERT INTO laskun_lisatiedot ($fields) VALUES ($values)";
           $uusires = pupe_query($query);
         }
         elseif (!$tilaus_splitattu) {
