@@ -2334,7 +2334,7 @@ if (!function_exists('tulosta_tarjous')) {
     $riresult = pupe_query($query);
 
     $row = mysqli_fetch_assoc($riresult);
-    $tuotetyyppi = $row['tuotetyyppi'];
+    $tuotetyyppi = isset($row) ? $row['tuotetyyppi'] : NULL; // MUOKKAUS: isset()
     mysqli_data_seek($riresult, 0);
 
     $kaanteinen_verotus = FALSE;
