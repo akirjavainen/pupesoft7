@@ -6774,10 +6774,10 @@ if ($tee == '') {
     }
     else {
       if (isset($ruutulimit) and $ruutulimit > 0) {
-        $rivino = $rivilaskuri-($ruutulimit-1)+1;
+        $rivino = (int)$rivilaskuri-((int)$ruutulimit-1)+1; // MUOKKAUS: BUGIKORJAUS (string + 1)
       }
       else {
-        $rivino = $rivilaskuri+1;
+        $rivino = (int)$rivilaskuri+1;
       }
     }
 
