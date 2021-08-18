@@ -848,6 +848,7 @@ if ($monta != 1) {
   }
 
   if ($kutsuja == "otsik.inc" and $toim == "TARJOUS") {
+    if (!isset($indexvas)) $indexvas = NULL; // MUOKKAUS: isset()
     echo "<form method='post'>";
     echo "<input type='hidden' name='myos_prospektit' value='TRUE'>";
     echo "<input type='hidden' name='toim' value='$toim'>";
