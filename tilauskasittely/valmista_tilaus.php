@@ -374,6 +374,28 @@ if ($tee == 'TEEVALMISTUS' and count($valmkpllat) == 0 and count($tilkpllat) == 
 
 if ($tee == 'TEEVALMISTUS') {
 
+  // Laiteaan rivit järjestykseen, ensin pitää valmistaa toisten raaka-aineeksi tarvittavat tuotteet
+  $normivalmisteet = array();
+  $rekuvalmisteet = array();
+
+  foreach (array_reverse($valmkpllat, true) as $rivitunnus => $valmkpl) {
+    $query = "SELECT tyyppi
+              FROM tilausrivi
+              WHERE yhtio = '$kukarow[yhtio]'
+              and tunnus  = '$rivitunnus'";
+    $roxresult = pupe_query($query);
+    $roxrow = mysqli_fetch_assoc($roxresult);
+
+    if ($roxrow['tyyppi'] == 'M') {
+      $rekuvalmisteet[$rivitunnus] = $valmkpl;
+    }
+    else {
+      $normivalmisteet[$rivitunnus] = $valmkpl;
+    }
+  }
+
+  $valmkpllat = array_replace($rekuvalmisteet, $normivalmisteet);
+
   //tarkistetaan, ettei usean valmisteen reseptissä valmisteta samaa tuotetta monta kertaa (tätä ei osata)
   $valmduplistek = array();
 
@@ -797,6 +819,10 @@ if ($tee == 'TEEVALMISTUS') {
 
       $peruttiinko = FALSE;
 
+      // Laiteaan rivi järjestykseen, ensin pitää valmistaa toisten raaka-aineeksi tarvittavat tuotteet
+
+
+
       foreach ($valmkpllat as $rivitunnus => $valmkpl) {
 
         $valmkpl = str_replace(',', '.', $valmkpl);
@@ -813,8 +839,8 @@ if ($tee == 'TEEVALMISTUS') {
         if (mysqli_num_rows($roxresult) == 1) {
           $tilrivirow = mysqli_fetch_assoc($roxresult);
 
-          $tuoteno     = $tilrivirow["tuoteno"];
-          $tee      = "UV";
+          $tuoteno = $tilrivirow["tuoteno"];
+          $tee     = "UV";
 
           // Perheid sen takia, että perutaan myös useat valmisteet perutaan
           if (isset($perutamakorj[$tilrivirow["perheid"]]) and $perutamakorj[$tilrivirow["perheid"]] != "") {
@@ -1045,7 +1071,7 @@ if (!isset($from_kaikkikorj)) {
     }
 
     //  Voidaan hypätä suoraan muokkaamaan tilausta
-    if ($toim == "" and mb_strpos($row["Tilaus"], ",") === FALSE and $row["Tilaustyyppi"] == "W") {
+    if ($toim == "" and strpos($row["Tilaus"], ",") === FALSE and $row["Tilaustyyppi"] == "W") {
       echo "  <tr>
             <td class='back' colspan='2'>
             <form method='post' action='tilaus_myynti.php'>
@@ -1342,8 +1368,8 @@ if (!isset($from_kaikkikorj)) {
 
               $sarjavalinta .= "<option value='$alkurow[hyllyalue]#!¡!#$alkurow[hyllynro]#!¡!#$alkurow[hyllyvali]#!¡!#$alkurow[hyllytaso]#!¡!#$alkurow[era]' $sel>";
 
-              if (mb_strtoupper($alkurow['varastomaa']) != mb_strtoupper($yhtiorow['maa'])) {
-                $sarjavalinta .= mb_strtoupper($alkurow['varastomaa'])." ";
+              if (strtoupper($alkurow['varastomaa']) != strtoupper($yhtiorow['maa'])) {
+                $sarjavalinta .= strtoupper($alkurow['varastomaa'])." ";
               }
 
               $sarjavalinta .= "$alkurow[hyllyalue] $alkurow[hyllynro] $alkurow[hyllyvali] $alkurow[hyllytaso], $alkurow[era]";
@@ -1397,7 +1423,7 @@ if (!isset($from_kaikkikorj)) {
 
       echo "<td class='$class' valign='top'>".t_tuotteen_avainsanat($prow, 'nimitys')."</td>";
       echo "<td class='$class' valign='top'><a href='{$palvelin2}tuote.php?tee=Z&tuoteno=".urlencode($prow["tuoteno"])."&lopetus=$lopetus'>$prow[tuoteno]</a></td>";
-      echo "<td class='$class' valign='top' align='right'>$sarjavalinta <span style='float: right; width: 80px;'>$prow[tilattu]".mb_strtolower($prow["yksikko"])."</span></td>";
+      echo "<td class='$class' valign='top' align='right'>$sarjavalinta <span style='float: right; width: 80px;'>$prow[tilattu]".strtolower($prow["yksikko"])."</span></td>";
 
       if ($toim == "KORJAA" and  $prow["tyyppi"] == 'V') {
         echo "<td valign='top' class='$class' align='left'>
