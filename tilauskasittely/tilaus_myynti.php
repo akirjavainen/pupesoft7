@@ -1300,7 +1300,7 @@ if (in_array($jarjesta, array("moveUp", "moveDown")) and $rivitunnus > 0) {
     $updres = pupe_query($query);
     $query = "UPDATE tilausrivi SET tilaajanrivinro = '$aburow[jarjestys]' WHERE yhtio = '$kukarow[yhtio]' and tunnus='$kohderow[tilausrivitunnus]'";
     $updres = pupe_query($query);
-    korjaa_rivinumerointi((int)$laskurow['tunnus'], (string)$kukarow['yhtio']);
+    korjaa_rivinumerointi((string)$kukarow['yhtio'], (int)$laskurow['tunnus']);
   }
   else {
     echo "<font class='error'>".t("VIRHE: riviä ei voi siirtää!")."</font><br>";
