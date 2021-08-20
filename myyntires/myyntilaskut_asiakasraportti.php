@@ -1110,9 +1110,8 @@ function hae_maksusuoritukset($maksurow, $linkki) {
                      WHERE yhtio     = '{$kukarow['yhtio']}'
                      AND laskutunnus = '{$maksurow['tunnus']}'";
       $alku_res = pupe_query($alku_query);
-      $alku = mysqli_fetch_array($alku_res); // MUOKKAUS: mysqli_fetch_array()
 
-      if (!$alku) {
+      if (!isset($alku)) { // MUOKKAUS: isset()
         $alku = '3000-01-01';
       }
 
