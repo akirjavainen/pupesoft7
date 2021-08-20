@@ -35763,7 +35763,6 @@ if (!function_exists('generoi_sarjanumero')) {
 if (!function_exists('korjaa_rivinumerointi')) {
   function korjaa_rivinumerointi(string $yhtio, int $tunnus) {
     $query = "SELECT tunnus FROM tilausrivi WHERE otunnus='$tunnus' AND yhtio='$yhtio' ORDER BY tilaajanrivinro ASC, tunnus ASC;";
-    $result = mysqli_query($db, $query);
     $result = pupe_query($query);
 
     $i = 0;
