@@ -1297,9 +1297,10 @@ if (in_array($jarjesta, array("moveUp", "moveDown")) and $rivitunnus > 0) {
 
     // MUOKKAUS: lisatty:
     $query = "UPDATE tilausrivi SET tilaajanrivinro = '$kohderow[jarjestys]' WHERE yhtio = '$kukarow[yhtio]' and tunnus='$aburow[tilausrivitunnus]'";
-    $updres=pupe_query($query);
+    $updres = pupe_query($query);
     $query = "UPDATE tilausrivi SET tilaajanrivinro = '$aburow[jarjestys]' WHERE yhtio = '$kukarow[yhtio]' and tunnus='$kohderow[tilausrivitunnus]'";
-    $updres=pupe_query($query);
+    $updres = pupe_query($query);
+    korjaa_rivinumerointi((int)$laskurow['tunnus'], (string)$kukarow['yhtio']);
   }
   else {
     echo "<font class='error'>".t("VIRHE: riviä ei voi siirtää!")."</font><br>";

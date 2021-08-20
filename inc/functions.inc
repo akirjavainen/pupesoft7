@@ -35759,5 +35759,24 @@ if (!function_exists('generoi_sarjanumero')) {
   }
 }
 
+// MUOKKAUS: lisatty funktio:
+if (!function_exists('korjaa_rivinumerointi')) {
+  function korjaa_rivinumerointi(string $yhtio, int $tunnus) {
+    $query = "SELECT tunnus FROM tilausrivi WHERE otunnus='$tunnus' AND yhtio='$yhtio' ORDER BY tilaajanrivinro ASC, tunnus ASC;";
+    $result = mysqli_query($db, $query);
+    $result = pupe_query($query);
+
+    $i = 0;
+    while ($row = mysqli_fetch_assoc($result)) {
+      $i++;
+      $query2 = "UPDATE tilausrivi SET tilaajanrivinro='$i' WHERE tunnus='" . (int)$row["tunnus"] . "';";
+      $result2 = pupe_query($query2);
+
+      $query3 = "UPDATE tilausrivin_lisatiedot SET jarjestys='$i' WHERE tilausrivitunnus='" . (int)$row["tunnus"] . "';";
+      $result3 = pupe_query($query3);
+    }
+  }
+}
+
 include_once("php7_compatibility_functions.php"); // MUOKKAUS: PHP7/8 yhteensopivuus
 
