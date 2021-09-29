@@ -1707,6 +1707,7 @@ CREATE TABLE `kuka` (
   `asema` varchar(150) NOT NULL DEFAULT '',
   `dynaaminen_kassamyynti` char(1) NOT NULL DEFAULT '',
   `maksupaate_kassamyynti` char(1) NOT NULL DEFAULT '',
+  `maksupaate_id` int(11) NOT NULL DEFAULT 0,
   `maksupaate_ip` varchar(60) NOT NULL DEFAULT '',
   `toimipaikka` int(11) NOT NULL DEFAULT '0',
   `eposti` varchar(50) NOT NULL DEFAULT '',

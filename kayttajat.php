@@ -294,7 +294,7 @@ if ($tee == 'UUSI') {
       $profile = implode(",", $profiili);
     }
 
-    if (count($piiri) > 0) {
+    if (isset($piiri) && count($piiri) > 0) { // MUOKKAUS: isset()
       $piirit = implode(",", $piiri);
     }
 
@@ -306,11 +306,11 @@ if ($tee == 'UUSI') {
       $salasana = $password; // jos meillä ei ole kopioitua salasanaa toisesta yrityksestä, käytetään syötettyä
     }
 
-    if (count($varasto) > 0) {
+    if (isset($varasto) && count($varasto) > 0) { // MUOKKAUS: isset()
       $varasto = implode(",", $varasto);
     }
 
-    if (count($kassalipas_otto) > 0) {
+    if (isset($kassalipas_otto) && count($kassalipas_otto) > 0) { // MUOKKAUS: isset()
       $kassalipas_otto = implode(",", $kassalipas_otto);
     }
 
@@ -531,7 +531,7 @@ if ($tee == 'MUUTA') {
       $profile = implode(",", $profiili);
     }
 
-    if (count($piiri) > 0) {
+    if (isset($piiri) && count($piiri) > 0) { // MUOKKAUS: isset()
       $piirit = implode(",", $piiri);
     }
 
@@ -548,11 +548,11 @@ if ($tee == 'MUUTA') {
       $result = pupe_query($query);
     }
 
-    if (count($varasto) > 0) {
+    if (isset($varasto) && count($varasto) > 0) { // MUOKKAUS: isset()
       $varasto = implode(",", $varasto);
     }
 
-    if (count($kassalipas_otto) > 0) {
+    if (isset($kassalipas_otto) && count($kassalipas_otto) > 0) { // MUOKKAUS: isset()
       $kassalipas_otto = implode(",", $kassalipas_otto);
     }
 
