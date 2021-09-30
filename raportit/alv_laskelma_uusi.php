@@ -1,6 +1,6 @@
 <?php
 
-if (mb_strpos($_SERVER['SCRIPT_NAME'], "viranomaisilmoitukset.php") === FALSE) {
+if (strpos($_SERVER['SCRIPT_NAME'], "viranomaisilmoitukset.php") === FALSE) {
   require "../inc/parametrit.inc";
 }
 
@@ -111,10 +111,8 @@ if (isset($tee) and $tee == 'kuittaa_alv_ilmoitus') {
                 comments   = '',
                 laatija    = '{$kukarow['kuka']}',
                 luontiaika = now()";
-
-      // MUOKKAUS: mysqli_insert_id():
-      $result = pupe_query($query, $GLOBALS["link"]);
-      $tunnus = mysqli_insert_id($GLOBALS["link"]);
+      $result = pupe_query($query);
+      $tunnus = mysqli_insert_id($GLOBALS["masterlink"]);
 
       require "inc/teetiliointi.inc";
 
@@ -356,7 +354,7 @@ if (isset($tee) and $tee == 'VSRALVKK_UUSI_erittele') {
       echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['bruttosumma']), "</td>";
       echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['verot']), "</td>";
 
-      if (mb_strtoupper($trow["maa"]) != mb_strtoupper($yhtiorow["maa"])) {
+      if (strtoupper($trow["maa"]) != strtoupper($yhtiorow["maa"])) {
         echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['bruttosumma_valuutassa']), "</td>";
         echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['verot_valuutassa']), "</td>";
       }
@@ -418,7 +416,7 @@ if (isset($tee) and $tee == 'VSRALVKK_UUSI_erittele') {
           echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['bruttosumma']), "</td>";
           echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['verot']), "</td>";
 
-          if (mb_strtoupper($trow["maa"]) != mb_strtoupper($yhtiorow["maa"])) {
+          if (strtoupper($trow["maa"]) != strtoupper($yhtiorow["maa"])) {
             echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['bruttosumma_valuutassa']), "</td>";
             echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['verot_valuutassa']), "</td>";
           }
@@ -667,7 +665,7 @@ if (isset($tee) and $tee == 'VSRALVKK_UUSI_erittele') {
         echo "<td valign='top' align='right' nowrap>$trow[bruttosumma]</td>";
         echo "<td valign='top' align='right' nowrap>$trow[verot]</td>";
 
-        if (mb_strtoupper($trow["maa"]) != mb_strtoupper($yhtiorow["maa"])) {
+        if (strtoupper($trow["maa"]) != strtoupper($yhtiorow["maa"])) {
           echo "<td valign='top' align='right' nowrap>$trow[bruttosumma_valuutassa]</td>";
           echo "<td valign='top' align='right' nowrap>$trow[verot_valuutassa]</td>";
         }
@@ -718,7 +716,7 @@ if (isset($tee) and $tee == 'VSRALVKK_UUSI_erittele') {
           echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['bruttosumma']), "</td>";
           echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['verot']), "</td>";
 
-          if (mb_strtoupper($trow["maa"]) != mb_strtoupper($yhtiorow["maa"])) {
+          if (strtoupper($trow["maa"]) != strtoupper($yhtiorow["maa"])) {
             echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['bruttosumma_valuutassa']), "</td>";
             echo "<td valign='top' align='right' nowrap>", sprintf('%.2f', $trow['verot_valuutassa']), "</td>";
           }
@@ -1037,7 +1035,7 @@ function alvlaskelma($kk, $vv) {
     // 320 "Rakentamispalvelun ostot"
     $fi320 = laskeveroja('fi320', 'summa');
 
-    if (mb_strtoupper($yhtiorow["maa"]) == 'FI') {
+    if (strtoupper($yhtiorow["maa"]) == 'FI') {
       $uytunnus = tulosta_ytunnus($yhtiorow["ytunnus"]);
     }
     else {
@@ -1046,7 +1044,7 @@ function alvlaskelma($kk, $vv) {
 
     echo "<br><table>";
     echo "<tr><th>", t("Ilmoittava yritys"), "</th><th>$uytunnus</th></tr>";
-    echo "<tr><th>", t("Ilmoitettava kausi"), "</th><th>".mb_substr($startmonth, 0, 4)."/".mb_substr($startmonth, 5, 2)."</th></tr>";
+    echo "<tr><th>", t("Ilmoitettava kausi"), "</th><th>".substr($startmonth, 0, 4)."/".substr($startmonth, 5, 2)."</th></tr>";
 
     echo "<tr><th colspan='2'>", t("Vero kotimaan myynnistä verokannoittain"), "</th></tr>";
 
@@ -1167,9 +1165,9 @@ function alvlaskelma($kk, $vv) {
       }
     }
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "viranomaisilmoitukset.php") !== FALSE) {
-      $ilmoituskausi = str_replace("0", "", mb_substr($startmonth, 5, 2));
-      $ilmoitusvuosi = mb_substr($startmonth, 0, 4);
+    if (strpos($_SERVER['SCRIPT_NAME'], "viranomaisilmoitukset.php") !== FALSE) {
+      $ilmoituskausi = str_replace("0", "", substr($startmonth, 5, 2));
+      $ilmoitusvuosi = substr($startmonth, 0, 4);
       $file  = "000:VSRALVKK\n";
       $file .= "100:\n";
       $file .= "051:\n";
@@ -1209,6 +1207,10 @@ function alvlaskelma($kk, $vv) {
             <input type='submit' name='tallenna' value='".t("Tallenna tiedosto")."'>
           </form><br><br>";
     }
+  }
+
+  if($kk and $vv) {
+    include_once('rajapinnat/tietue/vsralvkv.php');
   }
 
   // tehdään käyttöliittymä, näytetään aina
