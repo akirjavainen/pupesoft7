@@ -13604,12 +13604,16 @@ if (!function_exists("tulosta_logo_pdf")) {
 
     unset($data);
 
-    if (isset($apu_yhtiorow["lasku_logo"]) and (int) $apu_yhtiorow["lasku_logo"] > 0 and isset($liite) and is_array($liite)) { // MUOKKAUS: isset() & is_array()
+    if (isset($apu_yhtiorow["lasku_logo"]) and (int) $apu_yhtiorow["lasku_logo"] > 0) {
       $liite = hae_liite($apu_yhtiorow["lasku_logo"], "Yllapito", "array");
-      $data = $liite["data"];
-      $isizelogo[0] = $liite["image_width"];
-      $isizelogo[1] = $liite["image_height"];
-      unset($liite);
+
+      // MUOKKAUS: isset():
+      if (is_array($liite)) {
+        $data = $liite["data"];
+        $isizelogo[0] = $liite["image_width"];
+        $isizelogo[1] = $liite["image_height"];
+        unset($liite);
+      }
     }
     elseif (isset($apu_yhtiorow["lasku_logo"]) and $apu_yhtiorow["lasku_logo"] != "" and file_exists($apu_yhtiorow["lasku_logo"])) {
       $filename = $apu_yhtiorow["lasku_logo"];
