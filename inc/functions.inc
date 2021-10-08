@@ -21936,7 +21936,7 @@ if (!function_exists("tarkistahetu")) {
       $hetutarkista3 = mb_substr($hetu, 6, 1);
 
       // otetaan tarkistettavasta osasta mod 31
-      $jaannos = $hetutarkista1 % 31;
+      $jaannos = (int)$hetutarkista1 % 31; // MUOKKAUS: BUGIKORJAUS (string % int)
 
       // tehdään jakojäännöksestä konversio kirjaimeen
       if ($jaannos <  10) $tarkiste = $jaannos;
