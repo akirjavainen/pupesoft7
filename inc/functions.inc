@@ -13604,7 +13604,7 @@ if (!function_exists("tulosta_logo_pdf")) {
 
     unset($data);
 
-    if (isset($apu_yhtiorow["lasku_logo"]) and (int) $apu_yhtiorow["lasku_logo"] > 0) {
+    if (isset($apu_yhtiorow["lasku_logo"]) and (int) $apu_yhtiorow["lasku_logo"] > 0 and is_array($liite)) { // MUOKKAUS: is_array()
       $liite = hae_liite($apu_yhtiorow["lasku_logo"], "Yllapito", "array");
       $data = $liite["data"];
       $isizelogo[0] = $liite["image_width"];
