@@ -1153,7 +1153,6 @@ if ($tee == "JATKA") {
                 WHERE tilausrivi.yhtio                        = '$kukarow[yhtio]'
                 AND tilausrivi.tyyppi                         IN ('L','G')
                 AND tilausrivi.var                            = 'J'
-                AND tilausrivi.keratty                        IN ('', 'saldoton')
                 AND tilausrivi.uusiotunnus                    = 0
                 AND tilausrivi.kpl                            = 0
                 AND tilausrivi.jt  + tilausrivi.varattu  > 0
@@ -1164,6 +1163,7 @@ if ($tee == "JATKA") {
                 $tilausrivilisa
                 $order
                 $limit";
+                //AND tilausrivi.keratty                        IN ('', 'saldoton') // MUOKKAUS: BUGIKORJAUS (kommentoitu ulos kyselysta)
     }
     $isaresult = pupe_query($query);
     $jtseluas_rivienmaara = mysqli_num_rows($isaresult);
