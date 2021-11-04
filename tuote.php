@@ -611,7 +611,7 @@ if (isset($ajax)) {
 
       // Epäkuranteissa saldo ei muutu
       if ($prow["laji"] != "Epäkurantti") {
-        $saldo_nyt -= $prow["kpl"];
+        $saldo_nyt = (float)$saldo_nyt - (float)$prow["kpl"]; // MUOKKAUS: BUGIKORJAUS (string - string)
       }
 
       if ($tapahtumalaji == "" or mb_strtoupper($tapahtumalaji) == mb_strtoupper($prow["laji"])) {
