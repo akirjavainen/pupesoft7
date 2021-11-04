@@ -558,7 +558,7 @@ if (isset($ajax)) {
       $kokonaissaldo_tapahtumalle = $sarjanumero_kpl;
     }
 
-    $vararvo_nyt = sprintf('%.2f', $kokonaissaldo_tapahtumalle*$kehahin);
+    $vararvo_nyt = sprintf('%.2f', (float)$kokonaissaldo_tapahtumalle * (float)$kehahin); // MUOKKAUS: BUGIKORJAUS (string * string)
     $saldo_nyt = $kokonaissaldo_tapahtumalle;
 
     if ($ei_saldoa == "") {
