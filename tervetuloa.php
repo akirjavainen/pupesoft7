@@ -213,7 +213,7 @@ if (!isset($tee) or $tee == '') {
             and kalenteri.tyyppi   = 'Muistutus'
             and kalenteri.kuittaus = 'K'
             and kalenteri.yhtio    = '$kukarow[yhtio]'
-            ORDER BY kalenteri.pvmalku desc";
+            ORDER BY kalenteri.pvmalku ASC"; // MUOKKAUS: DESC -> ASC
   $result = pupe_query($query);
 
   if (mysqli_num_rows($result) > 0) {
