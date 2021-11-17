@@ -202,6 +202,7 @@ if (!isset($tee) or $tee == '') {
   ///* MUISTUTUKSET *///
   //listataan paivan muistutukset
 
+  echo "<a href='crm/kuittaamattomat.php?tee=MUISTUTUS'>Lis&auml;&auml; muistutus</a><br>\n"; // MUOKKAUS: lisatty linkki
   $selectlisa = $yhtiorow['tyomaarays_asennuskalenteri_muistutus'] == 'K' ? ", kalenteri.pvmloppu, kalenteri.kentta02 " : '';
 
   $query = "SELECT kalenteri.tunnus tunnus, left(pvmalku,10) Muistutukset, asiakas.nimi Asiakas, yhteyshenkilo.nimi Yhteyshenkilo,
