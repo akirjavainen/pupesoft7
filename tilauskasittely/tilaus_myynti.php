@@ -2007,7 +2007,8 @@ if ($tee == "VALMIS" and ($muokkauslukko == "" or $toim == "PROJEKTI")) {
       $mkk = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d")+14, date("Y")));
       $mhh = " 10:00:00";
 
-      kalenteritapahtuma("Muistutus", "Tarjous asiakkaalle", "Muista tarjous $tarjous\n\n$laskurow[viesti]\n$laskurow[comments]\n$laskurow[sisviesti2]", $laskurow["liitostunnus"], "K", "", $laskurow["tunnus"], "'".$mkk.$mhh."'");
+      // MUOKKAUS: kommentoitu ulos:
+      //kalenteritapahtuma("Muistutus", "Tarjous asiakkaalle", "Muista tarjous $tarjous\n\n$laskurow[viesti]\n$laskurow[comments]\n$laskurow[sisviesti2]", $laskurow["liitostunnus"], "K", "", $laskurow["tunnus"], "'".$mkk.$mhh."'");
     }
 
     // Tilaus ei enää kesken...
