@@ -323,7 +323,7 @@ if ($tee == "") {
             and kuittaus         = 'K'
             and kalenteri.yhtio  = '$kukarow[yhtio]'
             and left(kalenteri.tyyppi,7) != 'DELETED'
-            ORDER BY kalenteri.pvmalku desc";
+            ORDER BY kalenteri.pvmalku ASC"; // MUOKKAUS: DESC -> ASC
   $result = pupe_query($query);
 
   if (mysqli_num_rows($result) > 0) {
