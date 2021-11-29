@@ -4217,6 +4217,8 @@ if (!function_exists("alehinta")) {
     HUOM: tarkista saako_myyda_private_label-funkkari ja kaikki nämä koodit "if ($temptrow["hinnastoon"] == "V" and ($hinnat["hintaperuste"] > 13 or $hinnat["hintaperuste"] === FALSE) and ($hinnat["aleperuste"] > 12 or $hinnat["aleperuste"] === FALSE)) {" kun muutat ale ja hintaperusteita!
     */
 
+    if (!isset($trow)) return 0; // MUOKKAUS: isset()
+
     // Varmistetaan, että määrä on ok
     $kpl = (float) $kpl;
     if ($kpl == 0) $kpl = 1;

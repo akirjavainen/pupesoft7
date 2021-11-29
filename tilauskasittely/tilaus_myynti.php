@@ -5019,11 +5019,12 @@ if ($tee == '') {
         }
 
         // jos käytössä on myyntihinnan poikkeava määrä, kerrotaan hinta takaisin kuntoon.
-        if ($tuoterow["myyntihinta_maara"] != 0) {
+        if (isset($tuoterow) and $tuoterow["myyntihinta_maara"] != 0) { // MUOKKAUS: isset()
           $tilausrivi["hinta"] = $tilausrivi["hinta"] * $tuoterow["myyntihinta_maara"];
         }
 
-        if ($tuoterow["alv"] != $tilausrivi["alv"] and $yhtiorow["alv_kasittely"] == "" and $tilausrivi["alv"] < 500) {
+	// MUOKKAUS: isset():
+        if (isset($tuoterow) and $tuoterow["alv"] != $tilausrivi["alv"] and $yhtiorow["alv_kasittely"] == "" and $tilausrivi["alv"] < 500) {
           $hinta = (float) $tilausrivi["hinta"] / (1+$tilausrivi['alv']/100) * (1+$tuoterow["alv"]/100);
         }
         else {
@@ -5059,7 +5060,8 @@ if ($tee == '') {
         $omalle_tilaukselle = $tilausrivi['omalle_tilaukselle'];
         $valmistuslinja = $tilausrivi['positio'];
 
-        if ($tuoterow["alv"] < 500 and $yhtiorow["alv_kasittely_hintamuunnos"] == 'o') {
+	// MUOKKAUS: isset():
+        if (isset($tuoterow) and $tuoterow["alv"] < 500 and $yhtiorow["alv_kasittely_hintamuunnos"] == 'o') {
           // valittu ei näytetä alveja vaikka hinnat alvillisina
           if ($tilausrivi_alvillisuus == "E" and $yhtiorow["alv_kasittely"] == '') {
             $hinta = round($hinta / (1+$tuoterow["alv"]/100), $yhtiorow['hintapyoristys']);
@@ -8121,8 +8123,9 @@ if ($tee == '') {
           else {
             echo "<td $class align='left'>&nbsp;</td>";
           }
-        }
-        elseif ((($toim != "TARJOUS" and $toim != "EXTTARJOUS") or $yhtiorow['tarjouksen_tuotepaikat'] == "") and $muokkauslukko_rivi == "" and ($kukarow['extranet'] == '' or ($kukarow['extranet'] != '' and $yhtiorow['tuoteperhe_suoratoimitus'] == 'E')) and $trow["ei_saldoa"] == "") {
+	}
+	// MUOKKAUS: isset():
+        elseif (isset($trow) and (($toim != "TARJOUS" and $toim != "EXTTARJOUS") or $yhtiorow['tarjouksen_tuotepaikat'] == "") and $muokkauslukko_rivi == "" and ($kukarow['extranet'] == '' or ($kukarow['extranet'] != '' and $yhtiorow['tuoteperhe_suoratoimitus'] == 'E')) and $trow["ei_saldoa"] == "") {
  
           $avainsana_result = t_avainsana("TILRIVI_VIILAUS");
           $avainsana_tulos = mysqli_fetch_assoc($avainsana_result);
