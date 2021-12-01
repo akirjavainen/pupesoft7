@@ -1,21 +1,21 @@
 <?php
 
-// Kutsutaanko CLI:stä
+// Kutsutaanko CLI:stÃ¤
 if (php_sapi_name() != 'cli') {
-  die ("Tätä scriptiä voi ajaa vain komentoriviltä!\n");
+  die ("TÃ¤tÃ¤ scriptiÃ¤ voi ajaa vain komentoriviltÃ¤!\n");
 }
 
 date_default_timezone_set('Europe/Helsinki');
 
 if (trim($argv[1]) == '') {
-  die ("Et antanut lähettävää yhtiötä!\n");
+  die ("Et antanut lÃ¤hettÃ¤vÃ¤Ã¤ yhtiÃ¶tÃ¤!\n");
 }
 
 if (trim($argv[2]) == '') {
   die ("Et antanut luettavien tiedostojen polkua!\n");
 }
 
-// lisätään includepathiin pupe-root
+// lisÃ¤tÃ¤Ã¤n includepathiin pupe-root
 ini_set("include_path", ini_get("include_path").PATH_SEPARATOR.dirname(dirname(dirname(__FILE__))));
 ini_set("display_errors", 1);
 
@@ -31,7 +31,7 @@ require "rajapinnat/mycashflow/mycf_toimita_tilaus.php";
 // Logitetaan ajo
 cron_log();
 
-// Sallitaan vain yksi instanssi tästä skriptistä kerrallaan
+// Sallitaan vain yksi instanssi tÃ¤stÃ¤ skriptistÃ¤ kerrallaan
 pupesoft_flock();
 
 $yhtio = sanitize_string(trim($argv[1]));
@@ -39,7 +39,7 @@ $yhtiorow = hae_yhtion_parametrit($yhtio);
 $kukarow = hae_kukarow('admin', $yhtio);
 
 if (empty($kukarow)) {
-  exit("VIRHE: Admin käyttäjä ei löydy!\n");
+  exit("VIRHE: Admin kÃ¤yttÃ¤jÃ¤ ei lÃ¶ydy!\n");
 }
 
 $path = trim($argv[2]);
@@ -59,7 +59,7 @@ while (false !== ($file = readdir($handle))) {
   $is_txt = check_file_extension($full_filepath, 'TXT');
 
   if ($is_tc === false and $is_txt === false) {
-    pupesoft_log('logmaster_tracking_code', "Tiedosto ei ole TC eikä TXT päätteinen, skipataan {$full_filepath}");
+    pupesoft_log('logmaster_tracking_code', "Tiedosto ei ole TC eikÃ¤ TXT pÃ¤Ã¤tteinen, skipataan {$full_filepath}");
     continue;
   }
 
@@ -67,7 +67,7 @@ while (false !== ($file = readdir($handle))) {
   $seurantakoodit = array();
 
   while ($tietue = fgets($filehandle)) {
-    // Tyhjät rivit skipataan
+    // TyhjÃ¤t rivit skipataan
     if (trim($tietue) == "") {
       continue;
     }
@@ -82,7 +82,7 @@ while (false !== ($file = readdir($handle))) {
     $seurantakoodi = trim(preg_replace("/\r\n|\r|\n/", '', $seurantakoodi));
 
     if ($seurantakoodi == '') {
-      pupesoft_log('logmaster_tracking_code', "Seurantakoodi puuttuu riviltä");
+      pupesoft_log('logmaster_tracking_code', "Seurantakoodi puuttuu riviltÃ¤");
       continue;
     }
 
@@ -94,7 +94,7 @@ while (false !== ($file = readdir($handle))) {
       $tilausnumero = (int) $tilausnumero;
 
       if ($tilausnumero == 0) {
-        pupesoft_log('logmaster_tracking_code', "Tilausnumero puuttuu riviltä");
+        pupesoft_log('logmaster_tracking_code', "Tilausnumero puuttuu riviltÃ¤");
         continue;
       }
 
@@ -102,7 +102,7 @@ while (false !== ($file = readdir($handle))) {
     }
   }
 
-  // Löytyikö rahtikirjat?
+  // LÃ¶ytyikÃ¶ rahtikirjat?
   $rakir_loytyi = TRUE;
 
   foreach ($seurantakoodit as $tilausnumero => $koodit) {
@@ -118,7 +118,7 @@ while (false !== ($file = readdir($handle))) {
     pupe_query($query);
 
     if (mysqli_affected_rows($link) == 0) {
-      pupesoft_log('logmaster_tracking_code', "Ei löydetty rahtikirjaa tilaukselle {$tilausnumero}");
+      pupesoft_log('logmaster_tracking_code', "Ei lÃ¶ydetty rahtikirjaa tilaukselle {$tilausnumero}");
       $rakir_loytyi = FALSE;
       continue;
     }
@@ -135,9 +135,9 @@ while (false !== ($file = readdir($handle))) {
       'kilotyht' => $kilotrow['kilotyht']
     );
 
-    paivita_rahtikirjat_tulostetuksi_ja_toimitetuksi($params);
+    paivita_rahtikirjat_tulostetuksi_ja_toimitetuksi($params, true);
 
-    pupesoft_log('logmaster_tracking_code', "Tilauksen {$tilausnumero} seurantakoodisanoma käsitelty");
+    pupesoft_log('logmaster_tracking_code', "Tilauksen {$tilausnumero} seurantakoodisanoma kÃ¤sitelty");
 
     // Merkaatan woo-commerce tilaukset toimitetuiksi kauppaan
     $woo_params = array(
@@ -155,7 +155,7 @@ while (false !== ($file = readdir($handle))) {
 
     mycf_toimita_tilaus($mycf_params);
 
-    // Jos Magento on käytössä, merkataan tilaus toimitetuksi Magentoon kun rahtikirja tulostetaan
+    // Jos Magento on kÃ¤ytÃ¶ssÃ¤, merkataan tilaus toimitetuksi Magentoon kun rahtikirja tulostetaan
     if ($_magento_kaytossa) {
 
       $query = "SELECT toimitustapa
@@ -185,7 +185,7 @@ while (false !== ($file = readdir($handle))) {
 
         while ($magerow = mysqli_fetch_assoc($mageres)) {
 
-          pupesoft_log('logmaster_tracking_code', "Päivitetään tilaus {$magerow["tunnus"]} toimitetuksi Magentoon");
+          pupesoft_log('logmaster_tracking_code', "PÃ¤ivitetÃ¤Ã¤n tilaus {$magerow["tunnus"]} toimitetuksi Magentoon");
 
           $magento_api_met = $toitarow['virallinen_selite'] != '' ? $toitarow['virallinen_selite'] : $toitarow['selite'];
           $magento_api_rak = $seurantakoodi;
@@ -198,8 +198,8 @@ while (false !== ($file = readdir($handle))) {
     }
   }
 
-  // Jos rahtikirjaa ei löydetty niin ei siirretä done-kansioon
-  // Mutta jos file on yli viikon vanha niin siirretään jokatapauksessa done-kansioon
+  // Jos rahtikirjaa ei lÃ¶ydetty niin ei siirretÃ¤ done-kansioon
+  // Mutta jos file on yli viikon vanha niin siirretÃ¤Ã¤n jokatapauksessa done-kansioon
   $fileika = (mktime() - filemtime($full_filepath));
 
   if ($rakir_loytyi or $fileika >= 604800) {
