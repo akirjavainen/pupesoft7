@@ -3,6 +3,11 @@
 //* Tämä skripti käyttää slave-tietokantapalvelinta *//
 $useslave = 1;
 
+// MUOKKAUS: isset():
+foreach (array("rajaus", "nimet", "rajattunakyma", "asale", "ashin", "aletaulu", "yhdistetty") as $v) {
+	if (!isset(${$v})) ${$v} = NULL;
+}
+
 if (isset($_POST["tee"])) {
   if ($_POST["tee"] == 'lataa_tiedosto') $lataa_tiedosto=1;
   if ($_POST["kaunisnimi"] != '') $_POST["kaunisnimi"] = str_replace("/", "", $_POST["kaunisnimi"]);
@@ -382,6 +387,11 @@ if ($asiakasid > 0) {
 
       $kuukausi = mb_str_pad((int) $kuukausi, 2, 0, STR_PAD_LEFT);
 
+      // MUOKKAUS: isset():
+      if (!isset($sumarray["$vuosi/$kuukausi"])) $sumarray["$vuosi/$kuukausi"] = 0;
+      if (!isset($kayarray["$vuosi/$kuukausi"])) $kayarray["$vuosi/$kuukausi"] = 0;
+      if (!isset($budarray["$vuosi/$kuukausi"])) $budarray["$vuosi/$kuukausi"] = 0;
+
       $sumrow   = $sumarray["$vuosi/$kuukausi"];
       $askarow  = $kayarray["$vuosi/$kuukausi"];
       $budjetti = $budarray["$vuosi/$kuukausi"];
@@ -411,6 +421,10 @@ if ($asiakasid > 0) {
       $budjetti = ($budjetti == 0) ? "" : $budjetti;
       $askarow["kaynnit"] = ($askarow["kaynnit"] == 0) ? "" : $askarow["kaynnit"];
       $sumrow["katepro"]  = ($sumrow["katepro"] == 0) ? "" : round($sumrow["katepro"], 0)."%";
+
+      // MUOKKAUS: isset():
+      if (!isset($sumrow["myynti"])) $sumrow["myynti"] = 0;
+      if (!isset($sumrow["kate"])) $sumrow["kate"] = 0;
 
       $pylvaat = "<table style='padding:0px;margin:0px;'><tr>
       <td style='padding:0px;margin:0px;vertical-align:bottom;' class='back'><img src='{$palvelin2}pics/blue.png' height='$hmyynti' width='12' alt='".t("myynti")." $sumrow[myynti]'></td>";

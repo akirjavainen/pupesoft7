@@ -1,5 +1,10 @@
 <?php
 
+// MUOKKAUS: isset():
+foreach (array("kutsuja", "myos_prospektit") as $v) {
+	if (!isset(${$v})) ${$v} = NULL;
+}
+
 // tarvitaan $ytunnus (jolla haetaan) tai $asiakasid (joka on asiakas.tunnus) ja $kukarow
 // palautetaan $asiakasrow
 
