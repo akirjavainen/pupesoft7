@@ -44,7 +44,7 @@ $monivalintalaatikot = array_map('strtolower', $monivalintalaatikot);
 $monivalintalaatikot_normaali = array_map('trim', $monivalintalaatikot_normaali);
 $monivalintalaatikot_normaali = array_map('strtolower', $monivalintalaatikot_normaali);
 
-if (mb_strtoupper($kukarow["kieli"]) != mb_strtoupper($yhtiorow["kieli"])) {
+if (strtoupper($kukarow["kieli"]) != strtoupper($yhtiorow["kieli"])) {
   $kieli_selitetark = "  IFNULL((SELECT avainsana_kieli.selitetark
                   FROM avainsana as avainsana_kieli
                     WHERE avainsana_kieli.yhtio = avainsana.yhtio
@@ -60,7 +60,7 @@ else {
   $kieli_lisa = ".kieli in ('$yhtiorow[kieli]', '')";
 }
 
-if (mb_strtoupper($kukarow["kieli"]) != mb_strtoupper($yhtiorow["kieli"])) {
+if (strtoupper($kukarow["kieli"]) != strtoupper($yhtiorow["kieli"])) {
   $kieli_selite = "  IFNULL((SELECT avainsana_kieli.selite
             FROM avainsana as avainsana_kieli
               WHERE avainsana_kieli.yhtio = avainsana.yhtio
@@ -159,8 +159,8 @@ $dynaaminen_check = "";
 foreach ($monivalintalaatikot as $monivalintalaatikko) {
   $monivalintalaatikko = strip_tags($monivalintalaatikko);
 
-  if (mb_substr($monivalintalaatikko, 0, 9) == "parametri") {
-    $param = mb_substr($monivalintalaatikko, 10);
+  if (substr($monivalintalaatikko, 0, 9) == "parametri") {
+    $param = substr($monivalintalaatikko, 10);
 
     ${"lisa_haku_".$param} = '';
 
@@ -169,8 +169,8 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     }
   }
 
-  if (mb_substr($monivalintalaatikko, 0, 10) == "dynaaminen") {
-    $param = mb_substr($monivalintalaatikko, 11);
+  if (substr($monivalintalaatikko, 0, 10) == "dynaaminen") {
+    $param = substr($monivalintalaatikko, 11);
 
     $query = "SELECT DISTINCT (COUNT(node.tunnus) - 1) AS syvyys
               FROM dynaaminen_puu AS node
@@ -209,7 +209,7 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
       $ulisa .= "&mul_toimi[]=".rawurlencode($toimittaja);
     }
 
-    $toimittajat = trim(mb_substr($toimittajat, 0, -1), ',');
+    $toimittajat = trim(substr($toimittajat, 0, -1), ',');
 
     $query = "SELECT group_concat(quote(tuoteno))
               FROM tuotteen_toimittajat
@@ -218,9 +218,9 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
     $result = pupe_query($query);
 
     if (mysqli_num_rows($result) > 0) {
-      $tuotenumerot = mysqli_fetch_array($result, 0);
+      $tuotenumerot = mysqli_result($result, 0);
       if (trim($tuotenumerot) != '') {
-        $tuotenumerot = mysqli_fetch_array($result, 0);
+        $tuotenumerot = mysqli_result($result, 0);
         $lisa_haku_toimi = " and tuote.tuoteno in ($tuotenumerot) ";
         $lisa .= " and tuote.tuoteno in ($tuotenumerot) ";
       }
@@ -238,7 +238,7 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
       }
     }
 
-    $osastot = mb_substr($osastot, 0, -1);
+    $osastot = substr($osastot, 0, -1);
 
     if (trim($osastot) != '') {
       $lisa_haku_osasto = " and tuote.osasto in ($osastot) ";
@@ -257,7 +257,7 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
       }
     }
 
-    $tryt = mb_substr($tryt, 0, -1);
+    $tryt = substr($tryt, 0, -1);
 
     if (trim($tryt) != '') {
       $lisa_haku_try = " and tuote.try in ($tryt) ";
@@ -276,7 +276,7 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
       }
     }
 
-    $tmet = mb_substr($tmet, 0, -1);
+    $tmet = substr($tmet, 0, -1);
 
     if (trim($tmet) != '') {
       $lisa_haku_tme = " and tuote.tuotemerkki in ($tmet) ";
@@ -295,7 +295,7 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
       }
     }
 
-    $mallit = mb_substr($mallit, 0, -1);
+    $mallit = substr($mallit, 0, -1);
 
     if (trim($mallit) != '') {
       $lisa_haku_malli = " and tuote.malli in ($mallit) ";
@@ -314,7 +314,7 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
       }
     }
 
-    $mallitarkenteet = mb_substr($mallitarkenteet, 0, -1);
+    $mallitarkenteet = substr($mallitarkenteet, 0, -1);
 
     if (trim($mallitarkenteet) != '') {
       $lisa_haku_mallitarkenne = " and tuote.mallitarkenne in ($mallitarkenteet) ";
@@ -325,8 +325,8 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
   foreach ($monivalintalaatikot as $monivalintalaatikko) {
     $monivalintalaatikko = strip_tags($monivalintalaatikko);
 
-    if (mb_substr($monivalintalaatikko, 0, 9) == "parametri") {
-      $param = mb_substr($monivalintalaatikko, 10);
+    if (substr($monivalintalaatikko, 0, 9) == "parametri") {
+      $param = substr($monivalintalaatikko, 10);
 
       if (count(${"mul_".$param}) > 0) {
         $paramit = '';
@@ -339,7 +339,7 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
           }
         }
 
-        $paramit = mb_substr($paramit, 0, -1);
+        $paramit = substr($paramit, 0, -1);
 
         if (trim($paramit) != '') {
           ${"lisa_haku_".$param} = " and t_av_$param.selite in ($paramit) ";
@@ -355,8 +355,8 @@ if (count($mul_toimi) > 0 or count($mul_osasto) > 0 or count($mul_try) > 0 or co
 foreach ($monivalintalaatikot as $monivalintalaatikko) {
   $monivalintalaatikko = strip_tags($monivalintalaatikko);
 
-  if (isset($dynpuu_count_result) and mysqli_num_rows($dynpuu_count_result) > 0 and mb_substr($monivalintalaatikko, 0, 10) == "dynaaminen") {
-    $param = mb_substr($monivalintalaatikko, 11);
+  if (isset($dynpuu_count_result) and mysqli_num_rows($dynpuu_count_result) > 0 and substr($monivalintalaatikko, 0, 10) == "dynaaminen") {
+    $param = substr($monivalintalaatikko, 11);
 
     mysqli_data_seek($dynpuu_count_result, 0);
 
@@ -373,7 +373,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
           }
         }
 
-        $dynaamiset = mb_substr($dynaamiset, 0, -1);
+        $dynaamiset = substr($dynaamiset, 0, -1);
 
         if (trim($dynaamiset) != '') {
 
@@ -457,10 +457,10 @@ if (count($mul_laskumyyja) > 0) {
     }
   }
 
-  $laskumyyjat = mb_substr($laskumyyjat, 0, -1);
+  $laskumyyjat = substr($laskumyyjat, 0, -1);
 
   if (trim($laskumyyjat) != '') {
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "budjetinyllapito_tat.php") !== FALSE) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "budjetinyllapito_tat.php") !== FALSE) {
       $lisa .= " and kuka.tunnus in ({$laskumyyjat}) ";
     }
     else {
@@ -480,7 +480,7 @@ if (count($mul_asiakastila) > 0) {
     }
   }
 
-  $asiakastilat = mb_substr($asiakastilat, 0, -1);
+  $asiakastilat = substr($asiakastilat, 0, -1);
 
   if (trim($asiakastilat) != '') {
     $lisa_haku_asiakastila = " and asiakas.tila in ($asiakastilat) ";
@@ -499,7 +499,7 @@ if (count($mul_tuotemyyja) > 0) {
     }
   }
 
-  $tuotemyyjat = mb_substr($tuotemyyjat, 0, -1);
+  $tuotemyyjat = substr($tuotemyyjat, 0, -1);
 
   if (trim($tuotemyyjat) != '') {
     $lisa_haku_myyja = " and kuka.myyja in ($tuotemyyjat) ";
@@ -518,7 +518,7 @@ if (count($mul_asiakasmyyja) > 0) {
     }
   }
 
-  $asiakasmyyjat = mb_substr($asiakasmyyjat, 0, -1);
+  $asiakasmyyjat = substr($asiakasmyyjat, 0, -1);
 
   if (trim($asiakasmyyjat) != '') {
     $lisa_haku_asiakasmyyja = " and kuka.myyja in ($asiakasmyyjat) ";
@@ -537,7 +537,7 @@ if (count($mul_tuoteostaja) > 0) {
     }
   }
 
-  $tuoteostajat = mb_substr($tuoteostajat, 0, -1);
+  $tuoteostajat = substr($tuoteostajat, 0, -1);
 
   if (trim($tuoteostajat) != '') {
     $lisa_haku_ostaja = " and kuka.myyja in ($tuoteostajat) ";
@@ -556,7 +556,7 @@ if (count($mul_asiakasosasto) > 0) {
     }
   }
 
-  $asiakasosastot = mb_substr($asiakasosastot, 0, -1);
+  $asiakasosastot = substr($asiakasosastot, 0, -1);
 
   if (trim($asiakasosastot) != '') {
     $lisa_haku_asiakasosasto = " and asiakas.osasto in ($asiakasosastot) ";
@@ -577,13 +577,23 @@ if (count($mul_asiakasryhma) > 0) {
     }
   }
 
-  $asiakasryhmat = mb_substr($asiakasryhmat, 0, -1);
+  $asiakasryhmat = substr($asiakasryhmat, 0, -1);
 
   if (trim($asiakasryhmat) != '') {
-    $lisa_haku_asiakasryhma = " and asiakas.ryhma in ($asiakasryhmat) ";
-
-    if ($mulselprefix == "abc_aputaulu") $lisa .= " and abc_aputaulu.try in ($asiakasryhmat) ";
-    else $lisa .= " and asiakas.ryhma in ($asiakasryhmat) ";
+    if ($asiakasryhmavalinta == "asiakashinta") {
+      $lisa_haku_asiakasryhma = " and asiakashinta.asiakas_ryhma in ($asiakasryhmat) ";
+    } else {
+      $lisa_haku_asiakasryhma = " and asiakas.ryhma in ($asiakasryhmat) ";
+    }
+    if ($mulselprefix == "abc_aputaulu") {
+      $lisa .= " and abc_aputaulu.try in ($asiakasryhmat) ";
+    }
+    else if($asiakasryhmavalinta == "asiakashinta") {
+      $lisa .= " and asiakashinta.asiakas_ryhma in ($asiakasryhmat) ";
+    }
+    else {
+      $lisa .= " and asiakas.ryhma in ($asiakasryhmat) ";
+    }
   }
 }
 
@@ -598,13 +608,17 @@ if (count($mul_asiakaspiiri) > 0) {
     }
   }
 
-  $asiakaspiirit = mb_substr($asiakaspiirit, 0, -1);
+  $asiakaspiirit = substr($asiakaspiirit, 0, -1);
 
   if (trim($asiakaspiirit) != '') {
 
     if (isset($piirivalinta) and $piirivalinta == "lasku") {
       $lisa_haku_asiakaspiiri = " and lasku.piiri in ($asiakaspiirit) ";
       $lisa .= " and lasku.piiri in ($asiakaspiirit) ";
+    }
+    else if (isset($piirivalinta) and $piirivalinta == "asiakashinta") {
+      $lisa_haku_asiakaspiiri = " and asiakashinta.piiri in ($asiakaspiirit) ";
+      $lisa .= " and asiakashinta.piiri in ($asiakaspiirit) ";
     }
     else {
       $lisa_haku_asiakaspiiri = " and asiakas.piiri in ($asiakaspiirit) ";
@@ -623,7 +637,7 @@ if (count($mul_toimipaikka) > 0) {
     }
   }
 
-  $toimipaikat = mb_substr($toimipaikat, 0, -1);
+  $toimipaikat = substr($toimipaikat, 0, -1);
 
   if (trim($toimipaikat) != '') {
     $lisa_haku_toimipaikka = "  and lasku.yhtio_toimipaikka in ($toimipaikat)";
@@ -641,7 +655,7 @@ if (count($mul_maa) > 0) {
     }
   }
 
-  $maat = mb_substr($maat, 0, -1);
+  $maat = substr($maat, 0, -1);
 
   if (trim($maat) != '') {
     $lisa_haku_maa = " maat.tunnus in ($maat)";
@@ -660,14 +674,14 @@ if (count($mul_kustp) > 0) {
     }
   }
 
-  $kustpt = mb_substr($kustpt, 0, -1);
+  $kustpt = substr($kustpt, 0, -1);
 
   if (trim($kustpt) != '') {
     if ($mulselprefix == 'asiakas') {
       $lisa_haku_kustp = " and asiakas.kustannuspaikka in ($kustpt) ";
       $lisa .= " and asiakas.kustannuspaikka in ($kustpt) ";
     }
-    elseif (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== false) {
+    elseif (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== false) {
       if (isset($kustapvalinta) and $kustapvalinta == "tuote") {
         $lisa_haku_kustp = " and tuote.kustp in ($kustpt) ";
         $lisa .= " and tuote.kustp in ($kustpt) ";
@@ -677,7 +691,7 @@ if (count($mul_kustp) > 0) {
         $lisa .= " and asiakas.kustannuspaikka in ($kustpt) ";
       }
     }
-    elseif (mb_strpos($_SERVER['SCRIPT_NAME'], "tulosseuranta") !== false) {
+    elseif (strpos($_SERVER['SCRIPT_NAME'], "tulosseuranta") !== false) {
       $lisa_haku_kustp = " and tuote.kustp in ($kustpt) ";
       $lisa .= " and tiliointi.kustp in ($kustpt) ";
     }
@@ -699,14 +713,14 @@ if (count($mul_kohde) > 0) {
     }
   }
 
-  $kohdet = mb_substr($kohdet, 0, -1);
+  $kohdet = substr($kohdet, 0, -1);
 
   if (trim($kohdet) != '') {
     if ($mulselprefix == 'asiakas') {
       $lisa_haku_kustp = " and asiakas.kohde in ($kohdet) ";
       $lisa .= " and asiakas.kohde in ($kohdet) ";
     }
-    elseif (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    elseif (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       if (isset($kohdevalinta) and $kohdevalinta == "tuote") {
         $lisa_haku_kustp = " and tuote.kohde in ($kohdet) ";
         $lisa .= " and tuote.kohde in ($kohdet) ";
@@ -734,14 +748,14 @@ if (count($mul_projekti) > 0) {
     }
   }
 
-  $projektit = mb_substr($projektit, 0, -1);
+  $projektit = substr($projektit, 0, -1);
 
   if (trim($projektit) != '') {
     if ($mulselprefix == 'asiakas') {
       $lisa_haku_kustp = " and asiakas.projekti in ($projektit) ";
       $lisa .= " and asiakas.projekti in ($projektit) ";
     }
-    elseif (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    elseif (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       if (isset($projektivalinta) and $projektivalinta == "tuote") {
         $lisa_haku_kustp = " and tuote.projekti in ($projektit) ";
         $lisa .= " and tuote.projekti in ($projektit) ";
@@ -760,8 +774,8 @@ if (count($mul_projekti) > 0) {
 
 foreach ($monivalintalaatikot as $monivalintalaatikko) {
 
-  if (mb_substr($monivalintalaatikko, 0, 4) == "<br>") {
-    $monivalintalaatikko = mb_substr($monivalintalaatikko, 4);
+  if (substr($monivalintalaatikko, 0, 4) == "<br>") {
+    $monivalintalaatikko = substr($monivalintalaatikko, 4);
     echo "<div style='clear: both;'><br></div>";
   }
 
@@ -830,12 +844,12 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
         $sel = '';
 
         if (count($mul_toimi) > 0) {
-          if (in_array(mb_strtolower(trim($sxrow['tunnus'])), $mul_toimi)) {
+          if (in_array(strtolower(trim($sxrow['tunnus'])), $mul_toimi)) {
             $sel = 'SELECTED';
           }
         }
 
-        echo "<option value='".mb_strtolower($sxrow['tunnus'])."' $sel>";
+        echo "<option value='".strtolower($sxrow['tunnus'])."' $sel>";
 
         echo "$sxrow[nimi]</option>";
       }
@@ -926,12 +940,12 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
         $sel = '';
 
         if (count($mul_osasto) > 0) {
-          if (in_array(mb_strtolower(trim($sxrow['selite'])), $mul_osasto)) {
+          if (in_array(strtolower(trim($sxrow['selite'])), $mul_osasto)) {
             $sel = 'SELECTED';
           }
         }
 
-        echo "<option value='".mb_strtolower($sxrow['selite'])."' $sel>";
+        echo "<option value='".strtolower($sxrow['selite'])."' $sel>";
 
         if ($yhtiorow['naytetaanko_osaston_ja_tryn_selite'] == '') {
           echo $sxrow['selite']." ";
@@ -943,7 +957,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
       echo "</select></td>";
       echo "</tr>";
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
         $ruksitchk = "";
 
         if ($ruksit["osasto"] != "") {
@@ -1038,11 +1052,11 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
       while ($srow = mysqli_fetch_assoc($sresult)) {
         $sel = '';
 
-        if (count($mul_try) > 0 and in_array(mb_strtolower(trim($srow['selite'])), $mul_try)) {
+        if (count($mul_try) > 0 and in_array(strtolower(trim($srow['selite'])), $mul_try)) {
           $sel = 'SELECTED';
         }
 
-        echo "<option value='".mb_strtolower($srow['selite'])."' $sel>";
+        echo "<option value='".strtolower($srow['selite'])."' $sel>";
 
         if ($yhtiorow['naytetaanko_osaston_ja_tryn_selite'] == '') {
           echo $srow['selite']." ";
@@ -1054,7 +1068,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
       echo "</select></td>";
       echo "</tr>";
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
         $ruksitchk = "";
 
         if ($ruksit["try"] != "") {
@@ -1162,17 +1176,17 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
       while ($srow = mysqli_fetch_assoc($tmsresult)) {
         $sel = '';
 
-        if (count($mul_tme) > 0 and in_array(mb_strtolower(trim($srow['tme'])), $mul_tme)) {
+        if (count($mul_tme) > 0 and in_array(strtolower(trim($srow['tme'])), $mul_tme)) {
           $sel = 'SELECTED';
         }
 
-        echo "<option value='".mb_strtolower($srow['tme'])."' $sel>$srow[selite]</option>";
+        echo "<option value='".strtolower($srow['tme'])."' $sel>$srow[selite]</option>";
       }
 
       echo "</select></td>";
       echo "</tr>";
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
         $ruksitchk = "";
 
         if ($ruksit["tuotemerkki"] != "") {
@@ -1285,7 +1299,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
           while ($mallirow = mysqli_fetch_assoc($sxresult)) {
             $sel = '';
 
-            if (count($mul_malli) > 0 and in_array(mb_strtolower(trim($mallirow['malli'])), $mul_malli)) {
+            if (count($mul_malli) > 0 and in_array(strtolower(trim($mallirow['malli'])), $mul_malli)) {
               $sel = 'SELECTED';
             }
 
@@ -1300,13 +1314,13 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
               $_mallie .= " {$mallirow["selitetark"]}";
             }
 
-            echo "<option value='".mb_strtolower($mallirow['malli'])."' $sel>$_mallie</option>";
+            echo "<option value='".strtolower($mallirow['malli'])."' $sel>$_mallie</option>";
           }
 
           echo "</select></td>";
           echo "</tr>";
 
-          if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+          if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
             $ruksitchk = "";
 
             if ($ruksit["malli"] != "") {
@@ -1415,17 +1429,17 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
           while ($mallitarkennerow = mysqli_fetch_assoc($sxresult)) {
             $sel = '';
 
-            if (count($mul_mallitarkenne) > 0 and in_array(mb_strtolower(trim($mallitarkennerow['mallitarkenne'])), $mul_mallitarkenne)) {
+            if (count($mul_mallitarkenne) > 0 and in_array(strtolower(trim($mallitarkennerow['mallitarkenne'])), $mul_mallitarkenne)) {
               $sel = 'SELECTED';
             }
 
-            echo "<option value='".mb_strtolower($mallitarkennerow['mallitarkenne'])."' $sel>$mallitarkennerow[selite]</option>";
+            echo "<option value='".strtolower($mallitarkennerow['mallitarkenne'])."' $sel>$mallitarkennerow[selite]</option>";
           }
 
           echo "</select></td>";
           echo "</tr>";
 
-          if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+          if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
             $ruksitchk = "";
 
             if ($ruksit["mallitarkenne"] != "") {
@@ -1441,10 +1455,10 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     }
   }
 
-  if (mb_substr($monivalintalaatikko, 0, 10) == "dynaaminen") {
+  if (substr($monivalintalaatikko, 0, 10) == "dynaaminen") {
     unset($sxresult);
 
-    $tree = mb_substr($monivalintalaatikko, 11);
+    $tree = substr($monivalintalaatikko, 11);
 
     if ($tree == "asiakas") {
       $mul_otsik = t("Asiakaskategoria");
@@ -1478,7 +1492,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
       $kaikki_puun_tunnukset_res = pupe_query($query, $link);
       $kaikki_puun_tunnukset_row = mysqli_fetch_assoc($kaikki_puun_tunnukset_res);
 
-      if (mb_strlen($kaikki_puun_tunnukset_row["tunnukset"]) > 0) {
+      if (strlen($kaikki_puun_tunnukset_row["tunnukset"]) > 0) {
         $nodelisa = " AND node.tunnus IN ($kaikki_puun_tunnukset_row[tunnukset]) ";
         $nodeinde = " use index (PRIMARY) ";
       }
@@ -1514,7 +1528,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
             echo "</select></td>";
             echo "</tr>";
 
-            if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+            if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
               $ruksitchk = "";
 
               if ($ruksit["dynaaminen_".$tree."_".$edsyvyys] != "") {
@@ -1600,7 +1614,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
       echo "</select><input type='hidden' name='dynaaminen{$tree}maxsyvyys' value='$edsyvyys'></td>";
       echo "</tr>";
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
         $ruksitchk = "";
 
         if ($ruksit["dynaaminen_".$tree."_".$edsyvyys] != "") {
@@ -1614,11 +1628,11 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     }
   }
 
-  if (mb_substr($monivalintalaatikko, 0, 9) == "parametri") {
+  if (substr($monivalintalaatikko, 0, 9) == "parametri") {
 
     unset($sxresult);
 
-    $parametri = mb_substr($monivalintalaatikko, 10);
+    $parametri = substr($monivalintalaatikko, 10);
 
     // Näytetään parametrit jos ollaan valittu osasto tai  tuoteryhmä tai rajattu segmenteillä
     if ($lisa_haku_osasto != "" or $lisa_haku_try != "" or $lisa_dynaaminen["tuote"] != "") {
@@ -1698,17 +1712,17 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
         while (${$parametri."row"} = mysqli_fetch_assoc($sxresult)) {
           $sel = '';
 
-          if (count(${"mul_".$parametri}) > 0 and in_array(mb_strtolower(trim(${$parametri."row"}["$parametri"])), ${"mul_".$parametri})) {
+          if (count(${"mul_".$parametri}) > 0 and in_array(strtolower(trim(${$parametri."row"}["$parametri"])), ${"mul_".$parametri})) {
             $sel = 'SELECTED';
           }
 
-          echo "<option value='".mb_strtolower(${$parametri."row"}[$parametri])."' $sel>".${$parametri."row"}[$parametri]."</option>";
+          echo "<option value='".strtolower(${$parametri."row"}[$parametri])."' $sel>".${$parametri."row"}[$parametri]."</option>";
         }
 
         echo "</select></td>";
         echo "</tr>";
 
-        if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+        if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
           $ruksitchk = "";
 
           if ($ruksit[$parametri] != "") {
@@ -1758,7 +1772,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     echo "</select></td>";
     echo "</tr>";
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       $ruksitchk = "";
 
       if ($ruksit["laskumyyja"] != "") {
@@ -1802,7 +1816,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     echo "</select></td>";
     echo "</tr>";
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       $ruksitchk = "";
 
       if ($ruksit["asiakastila"] != "") {
@@ -1850,7 +1864,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     echo "</select></td>";
     echo "</tr>";
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       $ruksitchk = "";
 
       if ($ruksit["tuotemyyja"] != "") {
@@ -1898,7 +1912,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     echo "</select></td>";
     echo "</tr>";
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       $ruksitchk = "";
 
       if ($ruksit["asiakasmyyja"] != "") {
@@ -1945,7 +1959,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     echo "</select></td>";
     echo "</tr>";
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       $ruksitchk = "";
 
       if ($ruksit["tuoteostaja"] != "") {
@@ -1989,7 +2003,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     echo "</select></td>";
     echo "</tr>";
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       $ruksitchk = "";
 
       if ($ruksit["asiakasosasto"] != "") {
@@ -2003,7 +2017,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
   }
 
   if ($monivalintalaatikko == "asiakasryhma") {
-    echo "<div class='monivalintadiv'><table valign='top'>";
+    echo "<div class='monivalintadiv asiakasryhmamonivalintadiv'><table valign='top'>";
 
     if ($piirra_otsikot) {
       echo "<tr><th>", t("Asiakasryhmä"), "</th></tr>";
@@ -2033,7 +2047,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     echo "</select></td>";
     echo "</tr>";
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       $ruksitchk = "";
 
       if ($ruksit["asiakasryhma"] != "") {
@@ -2047,7 +2061,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
   }
 
   if ($monivalintalaatikko == "asiakaspiiri") {
-    echo "<div class='monivalintadiv'><table valign='top'>";
+    echo "<div class='monivalintadiv asiakaspiirimonivalintadiv'><table valign='top'>";
 
     if ($piirra_otsikot) {
       echo "<tr><th>", t("Asiakaspiiri"), "</th></tr>";
@@ -2077,7 +2091,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
     echo "</select></td>";
     echo "</tr>";
 
-    if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+    if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
       $ruksitchk = "";
 
       if ($ruksit["asiakaspiiri"] != "") {
@@ -2122,7 +2136,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
 
       echo "</tr>";
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
         $ruksitchk = "";
 
         if ($ruksit["toimipaikka"] != "") {
@@ -2172,7 +2186,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
 
       echo "</select></td></tr>";
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
         $ruksitchk = "";
 
         if ($ruksit["maa"] != "") {
@@ -2291,7 +2305,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
       echo "</select></td>";
       echo "</tr>";
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
         $ruksitchk = "";
 
         if ($ruksit["kustp"] != "") {
@@ -2304,7 +2318,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
         echo "<input type='radio' name='kustapvalinta' value='asiakas' {$kustapvalinta_asiakas}>", t("Asiakkailta");
         echo "</th></tr>";
       }
-      elseif (mb_strpos($_SERVER['SCRIPT_NAME'], "matkalaskuraportti") !== FALSE) {
+      elseif (strpos($_SERVER['SCRIPT_NAME'], "matkalaskuraportti") !== FALSE) {
         $ruksitchk_kustp = "";
         $ruksitchk_toimittajalta = "";
         $ruksitchk_tuotteilta = "";
@@ -2372,7 +2386,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
       echo "</select></td>";
       echo "</tr>";
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
         $ruksitchk = "";
 
         if ($ruksit["kohde"] != "") {
@@ -2428,7 +2442,7 @@ foreach ($monivalintalaatikot as $monivalintalaatikko) {
       echo "</select></td>";
       echo "</tr>";
 
-      if (mb_strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
+      if (strpos($_SERVER['SCRIPT_NAME'], "myyntiseuranta") !== FALSE) {
         $ruksitchk = "";
 
         if ($ruksit["projekti"] != "") {

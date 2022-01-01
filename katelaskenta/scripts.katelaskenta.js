@@ -1,14 +1,14 @@
 /*
  * scripts.katelaskenta.php
  *
- * Tiedosto sis√§lt√§√§ javascript koodit k√§ytt√∂liittym√§n toimintoja varten,
+ * Tiedosto sis‰lt‰‰ javascript koodit k‰yttˆliittym‰n toimintoja varten,
  * jotka sijaitsevat template.katelaskenta.php tiedostossa. Tiedoston
- * alussa esitell√§√§n k√§ytett√§vi√§ muuttujia ja funktioita.
+ * alussa esitell‰‰n k‰ytett‰vi‰ muuttujia ja funktioita.
  */
 $(document).ready(function () {
 
-    // Esitell√§√§n muuttujat.
-    // Kaikki muuttujat alustetaan funktiossa my√∂hemm√§ss√§
+    // Esitell‰‰n muuttujat.
+    // Kaikki muuttujat alustetaan funktiossa myˆhemm‰ss‰
     // vaiheessa.
     var tuoterivitTaulukko; // koko taulukko
     var tuoterivit; // kaikki taulukon rivit
@@ -17,34 +17,44 @@ $(document).ready(function () {
     var footerCheckbox; // taulukon footer checkbox
     var footerLaskeKaikki;  // Footer osion
 
-    // Kaikki sarake-p√§√§tteiset muuttujat ovat jqueryn
-    // selectoreita kertomaan, miss√§ oikea sarake on
-    // mik√§li k√§ytt√∂liittym√§√§ menn√§√§n muuttamaan.
+    // Kaikki sarake-p‰‰tteiset muuttujat ovat jqueryn
+    // selectoreita kertomaan, miss‰ oikea sarake on
+    // mik‰li k‰yttˆliittym‰‰ menn‰‰n muuttamaan.
     var footerKateMyyntihintaSarake;
     var footerKateMyymalahintaSarake;
     var footerKateNettohintaSarake;
+    var footerKateAsiakashintaSarake;
     var tuoteriviCheckboxSarake;
     var tuoteriviLaskeNappiSarake;
     var kateMyyntihintaSarake;
     var kateMyymalahintaSarake;
     var kateNettohintaSarake;
+    var kateAsiakashintaSarake;
     var myyntihintaSarake;
     var myymalahintaSarake;
     var nettohintaSarake;
+    var asiakashintaSarake;
 
-
-    // Esitell√§√§n funktiot.
-    // Toteutukset l√∂ytyv√§t alapuolelta.
+    // Esitell‰‰n funktiot.
+    // Toteutukset lˆytyv‰t alapuolelta.
     var alustaMuuttujat;
     var onkoVirheellinenMyyntikate;
     var onkoTyhja;
     var lisaaHintaanKate;
     var asetaUusiHinta;
 
+    $("#katelaskenta-hakutulokset td input").on("change, keyup", function() {
+        var nimike = $(this).attr("name");
+        var haesamanlaiset = $('#katelaskenta-hakutulokset td input[name|="'+nimike+'"]');
+        if(haesamanlaiset.length > 1) {
+            $('#katelaskenta-hakutulokset td input[name|="'+nimike+'"]').val($(this).val());
+        }
+    });
+
     /**
      * Funtion toiminto on vain alustaa tavittavat muuttujat, joita
-     * eri toiminnallisuuksissa k√§ytet√§√§n. N√§in elementtien hakuja
-     * on helpompi muuttaa, jos k√§ytt√∂liittym√§ss√§ muuttuu jokin.
+     * eri toiminnallisuuksissa k‰ytet‰‰n. N‰in elementtien hakuja
+     * on helpompi muuttaa, jos k‰yttˆliittym‰ss‰ muuttuu jokin.
      */
     var alustaMuuttujat = function() {
         tuoterivitTaulukko = $("#katelaskenta-hakutulokset");
@@ -53,16 +63,18 @@ $(document).ready(function () {
         footerRivi = tuoterivitTaulukko.find("tfoot tr");
         footerCheckbox = tuoterivitTaulukko.find("tfoot tr td:first-child input[type=checkbox]");
         footerLaskeKaikki = tuoterivitTaulukko.find("tfoot tr td:last-child a");
-
         footerKateMyyntihintaSarake = "td:nth-child(4) input";
         footerKateMyymalahintaSarake = "td:nth-child(6) input";
         footerKateNettohintaSarake = "td:nth-child(8) input";
+        footerKateAsiakashintaSarake = "td:nth-child(10) input";
         kateMyyntihintaSarake = "td:nth-child(8) input";
         kateMyymalahintaSarake = "td:nth-child(10) input";
         kateNettohintaSarake = "td:nth-child(12) input";
+        kateAsiakashintaSarake = "td:nth-child(15) input";
         myyntihintaSarake = "td:nth-child(7) span.hinta";
         myymalahintaSarake = "td:nth-child(9) span.hinta";
         nettohintaSarake = "td:nth-child(11) span.hinta";
+        asiakashintaSarake = "td:nth-child(14) span.hinta";
         tuoteriviCheckboxSarake = "td:nth-child(2) input[type=checkbox]";
         tuoteriviLaskeNappiSarake = "td:last-child a";
     }
@@ -72,7 +84,7 @@ $(document).ready(function () {
      * Funktio tarkistaa annetun myyntikatteen, jotta laskutoimitukset
      * voidaan suorittaa.
      *
-     * Palauttaa false, jos virhe l√∂ytyy.
+     * Palauttaa false, jos virhe lˆytyy.
      */
     var onkoVirheellinenMyyntikate = function(myyntikate) {
         if (isNaN(myyntikate))
@@ -92,19 +104,19 @@ $(document).ready(function () {
     };
 
     /**
-     * Funktio lis√§√§ annettuun hintaan annetun katteen.
+     * Funktio lis‰‰ annettuun hintaan annetun katteen.
      *
-     * Kate annetaan prosentteina, eik√§ desimaaleissa. Desimaaleja
-     * voi k√§ytt√§√§ prosenteissa. Palauttaa hinnan laskutoimituksen
-     * j√§lkeen. Jos sy√∂tetyiss√§ tiedoissa on virhe, palautetaan false
-     * ja n√§ytet√§√§n alert-ikkuna.
+     * Kate annetaan prosentteina, eik‰ desimaaleissa. Desimaaleja
+     * voi k‰ytt‰‰ prosenteissa. Palauttaa hinnan laskutoimituksen
+     * j‰lkeen. Jos syˆtetyiss‰ tiedoissa on virhe, palautetaan false
+     * ja n‰ytet‰‰n alert-ikkuna.
      */
     var lisaaHintaanKate = function(keskihankintahinta, myyntikate) {
         var floatKeskihankintaHinta = parseFloat(keskihankintahinta);
         var floatMyyntikate = parseFloat(myyntikate);
 
         if (onkoTyhja(floatMyyntikate)) {
-            alert("Katekentt√§ ei voi olla tyhj√§.");
+            alert("Katekentt‰ ei voi olla tyhj‰.");
             return false;
         }
         if (isNaN(floatKeskihankintaHinta) || floatKeskihankintaHinta == 0) {
@@ -113,7 +125,7 @@ $(document).ready(function () {
         }
 
         if(!onkoVirheellinenMyyntikate(floatMyyntikate)) {
-            alert("Virheellinen kate. Katteen pit√§√§ olla 0-100 v√§lill√§.");
+            alert("Virheellinen kate. Katteen pit‰‰ olla 0-100 v‰lill‰.");
             return false;
         }
 
@@ -123,8 +135,8 @@ $(document).ready(function () {
     /**
      * Funktio asettaa elementtiin uuden hinnan.
      *
-     * Hintaan m√§√§ritet√§√§n k√§√§rin elementti eli t√§ss√§ tapauksessa
-     * <font>. Hinta v√§rj√§t√§√§n punaiseksi ja asetetaan annettuun
+     * Hintaan m‰‰ritet‰‰n k‰‰rin elementti eli t‰ss‰ tapauksessa
+     * <font>. Hinta v‰rj‰t‰‰n punaiseksi ja asetetaan annettuun
      * elementtiin.
      */
     var asetaUusiHinta = function(hinta, kohdeElementti) {
@@ -136,19 +148,20 @@ $(document).ready(function () {
     };
 
     /**
-     * T√§st√§ l√§htien ohjelmakoodissa m√§√§ritell√§√§n elementeille niiden
+     * T‰st‰ l‰htien ohjelmakoodissa m‰‰ritell‰‰n elementeille niiden
      * toimintalogiikka aikaisemmin esitettyjen funktioiden avulla.
      * Kaikkien funktioiden ja yleisten muuttujien kuuluisi olla esitetty
-     * ennen seuraavia toimenpiteit√§.
+     * ennen seuraavia toimenpiteit‰.
      */
 
     // Kutsutaan muuttujien alustus.
     alustaMuuttujat();
 
-    // Lis√§t√§√§n jokaiselle tuoterivin laske-painikkeellle toimintalogiikka.
+    // Lis‰t‰‰n jokaiselle tuoterivin laske-painikkeellle toimintalogiikka.
     // Laske painike laskee annetun kateprosentin mukaan uuden hinnan.
     $.each(tuoterivit, function () {
         var keskihankintahinta = $(this).data("kehahinta");
+        var keskiasiakashinta = $(this).data("asiakashinta");
 
         var myyntikate = $(this).find(kateMyyntihintaSarake);
         var myyntihintaElementti = $(this).find(myyntihintaSarake);
@@ -159,11 +172,15 @@ $(document).ready(function () {
         var nettokate = $(this).find(kateNettohintaSarake);
         var nettohintaElementti = $(this).find(nettohintaSarake);
 
+        var asiakaskate = $(this).find(kateAsiakashintaSarake);
+        var asiakashintaElementti = $(this).find(asiakashintaSarake);
+
         $(this).find(tuoteriviLaskeNappiSarake).on("click", function (event) {
             event.preventDefault();
             var uusiMyyntihinta = lisaaHintaanKate(keskihankintahinta, myyntikate.val());
             var uusiMyymalahinta = lisaaHintaanKate(keskihankintahinta, myymalakate.val());
             var uusiNettohinta = lisaaHintaanKate(keskihankintahinta, nettokate.val());
+            var uusiAsiakashinta = lisaaHintaanKate(keskiasiakashinta, asiakaskate.val());
 
             if(uusiMyyntihinta !== false && myyntikate.val() > 0) {
                 asetaUusiHinta(uusiMyyntihinta, myyntihintaElementti);
@@ -176,10 +193,14 @@ $(document).ready(function () {
             if(uusiNettohinta !== false && nettokate.val() > 0) {
                 asetaUusiHinta(uusiNettohinta, nettohintaElementti);
             }
+
+            if(uusiAsiakashinta !== false && asiakaskate.val() > 0) {
+                asetaUusiHinta(uusiAsiakashinta, asiakashintaElementti);
+            }
         });
     });
 
-    // Lis√§t√§√§n taulukon viimeisen rivin valintaruudulle toimintalogiikka.
+    // Lis‰t‰‰n taulukon viimeisen rivin valintaruudulle toimintalogiikka.
     // Ruutua klikkaamalla joko valitaan kaikki tai poistetaan valinta
     // kaikista ruuduista.
     footerCheckbox.on("click", function (event) {
@@ -194,44 +215,53 @@ $(document).ready(function () {
             }
         });
 
-    // Lis√§t√§√§n taulukon viimeisen rivin "laske kaikki" -painikkeelle
+    // Lis‰t‰‰n taulukon viimeisen rivin "laske kaikki" -painikkeelle
     // toimintalogiikka. Painiketta painaessa lasketaan uusi hinta ja
-    // samat arvot m√§√§ritet√§√§n taulukon kaikille muille tuoteriveille.
+    // samat arvot m‰‰ritet‰‰n taulukon kaikille muille tuoteriveille.
      footerLaskeKaikki.on("click", function (event) {
         event.preventDefault();
 
         var myyntikate = tuoterivitTaulukko.find("tfoot tr").find(footerKateMyyntihintaSarake).val();
         var myymalakate = tuoterivitTaulukko.find("tfoot tr").find(footerKateMyymalahintaSarake).val();
         var nettokate = tuoterivitTaulukko.find("tfoot tr").find(footerKateNettohintaSarake).val();
+        var asiakaskate = tuoterivitTaulukko.find("tfoot tr").find(footerKateAsiakashintaSarake).val();
 
         if (!onkoTyhja(myyntikate)) {
             if(!onkoVirheellinenMyyntikate(myyntikate)) {
-                alert("Virheellinen kate. Myyntikatekentt√§ ei voi olla tyhj√§ ja katteen pit√§√§ olla 0-100 v√§lill√§.");
+                alert("Virheellinen kate. Myyntikatekentt‰ ei voi olla tyhj‰ ja katteen pit‰‰ olla 0-100 v‰lill‰.");
                 return true;
             }
         }
 
         if (!onkoTyhja(myymalakate)) {
             if(!onkoVirheellinenMyyntikate(myymalakate)) {
-                alert("Virheellinen kate. Myymalaatekentt√§ ei voi olla tyhj√§ ja katteen pit√§√§ olla 0-100 v√§lill√§.");
+                alert("Virheellinen kate. Myymalaatekentt‰ ei voi olla tyhj‰ ja katteen pit‰‰ olla 0-100 v‰lill‰.");
                 return true;
             }
         }
 
         if (!onkoTyhja(nettokate)) {
             if(!onkoVirheellinenMyyntikate(nettokate)) {
-                alert("Virheellinen kate. Nettokatekentt√§ ei voi olla tyhj√§ ja katteen pit√§√§ olla 0-100 v√§lill√§.");
+                alert("Virheellinen kate. Nettokatekentt‰ ei voi olla tyhj‰ ja katteen pit‰‰ olla 0-100 v‰lill‰.");
                 return true;
             }
         }
 
-        // K√§yd√§√§n jokainen rivi l√§pi ja asetetaan uusi hinta, jos hinta
+        if (!onkoTyhja(asiakaskate) && undefined !== undefined) {
+            if(!onkoVirheellinenMyyntikate(asiakaskate)) {
+                alert("Virheellinen kate. Asiakaskatekentt‰ ei voi olla tyhj‰ ja katteen pit‰‰ olla 0-100 v‰lill‰.");
+                return true;
+            }
+        }
+
+        // K‰yd‰‰n jokainen rivi l‰pi ja asetetaan uusi hinta, jos hinta
         // ei ole virheellinen.
         $.each(tuoterivit, function () {
             var valintaElementti = $(this).find(tuoteriviCheckboxSarake);
 
             if (valintaElementti.attr("checked") === "checked") {
                 var keskihankintahinta = $(this).data("kehahinta");
+                var keskiasiakashinta = $(this).data("asiakashinta");
 
                 if (!onkoTyhja(myyntikate)) {
                     var myyntihintaElementti = $(this).find(myyntihintaSarake);
@@ -258,6 +288,15 @@ $(document).ready(function () {
                         asetaUusiHinta(uusiNettohinta, nettohintaElementti);
                     }
                     $(this).find(kateNettohintaSarake).val(nettokate);
+                }
+
+                if (!onkoTyhja(asiakaskate)) {
+                    var asiakashintaElementti = $(this).find(asiakashintaSarake);
+                    var uusiAsiakashinta = lisaaHintaanKate(keskiasiakashinta, asiakaskate);
+                    if(uusiAsiakashinta !== false && asiakaskate > 0) {
+                        asetaUusiHinta(uusiAsiakashinta, asiakashintaElementti);
+                    }
+                    $(this).find(kateAsiakashintaSarake).val(asiakaskate);
                 }
             }
         });
