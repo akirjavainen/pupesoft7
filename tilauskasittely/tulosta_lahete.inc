@@ -290,7 +290,7 @@ if (!function_exists('alku_lahete')) {
         $taika = t("Vko", $kieli)." ".date("W", strtotime($laskurow["toimaika"]));
 
         if ($laskurow['toimvko'] != '7') {
-          $taika .= isset($laskurow["toimvko"]) ? "/" .$DAY_ARRAY[$laskurow["toimvko"]] : ""; // MUOKKAUS: isset()
+          $taika .= isset($laskurow["toimvko"]) && isset($DAY_ARRAY[$laskurow["toimvko"]]) ? "/" .$DAY_ARRAY[$laskurow["toimvko"]] : ""; // MUOKKAUS: isset()
         }
 
         $pdf->draw_text(430, 782, $taika,                 $thispage, $norm);
