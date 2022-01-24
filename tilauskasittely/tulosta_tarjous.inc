@@ -2169,7 +2169,7 @@ if (!function_exists('print_pdf_tarjous')) {
 
     //keksitään uudelle failille joku varmasti uniikki nimi:
     list($usec, $sec) = explode(' ', microtime());
-    mt_srand((float) $sec + ((float) $usec * 100000));
+    mt_srand((int)((float)$sec + ((float)$usec * 100000)));
     $pdf_tarjousfilenimi = "/tmp/Tarjous-".md5(uniqid(mt_rand(), true)).".pdf";
 
     //kirjoitetaan pdf faili levylle..
