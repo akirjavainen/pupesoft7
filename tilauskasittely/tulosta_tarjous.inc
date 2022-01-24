@@ -24,7 +24,7 @@ $kielresult = pupe_query($querykiel);
 $kielrow = mysqli_fetch_array($kielresult);
 
 // MUOKKAUS: isset():
-if (!isset($verolliset_verottomat_hinnat)) $verolliset_verottomat_hinnat = null;
+if (!isset($verolliset_verottomat_hinnat)) $verolliset_verottomat_hinnat = "";
 if (strlen($verolliset_verottomat_hinnat) === 0) $verolliset_verottomat_hinnat = "verottomat";
 //$naytetaanko_tuoteno = "ei";
 
