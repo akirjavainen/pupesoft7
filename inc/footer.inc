@@ -11,7 +11,7 @@ if (isset($formi) and isset($kentta)) {
 
 if (!isset($starttime)) $starttime = 0; // MUOKKAUS: isset()
 $timeparts = explode(" ", microtime());
-$endtime   = $timeparts[1].mb_substr($timeparts[0], 1);
+$endtime   = (float)$timeparts[1].mb_substr($timeparts[0], 1);
 $aika      = round($endtime-$starttime, 4);
 
 if (array_key_exists("password", $_REQUEST)) {
@@ -22,14 +22,15 @@ if (array_key_exists("salasana", $_REQUEST)) {
   $_REQUEST["salasana"] = "";
 }
 
+// MUOKKAUS: (float) (int)
 if (!isset($verkkokauppa) or $verkkokauppa == "") {
   $suoque = "INSERT INTO suorituskykyloki
              SET yhtio     = '$kukarow[yhtio]',
              skripti       = '".$_SERVER['SCRIPT_NAME']."',
              iposoite      = '".$_SERVER['REMOTE_ADDR']."',
              request       = '".sanitize_string(serialize($_REQUEST))."',
-             suoritusalku  = '".date("Y-m-d H:i:s", $starttime)."',
-             suoritusloppu = '".date("Y-m-d H:i:s", $endtime)."',
+             suoritusalku  = '".date((float)"Y-m-d H:i:s", (int)$starttime)."',
+             suoritusloppu = '".date((float)"Y-m-d H:i:s", (int)$endtime)."',
              suoritusaika  = '$aika',
              laatija       = '$kukarow[kuka]',
              luontiaika    = now()";
