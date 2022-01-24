@@ -2070,7 +2070,7 @@ if ($tila == "" and !isset($jatka)) {
     }
     else {
       $vasen_sarake[$vasen] .= "<input type='text' name='kerpp' value='$kerpp' size='3'><input type='text' name='kerkk' value='$kerkk' size='3'><input type='text' name='kervv' value='$kervv' size='6'>
-          <input type='hidden' name='vkerayspvm' value='".mb_substr($srow["kerayspvm"], 0, 10)."'>";
+          <input type='hidden' name='vkerayspvm' value='".mb_substr((string)$srow["kerayspvm"], 0, 10)."'>"; // MUOKKAUS: (string)
 
       if ($srow["keraysvko"] != '') {
         $keraysvko = date("W", strtotime($srow["kerayspvm"]));
