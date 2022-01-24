@@ -6169,6 +6169,7 @@ if (!function_exists("alehinta")) {
       }
       elseif (isset($ale["ale".$alepostfix]) and is_numeric($ale["ale".$alepostfix]) and $ale["ale".$alepostfix] == 0) {
         // 2. käyttäjän syöttämä alennus
+        if (!is_array($aleperuste)) $aleperuste = array(); // MUOKKAUS: is_array()
         $aleperuste["ale".$alepostfix] = 4;
 
         $aperuste .= " Ei alennusta (Aletaso: $alepostfix)";
