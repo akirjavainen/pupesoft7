@@ -2973,8 +2973,8 @@ if ($tila == "" and !isset($jatka)) {
 
 	if (!isset($kantaasiakastunnus)) $kantaasiakastunnus = null; // MUOKKAUS: isset()
 
-    // MUOKKAUS: isset():
-    if (($toim == "RIVISYOTTO" or $toim == "PIKATILAUS") and ((trim($kantaasiakastunnus) != '' and trim($kantaasiakastunnus) != '0') or (isset($srow['kantaasiakastunnus']) and trim($srow['kantaasiakastunnus']) != '' and trim($srow['kantaasiakastunnus']) != '0'))) {
+    // MUOKKAUS: isset(), (string):
+    if (($toim == "RIVISYOTTO" or $toim == "PIKATILAUS") and ((trim((string)$kantaasiakastunnus) != '' and trim((string)$kantaasiakastunnus) != '0') or (isset($srow['kantaasiakastunnus']) and trim((string)$srow['kantaasiakastunnus']) != '' and trim((string)$srow['kantaasiakastunnus']) != '0'))) {
       if ($srow['kantaasiakastunnus'] != '') $kantaasiakastunnus = $srow['kantaasiakastunnus'];
 
       $vasen_sarake[$vasen] = "<td>".t("Kanta-asiakastunnus")."</td><td><input type='text' name='kantaasiakastunnus' value='$kantaasiakastunnus'></td>";
