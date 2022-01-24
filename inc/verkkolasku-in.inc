@@ -2000,7 +2000,7 @@ if (!function_exists("verkkolasku_in")) {
           }
         }
 
-        if (trim($liitetaanko_editilaus_laskulle_hakemisto) != '' and trim($laskun_asiakkaan_tilausnumero) != '') {
+        if (trim((string)$liitetaanko_editilaus_laskulle_hakemisto) != '' and trim((string)$laskun_asiakkaan_tilausnumero) != '') {
 
           // fopen dirikka $liitetaanko_editilaus_laskulle_hakemisto eli purchaseorderit
           $files_editilaus_laskulle = listdir($liitetaanko_editilaus_laskulle_hakemisto);
