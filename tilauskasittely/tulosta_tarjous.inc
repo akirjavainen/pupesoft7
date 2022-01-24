@@ -793,7 +793,7 @@ if (!function_exists('tarjous_rivi_otsikot')) {
         if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") $pdf_tarjous->draw_text(498, $kala + 15, t("Alv", $kieli), $page_tarjous, $norm);
       }
 
-      if (trim($naytetaanko_rivihinta) == '') {
+      if (trim((string)$naytetaanko_rivihinta) == '') { // MUOKKAUS: (string)
         if ($yhtiorow["tarjoustyyppi"] == 4) {
           $pdf_tarjous->draw_text(543, $kala + 15, t("Hinta", $kieli), $page_tarjous, $norm);
           $pdf_tarjous->draw_text(543, $kala + 5, $alv, $page_tarjous, $norm);
@@ -1253,7 +1253,7 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
       }
     }
 
-    if (trim($naytetaanko_rivihinta) == '') {
+    if (trim((string)$naytetaanko_rivihinta) == '') {
       $oikpos = $pdf_tarjous->mb_strlen(hintapyoristys($row["rivihinta"]), $norm);
       $pdf_tarjous->draw_text(575-$oikpos, $kala, hintapyoristys($row["rivihinta"]), $page_tarjous[$sivu], $norm);
     }
@@ -2181,7 +2181,7 @@ if (!function_exists('print_pdf_tarjous')) {
     if ($komento == 'RUUDULLE') {
       return $pdf_tarjousfilenimi;
     }
-    elseif ($komento == 'email' or mb_substr($komento, 0, 12) == 'asiakasemail') {
+    elseif ($komento == 'email' or mb_substr((string)$komento, 0, 12) == 'asiakasemail') {
       $liite = $pdf_tarjousfilenimi;
 
       $kutsu = t("Tarjous", $kieli)." ".$laskurow["tunnus"];
