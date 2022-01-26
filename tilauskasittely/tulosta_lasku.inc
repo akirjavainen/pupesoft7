@@ -3372,7 +3372,7 @@ if (!function_exists("tulosta_lasku")) {
 
     // keksitään uudelle failille joku varmasti uniikki nimi:
     list($usec, $sec) = explode(' ', microtime());
-    mt_srand((float) $sec + ((float) $usec * 100000));
+    mt_srand((int)((float) $sec + ((float) $usec * 100000))); // MUOKKAUS: (int)
     $pdf_laskufilenimi = "/tmp/Lasku-".md5(uniqid(mt_rand(), true)).".pdf";
 
     // kirjoitetaan pdf faili levylle..

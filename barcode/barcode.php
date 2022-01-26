@@ -93,7 +93,7 @@ class BarcodeObject {
     $this->mHeight  = $Height;
     $this->mStyle   = $Style;
     $this->mFont    = BCD_DEFAULT_FONT;
-    $this->mImg    = imagecreate($this->mWidth, $this->mHeight);
+    $this->mImg    = imagecreate((int)$this->mWidth, (int)$this->mHeight); // MUOKKAUS: (int)
     $dbColor        = $this->mStyle & BCS_REVERSE_COLOR ? BCD_DEFAULT_FOREGROUND_COLOR : BCD_DEFAULT_BACKGROUND_COLOR;
     $dfColor        = $this->mStyle & BCS_REVERSE_COLOR ? BCD_DEFAULT_BACKGROUND_COLOR : BCD_DEFAULT_FOREGROUND_COLOR;
 
@@ -101,7 +101,7 @@ class BarcodeObject {
     $this->mBrush   = imagecolorallocate($this->mImg, ($dfColor & 0xFF0000) >> 16, ($dfColor & 0x00FF00) >> 8 , $dfColor & 0x0000FF);
 
     if (!($this->mStyle & BCS_TRANSPARENT)) {
-      imagefill($this->mImg, $this->mWidth, $this->mHeight, $this->mBgcolor);
+      imagefill($this->mImg, (int)$this->mWidth, (int)$this->mHeight, $this->mBgcolor); // MUOKKAUS: (int)
     }
     //__TRACE//__("OBJECT CONSTRUCTION: ".$this->mWidth." ".$this->mHeight." ".$this->mStyle);
   }
@@ -128,7 +128,7 @@ class BarcodeObject {
   function DrawSingleBar($xPos, $yPos, $xSize, $ySize) {
     if ($xPos>=0 && $xPos<=$this->mWidth  && ($xPos+$xSize)<=$this->mWidth && $yPos>=0 && $yPos<=$this->mHeight && ($yPos+$ySize)<=$this->mHeight) {
       for ($i=0;$i<$xSize;$i++) {
-        imageline($this->mImg, $xPos+$i, $yPos, $xPos+$i, $yPos+$ySize, $this->mBrush);
+        imageline($this->mImg, (int)$xPos+$i, (int)$yPos, (int)$xPos+$i, (int)$yPos+(int)$ySize, $this->mBrush); // MUOKKAUS: (int)
       }
       return true;
     }
