@@ -26,7 +26,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
     }
 
     // Napataan toimittajan/asiakkaan tunnus
-    if (mb_substr($perusta, 0, 11) == "REKLAMAATIO") {
+    if (mb_substr((string)$perusta, 0, 11) == "REKLAMAATIO") { // MUOKKAUS: (string)
       list($perusta, $asiakasjollepalautetaan) = explode("#", $perusta);
     }
 
