@@ -124,7 +124,7 @@ if ($handle = opendir($laskut)) {
       $alku = $loppu = "";
       list($alku, $loppu) = explode("####", $laskuvirhe);
 
-      if (trim($loppu) == "ASN") {
+      if (trim((string)$loppu) == "ASN") { // MUOKKAUS: (string)
         // ei tehdä mitään vaan annetaan jäädä roikkumaan kansioon seuraavaan kierrokseen saakka, tai kunnes joku lukee postit.
       }
       else {
