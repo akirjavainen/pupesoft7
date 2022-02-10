@@ -213,7 +213,7 @@ class pdffile {
       $text = str_replace("″", "\"", $text);
       $text = str_replace("′", "'", $text);
 
-      $text = iconv("UTF-8", "ISO-8859-15//TRANSLIT", $text);
+      $text = iconv("UTF-8", "ISO-8859-15//TRANSLIT", (string)$text);
     }
 
     if (!isset($this->objects[$parent]["type"]) or $this->objects[$parent]["type"] != "page") {
