@@ -300,7 +300,7 @@ if ($tee == 'A') {
         echo "<p><font class='error'>".t("Alkupäivämäärä virheellinen!")."</font></p>";
       }
 
-      if (@checkdate((int)$kk2, $pp2, $vv2)) { // MUOKKAUS: BUGIKORJAUS (arg1 -> int)
+      if (@checkdate((int)$kk2, (int)$pp2, (int)$vv2)) { // MUOKKAUS: BUGIKORJAUS (int)
         $aikalisa .= " AND lasku.tapvm <='$vv2-$kk2-$pp2' ";
         $limit = "NO";
       }
