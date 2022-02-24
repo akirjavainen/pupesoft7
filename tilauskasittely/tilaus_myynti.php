@@ -4206,8 +4206,8 @@ if ($tee == '') {
       echo $options;
       echo "</select></td></tr>";
 
-      // MUOKKAUS: isset():
-      if (isset($asiakasrow) and trim($asiakasrow["fakta"]) != "" and $toim != "SIIRTOTYOMAARAYS"  and $toim != "SIIRTOLISTA" and $toim != "VALMISTAVARASTOON") {
+      // MUOKKAUS: isset(), (string):
+      if (isset($asiakasrow) and trim((string)$asiakasrow["fakta"]) != "" and $toim != "SIIRTOTYOMAARAYS"  and $toim != "SIIRTOLISTA" and $toim != "VALMISTAVARASTOON") {
         echo "<tr>$jarjlisa<th>".t("Asiakasfakta").":</th><td colspan='3'>";
         echo "<font class='asiakasfakta'>".str_replace("\n", "<br>", $asiakasrow['fakta'])."</font>&nbsp;</td></tr>\n";
       }
