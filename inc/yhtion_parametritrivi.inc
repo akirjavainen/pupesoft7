@@ -2592,8 +2592,8 @@ if ($fieldname == "varastopaikan_lippu") {
   $apu = $trow[$i];
   $sel[$apu] = "SELECTED";
 
-  $ulos .= "<option value = ''>".t("Myynnissä ei näytetä varastopaikan maan lippua")."</option>";
-  $ulos .= "<option value = 'K' $sel[K]>".t("Myynnissä näytetään varastopaikan maan lippu")."</option>";
+  $ulos .= "<option value = ''>".t("Myynnissä ei näytetä vaarastopaikan maan lippu")."</option>";
+  $ulos .= "<option value = 'K' $sel[K]>".t("Myynnissä näytetään vaarastopaikan maan lippu")."</option>";
   $ulos .= "</select></td>";
 
   $jatko = 0;
@@ -4269,10 +4269,11 @@ if ($fieldname == 'ennakkolaskun_tyyppi') {
 if ($fieldname == 'raaka_aineet_valmistusmyynti') {
   $ulos = "<td><select name='$nimi' ".js_alasvetoMaxWidth($nimi, 400).">";
 
-  $sel = $trow[$i] == 'N' ? ' selected' : '';
+  $sel = array($trow[$i] => 'selected') + array('M' => '', 'N' => '');
 
   $ulos .= "<option value = ''>".t("Näytetään raaka-aineet valmistusmyynnissä (asiakkaallevalmistus)");
-  $ulos .= "<option value = 'N' $sel>".t("Ei näytetä raaka-aineita valmistusmyynnissä (asiakkaallevalmistus)");
+  $ulos .= "<option value = 'M' {$sel['M']}>".t("Näytetään raaka-aineet valmistusmyynnissä (asiakkaallevalmistus) ja muokataan oletuksena vain isätuotetta");
+  $ulos .= "<option value = 'N' {$sel['N']}>".t("Ei näytetä raaka-aineita valmistusmyynnissä (asiakkaallevalmistus)");
   $ulos .= "</select></td>";
 
   $jatko = 0;
