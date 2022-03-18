@@ -340,8 +340,8 @@ if (empty($rivitunnus) and $laskurow['tila'] == 'O' and $yhtiorow["ostotilauksee
 }
 
 // Päivämäärien oikeellisuustsekki
-// MUOKKAUS: BUGIKORJAUS (array out of bounds):
-if (strpos($toimaika, "-") !== false) {
+// MUOKKAUS: BUGIKORJAUS (array out of bounds, (string)):
+if (strpos((string)$toimaika, "-") !== false) {
   list($aikatsk_v, $aikatsk_k , $aikatsk_p) = explode("-", $toimaika);
 } else {
   $aikatsk_v = 0;
@@ -360,8 +360,8 @@ if ($toimaika != "0000-00-00" and !checkdate($aikatsk_k, $aikatsk_p, $aikatsk_v)
   }
 }
 
-// MUOKKAUS: BUGIKORJAUS (array out of bounds):
-if (strpos($kerayspvm, "-") !== false) {
+// MUOKKAUS: BUGIKORJAUS (array out of bounds, (string)):
+if (strpos((string)$kerayspvm, "-") !== false) {
   list($aikatsk_v, $aikatsk_k , $aikatsk_p) = explode("-", $kerayspvm);
 } else {
   $aikatsk_v = 0;
