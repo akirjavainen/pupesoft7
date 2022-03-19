@@ -494,6 +494,14 @@ elseif ($laskurow["tila"] == 'V' and $perheid2 == -100) {
 }
 elseif ($laskurow["tila"] == 'V') {
   $rivityyppi = 'V';  // Valmistustilausrivi
+
+if (!empty($perheid) and $perheid == $rivitunnus) {
+    $rivityyppi = 'W';
+  }
+  elseif (!empty($perheid) and ($perheid * -1) == $rivitunnus) {
+    $rivityyppi = 'M';
+    $perheid = abs($perheid);
+  }
 }
 elseif ($laskurow["tila"] == 'Z') {
   $rivityyppi = 'Z';  // Terminaalitoimitus
@@ -1535,8 +1543,8 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
 
       if (count($zzrow) > 0) {
 
-        if(isset($edi_tyyppi) and $edi_tyyppi == "magento" and 
-        isset($presta_siirta_varastoon1) and isset($presta_siirta_varastoon2) 
+        if(isset($edi_tyyppi) and $edi_tyyppi == "magento" and
+        isset($presta_siirta_varastoon1) and isset($presta_siirta_varastoon2)
         and $presta_siirta_varastoon1 and $presta_siirta_varastoon2) {
           $presta_siirta_varastoon1 = str_replace(",", "#!¡!#", $presta_siirta_varastoon1);
           $presta_siirta_varastoon2 = str_replace(",", "#!¡!#", $presta_siirta_varastoon2);
