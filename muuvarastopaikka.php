@@ -365,7 +365,8 @@ if ($tee == 'MUUTA' and $toim != "VAINSIIRTO") {
     }
   }
 
-  if (count($prio2) > 0) {
+  // MUOKKAUS: isset():
+  if (isset($prio2) and count($prio2) > 0) {
     foreach ($prio2 as $tunnus => $prio) {
       $query = "UPDATE tuotepaikat
                 SET prio = '{$prio}',
