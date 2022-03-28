@@ -6,6 +6,7 @@ function mysqli_field_len($result, $field_offset) {
 }
 
 function mysqli_field_name($result, $field_offset) {
+	if (is_bool($result)) return false;
 	$properties = mysqli_fetch_field_direct($result, $field_offset);
 	return is_object($properties) ? $properties->name : false;
 }
