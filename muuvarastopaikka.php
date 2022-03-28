@@ -298,7 +298,8 @@ if ($tee == 'MUUTA' and $toim != "VAINSIIRTO") {
     }
   }
 
-  if (count($flagaa_poistettavaksi) > 0) {
+  // MUOKKAUS: isset():
+  if (isset($flagaa_poistettavaksi) and count($flagaa_poistettavaksi) > 0) {
     foreach ($flagaa_poistettavaksi as $poistetaan) {
       $query = "UPDATE tuotepaikat
                 SET poistettava = 'D'
