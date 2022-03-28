@@ -283,7 +283,8 @@ if ($tee == 'MUUTA' and $toim != "VAINSIIRTO") {
     echo "<br/>";
   }
 
-  if (count($flagaa_poistettavaksi_undo) > 0) {
+  // MUOKKAUS: isset():
+  if (isset($flagaa_poistettavaksi_undo) and count($flagaa_poistettavaksi_undo) > 0) {
     foreach ($flagaa_poistettavaksi_undo as $poistetaan => $undoataan) {
 
       if ($undoataan != "" and !isset($flagaa_poistettavaksi[$poistetaan])) {
