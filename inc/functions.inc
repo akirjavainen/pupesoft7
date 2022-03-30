@@ -1769,7 +1769,7 @@ if (!function_exists("saldo_myytavissa")) {
     if (is_array($varasto) and count($varasto) > 0) {
       $varasto = implode(",", $varasto);
     }
-    elseif (!is_array($varasto) and mb_strpos($varasto, "##") !== FALSE) {
+    elseif (!is_array($varasto) and mb_strpos((string)$varasto, "##") !== FALSE) { // MUOKKAUS: (string)
       list($varasto, $keraysvyohyke) = explode("##", $varasto);
 
       $varasto      = (int) $varasto;
@@ -12100,7 +12100,7 @@ if (!function_exists("t")) {
   function t($stringi, $kieli = "") {
     global $yhtiorow, $kukarow, $verkkokauppa, $kaannetyt_sanat;
 
-    if (trim($kieli) != '') {
+    if (trim((string)$kieli) != '') { // MUOKKAUS: (string)
       $indeksi = trim(mb_strtolower($kieli));
     }
     elseif (isset($kukarow["kieli"]) and trim($kukarow["kieli"]) != '') {
