@@ -294,7 +294,7 @@ elseif ($ytunnus != '') {
 
     $osoitelisa = '';
 
-    if (trim($osoite) != '') {
+    if (trim((string)$osoite) != '') { // MUOKKAUS: (string)
       // MUOKKAUS: mysqli_real_escape_string():
       $osoitelisa = " and asiakas.osoite like '".mysqli_real_escape_string($GLOBALS["link"], $osoite)."%' ";
       $osoite_toim_lisa = " and asiakas.toim_osoite like '".mysqli_real_escape_string($GLOBALS["link"], $osoite)."%' ";
@@ -303,7 +303,7 @@ elseif ($ytunnus != '') {
     $postitplisa = '';
 
     // jos on annettu postitoimipaikka, niin lisätää se jokaiseen asiakashakuqueryyn ja ei tehdä erillistä postitoimipaikka unionia
-    if (trim($postitp) != '') {
+    if (trim((string)$postitp) != '') { // MUOKKAUS: (string)
       $postitp2 = mysqli_real_escape_string($GLOBALS["link"], $postitp); // MUOKKAUS: mysqli_real_escape_string():
       $postitplisa = " and asiakas.postitp like '%$postitp2%' ";
       $postitp_toim_lisa = " and asiakas.toim_postitp like '%$postitp2%' ";
@@ -314,7 +314,7 @@ elseif ($ytunnus != '') {
 
     $postinolisa = '';
 
-    if (trim($postino) != '') {
+    if (trim((string)$postino) != '') { // MUOKKAUS: (string)
       $postinolisa = " and asiakas.postino like '%".(int) $postino."%' ";
       $postino_toim_lisa = " and asiakas.toim_postino like '%".(int) $postino."%' ";
     }
