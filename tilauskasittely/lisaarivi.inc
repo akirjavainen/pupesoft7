@@ -2288,6 +2288,7 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
                 }
 
                 $result = pupe_query($query);
+		if (file_exists("../../raportit")) file_get_contents("/raportit/rivinumerokorjaus.php?order=" . $kukarow["kesken"]);
               }
 
               $lisatyt_rivit1[] = $lisatty_tun;
@@ -3671,6 +3672,7 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
       }
 
       $result = pupe_query($query);
+      if (file_exists("../../raportit")) file_get_contents("/raportit/rivinumerokorjaus.php?order=" . $kukarow["kesken"]);
     }
 
     if ($var == "H") {
