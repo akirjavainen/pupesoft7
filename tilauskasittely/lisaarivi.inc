@@ -3653,7 +3653,7 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
                 toimittajan_tunnus = '$toimittajan_tunnus',
                 {$kohde_varasto_update}
                 tilausrivitunnus   = '$lisatty_tun',
-                jarjestys          = '$jarjestys',
+                jarjestys          = '$rivinumero',
                 vanha_otunnus      = '$kukarow[kesken]',
                 ei_nayteta         = '{$puu_ein[$i]}',
                 ohita_kerays       = '{$puu_ohiker[$i]}',
