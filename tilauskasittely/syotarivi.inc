@@ -274,7 +274,7 @@ if (file_exists("../../hinnasto") and isset($laskurow['tunnus'])) {
     echo "<tr>$jarjlisa<td valign='top' colspan='$nrospanni'><textarea name='kommentti' cols='70' rows='2' wrap='soft'>$kommentti</textarea></td>";
 
     if ($yhtiorow['rivinumero_syotto'] != '') {
-      echo "<td valign='top'><input type='text' size='2' name='tilrivinumero' value='$rivinumero'></td>";
+      echo "<td valign='top'><input type='text' size='2' name='tilrivinumero' id='tilrivinumero' value='$rivinumero'></td>"; // MUOKKAUS: lisatty id
       $nrospanni++;
     }
     echo "</tr>";
@@ -669,7 +669,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
   echo "<td valign='top' colspan='".($nrospanni-$nrospanni_vah)."'><textarea name='kommentti' id='kommentti' cols='$kommentit_columns' rows='2' wrap='soft'>$kommentti</textarea></td>"; // MUOKKAUS: lisatty id
 
   if ($yhtiorow['rivinumero_syotto'] != '') {
-    echo "<td valign='top'><input type='text' size='2' name='tilrivinumero' value='$rivinumero'></td>";
+    echo "<td valign='top'><input type='text' size='2' name='tilrivinumero' id='tilrivinumero' value='$rivinumero'></td>"; // MUOKKAUS: lisatty id
   }
 
   if (($yhtiorow["nimityksen_muutos_tilauksella"] == "Y" and ($toim == "RIVISYOTTO" or $toim == "TYOMAARAYS" or $toim == "TYOMAARAYS_ASENTAJA" or (($toim == "TARJOUS" or $toim == "EXTTARJOUS") or $laskurow["tilaustyyppi"] == "T"))) or ($yhtiorow["nimityksen_muutos_tilauksella"] == "T" and ($toim == "TARJOUS" or $toim == "EXTTARJOUS"))) {
