@@ -2277,7 +2277,7 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
                           vanha_otunnus          = '{$kukarow['kesken']}',
                           rekisterinumero        = '{$rekisterinumero}',
                           autoid                 = '{$autoid}',
-                          jarjestys              = '{$jarjestys}',
+                          jarjestys              = '{$rivinumero}',
                           luontiaika             = now(),
                           laatija                = '{$kukarow['kuka']}'
                           $tlisatied_lisa
