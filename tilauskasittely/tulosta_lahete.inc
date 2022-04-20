@@ -4332,7 +4332,7 @@ if (!function_exists('print_pdf_lahete')) {
     if (!skippa_lahete_pdf($params)) {
       //keksitään uudelle failille joku varmasti uniikki nimi:
       list($usec, $sec) = explode(' ', microtime());
-      mt_srand((float) $sec + ((float) $usec * 100000));
+      mt_srand((int)((float)$sec + ((float)$usec * 100000))); // MUOKKAUS: BUGIKORJAUS (float -> int)
       $pdffilenimi = "/tmp/Lahete-".md5(uniqid(mt_rand(), true)).".pdf";
 
       //kirjoitetaan pdf faili levylle..
