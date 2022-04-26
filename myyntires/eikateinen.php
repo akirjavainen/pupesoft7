@@ -274,7 +274,7 @@ function korjaa_erapaivat_ja_alet_ja_paivita_lasku($params) {
               and tunnus  = '{$params['tunnus']}'";
     $result = pupe_query($query);
 
-    if (mysqli_affected_rows($link) > 0) {
+    if (mysqli_affected_rows($GLOBALS["link"]) > 0) { // MUOKKAUS: $GLOBALS link
       echo "<font class='message'>".t("Muutettin laskun")." {$params['laskurow']['laskunro']} ".t("maksuehdoksi")." ".t_tunnus_avainsanat($params['mehtorow'], "teksti", "MAKSUEHTOKV")." ".t("ja merkattiin maksu avoimeksi")."!</font><br>";
     }
     else {

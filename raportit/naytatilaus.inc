@@ -289,7 +289,7 @@ if ($laskurow["tila"] != "O" and $laskurow["tila"] != "K") {
     $kassalipas_row = hae_kassalipas($laskurow["kassalipas"]);
     $toimitus_colspan = 3;
     $kassalipas_header = "<th>Kassalipas</th>";
-    $kassalipas_data = "<td>{$kassalipas_row["nimi"]}</td>";
+    $kassalipas_data = isset($kassalipas_row) ? "<td>{$kassalipas_row["nimi"]}</td>" : ""; // MUOKKAUS: isset()
   }
   else {
     $toimitus_colspan = 4;
