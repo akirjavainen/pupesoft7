@@ -6,7 +6,7 @@ function getSerialForOrder($order)
 	$notfound = "Etsi tilausnumerolla";
 
 	$db = mysqli_connect(DATABASE_SERVER, DATABASE_USERNAME, DATABASE_PASSWORD, "jwio_employees");
-	$result = mysqli_query($db, "SELECT serial FROM serials WHERE singleorder='$order';");
+	$result = mysqli_query($db, "SELECT serial FROM serials WHERE order_id=$order;");
 
 	mysqli_select_db($db, "pupesoft");
 	if ($result == null) return $notfound;
