@@ -1287,7 +1287,7 @@ if (in_array($jarjesta, array("moveUp", "moveDown")) and $rivitunnus > 0) {
   $result = pupe_query($query);
   $kohderow = mysqli_fetch_assoc($result);
 
-  if ($kohderow["jarjestys"]>0 and $kohderow["tunnus"] != $rivitunnus) {
+  if (isset($kohderow) and $kohderow["jarjestys"] > 0 and $kohderow["tunnus"] != $rivitunnus) { // MUOKKAUS: isset()
     //  Kaikki OK vaihdetaan data päikseen
     $query = "UPDATE tilausrivin_lisatiedot SET jarjestys = '$kohderow[jarjestys]' WHERE yhtio = '$kukarow[yhtio]' and tunnus='$aburow[tunnus]'";
     $updres=pupe_query($query);
