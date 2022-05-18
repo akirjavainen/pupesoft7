@@ -399,7 +399,7 @@ if ($asiakasid > 0) {
       if ($col==1) echo "<tr>\n";
 
       // lasketaan pylväiden korkeus
-      if ($maxeur > 0) {
+      if ($maxeur > 0 and is_array($sumrow)) { // MUOKKAUS: is_array()
         $hmyynti  = round(50*$sumrow['myynti'] / $maxeur, 0);
         $hkate    = round(50*$sumrow['kate'] / $maxeur, 0);
         $hkatepro = round($sumrow['katepro'] / 2, 0);
@@ -420,7 +420,11 @@ if ($asiakasid > 0) {
 
       $budjetti = ($budjetti == 0) ? "" : $budjetti;
       $askarow["kaynnit"] = ($askarow["kaynnit"] == 0) ? "" : $askarow["kaynnit"];
-      $sumrow["katepro"]  = ($sumrow["katepro"] == 0) ? "" : round($sumrow["katepro"], 0)."%";
+
+      // MUOKKAUS: is_array():
+      if (is_array($sumrow)) {
+        $sumrow["katepro"]  = (is_array($sumrow) and $sumrow["katepro"] == 0) ? "" : round($sumrow["katepro"], 0)."%";
+      }
 
       // MUOKKAUS: isset():
       if (!isset($sumrow["myynti"])) $sumrow["myynti"] = 0;
