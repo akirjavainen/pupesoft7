@@ -427,8 +427,8 @@ if ($asiakasid > 0) {
       }
 
       // MUOKKAUS: isset():
-      if (!isset($sumrow["myynti"])) $sumrow["myynti"] = 0;
-      if (!isset($sumrow["kate"])) $sumrow["kate"] = 0;
+      if (!isset($sumrow["myynti"]) and is_array($sumrow)) $sumrow["myynti"] = 0;
+      if (!isset($sumrow["kate"]) and is_array($sumrow)) $sumrow["kate"] = 0;
 
       $pylvaat = "<table style='padding:0px;margin:0px;'><tr>
       <td style='padding:0px;margin:0px;vertical-align:bottom;' class='back'><img src='{$palvelin2}pics/blue.png' height='$hmyynti' width='12' alt='".t("myynti")." $sumrow[myynti]'></td>";
