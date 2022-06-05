@@ -12625,8 +12625,8 @@ if (!function_exists("hae_yhtion_parametrit")) {
 
     // Jos meillä on toimipaikka, ylikirjataan yhtion parametrit toimipaikan parametreillä
     if ($toimipaikka > 0) {
-      $query = "SELECT *, 
-                maa as maa_vero, 
+      $query = "SELECT *,
+                maa as maa_vero,
                 tunnus yhtion_toimipaikat_tunnus
                 FROM yhtion_toimipaikat
                 WHERE yhtio = '$yhtio'
@@ -33668,6 +33668,11 @@ if (!function_exists("piirra_maksupaate_formi")) {
     global $kukarow, $mista, $valittu_kopio_tulostin, $kertakassa, $toim, $orig_tila, $orig_alatila,
     $kassalipas, $kieli, $valittu_tulostin;
 
+    $ehtolisa = "";
+    if (!empty($maksuehto)) {
+      $ehtolisa = " AND tunnus = {$maksuehto} ";
+    }
+
     $query_maksuehto = "SELECT *
                         FROM maksuehto
                         WHERE yhtio='{$kukarow["yhtio"]}'
@@ -33675,7 +33680,7 @@ if (!function_exists("piirra_maksupaate_formi")) {
                         AND kaytossa                  = ''
                         AND (maksuehto.sallitut_maat = ''
                           OR maksuehto.sallitut_maat  LIKE '%{$laskurow["maa"]}%')
-                        AND tunnus = {$maksuehto}";
+                        {$ehtolisa}";
 
     $maksuehtores = pupe_query($query_maksuehto);
     $maksuehtorow = mysqli_fetch_assoc($maksuehtores);
