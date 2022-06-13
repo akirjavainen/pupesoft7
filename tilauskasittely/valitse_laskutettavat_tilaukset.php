@@ -1004,7 +1004,7 @@ if ($tee == "VALITSE") {
       $kateista_annettu = isset($kateista_annettu) ? $kateista_annettu : 0;
       piirra_maksupaate_formi($ekarow, $ekarow["summa"], $kateinen, $maksettavaa_jaljella,
         $loytyy_maksutapahtumia, $kateismaksu, $kateista_annettu,
-        $korttimaksutapahtuman_status, reset($maksuehtoja), false);
+        $korttimaksutapahtuman_status, false);
     }
 
     echo "  <SCRIPT LANGUAGE=JAVASCRIPT>
@@ -1339,7 +1339,7 @@ echo "<b>Nyt on viikko " . date("W") . ".</b><br>"; // MUOKKAUS: lisatty
  <td class='' style='background-color: #E2E2E2;'>
  <a href='/raportit/sopimusalennus.php?order=$tilrow[tunnukset]'><input type='submit' name='sopimusalennus' value='Ale-%'></a>
  <a href='/pupesoft/tilauskasittely/tilaus_myynti.php?tilausnumero=$tilrow[tunnukset_ruudulle]&mista=muokkaatilaus&toim=RIVISYOTTO'><input type='submit' name='muokkaa' value='Muokkaa'></a>
- <a href='/hinnasto/printable.php?pupeorder=$tilrow[tunnukset_ruudulle]' target='_blank'><input type='submit' value='Mittakuvat'></a>
+ <a href='/hinnasto/printable.php?pupe_order=$tilrow[tunnukset_ruudulle]' target='_blank'><input type='submit' value='Mittakuvat'></a>
  <a href='/tuotanto/index.php?order=$tilrow[tunnukset_ruudulle]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>
  <a href='/raportit/ehtokorjaus.php?order=$tilrow[tunnukset_ruudulle]'><input type='submit' name='ehtokorjaus' value='Ehtokorjaus'></a>
  <a href='/toimitusvahvistus/index.php?nonavi=1&summary=1&order=$tilrow[tunnukset_ruudulle]'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a></td>

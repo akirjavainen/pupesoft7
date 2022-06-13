@@ -173,11 +173,11 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
 if (file_exists("../../hinnasto") and isset($laskurow['tunnus'])) {
 	echo "<tr><td colspan='2'>";
 	echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
-	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ikkunalaskuri</a> || ";
-	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ovilaskuri</a>";
+	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&pupe_order=".$laskurow['tunnus']."&pupe_row=$rivitunnus');\">Ikkunalaskuri</a> || ";
+	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&pupe_order=".$laskurow['tunnus']."&pupe_row=$rivitunnus');\">Ovilaskuri</a>";
 	//echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
-	//echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
-	//echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
+	//echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&pupe_order=".$laskurow['tunnus']."&pupe_row=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
+	//echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&pupe_order=".$laskurow['tunnus']."&pupe_row=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
 	echo "</td>";
 }
                 echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.05; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.05;\">Hinta +5 %</a></td>"; // MUOKKAUS: lisatty
@@ -520,11 +520,11 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
   if (file_exists("../../hinnasto")) { // MUOKKAUS: JWIO ERP -ohjelmalinkit:
 	echo "<tr><td colspan='2'>";
 	echo "<a href=\"#\" onclick=\"window.open('../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."');\">Varastotuotteet</a><br>";
-	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ikkunalaskuri</a> || ";
-	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus');\">Ovilaskuri</a>";
+	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&pupe_order=".$laskurow['tunnus']."&pupe_row=$rivitunnus');\">Ikkunalaskuri</a> || ";
+	echo "<a href=\"#\" onclick=\"window.open('/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&pupe_order=".$laskurow['tunnus']."&pupe_row=$rivitunnus');\">Ovilaskuri</a>";
 	//echo "<a href=\"../../varasto/tuotteet.php?yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&order_id=".$laskurow['tunnus']."\" target=\"_blank\">Varastotuotteet</a><br>";
-	//echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
-	//echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&ytunnus=".$laskurow['ytunnus']."&pupeorder=".$laskurow['tunnus']."&puperow=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
+	//echo "<a href=\"/hinnasto/?category=0&yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&pupe_order=".$laskurow['tunnus']."&pupe_row=$rivitunnus\" target=\"_blank\">Ikkunalaskuri</a> || ";
+	//echo "<a href=\"/hinnasto/?category=1&yhtio=".$yhtiorow['yhtio']."&vatin=".$laskurow['ytunnus']."&pupe_order=".$laskurow['tunnus']."&pupe_row=$rivitunnus\" target=\"_blank\">Ovilaskuri</a>";
 	echo "</td>";
 	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.05; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.05;\">Hinta +5 %</a></td>";
 	echo "<td><a href=\"#\" onClick=\"document.getElementById('hinta').value=document.getElementById('hinta').value * 1.1; document.getElementById('bruttohinta').value=document.getElementById('bruttohinta').value * 1.1;\">Hinta +10 %</a></td>";

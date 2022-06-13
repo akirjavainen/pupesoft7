@@ -144,9 +144,9 @@ if (isset($toimi_array[2])) $rajattu_nakyma = $toimi_array[2];
 if ($toim == "toimi" or $toim == "asiakas" or $toim == "tuote" or $toim == "avainsana") {
 
 // MUOKKAUS: lisatty:
-if (file_exists("../raportit/javascript/jspupesoft.js")) {
-	include("../raportit/includes/phpupesoft.php");
-	include("../raportit/javascript/jspupesoft.js");
+if (file_exists("../raportit")) {
+	//include("../raportit/includes/static-pupesoft_internals.php");
+	include("../raportit/javascript/jspupesoft_extensions.js");
 }
   enable_ajax();
 }

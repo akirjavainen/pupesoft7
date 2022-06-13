@@ -3,12 +3,6 @@
 if (@include_once "pdflib/phppdflib.class.php");
 else include_once "phppdflib.class.php";
 
-// MUOKKAUS: lisatty:
-if (file_exists("../../common")) {
-	include_once("../../common/pupesoft.php");
-	include_once("../../common/functions-pupesoft.php");
-}
-
 if ($kieli == '') {
   $querykiel = "SELECT kieli
                 FROM asiakas
@@ -127,7 +121,7 @@ if (!function_exists('alku_lahete')) {
 
     if ($tyyppi == "TILAUSVAHVISTUS") {
       // MUOKKAUS: lisatty:
-      if (file_exists("../../raportit")) $pdf->draw_text(560, 820, get_modified_checksum($laskurow['muutospvm']), $thispage, $pieni);
+      if (file_exists("../../raportit")) $pdf->draw_text(560, 820, Pupesoft_Order::get_modified_checksum($laskurow['muutospvm']), $thispage, $pieni);
       
       if ($base_lahetetyyppi == "tulosta_lahete_custom.inc") {
         $otsikko_len = $pdf->mb_strlen(t("TILAUSVAHVISTUS", $kieli), $iso);
@@ -568,7 +562,7 @@ if (!function_exists('alku_lahete')) {
     //$pdf->draw_text(290, 606, t("Kätisyys ikkunoissa sisältäpäin ja ovissa ulkoapäin", $kieli).".", $thispage, $boldi);
     $puh = "";
     $komm = "";
-    if (file_exists("../../common")) $puh = get_order_contact_person_phone_number($GLOBALS["masterlink"], (string)$laskurow['yhtio'], (int)$laskurow['liitostunnus'], (string)$laskurow['tilausyhteyshenkilo']);
+    if (file_exists("../../common")) $puh = Pupesoft::get_order_contact_person_phone_number($GLOBALS["masterlink"], (string)$laskurow['yhtio'], (int)$laskurow['liitostunnus'], (string)$laskurow['tilausyhteyshenkilo']);
     if (strlen($puh) > 0) $puh = " " . $puh;
 
     if ($base_lahetetyyppi == "tulosta_lahete_custom.inc") {

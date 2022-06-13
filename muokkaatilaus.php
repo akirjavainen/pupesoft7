@@ -3300,7 +3300,7 @@ if (mysqli_num_rows($result) != 0) {
       
       // MUOKKAUS: lisatty JWIO ERP -linkit:
       echo " <a href='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$row[tunnus]&lasku_yhtio=sapu&toim=$toim_link&tee=NAYTATILAUS' target='_blank'><input type='submit' name='pdf' value='Näytä PDF'></a>";
-      if (file_exists("../hinnasto")) echo " <a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'><input type='submit' name='mittakuvat' value='Mittakuvat'></a>";
+      if (file_exists("../hinnasto")) echo " <a href='/hinnasto/printable.php?pupe_order=$row[tunnus]' target='_blank'><input type='submit' name='mittakuvat' value='Mittakuvat'></a>";
       if (file_exists("../tuotanto")) echo " <a href='/tuotanto/index.php?order=$row[tunnus]&newwin=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>";
 
       if ($toim != "TARJOUS") {

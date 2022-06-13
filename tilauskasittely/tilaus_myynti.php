@@ -1,10 +1,4 @@
 <?php
-// MUOKKAUS: lisatty:
-if (file_exists("../../raportit")) {
-	include("../../common/functions-sql.php");
-	include("../../common/functions-ascii.php");
-	include("../../raportit/includes/phpupesoft2.php");
-}
 
 if (!empty($_REQUEST["naytetaan_kate"])) {
   setcookie("katteen_nayttaminen", $_REQUEST["naytetaan_kate"]);
@@ -47,7 +41,7 @@ foreach (array("perusta_tilaustyyppi", "projekti", "jarjlisa", "yt", "postitp", 
 if (@include "../inc/parametrit.inc");
 elseif (@include "parametrit.inc");
 else exit;
-include("../../raportit/javascript/jspupesoft2.js"); // MUOKKAUS: lisatty
+include("../../raportit/javascript/jspupesoft_m2_m3.js"); // MUOKKAUS: lisatty
 
 if (@include "rajapinnat/logmaster/logmaster-functions.php");
 elseif (@include "logmaster-functions.php");
@@ -8124,7 +8118,7 @@ if ($tee == '') {
         }
 
         // MUOKKAUS: lisatty pikamuokkaus Ikkuna-/Ovilaskureihin:
-        if (strlen(getImageLink((int)$laskurow["tunnus"], (int)$row["tunnus"], true)) > 0) { // Jos tuote on ikkuna tai ovi
+        if (strlen(Pupesoft_Internals::get_image_link((int)$laskurow["tunnus"], (int)$row["tunnus"], true)) > 0) { // Jos tuote on ikkuna tai ovi
           echo "<td $class align='left'>{$liitekuvat}<a href='#' id='link_nimitys_$row[tunnus]' onclick='editProductQuick(\"$row[yhtio]\", \"$laskurow[ytunnus]\", \"$row[otunnus]\", \"$row[tunnus]\", \"$toim\"); return false;'>".t_tuotteen_avainsanat($row, "nimitys")."$extranet_tarkistus_teksti</a></td>";
 	} else {
           echo "<td $class align='left'>{$liitekuvat}".t_tuotteen_avainsanat($row, "nimitys")."$extranet_tarkistus_teksti</td>";
@@ -8290,11 +8284,11 @@ if ($tee == '') {
 	  if (file_exists("../../raportit")) {
 		// MUOKKAUS: lisatty rahtikuutioiden laskemista varten:
 	    if ($row["tuoteno"] == "RAHTI") {
-	  	  $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>" . calculateSquareCubic($row["nimitys"], $row["tilkpl"], true) . "</font>";
+	  	  $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>" . Pupesoft_Internals::get_html_m2_or_m3($row["nimitys"], $row["tilkpl"], true) . "</font>";
 		  if (!isset($total_m3)) $total_m3 = 0;
-		  $total_m3 += (float)calculateSquareCubic($row["nimitys"], $row["tilkpl"], false);
+		  $total_m3 += (float)Pupesoft_Internals::get_html_m2_or_m3($row["nimitys"], $row["tilkpl"], false);
         } else {
-		  $imagelink = getImageLink((int)$laskurow["tunnus"], (int)$row["tunnus"], true);
+		  $imagelink = Pupesoft_Internals::get_image_link((int)$laskurow["tunnus"], (int)$row["tunnus"], true);
 		  $imagelink = (strlen($imagelink) > 0) ? file_get_contents($imagelink) : "";
 	  	  if (strlen($imagelink) > 0) $shippingtext = "<font color='green' style='font-weight: bold;'>$imagelink</font>";
 		  $tuoteno_text = "";
@@ -9410,7 +9404,7 @@ if ($tee == '') {
             echo t("Kommentti").": <font {$font_color} style='font-weight: bold;'>".str_replace("\n", "<br>", $row["kommentti"])."</font><br>";
             // MUOKKAUS: lisatty:
             if (file_exists("../../raportit")) {
-              if (!isDescriptionMatchingGlassType((int)$row["tunnus"], (string)$row["nimitys"], (string)$row["kommentti"])) {
+              if (!Pupesoft_Internals::is_description_matching_glass_type((int)$row["tunnus"], (string)$row["nimitys"], (string)$row["kommentti"])) {
                 echo "<br><font color='red'>HUOM! Laskuriin valittu lasityyppi ei vastaa tekstikuvausta.</font><br>";
               }
             }
@@ -10245,7 +10239,7 @@ if ($tee == '') {
               </form>";
             
             // MUOKKAUS: lisatty:
-            if (file_exists("../../hinnasto")) echo "<a href='/hinnasto/printable.php?pupeorder=$laskurow[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
+            if (file_exists("../../hinnasto")) echo "<a href='/hinnasto/printable.php?pupe_order=$laskurow[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
 	    if (file_exists("../../toimitusvahvistus") and $toim != 'TARJOUS') echo "<a href='/toimitusvahvistus/?nonavi=1&summary=1&order=$laskurow[tunnus]'><input type='submit' value='Kuljetustilaus'></a>";
             echo "</td>";
 
@@ -10592,7 +10586,7 @@ if ($tee == '') {
 
       piirra_maksupaate_formi($laskurow, $kaikkiyhteensa, $kateinen, $maksettavaa_jaljella,
         $loytyy_maksutapahtumia, $kateismaksu, $kateista_annettu,
-        $korttimaksutapahtuman_status, $maksuehtorow['tunnus'], true);
+        $korttimaksutapahtuman_status);
     }
 
     echo "<br><table width='100%'><tr>$jarjlisa";

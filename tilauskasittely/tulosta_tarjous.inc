@@ -6,12 +6,6 @@ else {
   include_once "phppdflib.class.php";
 }
 
-// MUOKKAUS: lisatty:
-if (file_exists("../../common")) {
-	include_once("../../common/pupesoft.php");
-	include_once("../../common/functions-pupesoft.php");
-}
-
 // jos php-gd on installoitu niin loidataab barcode library
 if (in_array("gd", get_loaded_extensions())) {
   if (include_once "viivakoodi/Barcode.php");
@@ -426,7 +420,7 @@ if (!function_exists('alku_tarjous')) {
     // MUOKKAUS: lisatty:
     $komm = "";
     $puh = "";
-    if (file_exists("../../common")) $puh = get_order_contact_person_phone_number($GLOBALS["masterlink"], (string)$laskurow['yhtio'], (int)$laskurow['liitostunnus'], (string)$laskurow['tilausyhteyshenkilo']);
+    if (file_exists("../../common")) $puh = Pupesoft::get_order_contact_person_phone_number($GLOBALS["masterlink"], (string)$laskurow['yhtio'], (int)$laskurow['liitostunnus'], (string)$laskurow['tilausyhteyshenkilo']);
     if (strlen($puh) > 0) $puh = " " . $puh;
 
     if ($kaanteinen_verotus) {
@@ -611,8 +605,7 @@ if (!function_exists('alku_tarjous')) {
 */
 
     // MUOKKAUS: lisatty:
-    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 825, get_datetime_checksum(), $page_tarjous[$sivu], $pieni);
-    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, get_modified_checksum($laskurow['muutospvm']), $page_tarjous[$sivu], $pieni);
+    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, Pupesoft_Order::get_modified_checksum($laskurow['muutospvm']), $page_tarjous[$sivu], $pieni);
     return array($page_tarjous, $sivu, $kala);
   }
 }
@@ -2146,7 +2139,6 @@ if (!function_exists('loppu_tarjous')) {
 
     /*
     // MUOKKAUS: lisatty:
-    //if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 12, get_datetime_checksum(), $page_tarjous[$sivu], $pieni);
     $aaa_nimi = "../pics/aaa.jpg";
     $fh_aaa = fopen($aaa_nimi, "r");
     $data_aaa = fread($fh_aaa, filesize($aaa_nimi));
@@ -2464,7 +2456,7 @@ if (!function_exists('tulosta_tarjous')) {
         $pdf_tarjous->draw_text(330, 803, "$pp / $sivu", $page_tarjous[$pp], $norm);
         
         // MUOKKAUS: lisatty:
-	    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, get_modified_checksum($laskurow['muutospvm']), $page_tarjous[$pp], $pieni);
+	    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, Pupesoft_Order::get_modified_checksum($laskurow['muutospvm']), $page_tarjous[$pp], $pieni);
       }
     }
 

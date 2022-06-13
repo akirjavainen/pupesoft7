@@ -1293,7 +1293,7 @@ if ($tee == "ETSILASKU") {
 
           // MUOKKAUS: lisatty ikkunoiden ja ovien mittakuviin vieva nappula:
           if (file_exists("../../hinnasto")) {
-            echo "<a href='/hinnasto/printable.php?pupeorder=$row[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
+            echo "<a href='/hinnasto/printable.php?pupe_order=$row[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
           }
           echo "<br>";
         }

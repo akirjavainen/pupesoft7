@@ -318,7 +318,7 @@ if ($fieldname == "ytunnus") {
     $ulos .= " <a target='VIES' href='http://ec.europa.eu/taxation_customs/vies/?locale=" . mb_strtolower($kukarow["kieli"]) . "'>VIES</a>";
     $ulos .= " <a target='YTJ' href='https://tietopalvelu.ytj.fi/yrityshaku.aspx'>YTJ</a>";
     $ulos .= " <a target='VL' href='https://www.verkkolaskuosoite.fi'>Verkkolaskuosoite</a>";
-    if (file_exists("../raportit/javascript/jspupesoft.js")) {
+    if (file_exists("../raportit/javascript/jspupesoft_extensions.js")) {
 	    $ulos .= "<br><a href='#' onclick='get_ytj_info(); get_finvoice_address(); set_dap();'>Automaattihaku:</a> ";
 	    $ulos .= "<a href='#' onclick='get_ytj_info();'>YTJ</a> ";
 	    $ulos .= "<a href='#' onclick='get_finvoice_address();'>Verkkolaskuosoite</a> ";
