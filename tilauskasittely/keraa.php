@@ -3390,6 +3390,9 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
     $riveja = mysqli_num_rows($result);
 
     if ($riveja > 0) {
+      // MUOKKAUS: BUGIKORJAUS:
+      $bugfix_query = "UPDATE lasku SET tila='L', alatila='D' WHERE tunnus=$id AND yhtio='$kukarow[yhtio]';";
+      mysqli_query($GLOBALS["masterlink"], $bugfix_query) or die(mysqli_error($GLOBALS["masterlink"]));
 
       if ($otsik_row['kerayserat'] == "H") {
         //generoidaan rivinumerot
@@ -4483,7 +4486,7 @@ if (php_sapi_name() != 'cli' and mb_strpos($_SERVER['SCRIPT_NAME'], "keraa.php")
     }
     else {
       // MUOKKAUS: BUGIKORJAUS:
-      $bugfix_query = "UPDATE lasku SET tila='L', alatila='D' WHERE tunnus='$id' AND yhtio='$kukarow[yhtio]';";
+      $bugfix_query = "UPDATE lasku SET tila='L', alatila='D' WHERE tunnus=$id AND yhtio='$kukarow[yhtio]';";
       mysqli_query($GLOBALS["masterlink"], $bugfix_query) or die(mysqli_error($GLOBALS["masterlink"]));
       echo t("Ei löydetty kerättäviä rivejä, mutta korjattiin mahdollisesti epäonnistunut edellinen keräys.");
     }
