@@ -53,7 +53,7 @@ class Presta17RestApi
       'Suomi' => 'Finland',
       'Ruotsi' => 'Sweden',
       'Viro' => 'Estonia',
-      'Venäjä' => 'Russian Federation',
+      'VenÃ¤jÃ¤' => 'Russian Federation',
       'Saksa' => 'Germany'
     );
   } 
@@ -75,16 +75,16 @@ class Presta17RestApi
     $products = pupe_query($query);
     $results = array();
 
-    while ($product = mysql_fetch_assoc($products)) {
+    while ($product = mysqli_fetch_assoc($products)) {
       $osastores = t_avainsana('OSASTO', '', "and avainsana.selite ='$product[osasto]'", "'$yhtio'");
-      $osastorow = mysql_fetch_assoc($osastores);
+      $osastorow = mysqli_fetch_assoc($osastores);
 
       if ($osastorow['selitetark'] != '') {
         $product['osasto_nimike'] = $osastorow['selitetark'];
       }
 
       $tryres = t_avainsana('TRY', '', "and avainsana.selite ='$product[try]'", "'$yhtio'");
-      $tryrow = mysql_fetch_assoc($tryres);
+      $tryrow = mysqli_fetch_assoc($tryres);
 
       if ($tryrow['selitetark'] != '') {
         $product['try_nimike'] = $tryrow['selitetark'];
@@ -303,7 +303,7 @@ class Presta17RestApi
     $result = pupe_query($query);
     $this->categories = array();
     $counter = 0;
-    while ($row = mysql_fetch_assoc($result)) {
+    while ($row = mysqli_fetch_assoc($result)) {
       if ($counter == 0) {
         $root_cat = $row['parent_tunnus'];
       }
@@ -422,7 +422,7 @@ class Presta17RestApi
                   LIMIT 1";
         $result = pupe_query($query);
 
-        $result = mysql_fetch_assoc($result);
+        $result = mysqli_fetch_assoc($result);
 
         $xml = $this->rest->get(Array(
           'resource' => 'categories',
@@ -448,6 +448,16 @@ class Presta17RestApi
         ));
       }
     }
+  }
+
+  public function get_tax_group_id($vat) {
+    $taxes = array(
+      "0" => "0",
+      "10.00" => "3",
+      "14.00" => "2",
+      "24.00" => "1"
+    );
+    return $taxes[$vat];
   }
 
   public function updatePrestashopCategory($cat)
@@ -570,15 +580,15 @@ class Presta17RestApi
 
       if ($pupesoft_product['yksikko'] and $pupesoft_product['yksikko'] != '') {
         $new_feat = $productFields->associations->product_features->addChild('product_feature');
-        $new_feat->addChild('id', $this->getPrestashopProductFeature('Yksikkö'));
-        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['yksikko'], $this->getPrestashopProductFeature('Yksikkö'));
+        $new_feat->addChild('id', $this->getPrestashopProductFeature('YksikkÃ¶'));
+        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['yksikko'], $this->getPrestashopProductFeature('YksikkÃ¶'));
         $new_feat->addChild('id_feature_value', $product_val);
       }
 
       if ($pupesoft_product['myynti_era'] and $pupesoft_product['myynti_era'] != '') {
         $new_feat = $productFields->associations->product_features->addChild('product_feature');
-        $new_feat->addChild('id', $this->getPrestashopProductFeature('Myyntierä'));
-        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['myynti_era'], $this->getPrestashopProductFeature('Myyntierä'));
+        $new_feat->addChild('id', $this->getPrestashopProductFeature('MyyntierÃ¤'));
+        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['myynti_era'], $this->getPrestashopProductFeature('MyyntierÃ¤'));
         $new_feat->addChild('id_feature_value', $product_val);
       }
 
@@ -597,6 +607,8 @@ class Presta17RestApi
       }
 
       $productFields->id_category_default = $this->getPrestashopCategory($cat_data[0]);
+
+      $productFields->id_tax_rules_group = $this->get_tax_group_id($pupesoft_product["alv"]);
 
       $productFields->price = $pupesoft_product['myyntihinta'];
       $pupesoft_product['nimitys'] = trim($pupesoft_product['nimitys']);
@@ -682,19 +694,21 @@ class Presta17RestApi
 
       if ($pupesoft_product['yksikko'] and $pupesoft_product['yksikko'] != '') {
         $new_feat = $productFields->associations->product_features->addChild('product_feature');
-        $new_feat->addChild('id', $this->getPrestashopProductFeature('Yksikkö'));
-        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['yksikko'], $this->getPrestashopProductFeature('Yksikkö'));
+        $new_feat->addChild('id', $this->getPrestashopProductFeature('YksikkÃ¶'));
+        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['yksikko'], $this->getPrestashopProductFeature('YksikkÃ¶'));
         $new_feat->addChild('id_feature_value', $product_val);
       }
 
       if ($pupesoft_product['myynti_era'] and $pupesoft_product['myynti_era'] != '') {
         $new_feat = $productFields->associations->product_features->addChild('product_feature');
-        $new_feat->addChild('id', $this->getPrestashopProductFeature('Myyntierä'));
-        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['myynti_era'], $this->getPrestashopProductFeature('Myyntierä'));
+        $new_feat->addChild('id', $this->getPrestashopProductFeature('MyyntierÃ¤'));
+        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['myynti_era'], $this->getPrestashopProductFeature('MyyntierÃ¤'));
         $new_feat->addChild('id_feature_value', $product_val);
       }
 
       $productFields->id_category_default = $this->getPrestashopCategory($cat_data[0]);
+
+      $productFields->id_tax_rules_group = $this->get_tax_group_id($pupesoft_product["alv"]);
 
       $productFields->price = $pupesoft_product['myyntihinta'];
       $pupesoft_product['nimitys'] = trim($pupesoft_product['nimitys']);
@@ -754,7 +768,7 @@ class Presta17RestApi
 
     $groups_result = array();
 
-    while ($group = mysql_fetch_assoc($result)) {
+    while ($group = mysqli_fetch_assoc($result)) {
       if (!$group['presta_customergroup_id'] or $group['presta_customergroup_id'] == '') {
         $group_id = $group['presta_customergroup_id'] = $this->setPupesoftCustomerGroup($group);
         $query = "UPDATE avainsana
@@ -898,7 +912,7 @@ class Presta17RestApi
 
     $customerFields->firstname = '-';
 
-    if (!preg_match("/^[a-zA-Z\s\ä\Ä\ö\Ö]+$/", $address['nimi'])) {
+    if (!preg_match("/^[a-zA-Z\s\Ã¤\Ã„\Ã¶\Ã–]+$/", $address['nimi'])) {
       $address['nimi'] = 'Tuntematon';
     } 
     $customerFields->lastname = $customer['nimi'];
@@ -1057,7 +1071,7 @@ class Presta17RestApi
 
     $result = pupe_query($query);
     $addresses = array();
-    while ($customer = mysql_fetch_assoc($result)) {
+    while ($customer = mysqli_fetch_assoc($result)) {
       
       $addresses[] = Array(
         'asiakas_id' => $customer['asiakas_tunnus'],
@@ -1121,7 +1135,7 @@ class Presta17RestApi
                 GROUP by group_name";
     $price_targets_q = pupe_query($query);
     $prices_targets = array();
-    while ($price_targets = mysql_fetch_assoc($price_targets_q)) {
+    while ($price_targets = mysqli_fetch_assoc($price_targets_q)) {
       $prices_targets[] = $price_targets;
     }
 
@@ -1149,7 +1163,7 @@ class Presta17RestApi
     $price_groups_q = pupe_query($query);
 
     $prices_groups = array();
-    while ($price_groups = mysql_fetch_assoc($price_groups_q)) {
+    while ($price_groups = mysqli_fetch_assoc($price_groups_q)) {
       $prices_groups[] = $price_groups;
     }
 
@@ -1407,7 +1421,7 @@ class Presta17RestApi
           $addressesFields->alias = $address['nimi'];
 
           $addressesFields->firstname = '-';
-          if (!preg_match("/^[a-zA-Z\s\ä\Ä\ö\Ö]+$/", $address['nimi'])) {
+          if (!preg_match("/^[a-zA-Z\s\Ã¤\Ã„\Ã¶\Ã–]+$/", $address['nimi'])) {
             $address['nimi'] = 'Tuntematon';
           }
           $addressesFields->lastname = $address['nimi'];
