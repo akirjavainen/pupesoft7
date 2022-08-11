@@ -2483,6 +2483,7 @@ if ($tila == "" and !isset($jatka)) {
     $laskkielto = '';
     $jtki = "";
     $rahtivapaa_chk = '';
+    $tark_ennen_lask = '';
 
     $args = array(
       'srow'           => $srow,
@@ -2496,6 +2497,7 @@ if ($tila == "" and !isset($jatka)) {
     if ($srow['sisainen']    != '') $sisah          = 'CHECKED';
     if ($srow['rahtivapaa']  != '') $rahtivapaa_chk = 'CHECKED';
     if ($srow['chn'] == '999')      $laskkielto     = 'CHECKED';
+    if (!empty($srow['tarkista_ennen_laskutusta'])  != '') $tark_ennen_lask = 'CHECKED';
 
     $args = array(
       'srow'   => $srow,
@@ -2820,6 +2822,12 @@ if ($tila == "" and !isset($jatka)) {
 
     $vasen_sarake[$vasen] .= "</select></td>";
     $vasen++;
+
+    $oikea_sarake[$oikea] = "<td>".t("Tarkista ennen laskutusta").":</td>";
+    $oikea_sarake[$oikea] .= "<td>";
+    $oikea_sarake[$oikea] .= "<input type='checkbox' id='tarkista_ennen_laskutusta' name='tarkista_ennen_laskutusta' $tark_ennen_lask>";
+    $oikea_sarake[$oikea] .= "</td>";
+    $oikea++;
 
     if (!empty($yhtiorow['laskutuskielto']) and $toim != "MYYNTITILI") {
       $oikea_sarake[$oikea] = "<td>".t("Laskutuskieltoon").":</td><td><input type='checkbox' name='laskutuskielto' $laskkielto></td>";
@@ -4663,7 +4671,7 @@ if (isset($jatka)) {
       if ($campaign_id_avainsana["selite"] and $campaign_id_avainsana["selite"] == 1) {
         $query_campaign_id = "UPDATE tilausrivi SET
                               campaign_id      = $campaign_id
-                              WHERE  yhtio = '$kukarow[yhtio]' 
+                              WHERE yhtio = '$kukarow[yhtio]' 
                               AND campaign_id IS NULL 
                               AND otunnus='$tilausnumero'";
         $query_campaign_id = pupe_query($query_campaign_id);
@@ -4762,6 +4770,7 @@ if (isset($jatka)) {
         yhtio_postitp           = '$yhtiopostitp',
         yhtio_toimipaikka       = '$yhtiotoimipaikka',
         ytunnus                 = '$ytunnus'";
+// tarkista_ennen_laskutusta = '$tarkista_ennen_laskutusta',
 
   if ($toim == "MYYNTITILI") {
     if ($ylatila == '') {

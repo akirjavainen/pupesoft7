@@ -497,11 +497,14 @@ if ($tee == "VALITSE") {
 
     // Onko yhtään jaksotettua tilausta
     $jaksotettuja = FALSE;
+    $tarkistettavia = FALSE;
 
     while ($row = mysqli_fetch_assoc($res)) {
       if ($row["jaksotettu"] > 0) {
         $jaksotettuja = TRUE;
-        break;
+      }
+      if ($row["tarkista_ennen_laskutusta"] != '') {
+        $tarkistettavia = TRUE;
       }
     }
 
@@ -536,6 +539,7 @@ if ($tee == "VALITSE") {
     echo "<th>".t("Toimitustapa")."</th>";
     echo "<th>".t("Muokkaa tilausta")."</th>";
     if ($jaksotettuja) echo "<th>".t("Laskuta kaikki positiot")."</th>";
+    if ($tarkistettavia) echo "<th>".t("Tarkista ennen kuin laskutat")."</th>";
 
     $maksu_positiot = array();
 
@@ -718,6 +722,15 @@ if ($tee == "VALITSE") {
         }
         else {
           echo "<td>".t("Ei positioita")."</td>";
+        }
+      }
+
+      if ($tarkistettavia) {
+        if ($row["tarkista_ennen_laskutusta"] != '') {
+          echo "<td valign='top'><img src='$palvelin2/pics/lullacons/alert.png'>&nbsp;<font class='error'>".t("HUOM: Tarkista tilaus ennen laskutusta")."!</font></td>";
+        }
+        else {
+          echo "<td></td>";
         }
       }
 
@@ -1437,6 +1450,7 @@ function hae_tilaukset_result($query_ale_lisa, $tunnukset, $alatilat, $vientilis
             lasku.hinta
             ORDER BY ketjutuskentta, reklamaatiot_lasku, lasku.tunnus";
   $res = pupe_query($query);
+            //lasku.tarkista_ennen_laskutusta,
 
   return $res;
 }
