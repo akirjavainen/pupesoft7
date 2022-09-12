@@ -563,8 +563,8 @@ if (!function_exists('laskun_kommentit')) {
       $komm .= "\n".t("Tilausviite", $kieli).":###".$laskurow['viesti'];
     }
 
-    if (trim($laskurow['sisviesti1']) != '') {
-      $komm .= "\n".t("Kommentti", $kieli).":###".wordwrap(str_replace("\n", "\n###", $laskurow['sisviesti1']), 90, "\n###");
+    if (trim((string)$laskurow['sisviesti1']) != '') {
+      $komm .= "\n".t("Kommentti", $kieli).":###".wordwrap(str_replace("\n", "\n###", (string)$laskurow['sisviesti1']), 90, "\n###");
     }
 
     // Lisätään kommenttiin sopimus_numero se on asetettu ja laiterekisteri käytössä
