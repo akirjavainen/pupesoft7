@@ -6485,12 +6485,12 @@ if (!function_exists("alehinta")) {
                   and alennus  <= 100";
         $hresult = pupe_query($query);
 
-        if (mysqli_num_rows($hresult) > 0) {
-          $aleperuste["ale1"] = 13;
+        if (mysqli_num_rows($hresult) > 0) { // MUOKKAUS: is_array()
+          if (is_array($aleperuste)) $aleperuste["ale1"] = 13;
 
           $hrow = mysqli_fetch_assoc($hresult);
 
-          $ale["ale1"]  = $hrow["alennus"];
+          if (is_array($ale)) $ale["ale1"]  = $hrow["alennus"];
           $aperuste .= " Tuotealeryhmän perusalennus (Aletaso: 1).";
         }
       }
