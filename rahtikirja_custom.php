@@ -94,7 +94,10 @@ if ((isset($tulosta) or isset($tulostakopio)) and $otsikkonro > 0) {
   $GLOBALS['rtunnus']   = abs($otsikkonro);
 
   // pistetään kaikki globaaleiksi
-  $GLOBALS = array_merge($GLOBALS, $data);
+  // MUOKKAUS: PHP8-yhteensopivaksi foreach-loopilla:
+  foreach ($data as $key => $value) {
+    $GLOBALS[$key] = $value;
+  }
 
   // kerrotaan että tämä on custom rahtikirja == ei haeta laskulta mitään
   $GLOBALS['tyhja'] = 1;

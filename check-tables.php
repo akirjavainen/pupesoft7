@@ -24,7 +24,7 @@ function decho($string) {
 // Ollaanko annettu --verbose komentoriviltä
 $verbose_mode = (in_array("--verbose", $argv) !== false) ? true : false;
 
-$query = "show tables from $dbkanta";
+$query = "SHOW FULL TABLES FROM `$dbkanta` WHERE Table_Type = 'BASE TABLE'";
 $result = pupe_query($query);
 
 decho("Check tables from $dbkanta.");
@@ -41,7 +41,7 @@ while ($row = mysqli_fetch_row($result)) {
   $_table_broken = ($chkro["Msg_text"] != "OK");
 
   if ($_table_broken or $verbose_mode) {
-    decho("$query -> $chkro[Msg_text]");
+    //decho("$query -> $chkro[Msg_text]"); // MUOKKAUS: kommentoitu ulos
   }
 
   if ($_table_broken) {
@@ -61,7 +61,7 @@ while ($row = mysqli_fetch_row($result)) {
   $_table_broken = ($chkro["Msg_text"] != "OK" and $chkro["Msg_text"] != "Table is already up to date");
 
   if ($_table_broken or $verbose_mode) {
-    //decho("$query -> $chkro[Msg_text]"); // MUOKKAUS: kommentoitu ulos
+    decho("$query -> $chkro[Msg_text]");
   }
 
   // varmistetaan vielä indexien käytössäolo
@@ -69,7 +69,7 @@ while ($row = mysqli_fetch_row($result)) {
   $chkre = pupe_query($query);
 
   while ($chkro = mysqli_fetch_assoc($chkre)) {
-    if (mb_stripos($chkro["Comment"], "disabled") !== FALSE) {
+    if (stripos($chkro["Comment"], "disabled") !== FALSE) {
       $query = "alter table $table enable keys";
       $chkre = pupe_query($query);
       decho("$query -> $chkro[Comment]");
@@ -79,4 +79,3 @@ while ($row = mysqli_fetch_row($result)) {
 }
 
 decho("Check tables. Done.");
-

@@ -12,7 +12,7 @@ echo "\nSTART: $hname :$dbkanta\n";
 $sql = "ALTER DATABASE $dbkanta CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;";
 pupe_query($sql);
 
-$query  = "SHOW TABLES FROM $dbkanta";
+$query  = "SHOW FULL TABLES FROM `$dbkanta` WHERE Table_Type = 'BASE TABLE'";
 $tabresult = pupe_query($query);
 
 while ($tables = mysqli_fetch_row($tabresult)) {

@@ -7,7 +7,7 @@ require "inc/parametrit.inc";
 
 echo "<table><tr><td valign='top' class='back'>";
 
-$query  = "show tables from $dbkanta";
+$query  = "SHOW FULL TABLES FROM `$dbkanta` WHERE Table_Type = 'BASE TABLE'";
 $result =  pupe_query($query);
 
 while ($row=mysqli_fetch_array($result)) {

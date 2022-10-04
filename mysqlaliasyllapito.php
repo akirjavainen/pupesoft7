@@ -116,7 +116,7 @@ if ($kopsaataulu != "" and $uusisetti != "") {
 }
 
 // Nyt selataan
-$query  = "SHOW TABLES FROM `$dbkanta`";
+$query  = "SHOW FULL TABLES FROM `$dbkanta` WHERE Table_Type = 'BASE TABLE'";
 $tabresult = pupe_query($query);
 
 $sel[$taulu] = "SELECTED";
@@ -226,8 +226,8 @@ if ($taulu != "") {
       $trow[$i] = $t[$i];
     }
 
-    if (mb_strlen($trow[$i]) > 35) {
-      $size = mb_strlen($trow[$i])+2;
+    if (strlen($trow[$i]) > 35) {
+      $size = strlen($trow[$i])+2;
     }
     elseif (mysqli_field_len($result, $i)>10) {
       $size = '35';
@@ -322,9 +322,9 @@ if ($taulu != "") {
       echo "<td><input type = 'text' name = '$nimi' value = '$trow[$i]' size='$size' maxlength='$maxsize'></td>";
     }
     elseif ($tyyppi == 1.5) {
-      $vva = mb_substr($trow[$i], 0, 4);
-      $kka = mb_substr($trow[$i], 5, 2);
-      $ppa = mb_substr($trow[$i], 8, 2);
+      $vva = substr($trow[$i], 0, 4);
+      $kka = substr($trow[$i], 5, 2);
+      $ppa = substr($trow[$i], 8, 2);
 
       echo "<td>
           <input type = 'text' name = 'tpp[$i]' value = '$ppa' size='3' maxlength='2'>

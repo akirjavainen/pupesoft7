@@ -54,7 +54,7 @@ else {
 
     echo "<table>";
 
-    $query  = "SHOW TABLES FROM $dbkanta";
+    $query  = "SHOW FULL TABLES FROM `$dbkanta` WHERE Table_Type = 'BASE TABLE'";
     $tabresult = pupe_query($query);
 
     while ($tables = mysqli_fetch_array($tabresult)) {
@@ -64,7 +64,7 @@ else {
 
       while ($fields = mysqli_fetch_array($fieldresult)) {
 
-        if (mb_strpos($fields[0], "hinta") !== FALSE or mb_strpos($fields[0], "summa") !== FALSE or mb_strpos($fields[0], "arvo") !== FALSE) {
+        if (strpos($fields[0], "hinta") !== FALSE or strpos($fields[0], "summa") !== FALSE or strpos($fields[0], "arvo") !== FALSE) {
 
           if ($tables[0] == "asiakashinta" and  $fields[0] == "hinta") {
             echo "<tr><th>$tables[0]</th><th>$fields[0]</th><th>$teksti</th></tr>";

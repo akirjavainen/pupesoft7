@@ -45,11 +45,10 @@ else {
   echo "<tr><td><select name='table' onchange='submit();'>";
   echo "<option value=''></option>";
 
-  $query  = "SHOW tables FROM `$dbkanta`";
+  $query  = "SHOW FULL TABLES FROM `$dbkanta` WHERE Table_Type = 'BASE TABLE'";
   $result =  pupe_query($query);
 
   while ($row = mysqli_fetch_array($result)) {
-
     $query  = "describe $row[0]";
     $fieldresult = pupe_query($query);
 
@@ -97,7 +96,7 @@ else {
       if (!empty($kentat[$row[0]]) and $kentat[$row[0]] == $row[0]) {
         $chk = "CHECKED";
       }
-      elseif (is_array($ruksaa) and count($ruksaa) > 0 and in_array(mb_strtoupper($sarake), $ruksaa)) {
+      elseif (is_array($ruksaa) and count($ruksaa) > 0 and in_array(strtoupper($sarake), $ruksaa)) {
         $chk = "CHECKED";
       }
 
@@ -272,7 +271,7 @@ else {
 
     if (mysqli_num_rows($al_res) > 0) {
       while ($pakollisuuden_tarkistus_rivi = mysqli_fetch_assoc($al_res)) {
-        $ruksaa[] = mb_strtoupper(str_replace("$table.", "", $pakollisuuden_tarkistus_rivi["selite"]));
+        $ruksaa[] = strtoupper(str_replace("$table.", "", $pakollisuuden_tarkistus_rivi["selite"]));
       }
     }
   }
@@ -482,8 +481,8 @@ else {
       }
     }
 
-    $selecti_tt = mb_substr(trim($selecti_tt), 0, -1);
-    $selecti = mb_substr(trim($selecti), 0, -1);
+    $selecti_tt = substr(trim($selecti_tt), 0, -1);
+    $selecti = substr(trim($selecti), 0, -1);
 
     $sqlhaku = "SELECT
                 $selecti
@@ -691,7 +690,7 @@ else {
     echo "<tr><td>".t("Valitse kysely").":</td><td>";
 
     // tehdään "serializoitua" dataa ni etsitään tällä vain tämän tablen tallennettuja kyselyitä...
-    $data = "\"table\";s:".mb_strlen($table).":\"$table\"";
+    $data = "\"table\";s:".strlen($table).":\"$table\"";
 
     // Haetaan tallennetut kyselyt
     $query = "SELECT distinct kuka.nimi, kuka.kuka, tallennetut_parametrit.nimitys
