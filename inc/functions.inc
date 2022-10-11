@@ -7405,7 +7405,7 @@ if (!function_exists('ebid')) {
       elseif ($laskurow['chn'] == '666') $out = t("Sähköposti")."-".t("lasku");
       elseif ($laskurow['chn'] == '667') $out = t("Paperilasku, tulostetaan manuaalisesti");
 
-      $query = "SELECT tunnus
+      $query = "SELECT tunnus 
                 from liitetiedostot
                 where liitostunnus = '$laskurow[tunnus]'
                 and liitos         = 'lasku'
@@ -7427,7 +7427,8 @@ if (!function_exists('ebid')) {
         $orderlisa = "order by jarj";
       }
 
-      $query = "SELECT tunnus, filename, selite
+      // MUOKKAUS: lisatty filetype:
+      $query = "SELECT tunnus, filename, filetype, selite
                 {$sellisa}
                 from liitetiedostot
                 where liitostunnus = '{$laskurow['tunnus']}'
@@ -7453,8 +7454,10 @@ if (!function_exists('ebid')) {
             $out .= js_openUrlNewWindow("{$palvelin2}view.php?id=$row[tunnus]", t('Liite').": $row[filename]", "class='tooltip' id='$row[tunnus]'")."&nbsp;&nbsp;";
           }
           else {
+            // MUOKKAUS: lisatty $filetype:
+	    $filetype = strtoupper(substr($row['filetype'], -3));
             $out .= "<div id='div_$row[tunnus]' class='popup'>$row[filename]<br>$row[selite]</div>";
-            $out .= js_openUrlNewWindow("{$palvelin2}view.php?id=$row[tunnus]", t('Näytä lasku'), "class='tooltip' id='$row[tunnus]'")."&nbsp;&nbsp;";
+            $out .= js_openUrlNewWindow("{$palvelin2}view.php?id=$row[tunnus]", t('Näytä lasku (' . $filetype . ')'), "class='tooltip' id='$row[tunnus]'")."&nbsp;&nbsp;";
           }
         }
       }
