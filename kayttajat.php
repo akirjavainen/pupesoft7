@@ -290,7 +290,7 @@ if ($tee == 'UUSI') {
 
   if (strlen($ktunnus) > 0 and $jatka != 1) {
 
-    if (count($profiili) > 0) {
+    if (isset($profiili) and count($profiili) > 0) { // MUOKKAUS: isset()
       $profile = implode(",", $profiili);
     }
 
