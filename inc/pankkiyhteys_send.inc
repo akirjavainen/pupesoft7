@@ -34,7 +34,7 @@ if ($tee == 'laheta') {
       }
       else {
         echo "<div class='error'>";
-        echo t("Tiedoston %s käsittelyssä tapahtui virhe", '', "{$polku}/{$file}");
+        echo t("Tiedoston %s käsittelyssä tapahtui virhe", '', "{$file}"); // MUOKKAUS: virheviestin polku korjattu
         echo "</div>";
       }
     }
