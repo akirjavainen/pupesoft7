@@ -489,7 +489,7 @@ if ($tee != '' and isset($ajaraportti)) {
           $av_lisa
           $valkoodi1
           $groupby
-          ORDER BY lasku.ytunnus";
+          ORDER BY lasku.erpcm, lasku.ytunnus"; // MUOKKAUS: ORDER BY lasku.erpcm
     $result = pupe_query($query);
 
     // poimitaan kuluva päivä, raportin timestampille
