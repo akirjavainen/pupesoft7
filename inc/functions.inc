@@ -13983,7 +13983,7 @@ if (!function_exists("luoiban")) {
 
     for ($ind = 0; $ind < 20; $ind += 7) {
       $vali .= mb_substr($iban, $ind, 7);
-      $vali = $vali % 97;
+      $vali = (int)$vali % 97; // MUOKKAUS: BUGIKORJAUS string % int
       //echo "iban: $iban, (".mb_substr($iban, $ind, 7).") $vali\n";
     }
     $tarkiste = 98 - $vali;
