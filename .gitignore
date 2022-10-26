@@ -1,4 +1,5 @@
 inc/salasanat.php
+datain/pankkiaineisto*
 datain/lue-data*
 datain/magento-order*
 datain/presta-order*
@@ -6,3 +7,9 @@ dataout/*
 .idea
 pics/logo.png
 pupenext
+verkkolaskut_error
+verkkolaskut_in
+verkkolaskut_ok
+verkkolaskut_orig
+verkkolaskut_reject
+
