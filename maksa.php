@@ -1527,8 +1527,8 @@ where lasku.yhtio=tiliointi.yhtio and lasku.tunnus = tiliointi.ltunnus and tilio
         echo t("Paperilasku");
       }
       elseif (is_array($lasku_urlit)) {
-        foreach ($lasku_urlit as $lasku_url) {
-          echo "<a href='$lasku_url' target='Attachment'>".t("Näytä liite")."</a><br>";
+        foreach ($lasku_urlit as $filetype => $lasku_url) { // MUOKKAUS: lisatty filetype
+          echo "<a href='$lasku_url' target='Attachment'>".t("Näytä liite")." ($filetype)</a><br>";
         }
       }
 
