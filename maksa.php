@@ -1277,7 +1277,7 @@ if ($tee == 'DM') {
 }
 
 // Näytetään maksuvalmiit laskut
-if ($tee == 'S') {
+if ($tee == 'S' or $tee == 'V') { // MUOKKAUS: naytetaan oletuksena maksuvalmiit laskut, lisatty "$tee == 'S' or"
 
   $lisa = "";
   $kplisa = "";
