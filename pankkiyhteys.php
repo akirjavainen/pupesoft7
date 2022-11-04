@@ -189,12 +189,16 @@ if ($tee == "") {
         unset($params_ktl);
 	unset($params_tito);
 
-	echo "viite_tiedostot:\n";
-	print_r($viite_tiedostot);
-	echo "\n\n";
-	echo "tiliote_tiedostot:\n";
-	print_r($tiliote_tiedostot);
-	echo "\n\n";
+	if (!empty($viite_tiedostot["files"])) {
+		echo "viite_tiedostot:\n";
+		print_r($viite_tiedostot);
+		echo "\n\n";
+	}
+	if (!empty($tiliote_tiedostot["files"])) {
+		echo "tiliote_tiedostot:\n";
+		print_r($tiliote_tiedostot);
+		echo "\n\n";
+	}
 
 	if (empty($viite_tiedostot["files"])) echo "Ei uusia ladattavia viiteaineistoja pankissa.\n";
 	if (empty($tiliote_tiedostot["files"])) echo "Ei uusia ladattavia tilioteaineistoja pankissa.\n";
@@ -206,12 +210,16 @@ if ($tee == "") {
 	foreach ($tiliote_tiedostot["files"] as $tilioteref) {
 		array_push($tiliote_references, $tilioteref["fileReference"]);
 	}
-	echo "viite_references:\n";
-	print_r($viite_references);
-	echo "\n\n";
-	echo "tiliote_references:\n";
-	print_r($tiliote_references);
-	echo "\n\n";
+	if (count($viite_references) > 0) {
+		echo "viite_references:\n";
+		print_r($viite_references);
+		echo "\n\n";
+	}
+	if (count($tiliote_references) > 0) {
+		echo "tiliote_references:\n";
+		print_r($tiliote_references);
+		echo "\n\n";
+	}
 
         $params_ktl = array(
           "file_type"             => "KTL",
@@ -229,12 +237,16 @@ if ($tee == "") {
         $tiedostot_viite = sepa_download_files($params_ktl);
         $tiedostot_tiliote = sepa_download_files($params_tito);
 
-	echo "tiedostot_viite:\n";
-	print_r($tiedostot_viite);
-	echo "\n\n";
-	echo "tiedostot_tiliote:\n";
-	print_r($tiedostot_tiliote);
-	echo "\n\n";
+	if (count($tiedostot_viite) > 0) {
+		echo "tiedostot_viite:\n";
+		print_r($tiedostot_viite);
+		echo "\n\n";
+	}
+	if (count($tiedostot_tiliote) > 0) {
+		echo "tiedostot_tiliote:\n";
+		print_r($tiedostot_tiliote);
+		echo "\n\n";
+	}
 
         if (is_array($tiedostot_viite)) {
           foreach ($tiedostot_viite as $aineisto) {
