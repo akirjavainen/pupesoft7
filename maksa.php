@@ -1535,7 +1535,8 @@ where lasku.yhtio=tiliointi.yhtio and lasku.tunnus = tiliointi.ltunnus and tilio
       echo "</td>";
 
       // Ok, mutta onko meillä varaa makssa kyseinen lasku???
-      if ($yritirow["tilinylitys"] != "" or $trow["ysumma"] <= $yritirow["maksulimitti"]) {
+      if (true) { // MUOKKAUS: poistettu tilin saldotarkistus laskujen poiminnassa
+      //if ($yritirow["tilinylitys"] != "" or $trow["ysumma"] <= $yritirow["maksulimitti"]) {
 
         //Kikkaillaan jotta saadda seuraavan laskun tunnus
         if ($dataseek < mysqli_num_rows($result)-1) {
