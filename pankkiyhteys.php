@@ -237,18 +237,12 @@ if ($tee == "") {
         $tiedostot_viite = sepa_download_files($params_ktl);
         $tiedostot_tiliote = sepa_download_files($params_tito);
 
-	if (count($tiedostot_viite) > 0) {
-		echo "tiedostot_viite:\n";
-		print_r($tiedostot_viite);
-		echo "\n\n";
-	}
-	if (count($tiedostot_tiliote) > 0) {
-		echo "tiedostot_tiliote:\n";
-		print_r($tiedostot_tiliote);
-		echo "\n\n";
-	}
-
         if (is_array($tiedostot_viite)) {
+	  if (count($tiedostot_viite) > 0) {
+	    echo "tiedostot_viite:\n";
+	    print_r($tiedostot_viite);
+            echo "\n\n";
+	  }
           foreach ($tiedostot_viite as $aineisto) {
             $filenimi = tempnam($sepa_pankkiyhteys_tallennuskansio, date("Y-m-d") . "_viitemaksut_");
             $data = base64_decode($aineisto['data']);
@@ -259,6 +253,11 @@ if ($tee == "") {
           }
         }
         if (is_array($tiedostot_tiliote)) {
+	  if (count($tiedostot_tiliote) > 0) {
+	    echo "tiedostot_tiliote:\n";
+	    print_r($tiedostot_tiliote);
+	    echo "\n\n";
+	  }
           foreach ($tiedostot_tiliote as $aineisto) {
             $filenimi = tempnam($sepa_pankkiyhteys_tallennuskansio, date("Y-m-d") . "_tiliote_");
             $data = base64_decode($aineisto['data']);
