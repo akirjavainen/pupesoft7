@@ -125,7 +125,7 @@ $query = "SELECT *, luontiaika sypvm
           WHERE yhtio = '$kukarow[yhtio]'
           $pvmlisa
           and $lajiv
-          ORDER BY $jarj, nimi, summa desc";
+          ORDER BY mapvm, $jarj, nimi, summa desc";
 $result = pupe_query($query);
 $loppudiv ='';
 
@@ -134,11 +134,11 @@ if (mysqli_num_rows($result) == 0) {
 }
 else {
 
-  if ($iframe != '') $divwi = "width: 100%;";
+  if ($iframe != '') $divwi = "width: 100%; height: 100%;"; // MUOKKAUS: korjattu tulostusta varten
   else  $divwi = "";
 
-  echo "<div id='vasen' style='height: 300px; overflow: auto; margin-bottom: 10px; $divwi'>";
-  echo "<table style='$divwi'>";
+  echo "<div id='vasen' style='height: 100%; overflow: none; margin-bottom: 10px; $divwi'>";
+  echo "<table style='$divwi'>"; // MUOKKAUS: korjattu tulostusta varten
   echo "<tr>";
   echo "<th><a href='$PHP_SELF?tee=$tee&tunnus=$tunnus&iframe=$iframe&laji=$laji&vv=$vv&kk=$kk&viivatut=$viivatut&jarj=nimi'>".t("Nimi")."</a></th>";
   echo "<th><a href='$PHP_SELF?tee=$tee&tunnus=$tunnus&iframe=$iframe&laji=$laji&vv=$vv&kk=$kk&viivatut=$viivatut&jarj=tapvm'>".t("Tapvm")."</a></th>";
