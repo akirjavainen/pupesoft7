@@ -2667,7 +2667,7 @@ if (!function_exists('alvierittely')) {
     $total_tilkpl = (int)$qty_row["total_tilkpl"]; // MUOKKAUS: lisatty
     
     // MUOKKAUS: lisatty yhteensa kpl:
-    $pdf_tarjous->draw_text(350, $kala, t("{$_lasku_vai_tarjoustxt} yhteensä (" . round($total_tilkpl) . " kpl)", $kieli).":", $page_tarjous[$sivu], $boldi);
+    $pdf_tarjous->draw_text(350, $kala, t("{$_lasku_vai_tarjoustxt} yhteensä", $kieli) . " (" . round($total_tilkpl) . " " . t("kpl", $kieli) . "):", $page_tarjous[$sivu], $boldi);
 
     if ($toim == 'PROFORMA') {
       $summa = $kassa_ale != '' ? $summa * (1-$kassa_ale/100) : $summa;
