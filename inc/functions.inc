@@ -12107,6 +12107,10 @@ if (!function_exists("t")) {
   function t($stringi, $kieli = "") {
     global $yhtiorow, $kukarow, $verkkokauppa, $kaannetyt_sanat;
 
+    // MUOKKAUS: sanakirja-taulu tallentaa latin1-enkoodauksella,
+    // koska se on kaytossa tulostuspohjissa:
+    $stringi = utf8_decode($stringi);
+
     if (trim((string)$kieli) != '') { // MUOKKAUS: (string)
       $indeksi = trim(mb_strtolower($kieli));
     }
