@@ -524,7 +524,8 @@ if (!function_exists('alku_lahete')) {
         $pdf->draw_rectangle(674, 300, 653, 580, $thispage, $rectparam);
         $pdf->draw_text(310, 666, t("Maksuehto", $kieli),   $thispage, $pieni);
 
-        $maksuehtoteksti = t_tunnus_avainsanat($masrow, "teksti", "MAKSUEHTOKV", $kieli);
+        //$maksuehtoteksti = t_tunnus_avainsanat($masrow, "teksti", "MAKSUEHTOKV", $kieli);
+	$maksuehtoteksti = t($laskurow["maksuehto"], $kieli);
 
         if (!in_array($asiakas_row['chn'], array('100', '667')) and $kukarow['extranet'] == "" and $yhtiorow['konserni'] == "indu") {
           $maksuehtoteksti .= " / ".hae_chn_teksti($asiakas_row['chn'], $kieli);
@@ -3816,7 +3817,8 @@ if (!function_exists('loppu_lahete')) {
         $pdf->draw_text(200, $kala-25, t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli), $thispage, $norm);
 
         $pdf->draw_text(50,  $kala-38, t("Maksuehto", $kieli), $thispage, $boldi);
-        $pdf->draw_text(200, $kala-38, t_tunnus_avainsanat($masrow, "teksti", "MAKSUEHTOKV", $kieli)." ".t("tai erillisen maksupostiohjelman mukaan", $kieli), $thispage, $norm);
+        $pdf->draw_text(200, $kala-38, t($laskurow["maksuehto"], $kieli) . " " . t("tai erillisen maksupostiohjelman mukaan", $kieli), $thispage, $norm);
+        //$pdf->draw_text(200, $kala-38, t_tunnus_avainsanat($masrow, "teksti", "MAKSUEHTOKV", $kieli)." ".t("tai erillisen maksupostiohjelman mukaan", $kieli), $thispage, $norm);
 
         $pdf->draw_text(50,  $kala-51, t("Myynti- ja toimitusehdot", $kieli), $thispage, $boldi);
 
@@ -3925,7 +3927,7 @@ if (!function_exists('loppu_lahete')) {
       else {
         $pdf->draw_text(410, 92, t("Yhteensä", $kieli) . ":", $thispage, $norm); // MUOKKAUS: lisatty
         $oikpos = $pdf->mb_strlen(round($GLOBALS["total_tilkpl"], 1) . " kpl", $norm); // MUOKKAUS: lisatty
-        $pdf->draw_text(565-$oikpos, 92, round($GLOBALS["total_tilkpl"], 1) . " kpl", $thispage, $norm); // MUOKKAUS: lisatty
+        $pdf->draw_text(565-$oikpos, 92, round($GLOBALS["total_tilkpl"], 1) . " " . t("kpl", $kieli), $thispage, $norm); // MUOKKAUS: lisatty
         // Verolliset hinnat yhtiönparametreistä tai lähetetyypistä
         //if (($laskurow['alv'] > 0 and $yhtiorow["alv_kasittely"] == '') or mb_strpos($lahetetyyppi, "_verollinen")) { // MUOKKAUS: kommentoitu ulos
           $pdf->draw_text(410, 72, t("Yhteensä verollinen", $kieli).":", $thispage, $norm);
