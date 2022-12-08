@@ -782,7 +782,7 @@ if (!function_exists('tarjous_rivi_otsikot')) {
       }
 
       if (!in_array($yhtiorow["tarjoustyyppi"], array(2, 4))) {
-		// MUOKKAUS: BUGIKORJAUS (ei rivihintaa jos sita ei haluta):
+	// MUOKKAUS: BUGIKORJAUS (ei rivihintaa jos sita ei haluta):
         if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") $pdf_tarjous->draw_text(498, $kala + 15, t("Alv", $kieli), $page_tarjous, $norm);
       }
 
@@ -835,7 +835,7 @@ if (!function_exists('rivi_tarjous')) {
       if ($row["tilaajanrivinro"] != 0) {
         $row["kommentti"] .= "\n".t("Rivinumero", $kieli).": ".$row["tilaajanrivinro"].". ";
 
-	    // MUOKKAUS: isset():
+	// MUOKKAUS: isset():
         $x[0] = 25;
         $x[1] = 575;
         $y[0] = $y[1] = $kala + ($rivinkorkeus / 1.5);
@@ -1046,7 +1046,7 @@ if (!function_exists('rivi_tarjous')) {
       $row["kommentti"] .= "\n".t("Toimitusaika", $kieli).": ".tv1dateconv($row["toimaika"]);
     }
 
-	// MUOKKAUS: BUGIKORJAUS (string * int):
+    // MUOKKAUS: BUGIKORJAUS (string * int):
     $row["tilkpl"]   = (float)$row["tilkpl"] * 1;
     $row["varattu"] = ((float)$row["kpl"] + (float)$row["varattu"] + (float)$row["jt"]) . " " . t_avainsana("Y", $kieli, "and avainsana.selite='$row[yksikko]'", "", "", "selite");
     $row["kpl"]   = (float)$row["kpl"] * 1;
@@ -1964,7 +1964,7 @@ if (!function_exists('loppu_tarjous')) {
           //$pdf_tarjous->draw_text(560-$oikpos, $kuha, sprintf("%.2f", $total_tarjous)." ".$laskurow["valkoodi"], $page_tarjous[$sivu], $boldi);
         }
 
-	    if (!isset($asiakasrow)) $asiakasrow = null; // MUOKKAUS: isset()
+        if (!isset($asiakasrow)) $asiakasrow = null; // MUOKKAUS: isset()
         if ($kuha-165 <= 80) {
           list($page_tarjous[$sivu], $kuha) = uusi_sivu_tarjous($laskurow, $asiakasrow, $kieli, $pdf_tarjous);
         }

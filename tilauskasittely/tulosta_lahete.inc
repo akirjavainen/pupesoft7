@@ -237,7 +237,7 @@ if (!function_exists('alku_lahete')) {
         $pdf->draw_text(310, 782, array_shift(explode(",", $koontilahete)),  $thispage, $boldi);
       }
       elseif ($laskurow["tunnusnippu"] > 0) {
-		// MUOKKAUS: isset():
+	// MUOKKAUS: isset():
         if ($tyyppi == "YLLAPITOSOPIMUS" or (isset($laskurow["nippu"]) and $laskurow["nippu"] > 0)) {
           $pdf->draw_text(310, 792, t("Tilausnumero", $kieli),   $thispage, $pieni);
           $pdf->draw_text(310, 782, $laskurow["tunnusnippu"],    $thispage, $boldi);
