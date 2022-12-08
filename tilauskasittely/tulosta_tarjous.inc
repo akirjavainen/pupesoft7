@@ -272,7 +272,7 @@ if (!function_exists('alku_tarjous')) {
       $pdf_tarjous->draw_rectangle(674, 300, 654, 580, $page_tarjous[$sivu], $rectparam);
 
       $pdf_tarjous->draw_text(310, 667, t("Maksuehto", $kieli),  $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(310, 657, $laskurow["maksuehto"],  $page_tarjous[$sivu], $norm);
+      $pdf_tarjous->draw_text(310, 657, t($laskurow["maksuehto"], $kieli),  $page_tarjous[$sivu], $norm);
     }
     else {
       $pdf_tarjous->draw_text(310, 815, t("Tarjous", $kieli),     $page_tarjous[$sivu], $iso);
@@ -408,7 +408,7 @@ if (!function_exists('alku_tarjous')) {
       $pdf_tarjous->draw_rectangle(695, 300, 674, 580, $page_tarjous[$sivu], $rectparam);
 
       $pdf_tarjous->draw_text(310, 687, t("Maksuehto", $kieli),  $page_tarjous[$sivu], $pieni);
-      $pdf_tarjous->draw_text(310, 677, $laskurow["maksuehto"],  $page_tarjous[$sivu], $norm);
+      $pdf_tarjous->draw_text(310, 677, t($laskurow["maksuehto"], $kieli),  $page_tarjous[$sivu], $norm);
       
       // MUOKKAUS: lisatty:
       $pdf_tarjous->draw_text(295, 662, t("COVID-19 -kriisin johdosta tarkastamme asiakkaidemme", $kieli), $page_tarjous[$sivu], $boldi);
@@ -1903,7 +1903,7 @@ if (!function_exists('loppu_tarjous')) {
         $pdf_tarjous->draw_text(30, $kuha,
           t("Tarjous on voimassa %s saakka, minkä jälkeen hinta ja toimitusaika saattavat muuttua", $kieli, $voimassa) . ". " .
           t("Maksuehtomme on", $kieli) . " " .
-          trim($laskurow["maksuehto"]) . ".", $page_tarjous[$sivu],
+          t(trim($laskurow["maksuehto"]), $kieli) . ".", $page_tarjous[$sivu],
           $norm);
 
         $kuha -= 30;
@@ -2058,7 +2058,7 @@ if (!function_exists('loppu_tarjous')) {
             $pdf_tarjous->draw_text(30, $kuha - 48,
               t("Tarjous on voimassa %s saakka, minkä jälkeen hinta ja toimitusaika saattavat muuttua", $kieli, $voimassa) . ". " .
               t("Maksuehtomme on", $kieli) . " " .
-              trim($laskurow["maksuehto"]) . ".", $page_tarjous[$sivu],
+              t(trim($laskurow["maksuehto"]), $kieli) . ".", $page_tarjous[$sivu],
               $norm);
           }
         }
