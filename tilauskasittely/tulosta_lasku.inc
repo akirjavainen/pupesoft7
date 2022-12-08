@@ -301,7 +301,7 @@ if (!function_exists('alku')) {
       }
 
       $pdf_lasku->draw_text(310, $arvo[$rivi_ind],
-        pdf_substr($laskurow["maksuehto"], 110, $pdf_lasku, $norm),
+        pdf_substr(t($laskurow["maksuehto"], $kieli), 110, $pdf_lasku, $norm),
         $page_lasku[$sivu], $norm);
     }
 
