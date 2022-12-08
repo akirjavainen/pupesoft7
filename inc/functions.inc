@@ -12125,7 +12125,7 @@ if (!function_exists("t")) {
       }
 
       // Eskeipataan stringi
-      $stringi_sql = sanitize_string($stringi);
+      $stringi_sql = mysqli_real_escape_string($GLOBALS["link"], $stringi);
 
       $sanakirjaquery  = "SELECT fi, $indeksi, tunnus FROM sanakirja WHERE fi = BINARY '$stringi_sql'";
 
