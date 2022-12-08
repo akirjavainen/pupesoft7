@@ -12107,10 +12107,6 @@ if (!function_exists("t")) {
   function t($stringi, $kieli = "") {
     global $yhtiorow, $kukarow, $verkkokauppa, $kaannetyt_sanat;
 
-    // MUOKKAUS: sanakirja-taulu tallentaa latin1-enkoodauksella,
-    // koska se on kaytossa tulostuspohjissa:
-    $stringi = utf8_decode($stringi);
-
     if (trim((string)$kieli) != '') { // MUOKKAUS: (string)
       $indeksi = trim(mb_strtolower($kieli));
     }
@@ -12128,10 +12124,12 @@ if (!function_exists("t")) {
         return $stringi;
       }
 
-      // Eskeipataan stringi
+      // Eskeipataan stringi, MUOKKAUS: mysqli_real_escape_string:
       $stringi_sql = mysqli_real_escape_string($GLOBALS["link"], $stringi);
 
-      $sanakirjaquery  = "SELECT fi, $indeksi, tunnus FROM sanakirja WHERE fi = BINARY '$stringi_sql'";
+      // MUOKKAUS: BINARY compare ongelmallinen UTF-8/latin1 -muunnoksista johtuen. Kommentoitu ulos:
+      //$sanakirjaquery  = "SELECT fi, $indeksi, tunnus FROM sanakirja WHERE fi = BINARY '$stringi_sql'";
+      $sanakirjaquery  = "SELECT fi, $indeksi, tunnus FROM sanakirja WHERE fi='$stringi_sql'";
 
       if (isset($GLOBALS["slavelink"]) and is_resource($GLOBALS["slavelink"])) {
         $sanakirjaresult = pupe_query($sanakirjaquery, $GLOBALS["slavelink"]);
