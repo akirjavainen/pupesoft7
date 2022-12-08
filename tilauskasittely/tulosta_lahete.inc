@@ -525,7 +525,7 @@ if (!function_exists('alku_lahete')) {
         $pdf->draw_text(310, 666, t("Maksuehto", $kieli),   $thispage, $pieni);
 
         //$maksuehtoteksti = t_tunnus_avainsanat($masrow, "teksti", "MAKSUEHTOKV", $kieli);
-	$maksuehtoteksti = t($laskurow["maksuehto"], $kieli);
+	$maksuehtoteksti = t($laskurow["maksuteksti"], $kieli);
 
         if (!in_array($asiakas_row['chn'], array('100', '667')) and $kukarow['extranet'] == "" and $yhtiorow['konserni'] == "indu") {
           $maksuehtoteksti .= " / ".hae_chn_teksti($asiakas_row['chn'], $kieli);
@@ -3817,7 +3817,7 @@ if (!function_exists('loppu_lahete')) {
         $pdf->draw_text(200, $kala-25, t_tunnus_avainsanat($laskurow['toimitustapa'], "selite", "TOIMTAPAKV", $kieli), $thispage, $norm);
 
         $pdf->draw_text(50,  $kala-38, t("Maksuehto", $kieli), $thispage, $boldi);
-        $pdf->draw_text(200, $kala-38, t($laskurow["maksuehto"], $kieli) . " " . t("tai erillisen maksupostiohjelman mukaan", $kieli), $thispage, $norm);
+        $pdf->draw_text(200, $kala-38, t($laskurow["maksuteksti"], $kieli) . " " . t("tai erillisen maksupostiohjelman mukaan", $kieli), $thispage, $norm);
         //$pdf->draw_text(200, $kala-38, t_tunnus_avainsanat($masrow, "teksti", "MAKSUEHTOKV", $kieli)." ".t("tai erillisen maksupostiohjelman mukaan", $kieli), $thispage, $norm);
 
         $pdf->draw_text(50,  $kala-51, t("Myynti- ja toimitusehdot", $kieli), $thispage, $boldi);
