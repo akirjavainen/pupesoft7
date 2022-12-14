@@ -519,7 +519,7 @@ if (isset($myyntierahuom) and is_array($myyntierahuom) and in_array($row['tunnus
 }
 else { // MUOKKAUS: isset():
   if (isset($trow) and $trow['myynti_era'] > 0 and $trow['myynti_era'] != 1 and $trow['myynti_era'] != $kpl_st and !in_array($yhtiorow['myyntiera_pyoristys'], array('K', 'S'))) {
-    $mimyhuom = t("HUOM: Tuotteella on myyntierä"). " " . $trow['myynti_era'];
+    $mimyhuom = "<font class='error'>" .t("HUOM: Tuotteella on myyntierä"). " " .$trow['myynti_era']. "</font>";
     $varaosakommentti .= $mimyhuom."<br>";
   }
 }
