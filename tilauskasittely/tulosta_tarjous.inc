@@ -414,7 +414,8 @@ if (!function_exists('alku_tarjous')) {
       $pdf_tarjous->draw_text(295, 662, t("COVID-19 -kriisin johdosta tarkastamme asiakkaidemme", $kieli), $page_tarjous[$sivu], $boldi);
       $pdf_tarjous->draw_text(295, 649, t("maksuviiveet, mikä saattaa vaikuttaa maksuehtoihin", $kieli) . ".", $page_tarjous[$sivu], $boldi);
       $pdf_tarjous->draw_text(295, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli) . ".", $page_tarjous[$sivu], $boldi);
-      $pdf_tarjous->draw_text(295, 610, t("Mittatilaustuotteilla ei ole kuluttajansuojalain mukaista peruutusoikeutta", $kieli) . ".", $page_tarjous[$sivu], $boldi);
+      $pdf_tarjous->draw_text(295, 610, t("Mittatilaustuotteilla ei ole kuluttajansuojalain mukaista", $kieli), $page_tarjous[$sivu], $boldi);
+      $pdf_tarjous->draw_text(295, 597, t("peruutusoikeutta (kohta 16 peruutusoikeuksien rajoitus)", $kieli) . ".", $page_tarjous[$sivu], $boldi);
     }
 
     // MUOKKAUS: lisatty:
