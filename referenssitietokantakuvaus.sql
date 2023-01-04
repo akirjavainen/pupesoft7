@@ -1901,6 +1901,7 @@ CREATE TABLE `lasku` (
   `olmapvm` date NOT NULL DEFAULT '0000-00-00',
   `toimaika` date NOT NULL DEFAULT '0000-00-00',
   `toimvko` varchar(2) NOT NULL DEFAULT '',
+  `toimitusaikaikkuna` int NOT NULL DEFAULT 0,
   `kerayspvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `keraysvko` varchar(2) NOT NULL DEFAULT '',
   `summa` decimal(12,2) NOT NULL DEFAULT '0.00',

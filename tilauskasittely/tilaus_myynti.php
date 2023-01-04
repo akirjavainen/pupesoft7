@@ -3850,7 +3850,7 @@ if ($tee == '') {
       $_ikkunat_max = 7;
       $_ikkunat_min = 0;
 
-      echo "<select onchange='submit();' name='toimitusaikaikkuna' ".js_alasvetoMaxWidth($nimi, 300).">";
+      echo "<select onchange='submit();' name='toimitusaikaikkuna' ".js_alasvetoMaxWidth($asiakasrow["nimi"], 300).">";
 
       if($asiakasrow['toimitusaikaikkuna'] and $asiakasrow['toimitusaikaikkuna'] > 0 
       and ($toimitusaikaikkuna == 'x' or !$_POST['tilausnumero'])) {
@@ -3864,7 +3864,7 @@ if ($tee == '') {
         if($_ikkunat_min == $laskurow['toimitusaikaikkuna']) {
           echo "selected ";
         }
-        echo "value='".$_ikkunat_min."'>+- ".$_ikkunat_min." p�iv��</option>";
+        echo "value='".$_ikkunat_min."'>+- ".$_ikkunat_min." p&auml;iv&auml;&auml;</option>";
         $_ikkunat_min++;
       }
       echo "</select>";
