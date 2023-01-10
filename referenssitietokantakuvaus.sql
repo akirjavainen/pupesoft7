@@ -171,6 +171,7 @@ CREATE TABLE `asiakas` (
   `sisviesti1` text,
   `tilaus_viesti` varchar(70) NOT NULL DEFAULT '',
   `kuljetusohje` text,
+  `toimitusaikaikkuna` int NOT NULL DEFAULT 0,
   `selaus` varchar(55) NOT NULL DEFAULT '',
   `alv` decimal(5,2) NOT NULL DEFAULT '0.00',
   `valkoodi` char(3) NOT NULL DEFAULT '',
