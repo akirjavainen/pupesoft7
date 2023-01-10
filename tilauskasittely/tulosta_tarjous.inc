@@ -2199,7 +2199,6 @@ if (!function_exists('print_pdf_tarjous')) {
     elseif ($tee == 'NAYTATILAUS') {      
       // MUOKKAUS: PDF-tiedoston suorasahkopostitukseen:
       if (file_exists("/var/www/tmp")) copy($pdf_tarjousfilenimi, "/var/www/tmp/" . $laskurow["tunnus"] . ".pdf");
-      
       // Työnnetään tuo pdf vaan putkeen!
       echo file_get_contents($pdf_tarjousfilenimi);
     }
@@ -2256,6 +2255,9 @@ if (!function_exists('tulosta_tarjous')) {
     }
 
     $laskurow['tunnus'] = $otunnus;
+
+    // MUOKKAUS: PDF-mittakuvien tallennus verkkolevylle:
+    if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/printable.php?pupe_order=$otunnus&pdf_write=1");
 
     $querykiel = "SELECT kieli FROM asiakas WHERE yhtio = '$kukarow[yhtio]' and tunnus = '$laskurow[liitostunnus]'";
     $kielresult = pupe_query($querykiel);
@@ -2457,7 +2459,7 @@ if (!function_exists('tulosta_tarjous')) {
         $pdf_tarjous->draw_text(330, 803, "$pp / $sivu", $page_tarjous[$pp], $norm);
         
         // MUOKKAUS: lisatty:
-	    if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, Pupesoft_Order::get_modified_checksum($laskurow['muutospvm']), $page_tarjous[$pp], $pieni);
+        if (file_exists("../../raportit")) $pdf_tarjous->draw_text(560, 820, Pupesoft_Order::get_modified_checksum($laskurow['muutospvm']), $page_tarjous[$pp], $pieni);
       }
     }
 

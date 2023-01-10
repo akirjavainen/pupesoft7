@@ -2367,6 +2367,9 @@ if ($luottorajavirhe_ylivito_valmis) {
   $result = pupe_query($query);
 }
 
+// MUOKKAUS: PDF-mittakuvien tallennus verkkolevylle:
+if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/printable.php?pupe_order=" . $tilausnumero . "&pdf_write=1");
+
 if (!isset($silent) or $silent == "") {
   echo $tilaus_valmis_ulos;
 }
