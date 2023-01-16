@@ -213,7 +213,7 @@ elseif (!empty($tarkistusmuuttuja)) {
   }
   elseif ((!empty($request['tyom_parametrit']['valmnro']) or !empty($request['tyom_parametrit']['tuotenro'])) and puuttuuko_laitteelta_sopimus($request['tyom_parametrit']['valmnro'], $request['tyom_parametrit']['tuotenro'])) {
     $virheviesti2 = t("HUOM: Laite löytyy, mutta sillä ei ole sopimusta");
-    echo "<font class='error'>${virheviesti2}</font><br>";
+    echo "<font class='error'>$virheviesti2</font><br>"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
   }
   if (empty($request['tyom_parametrit']['valmnro']) and empty($request['tyom_parametrit']['tuotenro'])) echo "<font class='error'>".t("VIRHE: Sarjanumero tai malli on pakollinen tieto")."</font><br>";
   if (empty($request['tyom_parametrit']['komm1'])) echo "<font class='error'>".t("VIRHE: Viankuvaus on pakollinen tieto")."</font><br>";

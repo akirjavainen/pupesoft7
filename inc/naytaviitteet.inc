@@ -16,15 +16,15 @@ if ($type == '0' and substr($tietue, 0, 3) != "\$\$E" and substr($tietue, 0, 3) 
   $pp = substr($pvm, 4, 2);
 
   if (!isset($lopetus) or $lopetus == "") {
-    $lopetus = "${palvelin2}tilioteselailu.php////toim=$toim//tee=T//pvm=$vv-$kk-$pp//tyyppi=3//tilino=$tilino";
+    $lopetus = $palvelin2 . "tilioteselailu.php////toim=$toim//tee=T//pvm=$vv-$kk-$pp//tyyppi=3//tilino=$tilino"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
   }
   else {
-    $lopetus = "$lopetus/SPLIT/${palvelin2}tilioteselailu.php////toim=$toim//tee=T//pvm=$vv-$kk-$pp//tyyppi=3//tilino=$tilino";
+    $lopetus = "$lopetus/SPLIT/" . $palvelin2 . "tilioteselailu.php////toim=$toim//tee=T//pvm=$vv-$kk-$pp//tyyppi=3//tilino=$tilino"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
   }
 
   if ($tilioteselailu_oikrow !== FALSE) {
-    echo "<a href='${palvelin2}tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XXS&lopetus=$lopetus'>&laquo; ".t("Edellinen")."</a>&nbsp;&nbsp;&nbsp;&nbsp;
-          <a href='${palvelin2}tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XS&lopetus=$lopetus'>".t("Seuraava")." &raquo;</a>
+    echo "<a href='" . $palvelin2 . "tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XXS&lopetus=$lopetus'>&laquo; ".t("Edellinen")."</a>&nbsp;&nbsp;&nbsp;&nbsp; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
+          <a href='" . $palvelin2 . "tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XS&lopetus=$lopetus'>".t("Seuraava")." &raquo;</a>
           <br><br>";
   }
 
@@ -83,7 +83,7 @@ elseif ($type == '3' or $type == 'S') {
 
   if ($suoritusrow['kohdpvm'] != '0000-00-00' and $suoritusrow["laskunro"] != 0) {
     echo "<font class='ok'>".t("Suoritus kohdistettu laskuun")." ";
-    echo "<a href='${palvelin2}muutosite.php?tee=E&tunnus=$suoritusrow[tunnus]&lopetus=$lopetus'>$suoritusrow[laskunro]</a></font>";
+    echo "<a href='" . $palvelin2 . "muutosite.php?tee=E&tunnus=$suoritusrow[tunnus]&lopetus=$lopetus'>$suoritusrow[laskunro]</a></font>"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
   }
   else {
     if (mysqli_num_rows($suoritusresult)==1) {
@@ -102,7 +102,7 @@ elseif ($type == '3' or $type == 'S') {
                 WHERE tiliointi.tunnus = '$tiliotedatarow[tiliointitunnus]'";
       $tiliointiresult = pupe_query($query);
       if ($tiliointirow = mysqli_fetch_array($tiliointiresult)) {
-        echo "<a href='${palvelin2}muutosite.php?tee=E&tunnus=$tiliointirow[ltunnus]&lopetus=$lopetus'>Viitemaksusta luotu tosite</a></font>";
+        echo "<a href='" . $palvelin2 . "muutosite.php?tee=E&tunnus=$tiliointirow[ltunnus]&lopetus=$lopetus'>Viitemaksusta luotu tosite</a></font>"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
       }
     }
   }
@@ -125,9 +125,9 @@ elseif (substr($tietue, 0, 3) != "\$\$E" and substr($tietue, 0, 3) != "EOF") {
   echo "<td>".t("Tuntematon tietuetunnus")." $type</td>";
 }
 
-if ($tilioteselailu_oikrow !== FALSE and $tilioterivimaara == $tilioterivilaskuri) {
+if ($tilioteselailu_oikrow !== FALSE and $tilioterivimaara == $tilioterivilaskuri) { // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu:
   echo "<br>
-        <a href='${palvelin2}tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XXS&lopetus=$lopetus'>&laquo; ".t("Edellinen")."</a>&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href='${palvelin2}tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XS&lopetus=$lopetus'>".t("Seuraava")." &raquo;</a>
+        <a href='" . $palvelin2 . "tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XXS&lopetus=$lopetus'>&laquo; ".t("Edellinen")."</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href='" . $palvelin2 . "tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XS&lopetus=$lopetus'>".t("Seuraava")." &raquo;</a>
         <br>";
 }

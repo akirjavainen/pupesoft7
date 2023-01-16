@@ -1133,7 +1133,7 @@ if ($fieldname == "luottoraja" and $yhtiorow["myyntitilaus_saatavat"] == "Y") {
   $ulos = "<td>";
 
   if (tarkista_oikeus("luotonhallinta.php")) {
-    $ulos .= "<a target='Luotonhallinta' href='${palvelin2}myyntires/luotonhallinta.php?tee=1&ytunnus=$trow[ytunnus]&asiakasid=$trow[tunnus]'>".t("Luotonhallinta")."</a>";
+    $ulos .= "<a target='Luotonhallinta' href='" . $palvelin2 . "myyntires/luotonhallinta.php?tee=1&ytunnus=$trow[ytunnus]&asiakasid=$trow[tunnus]'>".t("Luotonhallinta")."</a>"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
   }
   else {
     $ulos .= t("Luottorajat ovat per ytunnus, käytä Luotonhallinta -sovellusta");

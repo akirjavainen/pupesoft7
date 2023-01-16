@@ -417,10 +417,11 @@ if ($tee == '') {
 
     $edalku = $row["alku"];
 
+    // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu:
     echo "<form name = 'valikko' method='post'>
           <input type='hidden' name='toim' value='$toim'>
           <input type='hidden' name='tee' value='T'>
-          <input type='hidden' name='lopetus' value='${palvelin2}tilioteselailu.php////toim=$toim//tee=//pp=$pp//kk=$kk//vv=$vv//tilino=$tilino//tyyppi=$tyyppi'>
+          <input type='hidden' name='lopetus' value='" . $palvelin2. "tilioteselailu.php////toim=$toim//tee=//pp=$pp//kk=$kk//vv=$vv//tilino=$tilino//tyyppi=$tyyppi'>
           <input type='hidden' name='pvm' value='$row[alku]'>
           <input type='hidden' name='tyyppi' value='$row[tyyppi]'>
           <input type='hidden' name='tilino' value='$row[tilino]'>

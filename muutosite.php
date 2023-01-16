@@ -1573,7 +1573,7 @@ if ($tee == 'E' or $tee == 'F') {
       echo "<input type = 'hidden' name = 'tunnus' value = '$trow[liitostunnus]'>";
       echo "<input type = 'hidden' name = 'liitetiedosto' value = '$ktarkoitus[tunnus]'>";
       echo "<input type = 'hidden' name = 'kayttotyyppi' value = '$ktarkoitus[kayttotarkoitus]'>";
-      echo "<input type='hidden' name='lopetus' value='$lopetus/SPLIT/${palvelin2}muutosite.php////tee=E//tunnus=$trow[tunnus]'>";
+      echo "<input type='hidden' name='lopetus' value='$lopetus/SPLIT/" . $palvelin2 . "muutosite.php////tee=E//tunnus=$trow[tunnus]'>"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
       echo "<input type = 'hidden' name = 'lisaselite' class='lisaselite' value='' />";
       echo "<input type = 'submit' class='hae_lisaselite' value='" . t('Tee tiliöintisääntö laskusta')."'>";
       echo "</form>";

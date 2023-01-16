@@ -37,7 +37,7 @@ echo "<font class='head'>", t("Myyntilaskuhaku"), "</font><hr>";
 
 $index = "";
 
-$lopelisa = "${palvelin2}myyntires/myyntilaskuhaku.php////tee=$tee//laskuntyyppi=$laskuntyyppi//summa1=$summa1//summa2=$summa2//alkuvv=$alkuvv//alkukk=$alkukk//alkupp=$alkupp//loppuvv=$loppuvv//loppukk=$loppukk//loppupp=$loppupp//pvm=$pvm";
+$lopelisa = $palvelin2 . "myyntires/myyntilaskuhaku.php////tee=$tee//laskuntyyppi=$laskuntyyppi//summa1=$summa1//summa2=$summa2//alkuvv=$alkuvv//alkukk=$alkukk//alkupp=$alkupp//loppuvv=$loppuvv//loppukk=$loppukk//loppupp=$loppupp//pvm=$pvm"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
 if (isset($lopetus) and $lopetus != "") $lopelisa = "$lopetus/SPLIT/$lopelisa";
 
 echo "<form name = 'valinta' method='post'>";

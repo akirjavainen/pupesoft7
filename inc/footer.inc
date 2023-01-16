@@ -94,7 +94,7 @@ if ($lopeta_body) {
     }
 
     echo "<br><br>";
-    echo "<form name='sanakirjaform' method='post' action='${palvelin2}sanakirja.php'>";
+    echo "<form name='sanakirjaform' method='post' action='" . $palvelin2 . "sanakirja.php'>"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
     echo "<input type='hidden' name='kieli[$kindex]' value='$kieli'>";
     echo "<input type='hidden' name='show' value='all'>";
     echo "<input type='hidden' name='etsi_kieli' value='fi'>";

@@ -1098,7 +1098,7 @@ case 'T10':
     $tiliotedatarowtunnus = $tiliotedatarow["tunnus"];
 
     if ($tilioteselailu_oikrow !== FALSE) {
-      $lopetuslisa = "/SPLIT/${palvelin2}tilioteselailu.php////toim=$toim//tee=T//tyyppi=$lopp_tyyppi//tilino=$lopp_tilino//pvm=$lopp_pvm//tiliotejarjestys=$tiliotejarjestys///kuitattu_$tiliotedatarowtunnus";
+      $lopetuslisa = "/SPLIT/" . $palvelin2 . "tilioteselailu.php////toim=$toim//tee=T//tyyppi=$lopp_tyyppi//tilino=$lopp_tilino//pvm=$lopp_pvm//tiliotejarjestys=$tiliotejarjestys///kuitattu_$tiliotedatarowtunnus"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
     }
     // Kuitattu checkbox
     $kuitattu_checked = ($tiliotedatarow['kuitattu'] != '' and $tiliotedatarow['kuitattuaika'] > '0000-00-00 00:00:00') ? ' CHECKED' : '';

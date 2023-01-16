@@ -130,7 +130,7 @@ if ($tee == "") {
     }
 
     $html = t("Myöhässä maksettuja laskuja").": ".sprintf('%.0f', $maksunopeus)."%";
-    $kuvaurl = "<img valign='bottom' src='${palvelin2}pics/$kuva'>";
+    $kuvaurl = "<img valign='bottom' src='" . $palvelin2 . "pics/$kuva'>"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
 
     return array($kuvaurl, $html);
   }

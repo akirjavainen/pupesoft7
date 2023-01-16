@@ -6099,9 +6099,9 @@ if ($tee == '') {
     }
   }
 
-  // Allr specific!
-  if (file_exists("${pupe_root_polku}/allr_kamppikset.php")) {
-    require "${pupe_root_polku}/allr_kamppikset.php";
+  // Allr specific! MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu:
+  if (file_exists("$pupe_root_polku/allr_kamppikset.php")) {
+    require "$pupe_root_polku/allr_kamppikset.php";
   }
 
   if (!empty($_etukateen_maksettu)) {

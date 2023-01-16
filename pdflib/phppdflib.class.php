@@ -1161,7 +1161,7 @@ class pdffile {
 
   function enable($name) {
     $name = strtolower($name);
-    include_once dirname(__FILE__) . "/${name}.class.php";
+    include_once dirname(__FILE__) . "/$name.class.php";
     $this->x[$name] = new $name;
     $this->x[$name]->pdf = &$this;
     switch ($name) {
