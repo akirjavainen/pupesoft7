@@ -48,6 +48,8 @@ class pdffile {
   var $nextpage;              // Tracks the next page number
   var $widths, $needsset;     // Store the font width arrays here
   var $default;               // Default values for objects
+  var $oid;
+  var $currentPage;
   var $x, $chart, $template,
   $packer, $import;       // extension class is instantiated here
   var $debug = 0, $dbs = '';  // Default debug level, higher = more data
