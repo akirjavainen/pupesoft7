@@ -357,7 +357,7 @@ if ($tee == 'KARHUA') {
       $lask = 1;
     }
 
-    echo "<option value='$viesti[tunnus]' ${'sel'.$lask}>".maa($viesti["kieli"])." ".t("viesti")." $lask</option>";
+    echo "<option value='$viesti[tunnus]' " . ${"sel" . $lask} . ">".maa($viesti["kieli"])." ".t("viesti")." $lask</option>"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulutusta muokattu
 
     if (${'sel'.$lask} != '') {
       ${'sel'.$lask} = "";

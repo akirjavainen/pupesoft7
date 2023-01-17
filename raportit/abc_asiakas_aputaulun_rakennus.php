@@ -247,13 +247,13 @@ if ($tee == 'YHTEENVETO') {
     foreach ($looparray as $row) {
 
       // katotaan onko kelvollinen tuote, elikkä luokitteluperuste pitää olla > 0
-      if ($row["${abcwhat}"] > 0) {
+      if ($row[$abcwhat] > 0) { // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
 
         // laitetaan oikeeseen luokkaan
         $luokka = $i;
 
         // tuotteen osuus yhteissummasta
-        if ($kausiyhteensa != 0) $tuoteprossa = ($row["${abcwhat}"] / $kausiyhteensa) * 100;
+        if ($kausiyhteensa != 0) $tuoteprossa = ($row[$abcwhat] / $kausiyhteensa) * 100; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
         else $tuoteprossa = 0;
 
         //muodostetaan ABC-luokka ryhmäprossan mukaan
@@ -361,7 +361,7 @@ if ($tee == 'YHTEENVETO') {
       while ($row = mysqli_fetch_assoc($res)) {
 
         // asiakkaan osuus yhteissummasta
-        if ($yhtrow["${abcwhat}"] != 0) $tuoteprossa = ($row["${abcwhat}"] / $yhtrow["${abcwhat}"]) * 100;
+        if ($yhtrow[$abcwhat] != 0) $tuoteprossa = ($row[$abcwhat] / $yhtrow[$abcwhat]) * 100; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
         else $tuoteprossa = 0;
 
         // muodostetaan ABC-luokka ryhmäprossan mukaan
@@ -433,7 +433,7 @@ if ($tee == 'YHTEENVETO') {
       while ($row = mysqli_fetch_assoc($res)) {
 
         // asiakkaan osuus yhteissummasta
-        if ($yhtrow["${abcwhat}"] != 0) $tuoteprossa = ($row["${abcwhat}"] / $yhtrow["${abcwhat}"]) * 100;
+        if ($yhtrow[$abcwhat] != 0) $tuoteprossa = ($row[$abcwhat] / $yhtrow[$abcwhat]) * 100; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
         else $tuoteprossa = 0;
 
         // muodostetaan ABC-luokka ryhmäprossan mukaan

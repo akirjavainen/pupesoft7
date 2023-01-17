@@ -31,7 +31,7 @@ function yrityspeli_kayttoliittyma(Array $params) {
   echo "<tr>";
   echo "<th>".t('Tilausten lukumäärä per yritys')."</th>";
   echo "<td>";
-  echo "<input type='text' name='tilausmaara' size='10' value='${tilausmaara}'/>";
+  echo "<input type='text' name='tilausmaara' size='10' value='$tilausmaara'/>"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
   echo "</td>";
   echo "</tr>";
 

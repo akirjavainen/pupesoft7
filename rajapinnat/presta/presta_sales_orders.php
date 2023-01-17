@@ -524,7 +524,7 @@ class PrestaSalesOrders extends PrestaClient {
       return $lastname;
     }
 
-    return "${lastname} ${firstname}";
+    return "$lastname $firstname"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
   }
 
   private function fetch_pupesoft_customer($params) {
