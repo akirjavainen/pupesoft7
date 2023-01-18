@@ -2197,8 +2197,6 @@ if (!function_exists('print_pdf_tarjous')) {
       }
     }
     elseif ($tee == 'NAYTATILAUS') {      
-      // MUOKKAUS: PDF-tiedoston suorasahkopostitukseen:
-      if (file_exists("/var/www/tmp")) copy($pdf_tarjousfilenimi, "/var/www/tmp/" . $laskurow["tunnus"] . ".pdf");
       // Työnnetään tuo pdf vaan putkeen!
       echo file_get_contents($pdf_tarjousfilenimi);
     }
@@ -2206,6 +2204,9 @@ if (!function_exists('print_pdf_tarjous')) {
       echo t("Tarjous tulostuu")."...<br>";
       $line = exec("$komento $pdf_tarjousfilenimi", $output, $returnvalue);
     }
+
+    // MUOKKAUS: PDF-tiedoston suorasahkopostitukseen:
+    if (file_exists("/var/www/tmp")) copy($pdf_tarjousfilenimi, "/var/www/tmp/" . $laskurow["tunnus"] . ".pdf");
   }
 }
 
