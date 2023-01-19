@@ -35,7 +35,7 @@ Code 128-C is numeric only and provides the most efficiency.
 
 
 class C128CObject extends BarcodeObject {
-  var $mCharSet, $mChars, $mFNC;
+  var $mCharSet, $mChars, $mFNC, $mValue;
   public function __construct($Width, $Height, $Style, $Value, $fnc = '') {
     $this->init($Width, $Height, $Style);
     $this->mFNC     = $fnc;
