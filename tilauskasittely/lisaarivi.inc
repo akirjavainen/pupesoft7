@@ -3695,7 +3695,8 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
       // lapsille oikea perheid
       $perheid_lisaarivi = $lisatty_tun;
 
-      if ($varattu+$jt != 0 and ($myy_sarjatunnus != "" or $osto_sarjatunnus != "") and mb_strtoupper($trow["tuoteno"]) == mb_strtoupper($alkupera_trow["tuoteno"])) {
+      // MUOKKAUS: BUGIKORJAUS (string + int):
+      if ((int)$varattu+(int)$jt != 0 and ($myy_sarjatunnus != "" or $osto_sarjatunnus != "") and mb_strtoupper($trow["tuoteno"]) == mb_strtoupper($alkupera_trow["tuoteno"])) {
 
         if ($osto_sarjatunnus != "" or $varattu+$jt < 0) {
           $tunken = "ostorivitunnus";
