@@ -148,6 +148,10 @@ else {
   echo "<th><a href='$PHP_SELF?tee=$tee&tunnus=$tunnus&iframe=$iframe&laji=$laji&vv=$vv&kk=$kk&viivatut=$viivatut&jarj=mapvm'>".t("valkoodi")."</a></th>";
   echo "</tr>";
 
+  // MUOKKAUS: Lisatty yhteenlasku:
+  $row_count = 0;
+  $total_sum = 0;
+
   while ($trow = mysqli_fetch_assoc($result)) {
     echo "<tr>";
 
@@ -173,8 +177,18 @@ else {
     echo "<$ero style='text-align: right;'>$trow[summa]</$ero>";
     echo "<$ero>$trow[valkoodi]</$ero>";
     echo "</tr>";
+
+    // MUOKKAUS: Lisatty yhteenlasku:
+    $row_count++;
+    $total_sum += (float)$trow["summa"];
   }
 
+  // MUOKKAUS: Lisatty yhteenlasku:
+  echo "<tr>";
+  echo "<th colspan='4'>$row_count " . t("kpl") . "</th>";
+  echo "<th>" . round($total_sum, 2) . "</th>";
+  echo "<th> </th>";
+  echo "</tr>";
   echo "</table>";
   echo "</div>";
 }
