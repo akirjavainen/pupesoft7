@@ -1202,6 +1202,10 @@ if (!function_exists("apix_invoice_put_file")) {
       $version       = "1.1";
     }
 
+    if ($yhtiorow["finvoice_versio"] == "3") {
+      $software = "Standard3";
+    }
+
     $query = "SELECT chn
               FROM lasku
               WHERE yhtio = '{$kukarow['yhtio']}'
@@ -4233,7 +4237,7 @@ if (!function_exists("alehinta")) {
     $hintaan_osunut_kampanja = null;
     $kampanjarajaus = '';
 
-    // Onko kyseess kampanja, jos on niin kampanjamatch yliajaa pivmrrajauksen
+    // Onko kyseessa kampanja, jos on niin kampanjamatch yliajaa paivamaararajauksen
     if (isset($laskurow['campaign_id'])) {
       $kampanjarajaus = " or campaign_id = {$laskurow['campaign_id']} ";
     }
