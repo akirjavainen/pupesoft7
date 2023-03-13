@@ -65,6 +65,16 @@ if (count($_POST) == 0) {
   $result = pupe_query($query);
 }
 
+// MUOKKAUS: Lisatty laskujen merkitseminen maksetuksi myos ilman pankkiyhteytta:
+if (isset($_POST["maksettu"])) {
+  $maksettu_tunnus = (int)$_POST["maksettu"];
+
+  if ($maksettu_tunnus > 0) {
+    $query = "UPDATE lasku SET mapvm=NOW() WHERE tunnus=$maksettu_tunnus;";
+    pupe_query($query);
+  }
+}
+
 // Päivitetään oletustili
 if ($tee == 'O') {
   $query = "UPDATE kuka SET
@@ -1487,7 +1497,14 @@ where lasku.yhtio=tiliointi.yhtio and lasku.tunnus = tiliointi.ltunnus and tilio
 
       echo "</td>";
 
-      echo "<td class='ptop'>$trow[laskunro]</td>";
+      echo "<td class='ptop'>$trow[laskunro]";
+      
+      // MUOKKAUS: Lisatty laskujen merkitseminen maksetuksi myos ilman pankkiyhteytta:
+      echo "<br>";
+      echo "<a href='?maksettu=" . $trow["tunnus"] . "'>";
+      echo "<input type='submit' name='maksettu' value='Merkitse maksetuksi'>";
+      echo "</a></td>" . PHP_EOL;
+
       echo "<td class='ptop'>$trow[viite] $trow[viesti]";
 
       if ($trow["vanhatunnus"] != 0) {
@@ -1568,7 +1585,7 @@ where lasku.yhtio=tiliointi.yhtio and lasku.tunnus = tiliointi.ltunnus and tilio
               <input type='hidden' name = 'kaikki' value='$kaikki'>
               <input type='hidden' name = 'nimihaku' value='$nimihaku'>
               <input type='hidden' name = 'tapa' value='$tapa'>
-              <input type='submit' value='".t("Poimi lasku")."'>";
+              <input type='submit' value='".t("Poimi lasku")."'>";  
         }
 
         echo "</td>";
