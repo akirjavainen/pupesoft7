@@ -560,8 +560,11 @@ if (!function_exists('alku_lahete')) {
     
     // MUOKKAUS: lisatty:
     $pdf->draw_text(290, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli).".", $thispage, $boldi);
-    $pdf->draw_text(290, 606, t("Mittatilaustuotteilla ei ole kuluttajansuojalain mukaista", $kieli), $thispage, $boldi);
-    $pdf->draw_text(290, 589, t("peruutusoikeutta (kohta 16 peruutusoikeuksien rajoitus)", $kieli).".", $thispage, $boldi);
+
+    if (strlen((string)$laskurow["ytunnus"]) < 7) {
+	    $pdf->draw_text(290, 606, t("Mittatilaustuotteilla ei ole kuluttajansuojalain mukaista", $kieli), $thispage, $boldi);
+	    $pdf->draw_text(290, 589, t("peruutusoikeutta (kohta 16 peruutusoikeuksien rajoitus)", $kieli).".", $thispage, $boldi);
+    }
     $puh = "";
     $komm = "";
     if (file_exists("../../common")) $puh = Pupesoft::get_order_contact_person_phone_number($GLOBALS["masterlink"], (string)$laskurow['yhtio'], (int)$laskurow['liitostunnus'], (string)$laskurow['tilausyhteyshenkilo']);
