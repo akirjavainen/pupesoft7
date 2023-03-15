@@ -955,22 +955,8 @@ if ((int) $kukarow["kesken"] > 0) {
       $tee = "VALMIS";
       $seka = "kylla";
     }
-    
-    if($maksupaate_kateinen_id and $maksupaate_kortti_id) {
-      if($kateismaksu['kateinen']) {
-        $_paivita_maksuehto = $maksupaate_kateinen_id;
-      } else {
-        $_paivita_maksuehto = $maksupaate_kortti_id;
-      }
-      $maksuehto_query = "UPDATE lasku 
-                          SET maksuehto   = '$_paivita_maksuehto' 
-                          WHERE yhtio = '$kukarow[yhtio]'
-                          AND tunnus  = '$laskurow[tunnus]'";
-      pupe_query($maksuehto_query);
-    }
-
   }
-
+    
   if ($yhtiorow["extranet_poikkeava_toimitusosoite"] == "Y") {
     if (isset($poikkeava_toimitusosoite) and $poikkeava_toimitusosoite == "N") {
       $tnimi     = $laskurow["nimi"];
@@ -1921,6 +1907,14 @@ if (    $tee == "VALMIS"
     $kertakassa = $kukarow["kassamyyja"];
   }
 
+  if($maksupaate_kateinen_id and $maksupaate_kortti_id) {
+    if($kateismaksu['kateinen']) {
+      $maksutapa = $maksupaate_kateinen_id;
+    } else {
+      $maksutapa = $maksupaate_kortti_id;
+    }
+  }
+
   $query_maksuehto = "UPDATE lasku
                       SET maksuehto   = '$maksutapa',
                       kassalipas  = '$kertakassa'
@@ -1941,8 +1935,8 @@ if ($tee == 'VALMIS' and (int) $kukarow['kesken'] > 0 and !empty($tilaus_valmis_
     $alatilaupdate = ", alatila = '' ";
   }
 
+  //tilaus_valmis_toiminto = '$tilaus_valmis_toiminto' // MUOKKAUS: Kommentoitu ulos
   $query  = "UPDATE lasku set
-              tilaus_valmis_toiminto = '$tilaus_valmis_toiminto'
               {$alatilaupdate}
               where yhtio = '$kukarow[yhtio]'
               and tunnus  = '$kukarow[kesken]'";
@@ -1956,6 +1950,14 @@ if ($tee == 'VALMIS' and (int) $kukarow['kesken'] > 0 and !empty($tilaus_valmis_
   if ($lopetus != '') {
     lopetus($lopetus, "META");
   }
+}
+
+if ($tee == 'VALMIS' and (int) $kukarow['kesken'] > 0 and empty($tilaus_valmis_toiminto)) {
+  $query  = "UPDATE lasku set
+              tilaus_valmis_toiminto = ''
+              where yhtio = '$kukarow[yhtio]'
+              and tunnus  = '$kukarow[kesken]'";
+  //pupe_query($query); // MUOKKAUS: Kommentoitu ulos
 }
 
 // Tilaus valmis
@@ -3184,14 +3186,6 @@ if ($tee == '') {
 
     if ((isset($asiakkaan_tilausnumero) and $asiakkaan_tilausnumero != $laskurow["asiakkaan_tilausnumero"])) {
       $asiakkaan_tilaunumero_lisa = "asiakkaan_tilausnumero = '$asiakkaan_tilausnumero',";
-    }
-
-    if($maksupaate_kateinen_id and $maksupaate_kortti_id and $maksupaate_kassamyynti and isset($maksupaatetapahtuma)) {
-      if($kateismaksu['kateinen']) {
-        $laskurow['maksuehto'] = $maksupaate_kateinen_id;
-      } else {
-        $laskurow['maksuehto'] = $maksupaate_kortti_id;
-      }
     }
 
     $query  = "UPDATE lasku SET
@@ -11161,7 +11155,7 @@ if ($tee == '') {
             ($laskurow['tila'] == "V" and in_array($laskurow['alatila'], array("", "J")))
           )) {
             $sel_tvt = array();
-            $sel_tvt[$laskurow['tilaus_valmis_toiminto']] = "SELECTED";
+            //$sel_tvt[$laskurow['tilaus_valmis_toiminto']] = "SELECTED"; // MUOKKAUS: Kommentoitu ulos
             echo "<select name='tilaus_valmis_toiminto'>";
             echo "<option value=''>".t("Tilaus valmis")."</option>";
             echo "<option value='OO' {$sel_tvt['OO']}>".t("Odottaa ohjelmointia")."</option>";

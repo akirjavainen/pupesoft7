@@ -171,12 +171,12 @@ CREATE TABLE `asiakas` (
   `sisviesti1` text,
   `tilaus_viesti` varchar(70) NOT NULL DEFAULT '',
   `kuljetusohje` text,
-  `toimitusaikaikkuna` int NOT NULL DEFAULT 0,
   `selaus` varchar(55) NOT NULL DEFAULT '',
   `alv` decimal(5,2) NOT NULL DEFAULT '0.00',
   `valkoodi` char(3) NOT NULL DEFAULT '',
   `maksuehto` int(11) NOT NULL DEFAULT '0',
   `toimitustapa` varchar(50) NOT NULL DEFAULT '',
+  `toimitusaikaikkuna` int(11) NOT NULL DEFAULT '0',
   `rahtivapaa` char(1) NOT NULL DEFAULT '',
   `rahtivapaa_alarajasumma` decimal(12,2) NOT NULL DEFAULT '0.00',
   `kuljetusvakuutus_tyyppi` char(1) NOT NULL DEFAULT '',
@@ -324,6 +324,7 @@ CREATE TABLE `asiakashinta` (
   `piiri` varchar(150) NOT NULL DEFAULT '',
   `campaign_id` int(11) DEFAULT NULL,
   `hinta` decimal(16,6) NOT NULL DEFAULT '0.000000',
+  `myyntikate` int(11) NOT NULL DEFAULT '0',
   `valkoodi` char(3) NOT NULL DEFAULT '',
   `minkpl` int(11) NOT NULL DEFAULT '0',
   `maxkpl` int(11) NOT NULL DEFAULT '0',
@@ -1025,7 +1026,7 @@ CREATE TABLE `git_paivitykset` (
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=423 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=430 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1708,8 +1709,7 @@ CREATE TABLE `kuka` (
   `asema` varchar(150) NOT NULL DEFAULT '',
   `dynaaminen_kassamyynti` char(1) NOT NULL DEFAULT '',
   `maksupaate_kassamyynti` char(1) NOT NULL DEFAULT '',
-  `maksupaate_id` int(11) NOT NULL DEFAULT 0,
-  `maksupaate_ip` varchar(60) NOT NULL DEFAULT '',
+  `maksupaate_id` varchar(60) NOT NULL DEFAULT '',
   `toimipaikka` int(11) NOT NULL DEFAULT '0',
   `eposti` varchar(50) NOT NULL DEFAULT '',
   `puhno` varchar(30) NOT NULL DEFAULT '',
@@ -1902,7 +1902,6 @@ CREATE TABLE `lasku` (
   `olmapvm` date NOT NULL DEFAULT '0000-00-00',
   `toimaika` date NOT NULL DEFAULT '0000-00-00',
   `toimvko` varchar(2) NOT NULL DEFAULT '',
-  `toimitusaikaikkuna` int NOT NULL DEFAULT 0,
   `kerayspvm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `keraysvko` varchar(2) NOT NULL DEFAULT '',
   `summa` decimal(12,2) NOT NULL DEFAULT '0.00',
@@ -1960,6 +1959,7 @@ CREATE TABLE `lasku` (
   `allekirjoittaja` int(11) NOT NULL DEFAULT '0',
   `maksuehto` int(11) NOT NULL DEFAULT '0',
   `toimitustapa` varchar(50) NOT NULL DEFAULT '',
+  `toimitusaikaikkuna` int(11) NOT NULL DEFAULT '0',
   `toimitustavan_lahto` int(11) NOT NULL DEFAULT '0',
   `toimitustavan_lahto_siirto` int(11) NOT NULL DEFAULT '0',
   `rahtivapaa` char(1) NOT NULL DEFAULT '',
@@ -2045,6 +2045,8 @@ CREATE TABLE `lasku` (
   `tullausnumero` varchar(25) NOT NULL DEFAULT '',
   `vientipaperit_palautettu` char(1) NOT NULL DEFAULT '',
   `piiri` varchar(150) NOT NULL DEFAULT '',
+  `tilaus_valmis_toiminto` varchar(100) NOT NULL DEFAULT '',
+  `tarkista_ennen_laskutusta` varchar(1) NOT NULL DEFAULT '',
   `lahetetty_ulkoiseen_varastoon` datetime DEFAULT NULL,
   `campaign_id` int(11) DEFAULT NULL,
   `siirtolistan_vastaanotto` int(11) NOT NULL DEFAULT '0',
@@ -2246,7 +2248,7 @@ CREATE TABLE `maat` (
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `koodi_ryhma` (`koodi`,`ryhma_tunnus`),
   KEY `koodi_nimi` (`koodi`,`nimi`)
-) ENGINE=MyISAM AUTO_INCREMENT=8885 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8889 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3110,7 +3112,7 @@ CREATE TABLE `suorituskykyloki` (
   PRIMARY KEY (`tunnus`),
   KEY `yhtio_luontiaika` (`yhtio`,`luontiaika`),
   KEY `yhtio_skripti_luontiaika` (`yhtio`,`skripti`,`luontiaika`)
-) ENGINE=MyISAM AUTO_INCREMENT=285 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=430 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3890,6 +3892,8 @@ CREATE TABLE `toimitustapa` (
   `logy_rahtikirjanumerot` char(1) NOT NULL DEFAULT '',
   `osoitelappu` varchar(50) NOT NULL DEFAULT '',
   `rahdinkuljettaja` varchar(40) NOT NULL DEFAULT '',
+  `smarten_partycode` varchar(100) NOT NULL DEFAULT '',
+  `smarten_serviceid` varchar(100) NOT NULL DEFAULT '',
   `rahti_tuotenumero` varchar(60) NOT NULL DEFAULT '',
   `sopimusnro` varchar(50) NOT NULL DEFAULT '',
   `rahtikirjakopio_email` varchar(150) NOT NULL DEFAULT '',
@@ -4068,7 +4072,7 @@ CREATE TABLE `tullinimike` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   KEY `tullinimike_cn` (`cn`)
-) ENGINE=MyISAM AUTO_INCREMENT=449157 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=536433 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4188,7 +4192,7 @@ CREATE TABLE `tuote` (
   KEY `yhtio_tuotetyyppi_status` (`yhtio`,`tuotetyyppi`,`status`),
   FULLTEXT KEY `tuoteno` (`tuoteno`),
   FULLTEXT KEY `nimitys` (`nimitys`)
-) ENGINE=MyISAM AUTO_INCREMENT=710618 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=711251 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4671,7 +4675,7 @@ CREATE TABLE `valuu_historia` (
   `tunnus` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`tunnus`),
   UNIQUE KEY `kotivaluutta_valkoodi_kurssipvm` (`kotivaluutta`,`valuutta`,`kurssipvm`)
-) ENGINE=MyISAM AUTO_INCREMENT=76929 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=98690 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4777,6 +4781,8 @@ CREATE TABLE `varastopaikat` (
   `postino` varchar(15) NOT NULL DEFAULT '',
   `postitp` varchar(35) NOT NULL DEFAULT '',
   `maa` varchar(35) NOT NULL DEFAULT '',
+  `email` varchar(100) NOT NULL DEFAULT '',
+  `puhelin` varchar(100) NOT NULL DEFAULT '',
   `maa_maara` char(2) NOT NULL DEFAULT '',
   `sisamaan_kuljetus` varchar(30) NOT NULL DEFAULT '',
   `sisamaan_kuljetus_kansallisuus` char(2) NOT NULL DEFAULT '',
@@ -5308,6 +5314,7 @@ CREATE TABLE `yhtion_parametrit` (
   `livetuotehaku_poistetut` char(1) NOT NULL DEFAULT '',
   `poistetut_lisays` char(1) NOT NULL DEFAULT '',
   `iltasiivo_mitatoi_ext_tilauksia` char(3) NOT NULL DEFAULT '',
+  `iltasiivo_mitatoi_kassamyynti_tilauksia` varchar(150) NOT NULL DEFAULT '',
   `extranet_tilaus_varaa_saldoa` varchar(3) NOT NULL DEFAULT '',
   `extranet_nayta_saldo` char(1) NOT NULL DEFAULT '',
   `extranet_nayta_kuvaus` char(1) NOT NULL DEFAULT '',
@@ -5416,6 +5423,8 @@ CREATE TABLE `yhtion_toimipaikat` (
   `yhtio` varchar(5) NOT NULL DEFAULT '',
   `ovtlisa` varchar(16) NOT NULL DEFAULT '',
   `vat_numero` varchar(50) NOT NULL DEFAULT '',
+  `nimitys` varchar(100) NOT NULL DEFAULT '',
+  `varastotoimipaikka` varchar(1) NOT NULL DEFAULT '',
   `kotipaikka` varchar(25) NOT NULL DEFAULT '',
   `nimi` varchar(60) NOT NULL DEFAULT '',
   `osoite` varchar(30) NOT NULL DEFAULT '',
@@ -5522,7 +5531,7 @@ CREATE TABLE `yriti` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-13 10:00:01
+-- Dump completed on 2023-03-15 10:00:02
 -- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: referenssi
@@ -5665,4 +5674,4 @@ DELIMITER ;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-13 10:00:02
+-- Dump completed on 2023-03-15 10:00:02
