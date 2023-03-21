@@ -88,7 +88,7 @@ if ($toim == '' and $tee == 'MONISTA' and count($monistettavat) > 0) {
                   JOIN tuote ON (tuote.yhtio = tilausrivi.yhtio AND tuote.tuoteno = tilausrivi.tuoteno)
                   WHERE tilausrivi.yhtio     = '{$kukarow['yhtio']}'
                   and tilausrivi.tyyppi      = 'L'
-                  AND tilausrivi.uusiotunnus = '{$chk_row['tunnus']}'";
+                  AND tilausrivi.uusiotunnus = '{$chk_row['tunnus']}' ORDER BY tilausrivi.tilaajanrivinro"; // MUOKKAUS: Sailyta tilausrivien jarjestys
         $chk_til_res = pupe_query($query);
 
         while ($chk_til_row = mysqli_fetch_assoc($chk_til_res)) {
@@ -123,7 +123,7 @@ if ($toim == '' and $tee == 'MONISTA' and count($monistettavat) > 0) {
                       JOIN tuote ON (tuote.yhtio = tilausrivi.yhtio AND tuote.tuoteno = tilausrivi.tuoteno)
                       WHERE tilausrivi.yhtio = '{$kukarow['yhtio']}'
                       and tilausrivi.tyyppi  = 'L'
-                      AND tilausrivi.otunnus = '{$clearing_chk_row['tunnus']}'";
+                      AND tilausrivi.otunnus = '{$clearing_chk_row['tunnus']}' ORDER BY tilausrivi.tilaajanrivinro"; // MUOKKAUS: Sailyta tilausrivien jarjestys
             $chk_til_res = pupe_query($query);
 
             while ($chk_til_row = mysqli_fetch_assoc($chk_til_res)) {
@@ -142,7 +142,7 @@ if ($toim == '' and $tee == 'MONISTA' and count($monistettavat) > 0) {
         }
 
         if ($asiakas_panttitili_chk_row['panttitili'] == "K") {
-          // Hyvitettävän laskun pantilliset rivit
+          // Hyvitettävän laskun pantilliset rivit, MUOKKAUS: Sailyta tilausrivien jarjestys
           $query = "SELECT tilausrivi.otunnus, tilausrivi.tuoteno, sum(tilausrivi.kpl) kpl
                     FROM tilausrivi
                     JOIN tuote ON (tuote.yhtio = tilausrivi.yhtio AND tuote.tuoteno = tilausrivi.tuoteno and tuote.panttitili != '')
@@ -150,6 +150,7 @@ if ($toim == '' and $tee == 'MONISTA' and count($monistettavat) > 0) {
                     and tilausrivi.tyyppi      = 'L'
                     AND tilausrivi.uusiotunnus = '{$chk_row['tunnus']}'
                     AND tilausrivi.kpl         > 0
+                    ORDER BY tilausrivi.tilaajanrivinro 
                     GROUP BY 1, 2";
           $chk_til_res = pupe_query($query);
 
@@ -1637,7 +1638,7 @@ if ($tee == 'MONISTA') {
 
         $tunnuslisa = "";
         
-		 // MUOKKAUS: BUGIKORJAUS:
+	// MUOKKAUS: BUGIKORJAUS:
         if ($toim == '' and in_array($kumpi, array('MONISTA', 'HYVITA', 'REKLAMA')) and isset($valitse_rivit) and isset($valitse_rivit[$lasku]) and is_array($valitse_rivit[$lasku]) and count($valitse_rivit[$lasku]) > 0) {
           $tunnuslisa   = "AND tunnus IN (".implode(",", $valitse_rivit[$lasku]).")";
         }
@@ -1649,7 +1650,7 @@ if ($tee == 'MONISTA') {
                   AND tyyppi        = 'L'
                   AND yhtio         = '{$monistarow['yhtio']}'
                   {$tunnuslisa}
-                  ORDER BY otunnus, tunnus";
+                  ORDER BY otunnus, tilaajanrivinro, tunnus";
       }
       $rivires = pupe_query($query);
 
