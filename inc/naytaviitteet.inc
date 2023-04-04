@@ -22,8 +22,9 @@ if ($type == '0' and substr($tietue, 0, 3) != "\$\$E" and substr($tietue, 0, 3) 
     $lopetus = "$lopetus/SPLIT/" . $palvelin2 . "tilioteselailu.php////toim=$toim//tee=T//pvm=$vv-$kk-$pp//tyyppi=3//tilino=$tilino"; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
   }
 
+  // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu:
   if ($tilioteselailu_oikrow !== FALSE) {
-    echo "<a href='" . $palvelin2 . "tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XXS&lopetus=$lopetus'>&laquo; ".t("Edellinen")."</a>&nbsp;&nbsp;&nbsp;&nbsp; // MUOKKAUS: PHP 8.2 -yhteensopivuus, aaltosulut poistettu
+    echo "<a href='" . $palvelin2 . "tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XXS&lopetus=$lopetus'>&laquo; ".t("Edellinen")."</a>&nbsp;&nbsp;&nbsp;&nbsp;
           <a href='" . $palvelin2 . "tilioteselailu.php?toim=$toim&tilino=$tiliotedatarow[tilino]&pvm=$tiliotedatarow[alku]&tee=XS&lopetus=$lopetus'>".t("Seuraava")." &raquo;</a>
           <br><br>";
   }
