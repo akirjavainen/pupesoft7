@@ -210,6 +210,8 @@ class pdffile {
 
   // draw text
   function draw_text($left, $bottom, $text, $parent, $attrib = array(), $iconvdone = "") {
+    if ($text == null) $text = "";
+
     // Käännetään merkistö LATIN:iksi PDF-library ei hanskaa UTF-8:ia
     if (PUPE_UNICODE and $iconvdone != "DONE") {
       $text = str_replace("″", "\"", $text);
