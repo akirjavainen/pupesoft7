@@ -296,6 +296,13 @@ if ($tee == 'TOIMITA') {
 
     if (isset($vaihdakateista) and $vaihdakateista == "KYLLA") {
       $katlisa = ", kassalipas = '$kassalipas', maksuehto = '$maksutapa'";
+    } else if($maksupaate_kassamyynti and isset($maksupaatetapahtuma) and $maksupaate_kateinen_id and $maksupaate_kortti_id) {
+      if($kateismaksu['kateinen']) {
+        $maksutapa = $maksupaate_kateinen_id;
+      } else {
+        $maksutapa = $maksupaate_kortti_id;
+      }
+      $katlisa = ", maksuehto = '$maksutapa'";
     }
     else {
       $katlisa = "";
