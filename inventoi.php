@@ -5,7 +5,7 @@ if (strpos($_SERVER['SCRIPT_NAME'], "inventoi.php") !== FALSE) {
 
   if (!empty($_POST['ajax_toiminto']) and $_POST['ajax_toiminto'] == 'hae_inventointiselite') {
 
-    $_selite = sanitize_string(utf8_decode($_POST['selite']));
+    $_selite = sanitize_string(mb_convert_encoding($_POST['selite'], 'ISO-8859-1', 'UTF-8'));
 
     echo t_avainsana("INVEN_LAJI", '', " and avainsana.selite = '{$_selite}'", '', '', "selitetark_4");
     exit;

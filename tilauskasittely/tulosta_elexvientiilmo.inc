@@ -475,6 +475,6 @@ $out = preg_replace("/<[a-z0-9]*?> *?<\/[a-z0-9]*?>/i", "", $out);
 $out = preg_replace("/<[a-z0-9]*?> *?<\/[a-z0-9]*?>/i", "", $out);
 $out = preg_replace("/></", ">\n<", $out);
 
-file_put_contents("/Users/juppe/Desktop/PUPE.xml" , utf8_encode($out));
+file_put_contents("/Users/juppe/Desktop/PUPE.xml" , mb_convert_encoding($out, 'UTF-8', mb_list_encodings()));
 
 echo "<pre>".htmlentities($out)."</pre>";

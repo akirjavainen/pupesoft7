@@ -256,7 +256,7 @@ if ($tee == "synkronoi") {
   if (PUPE_UNICODE) {
     // Tässä on "//NO_MB_OVERLOAD"-kommentti
     // jotta UTF8-konversio ei osu tähän riviin
-    $nimikeet = utf8_encode($nimikeet); //NO_MB_OVERLOAD
+    $nimikeet = mb_convert_encoding($nimikeet, 'UTF-8', mb_list_encodings()); //NO_MB_OVERLOAD
   }
 
   $nimikeet = explode("\n", trim($nimikeet));
@@ -326,7 +326,7 @@ if ($tee == "synkronoi" or $tee == "synkronoimaat") {
   if (PUPE_UNICODE) {
     // Tässä on "//NO_MB_OVERLOAD"-kommentti
     // jotta UTF8-konversio ei osu tähän riviin
-    $nimikeet = utf8_encode($nimikeet); //NO_MB_OVERLOAD
+    $nimikeet = mb_convert_encoding($nimikeet, 'UTF-8', mb_list_encodings()); //NO_MB_OVERLOAD
   }
 
   $nimikeet = explode("\n", trim($nimikeet));

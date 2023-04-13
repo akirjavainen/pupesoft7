@@ -31811,7 +31811,7 @@ if (!function_exists("tallenna_tiliote_viite")) {
     while (!feof($fd)) {
 
       if (!PUPE_UNICODE and mb_detect_encoding($tietue, 'UTF-8', true) !== FALSE) {
-        $tietue = utf8_decode($tietue);
+        $tietue = mb_convert_encoding($tietue, 'ISO-8859-1', 'UTF-8');
       }
 
       $tietue      = str_replace($serc, $repl, $tietue);

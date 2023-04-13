@@ -190,7 +190,7 @@ class MagentoClient {
         // Haetaan kategoriat joka kerta koska lisättäessä puu muuttuu
         $category_tree = $this->getCategories();
 
-        $kategoria['try_fi'] = utf8_encode($kategoria['try_fi']);
+        $kategoria['try_fi'] = mb_convert_encoding($kategoria['try_fi'], 'UTF-8', mb_list_encodings());
         // Kasotaan löytyykö tuoteryhmä
         if (!$this->findCategory($kategoria['try_fi'], $category_tree['children'])) {
 
@@ -279,7 +279,7 @@ class MagentoClient {
 
       // Etsitään kategoria_id tuoteryhmällä
       if ($selected_category == 'tuoteryhma') {
-        $category_ids[] = $this->findCategory(utf8_encode($tuoteryhmanimi), $category_tree['children']);
+        $category_ids[] = $this->findCategory(mb_convert_encoding($tuoteryhmanimi, 'UTF-8', mb_list_encodings()), $category_tree['children']);
       }
       else {
         // Etsitään kategoria_id:t tuotepuun tuotepolulla
@@ -383,9 +383,9 @@ class MagentoClient {
       $tuote_data = array(
         'categories'            => $category_ids,
         'websites'              => explode(" ", $tuote['nakyvyys']),
-        'name'                  => utf8_encode($tuotteen_nimitys),
-        'description'           => utf8_encode($tuote['kuvaus']),
-        'short_description'     => utf8_encode($tuote['lyhytkuvaus']),
+        'name'                  => mb_convert_encoding($tuotteen_nimitys, 'UTF-8', mb_list_encodings()),
+        'description'           => mb_convert_encoding($tuote['kuvaus'], 'UTF-8', mb_list_encodings()),
+        'short_description'     => mb_convert_encoding($tuote['lyhytkuvaus'], 'UTF-8', mb_list_encodings()),
         'weight'                => $tuote['paino'],
         'status'                => self::ENABLED,
         'visibility'            => $visibility,
@@ -394,9 +394,9 @@ class MagentoClient {
         'meta_title'            => '',
         'meta_keyword'          => '',
         'meta_description'      => '',
-        'campaign_code'         => utf8_encode($tuote['campaign_code']),
-        'onsale'                => utf8_encode($tuote['onsale']),
-        'target'                => utf8_encode($tuote['target']),
+        'campaign_code'         => mb_convert_encoding($tuote['campaign_code'], 'UTF-8', mb_list_encodings()),
+        'onsale'                => mb_convert_encoding($tuote['onsale'], 'UTF-8', mb_list_encodings()),
+        'target'                => mb_convert_encoding($tuote['target'], 'UTF-8', mb_list_encodings()),
         'tier_price'            => $tuote_ryhmahinta_data,
         'additional_attributes' => array('multi_data' => $multi_data),
       );
@@ -777,13 +777,13 @@ class MagentoClient {
       $configurable = array(
         'categories'            => $category_ids,
         'websites'              => explode(" ", $lapsituotteen_tiedot['nakyvyys']),
-        'name'                  => utf8_encode($lapsituotteen_tiedot[$configurable_tuote_nimityskentta]),
-        'description'           => utf8_encode($lapsituotteen_tiedot['kuvaus']),
-        'short_description'     => utf8_encode($lapsituotteen_tiedot['lyhytkuvaus']),
-        'campaign_code'         => utf8_encode($lapsituotteen_tiedot['campaign_code']),
-        'onsale'                => utf8_encode($lapsituotteen_tiedot['onsale']),
-        'target'                => utf8_encode($lapsituotteen_tiedot['target']),
-        'featured_priority'     => utf8_encode($lapsituotteen_tiedot['jarjestys']),
+        'name'                  => mb_convert_encoding($lapsituotteen_tiedot[$configurable_tuote_nimityskentta], 'UTF-8', mb_list_encodings()),
+        'description'           => mb_convert_encoding($lapsituotteen_tiedot['kuvaus'], 'UTF-8', mb_list_encodings()),
+        'short_description'     => mb_convert_encoding($lapsituotteen_tiedot['lyhytkuvaus'], 'UTF-8', mb_list_encodings()),
+        'campaign_code'         => mb_convert_encoding($lapsituotteen_tiedot['campaign_code'], 'UTF-8', mb_list_encodings()),
+        'onsale'                => mb_convert_encoding($lapsituotteen_tiedot['onsale'], 'UTF-8', mb_list_encodings()),
+        'target'                => mb_convert_encoding($lapsituotteen_tiedot['target'], 'UTF-8', mb_list_encodings()),
+        'featured_priority'     => mb_convert_encoding($lapsituotteen_tiedot['jarjestys'], 'UTF-8', mb_list_encodings()),
         'weight'                => $lapsituotteen_tiedot['paino'],
         'status'                => self::ENABLED,
         'visibility'            => self::CATALOG_SEARCH, // Configurablet nakyy kaikkialla
@@ -798,7 +798,7 @@ class MagentoClient {
 
       // Asetetaan configurable-tuotteen url_key mikäli parametrit määritelty
       if (count($this->_magento_url_key_attributes) > 0) {
-        $configurable['url_key'] = utf8_encode($this->sanitize_link_rewrite($nimitys));
+        $configurable['url_key'] = mb_convert_encoding($this->sanitize_link_rewrite($nimitys), 'UTF-8', mb_list_encodings());
       }
 
       $poista_defaultit = $this->_magento_poistadefaultit;
@@ -839,8 +839,8 @@ class MagentoClient {
 
           $simple_tuote_data = array(
             'price'                 => $tuote[$hintakentta],
-            'short_description'     => utf8_encode($tuote['lyhytkuvaus']),
-            'featured_priority'     => utf8_encode($tuote['jarjestys']),
+            'short_description'     => mb_convert_encoding($tuote['lyhytkuvaus'], 'UTF-8', mb_list_encodings()),
+            'featured_priority'     => mb_convert_encoding($tuote['jarjestys'], 'UTF-8', mb_list_encodings()),
             'visibility'            => constant("MagentoClient::{$this->_configurable_lapsituote_nakyvyys}"),
             'additional_attributes' => array('multi_data' => $multi_data),
           );
@@ -1155,36 +1155,36 @@ class MagentoClient {
       $asiakasryhma_id = $this->findCustomerGroup($asiakas['asiakasryhma']);
 
       $asiakas_data = array(
-        'email'       => utf8_encode($asiakas['yhenk_email']),
-        'firstname'   => utf8_encode($asiakas['nimi']),
-        'lastname'    => utf8_encode($asiakas['nimi']),
-        'website_id'  => utf8_encode($asiakas['magento_website_id']),
+        'email'       => mb_convert_encoding($asiakas['yhenk_email'], 'UTF-8', mb_list_encodings()),
+        'firstname'   => mb_convert_encoding($asiakas['nimi'], 'UTF-8', mb_list_encodings()),
+        'lastname'    => mb_convert_encoding($asiakas['nimi'], 'UTF-8', mb_list_encodings()),
+        'website_id'  => mb_convert_encoding($asiakas['magento_website_id'], 'UTF-8', mb_list_encodings()),
         'taxvat'      => $asiakas['ytunnus'],
         'external_id' => $asiakas['asiakasnro'],
         'group_id'    => $asiakasryhma_id,
       );
 
       $laskutus_osoite_data = array(
-        'firstname'  => utf8_encode($asiakas['laskutus_nimi']),
-        'lastname'   => utf8_encode($asiakas['laskutus_nimi']),
-        'street'     => array(utf8_encode($asiakas['laskutus_osoite'])),
-        'postcode'   => utf8_encode($asiakas['laskutus_postino']),
-        'city'       => utf8_encode($asiakas['laskutus_postitp']),
-        'country_id' => utf8_encode($asiakas['maa']),
-        'telephone'  => utf8_encode($asiakas['yhenk_puh']),
-        'company'    => utf8_encode($asiakas['nimi']),
+        'firstname'  => mb_convert_encoding($asiakas['laskutus_nimi'], 'UTF-8', mb_list_encodings()),
+        'lastname'   => mb_convert_encoding($asiakas['laskutus_nimi'], 'UTF-8', mb_list_encodings()),
+        'street'     => array(mb_convert_encoding($asiakas['laskutus_osoite'], 'UTF-8', mb_list_encodings())),
+        'postcode'   => mb_convert_encoding($asiakas['laskutus_postino'], 'UTF-8', mb_list_encodings()),
+        'city'       => mb_convert_encoding($asiakas['laskutus_postitp'], 'UTF-8', mb_list_encodings()),
+        'country_id' => mb_convert_encoding($asiakas['maa'], 'UTF-8', mb_list_encodings()),
+        'telephone'  => mb_convert_encoding($asiakas['yhenk_puh'], 'UTF-8', mb_list_encodings()),
+        'company'    => mb_convert_encoding($asiakas['nimi'], 'UTF-8', mb_list_encodings()),
         'is_default_billing'    => true,
       );
 
       $toimitus_osoite_data = array(
-        'firstname'  => utf8_encode($asiakas['toimitus_nimi']),
-        'lastname'   => utf8_encode($asiakas['toimitus_nimi']),
-        'street'     => array(utf8_encode($asiakas['toimitus_osoite'])),
-        'postcode'   => utf8_encode($asiakas['toimitus_postino']),
-        'city'       => utf8_encode($asiakas['toimitus_postitp']),
-        'country_id' => utf8_encode($asiakas['maa']),
-        'telephone'  => utf8_encode($asiakas['yhenk_puh']),
-        'company'    => utf8_encode($asiakas['nimi']),
+        'firstname'  => mb_convert_encoding($asiakas['toimitus_nimi'], 'UTF-8', mb_list_encodings()),
+        'lastname'   => mb_convert_encoding($asiakas['toimitus_nimi'], 'UTF-8', mb_list_encodings()),
+        'street'     => array(mb_convert_encoding($asiakas['toimitus_osoite'], 'UTF-8', mb_list_encodings())),
+        'postcode'   => mb_convert_encoding($asiakas['toimitus_postino'], 'UTF-8', mb_list_encodings()),
+        'city'       => mb_convert_encoding($asiakas['toimitus_postitp'], 'UTF-8', mb_list_encodings()),
+        'country_id' => mb_convert_encoding($asiakas['maa'], 'UTF-8', mb_list_encodings()),
+        'telephone'  => mb_convert_encoding($asiakas['yhenk_puh'], 'UTF-8', mb_list_encodings()),
+        'company'    => mb_convert_encoding($asiakas['nimi'], 'UTF-8', mb_list_encodings()),
         'is_default_shipping' => true
       );
 
@@ -1195,9 +1195,9 @@ class MagentoClient {
 
           // Jos value löytyy asiakas-arraysta, käytetään sitä
           if (isset($asiakas[$value])) {
-            $asiakas_data[$key] = utf8_encode($asiakas[$value]);
-            $laskutus_osoite_data[$key] = utf8_encode($asiakas[$value]);
-            $toimitus_osoite_data[$key] = utf8_encode($asiakas[$value]);
+            $asiakas_data[$key] = mb_convert_encoding($asiakas[$value], 'UTF-8', mb_list_encodings());
+            $laskutus_osoite_data[$key] = mb_convert_encoding($asiakas[$value], 'UTF-8', mb_list_encodings());
+            $toimitus_osoite_data[$key] = mb_convert_encoding($asiakas[$value], 'UTF-8', mb_list_encodings());
           }
         }
       }
@@ -2007,7 +2007,7 @@ class MagentoClient {
       }
     }
 
-    return utf8_encode($url_key);
+    return mb_convert_encoding($url_key, 'UTF-8', mb_list_encodings());
   }
 
   // Sanitizes string for magento url_key column
@@ -2031,7 +2031,7 @@ class MagentoClient {
     // otetaan koko tuotepuu, valitaan siitä eka solu idn perusteella
     // sen lapsista etsitään nimeä, jos ei löydy, luodaan viimeisimmän idn alle
     // lopuksi palautetaan id
-    $name = utf8_encode($name);
+    $name = mb_convert_encoding($name, 'UTF-8', mb_list_encodings());
     $categoryaccesscontrol = $this->_categoryaccesscontrol;
     $magento_tree = $this->getCategories();
     $results = $this->getParentArray($magento_tree, "$parent_cat_id");
@@ -2222,7 +2222,7 @@ class MagentoClient {
 
   // Etsii asiakasryhmää nimen perusteella Magentosta, palauttaa id:n
   private function findCustomerGroup($name) {
-    $name = utf8_encode($name);
+    $name = mb_convert_encoding($name, 'UTF-8', mb_list_encodings());
 
     $this->log('magento_tuotteet', "Etsitään asiakasryhmä nimellä '{$name}'");
 
@@ -2248,8 +2248,8 @@ class MagentoClient {
 
   // Palauttaa attribuutin option id:n annetulle atribuutille ja arvolle
   private function get_option_id($name, $value, $attribute_set_id) {
-    $name = utf8_encode($name);
-    $value = utf8_encode($value);
+    $name = mb_convert_encoding($name, 'UTF-8', mb_list_encodings());
+    $value = mb_convert_encoding($value, 'UTF-8', mb_list_encodings());
     $attribute_list = $this->getAttributeList($attribute_set_id);
     $attribute_id = '';
 
@@ -2606,8 +2606,8 @@ class MagentoClient {
 
       while ($avainsana = mysqli_fetch_assoc($result)) {
         $kieli  = $avainsana['kieli'];
-        $laji   = utf8_encode($avainsana['laji']);
-        $selite = utf8_encode($avainsana['selite']);
+        $laji   = mb_convert_encoding($avainsana['laji'], 'UTF-8', mb_list_encodings());
+        $selite = mb_convert_encoding($avainsana['selite'], 'UTF-8', mb_list_encodings());
 
         // Jäsennellään tuotteen avainsanat kieliversioittain
         $kieliversiot_data[$kieli][$laji] = $selite;

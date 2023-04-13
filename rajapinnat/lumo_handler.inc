@@ -106,7 +106,7 @@ foreach ($suoritukset as $suoritus) {
 
     case '2':
       $kuitti1 = $clientti->getCustomerReceipt();
-      $kuitti1 = utf8_decode($kuitti1);
+      $kuitti1 = mb_convert_encoding($kuitti1, 'ISO-8859-1', 'UTF-8');
       $pankkivailuotto = '';
       $maksutyyppi = '';
 
@@ -138,7 +138,7 @@ foreach ($suoritukset as $suoritus) {
 
     case '3':
       $kuitti2 = $clientti->getMerchantReceipt();
-      $kuitti2 = utf8_decode($kuitti2);
+      $kuitti2 = mb_convert_encoding($kuitti2, 'ISO-8859-1', 'UTF-8');
 
       if (strpos($kuitti2, "ALLEKIRJOITUS")) {
         require "tilauskasittely/tulosta_asiakkaan_kuitti.inc";

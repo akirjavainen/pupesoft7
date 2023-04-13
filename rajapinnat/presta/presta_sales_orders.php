@@ -282,8 +282,8 @@ class PrestaSalesOrders extends PrestaClient {
         break;
       }
       // utf8 search for a payment name
-      $tilausmaksuehto_avainsana_selite = utf8_encode($tilausmaksuehto_avainsana['selite']);
-      $tilausmaksuehto_avainsana_selitetark = utf8_encode($tilausmaksuehto_avainsana['selitetark']);
+      $tilausmaksuehto_avainsana_selite = mb_convert_encoding($tilausmaksuehto_avainsana['selite'], 'UTF-8', mb_list_encodings());
+      $tilausmaksuehto_avainsana_selitetark = mb_convert_encoding($tilausmaksuehto_avainsana['selitetark'], 'UTF-8', mb_list_encodings());
       if($tilausmaksuehto_avainsana_selite == $order['payment']) {
         $prestasta_tilausmaksuehto = $tilausmaksuehto_avainsana_selitetark;
         break;

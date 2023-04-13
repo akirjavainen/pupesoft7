@@ -22,7 +22,7 @@ if ($tee == "TEE" or mb_strpos($_SERVER['SCRIPT_NAME'], "iltasiivo.php") !== FAL
   if (PUPE_UNICODE) {
     // Tässä on "//NO_MB_OVERLOAD"-kommentti
     // jotta UTF8-konversio ei osu tähän riviin
-    $aliakset = utf8_encode($aliakset); //NO_MB_OVERLOAD
+    $aliakset = mb_convert_encoding($aliakset, 'UTF-8', mb_list_encodings()); //NO_MB_OVERLOAD
   }
 
   $aliakset = explode("\n", trim($aliakset));

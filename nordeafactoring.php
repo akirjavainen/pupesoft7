@@ -211,8 +211,8 @@ if ($tee == 'TULOSTA') {
   if (PUPE_UNICODE) {
     // Tässä on "//NO_MB_OVERLOAD"-kommentti
     // jotta UTF8-konversio ei osu tähän riviin
-    $yhtiorow["nimi"] =  utf8_decode($yhtiorow["nimi"]); //NO_MB_OVERLOAD
-    $kukarow["nimi"] =  utf8_decode($kukarow["nimi"]); //NO_MB_OVERLOAD
+    $yhtiorow["nimi"] = mb_convert_encoding($yhtiorow["nimi"], 'ISO-8859-1', 'UTF-8'); //NO_MB_OVERLOAD
+    $kukarow["nimi"] = mb_convert_encoding($kukarow["nimi"], 'ISO-8859-1', 'UTF-8'); //NO_MB_OVERLOAD
   }
 
   //Luodaan erätietue
@@ -368,14 +368,14 @@ if ($tee == 'TULOSTA') {
     function nordea_decode(&$item1, $key) {
       // Tässä on "//NO_MB_OVERLOAD"-kommentti
       // jotta UTF8-konversio ei osu tähän riviin
-      $item1 = utf8_decode($item1); //NO_MB_OVERLOAD
+      $item1 = mb_convert_encoding($item1, 'ISO-8859-1', 'UTF-8'); //NO_MB_OVERLOAD
     }
 
     // Käännetään UTF-8 muoton, jos Pupe on UTF-8:ssa
     function nordea_encode(&$item1, $key) {
       // Tässä on "//NO_MB_OVERLOAD"-kommentti
       // jotta UTF8-konversio ei osu tähän riviin
-      $item1 = utf8_encode($item1); //NO_MB_OVERLOAD
+      $item1 = mb_convert_encoding($item1, 'ISO-8859-1', 'UTF-8'); //NO_MB_OVERLOAD
     }
 
     while ($laskurow = mysqli_fetch_assoc($laskures)) {

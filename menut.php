@@ -119,7 +119,7 @@ if ($kukarow['kuka'] == 'admin' and (isset($synkronoireferenssi) or isset($synkr
   if (PUPE_UNICODE) {
     // Tässä on "//NO_MB_OVERLOAD"-kommentti
     // jotta UTF8-konversio ei osu tähän riviin
-    $referenssit = utf8_encode($referenssit); //NO_MB_OVERLOAD
+    $referenssit = mb_convert_encoding($referenssit, 'UTF-8', mb_list_encodings()); //NO_MB_OVERLOAD
   }
 
   $referenssit = explode("\n", trim($referenssit));
@@ -666,7 +666,7 @@ if ($tee == "") {
         if (PUPE_UNICODE) {
           // Tässä on "//NO_MB_OVERLOAD"-kommentti
           // jotta UTF8-konversio ei osu tähän riviin
-          $referenssit = utf8_encode($referenssit); //NO_MB_OVERLOAD
+          $referenssit = mb_convert_encoding($referenssit, 'UTF-8', mb_list_encodings()); //NO_MB_OVERLOAD
         }
 
         $referenssit = explode("\n", trim($referenssit));
