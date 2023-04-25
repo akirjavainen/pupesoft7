@@ -236,6 +236,7 @@ if ($tee == "") {
 
         $tiedostot_viite = sepa_download_files($params_ktl);
         $tiedostot_tiliote = sepa_download_files($params_tito);
+	$kasittele = true;
 
         if (is_array($tiedostot_viite)) {
 	  if (count($tiedostot_viite) > 0) {
@@ -247,8 +248,11 @@ if ($tee == "") {
             $filenimi = tempnam($sepa_pankkiyhteys_tallennuskansio, date("Y-m-d") . "_viitemaksut_");
             $data = base64_decode($aineisto['data']);
             $status = file_put_contents($filenimi, $data);
-            $aineistotunnus = tallenna_tiliote_viite($filenimi, true); // $forceta = true
-            kasittele_tiliote_viite($aineistotunnus);
+
+	    if ($kasittele) {
+              $aineistotunnus = tallenna_tiliote_viite($filenimi, true); // $forceta = true
+	      kasittele_tiliote_viite($aineistotunnus);
+	    }
 	    echo "Tallennettiin $filenimi.\n";
           }
         }
@@ -262,8 +266,11 @@ if ($tee == "") {
             $filenimi = tempnam($sepa_pankkiyhteys_tallennuskansio, date("Y-m-d") . "_tiliote_");
             $data = base64_decode($aineisto['data']);
             $status = file_put_contents($filenimi, $data);
-            $aineistotunnus = tallenna_tiliote_viite($filenimi, true); // $forceta = true
-            kasittele_tiliote_viite($aineistotunnus);
+
+	    if ($kasittele) {
+              $aineistotunnus = tallenna_tiliote_viite($filenimi, true); // $forceta = true
+	      kasittele_tiliote_viite($aineistotunnus);
+	    }
 	    echo "Tallennettiin $filenimi.\n";
           }
         }
