@@ -410,7 +410,7 @@ if ($upd == 1) {
 
       $t[$i] = sprintf('%04d', $tvv[$i])."-".sprintf('%02d', $tkk[$i])."-".sprintf('%02d', $tpp[$i]);
 
-      if (!@checkdate($tkk[$i], $tpp[$i], $tvv[$i]) and ($tkk[$i]!= 0 or $tpp[$i] != 0)) {
+      if (!@checkdate((int)$tkk[$i], (int)$tpp[$i], (int)$tvv[$i]) and ((int)$tkk[$i]!= 0 or (int)$tpp[$i] != 0)) { // MUOKKAUS: BUGIKORJAUS string --> int
         $virhe[$i] = t("Virheellinen päivämäärä");
         $errori = 1;
       }
