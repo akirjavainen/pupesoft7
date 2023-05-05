@@ -3970,6 +3970,7 @@ if (!function_exists("settaa_ale")) {
           $aperuste .= " Kampanjahinnoittelu. ";
         }
         if (!isset($ale["ale".$hrow["alennuslaji"]])) {
+	  if (!is_array($ale)) $ale = array(); // MUOKKAUS: isset()
           $aleperuste["ale".$hrow["alennuslaji"]] = $aleperuste_nro;
           $ale["ale".$hrow["alennuslaji"]] = $hrow["alennus"];
           $aperuste .= " $aleperuste_teksti (Aletaso: $hrow[alennuslaji]).";
