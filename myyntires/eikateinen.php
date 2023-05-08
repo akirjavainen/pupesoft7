@@ -376,8 +376,8 @@ function tee_kirjanpito_muutokset($params) {
               and tunnus  = '{$tilid}'";
     $result = pupe_query($query);
 
-    if (mysqli_affected_rows($link) > 0) {
-      echo "<font class='message'>".t("Korjattiin kirjanpitoviennit")." (".mysqli_affected_rows($link)." ".t("kpl").").</font><br>";
+    if (mysqli_affected_rows($GLOBALS["link"]) > 0) { // MUOKKAUS: GLOBALS
+      echo "<font class='message'>".t("Korjattiin kirjanpitoviennit")." (".mysqli_affected_rows($GLOBALS["link"])." ".t("kpl").").</font><br>";
     }
     else {
       echo "<font class='error'>".t("Kirjanpitomuutoksia ei osattu tehdä! Korjaa kirjanpito käsin")."!</font><br>";
@@ -414,8 +414,8 @@ function yliviivaa_alet_ja_pyoristykset($tunnus) {
             and korjattu = ''";
   $result = pupe_query($query);
 
-  if (mysqli_affected_rows($link) > 0) {
-    echo "<font class='message'>".t("Poistettiin pyöristys- ja kassa-alekirjaukset")." (".mysqli_affected_rows($link)." ".t("kpl").").</font><br>";
+  if (mysqli_affected_rows($GLOBALS["link"]) > 0) { // MUOKKAUS: GLOBALS
+    echo "<font class='message'>".t("Poistettiin pyöristys- ja kassa-alekirjaukset")." (".mysqli_affected_rows($GLOBALS["link"])." ".t("kpl").").</font><br>";
   }
 }
 
