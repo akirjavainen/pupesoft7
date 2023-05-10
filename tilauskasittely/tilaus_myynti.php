@@ -8349,25 +8349,30 @@ if ($tee == '') {
         }
 
 	if ($kukarow['extranet'] == '' and $tuotekyslinkki != "") {
-      // MUOKKAUS: isset():
-	  $shippingtext = "";
-      if (!isset($total_qty)) $total_qty = 0;
+          // MUOKKAUS: isset():
+	  $shipping_text = "";
+          if (!isset($total_qty)) $total_qty = 0;
       
 	  $total_qty += $row["tilkpl"]; // MUOKKAUS: lisatty
 	  $tuoteno_text = $row["tuoteno"];
 
 	  if (file_exists("../../raportit")) {
-		// MUOKKAUS: lisatty rahtikuutioiden laskemista varten:
+            // MUOKKAUS: lisatty rahtikuutioiden laskemista varten:
 	    if ($row["tuoteno"] == "RAHTI") {
-	  	  $shippingtext = "<br><br><font color='green' style='font-weight: bold;'>" . Pupesoft_Internals::get_html_m2_or_m3($row["nimitys"], $row["tilkpl"], true) . "</font>";
-		  if (!isset($total_m3)) $total_m3 = 0;
-		  $total_m3 += (float)Pupesoft_Internals::get_html_m2_or_m3($row["nimitys"], $row["tilkpl"], false);
-        } else {
-		  $imagelink = Pupesoft_Internals::get_image_link((int)$laskurow["tunnus"], (int)$row["tunnus"], true);
-		  $imagelink = (strlen($imagelink) > 0) ? file_get_contents($imagelink) : "";
-	  	  if (strlen($imagelink) > 0) $shippingtext = "<font color='green' style='font-weight: bold;'>$imagelink</font>";
-		  $tuoteno_text = "";
-        }
+              $shipping_text = "<br><br><font color='green' style='font-weight: bold;'>" 
+                . Pupesoft_Internals::get_html_m2_or_m3($row["nimitys"], $row["tilkpl"], true) 
+                . "</font>";
+              if (!isset($total_m3)) $total_m3 = 0;
+              $total_m3 += (float)Pupesoft_Internals::get_html_m2_or_m3($row["nimitys"], $row["tilkpl"], false);
+
+            } else {
+              $image_link = Pupesoft_Internals::get_image_link((int)$laskurow["tunnus"], (int)$row["tunnus"], true);
+
+	      if (strlen($image_link) > 0) {
+                $shipping_text = "<font color='green' style='font-weight: bold;'>$image_link</font>";
+              }
+              $tuoteno_text = "";
+            }
 	  }
 	  
           echo "<td $class>
@@ -8381,7 +8386,7 @@ if ($tee == '') {
                        "&keskihinta={$row["kehahin"]}" .
                        "&valuutta={$laskurow["valkoodi"]}" .
                        "&varasto={$laskurow["varasto"]}" .
-                       "&vanhatunnus={$laskurow["vanhatunnus"]}'>$tuoteno_text</a>$shippingtext"; // MUOKKAUS: RAHTI
+                       "&vanhatunnus={$laskurow["vanhatunnus"]}'>$tuoteno_text</a>$shipping_text"; // MUOKKAUS: RAHTI
         }
         else {
           echo "<td $class>$row[tuoteno]";
@@ -11155,14 +11160,14 @@ if ($tee == '') {
             ($laskurow['tila'] == "V" and in_array($laskurow['alatila'], array("", "J")))
           )) {
             $sel_tvt = array();
-	    /* MUOKKAUS: Kommentoitu ulos
+	    /* MUOKKAUS: Kommentoitu ulos:
 	    $sel_tvt[$laskurow['tilaus_valmis_toiminto']] = "SELECTED";
 	    if((empty($sel_tvt) or $laskurow['tilaus_valmis_toiminto'] == '') and
             ($laskurow['tila'] == "V" and $laskurow['alatila'] != "J"
             )) {
               $sel_tvt['OTS'] = "SELECTED";
-	    }
-	     */
+            }
+	    */
             echo "<select name='tilaus_valmis_toiminto'>";
             echo "<option value=''>".t("Tilaus valmis")."</option>";
             echo "<option value='OO' {$sel_tvt['OO']}>".t("Odottaa ohjelmointia")."</option>";
