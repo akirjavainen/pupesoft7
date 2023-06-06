@@ -92,6 +92,7 @@ elseif ($jysum < 0 and $nega_summa >= 0) {
   echo "<font class='error'>".t("Et voi jyvittää summaa negatiiviseksi jos sinulla ei ole hyvitysrivejä")."!</font><br>";
 }
 elseif ($jysum > 0 and $plus_summa <= 0) {
+  // UPDATE tilausrivi SET rivihinta=0 WHERE otunnus=xxxxxx; jos saat tämän ilmoituksen:
   echo "<font class='error'>".t("Et voi jyvittää summaa positiiviseksi jos sinulla ei ole veloitusrivejä")."!</font><br>";
 }
 else {
