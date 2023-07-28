@@ -36,7 +36,7 @@ $(function() {
       },
       {
         id: "hyvaksyKateinen",
-        text: "Hyv√§ksy (Enter)",
+        text: "Hyv‰ksy (Enter)",
         disabled: 'disabled',
         click: function() {
           kateisFormi.submit();
@@ -48,6 +48,7 @@ $(function() {
   $('#kateismaksunappi').on('click', function() {
     var kateisFloat = parseFloat(kateinen.val());
     var korttimaksuFloat = parseFloat(korttimaksu.val());
+    korttimaksuFloat = (Math.ceil(korttimaksuFloat*20 - 0.5)/20).toFixed(2);
 
     if (kateisFloat) {
       annettu.val(korttimaksuFloat + kateisFloat);
@@ -72,14 +73,16 @@ $(function() {
       kateinen.val(annettu.val());
       $('#kateistaAnnettu').val(annettu.val());
       korttimaksu.val(Math.abs(erotus));
-      $('#pyoristysOtsikko').text('Maksettavaa j√§ljell√§');
+      $('#pyoristysOtsikko').text('Maksettavaa j‰ljell‰');
       pyoristysSarake.text(Math.abs(erotus));
       pyoristysSarake.attr('align', 'right');
       dialogi.dialog("close");
     }
   });
 
-  $('#korttimaksunappi').on('click', maksaMaksupaatteella);
+  $('#korttimaksunappi').on('click', function() {
+    maksaMaksupaatteella(true);
+  });
 
   $('#peruuta_viimeisin').click(function() {
     saaSubmittaa = true;
@@ -126,7 +129,13 @@ $(function() {
     maksupaate.submit();
   }
 
-  function maksaMaksupaatteella() {
+  function maksaMaksupaatteella(kortti=false) {
+    if(kortti) {
+      $("[name=kaikkiyhteensa]").val($("[name=kaikkiyhteensa]").attr("data"));
+      $("[name=kaikkiyhteensa]").attr("value", $("[name=kaikkiyhteensa]").attr("data"));
+      korttimaksu.val(korttimaksu.attr("data"));
+      korttimaksu.attr("value", korttimaksu.attr("data"));
+    }
     seka.val('X');
     maksupaateTapahtuma.val('X');
     saaSubmittaa = true;
@@ -151,7 +160,7 @@ $(function() {
       takaisin.text(Math.abs(erotus));
       kateinenKunnossa = false;
       hyvaksyKateinen.button('option', 'disabled', false);
-      $('#takaisinTeksti').text("Kortille j√§√§");
+      $('#takaisinTeksti').text("Kortille j‰‰");
     }
     else {
       takaisin.text(erotus);
