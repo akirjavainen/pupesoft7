@@ -32,7 +32,7 @@ else
   DBHOSTLISA=""
 fi
 
-YHTIOT=`mysql ${DBHOSTLISA} --user=${DBKAYTTAJA} --password=${DBSALASANA} ${DBKANTA} -B -N -e "SELECT yhtio FROM yhtio"`
+YHTIOT=`mariadb ${DBHOSTLISA} --user=${DBKAYTTAJA} --password=${DBSALASANA} ${DBKANTA} -B -N -e "SELECT yhtio FROM yhtio"`
 
 for YHTIO in $YHTIOT
 do
