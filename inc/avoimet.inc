@@ -996,7 +996,7 @@ if ($tee != '' and isset($ajaraportti)) {
         echo "<td>$trow[asiakasnro]</td>";
         echo "<td>$trow[nimi]</td>";
         echo "<td>$trow[maa]</td>";
-        echo "<td>$trow[maksutieto]</td>";
+        echo "<td><a href='tilauskasittely/tulostakopio.php?otunnus=$trow[tunnus]&lasku_yhtio=$trow[yhtio]&toim=LASKU&tee=NAYTATILAUS' target='_blank'>$trow[maksutieto]</a></td>"; // MUOKKAUS: Lisätty linkki myyntilaskun PDF-kopioon
 
         if ($trow["tapvm"] == "0000-00-00" or $trow["tapvm"] == "0000-00-00 0000-00-00") {
           $trow["tapvm"] = "";
