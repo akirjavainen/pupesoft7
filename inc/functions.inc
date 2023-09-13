@@ -3971,6 +3971,7 @@ if (!function_exists("settaa_ale")) {
         }
         if (!isset($ale["ale".$hrow["alennuslaji"]])) {
 	  if (!is_array($ale)) $ale = array(); // MUOKKAUS: isset()
+	  if (!is_array($aleperuste)) $aleperuste = array(); // MUOKKAUS: isset()
           $aleperuste["ale".$hrow["alennuslaji"]] = $aleperuste_nro;
           $ale["ale".$hrow["alennuslaji"]] = $hrow["alennus"];
           $aperuste .= " $aleperuste_teksti (Aletaso: $hrow[alennuslaji]).";
