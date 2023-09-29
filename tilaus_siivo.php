@@ -11,6 +11,11 @@ if ($tee == "NAYTA") {
   exit;
 }
 
+// MUOKKAUS: isset():
+foreach (array("valittutil", "valitturiv", "jttilriv") as $v) {
+  if (!isset(${$v})) ${$v} = array();
+}
+
 if ($tee == 'CLEAN') {
   if (count($valittutil) != 0) {
     foreach ($valittutil as $rastit) {
