@@ -409,7 +409,9 @@ if (!function_exists('finvoice_otsik')) {
         xml_add("InvoiceRecipientPartyIdentifier", tulosta_ytunnus($lasrow['ytunnus'], $lasrow['maa'], ""), $tootfinvoice, 35);
 
         $laskutus_nimitieto = trim($laskutusosoitetiedot["laskutus_nimi"]." ".$laskutusosoitetiedot["laskutus_nimitark"]);
-        $laskutus_nimitieto_array = mb_str_split($laskutus_nimitieto, 35, 2);
+
+	// MUOKKAUS: BUGIKORJAUS: poistettu 3. parametri, koska konfliktissa PHP:n sisaanrakennetun funktion kanssa (encoding vs. min_length):
+        $laskutus_nimitieto_array = mb_str_split($laskutus_nimitieto, 35);
 
         foreach ($laskutus_nimitieto_array as $laskutus_nimi_osa) {
           xml_add("InvoiceRecipientOrganisationName", $laskutus_nimi_osa, $tootfinvoice, 35, 2);
@@ -441,7 +443,9 @@ if (!function_exists('finvoice_otsik')) {
       }
 
       $asiakas_nimitieto = trim($lasrow['nimi']." ".$lasrow['nimitark']);
-      $asiakas_nimitieto_array = mb_str_split($asiakas_nimitieto, $nimikenpit, 2);
+
+      // MUOKKAUS: BUGIKORJAUS: poistettu 3. parametri, koska konfliktissa PHP:n sisaanrakennetun funktion kanssa (encoding vs. min_length):
+      $asiakas_nimitieto_array = mb_str_split($asiakas_nimitieto, $nimikenpit);
 
       foreach ($asiakas_nimitieto_array as $asiakas_nimi_osa) {
         xml_add("BuyerOrganisationName", $asiakas_nimi_osa, $tootfinvoice, $nimikenpit, 2);
@@ -511,7 +515,9 @@ if (!function_exists('finvoice_otsik')) {
       xml_add("DeliveryPartyIdentifier", tulosta_ytunnus($lasrow['ytunnus'], $lasrow['maa'], ""), $tootfinvoice, 35);
 
       $asiakas_toimnimitieto = trim($lasrow['toim_nimi']." ".$lasrow['toim_nimitark']);
-      $asiakas_toimnimitieto_array = mb_str_split($asiakas_toimnimitieto, 35, 2);
+
+      // MUOKKAUS: BUGIKORJAUS: poistettu 3. parametri, koska konfliktissa PHP:n sisaanrakennetun funktion kanssa (encoding vs. min_length):
+      $asiakas_toimnimitieto_array = mb_str_split($asiakas_toimnimitieto, 35);
 
       foreach ($asiakas_toimnimitieto_array as $asiakas_toimnimi_osa) {
         xml_add("DeliveryOrganisationName", $asiakas_toimnimi_osa, $tootfinvoice, 35, 2);
