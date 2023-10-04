@@ -2258,7 +2258,9 @@ if (!function_exists('tulosta_tarjous')) {
     $laskurow['tunnus'] = $otunnus;
 
     // MUOKKAUS: PDF-mittakuvien tallennus verkkolevylle:
-    if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/printable.php?pupe_order=$otunnus&pdf_write=1");
+    if ($kukarow["yhtio"] == "sapu" && file_exists("../../hinnasto")) {
+      file_get_contents("http://localhost/hinnasto/printable.php?pupe_order=$otunnus&pdf_write=1");
+    }
 
     $querykiel = "SELECT kieli FROM asiakas WHERE yhtio = '$kukarow[yhtio]' and tunnus = '$laskurow[liitostunnus]'";
     $kielresult = pupe_query($querykiel);

@@ -2223,6 +2223,11 @@ if ($tee == "VALMIS" and ($muokkauslukko == "" or $toim == "PROJEKTI")) {
         }
       }
     }
+
+    // MUOKKAUS: PDF-mittakuvien tallennus verkkolevylle:
+    if ($kukarow["yhtio"] == "sapu" && file_exists("../../hinnasto")) {
+      file_get_contents("http://localhost/hinnasto/printable.php?pupe_order=" . $laskurow["tunnus"] . "&pdf_write=1");
+    }
   }
 
   // ollaan käsitelty projektin osatoimitus joten palataan tunnusnipun otsikolle..
