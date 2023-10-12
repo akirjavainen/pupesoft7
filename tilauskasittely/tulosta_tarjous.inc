@@ -776,15 +776,18 @@ if (!function_exists('tarjous_rivi_otsikot')) {
         }
         else {
           // MUOKKAUS: BUGIKORJAUS (ei rivihintaa jos sita ei haluta):
-          if ($naytetaanko_rivihinta != "ei_rivihintaa") $pdf_tarjous->draw_text(380, $kala + 15, t("Yks.hinta", $kieli), $page_tarjous, $norm);
-          
-          $pdf_tarjous->draw_text(450, $kala + 15, t("Alennus", $kieli), $page_tarjous, $norm);
+	  if ($naytetaanko_rivihinta != "ei_rivihintaa") {
+	    $pdf_tarjous->draw_text(380, $kala + 15, t("Yks.hinta", $kieli), $page_tarjous, $norm);
+	    $pdf_tarjous->draw_text(450, $kala + 15, t("Alennus", $kieli), $page_tarjous, $norm);
+	  }
         }
       }
 
       if (!in_array($yhtiorow["tarjoustyyppi"], array(2, 4))) {
 	// MUOKKAUS: BUGIKORJAUS (ei rivihintaa jos sita ei haluta):
-        if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") $pdf_tarjous->draw_text(498, $kala + 15, t("Alv", $kieli), $page_tarjous, $norm);
+	if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") {
+	  $pdf_tarjous->draw_text(498, $kala + 15, t("Alv", $kieli), $page_tarjous, $norm);
+	}
       }
 
       if (trim((string)$naytetaanko_rivihinta) == '') { // MUOKKAUS: (string)
@@ -1230,7 +1233,11 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
 
       $oikpos = $pdf_tarjous->mb_strlen($ff_string, $ff_font);
       $page_tarjous_sivu = isset($page_tarjous[$sivu]) ? $page_tarjous[$sivu] : null; // MUOKKAUS: isset()
-      $pdf_tarjous->draw_text(482-$oikpos, $kala, $ff_string, $page_tarjous_sivu, $norm);
+
+      // MUOKKAUS: BUGIKORJAUS, ei alennusprosentteja jos ei nayteta rivihintojakaan:
+      if ($naytetaanko_rivihinta != 'ei_rivihintaa') {
+        $pdf_tarjous->draw_text(482-$oikpos, $kala, $ff_string, $page_tarjous_sivu, $norm);
+      }
     }
 
     if (!in_array($yhtiorow["tarjoustyyppi"], array(2, 4))) {
@@ -1243,7 +1250,9 @@ if (!function_exists('tarjous_rivi_hinta_ale')) {
       else {
         // MUOKKAUS: isset():
         $page_tarjous_sivu = isset($page_tarjous[$sivu]) ? $page_tarjous[$sivu] : null;
-        if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") $pdf_tarjous->draw_text(500, $kala, ($row["alv"]*1)."%", $page_tarjous_sivu, $norm);
+	if ($naytetaanko_rivihinta != "ei_rivihintaa" && trim($verolliset_verottomat_hinnat) != "verottomat") {
+	  $pdf_tarjous->draw_text(500, $kala, ($row["alv"]*1)."%", $page_tarjous_sivu, $norm);
+	}
       }
     }
 
