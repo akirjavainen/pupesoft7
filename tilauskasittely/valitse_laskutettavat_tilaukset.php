@@ -129,7 +129,6 @@ else {
 }
 
 if ($tee == 'TOIMITA' and isset($maksutapa) and $maksutapa == 'seka') {
-
   echo "<table><form name='laskuri' method='post'>";
 
   //käydään kaikki ruksatut tilaukset läpi
@@ -303,7 +302,7 @@ if ($tee == 'TOIMITA') {
       } else {
         $maksutapa = $maksupaate_kortti_id;
       }
-      $katlisa = ", maksuehto = '$maksutapa'";
+      $katlisa = ", kassalipas = '$kassalipas', maksuehto = '$maksutapa'";
     }
     else {
       $katlisa = "";

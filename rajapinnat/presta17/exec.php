@@ -1216,7 +1216,7 @@ class Presta17RestApi
         $presta_id = $customer['ulkoinen_asiakasnumero'] = $this->setPupesoftCustomer($customer, $customer['ulkoinen_asiakasnumero']);
       }
 
-      if(!$presta_id) {
+      if(!$presta_id or $presta_id == "") {
         continue;
       }
 
@@ -1603,7 +1603,7 @@ class Presta17RestApi
       $prestashop_addresses = $this->setPrestashopAddresses($pupesoft_customers);
     }
 
-    if ($resource == 'prices' or $resource == 'all') {
+    if ($resource == 'prices') {
       $this->pupesoft_products = $this->getPupesoftProducts(999999);
       $this->prestashop_products = $this->getPrestashopProducts($this->pupesoft_products);
       $this->setPrestashopPrices($this->getPupesoftPrices($days), $this->getPupesoftCustomers(999999), $this->prestashop_products);
