@@ -2374,8 +2374,12 @@ if ($luottorajavirhe_ylivito_valmis) {
 }
 
 // MUOKKAUS: PDF-mittakuvien tallennus verkkolevylle:
-if ($kukarow["yhtio"] == "sapu" && file_exists("../../hinnasto")) {
-  file_get_contents("http://localhost/hinnasto/printable.php?pupe_order=" . $tilausnumero . "&pdf_write=1");
+if ($kukarow["yhtio"] == "sapu") {
+  echo "<script>" . PHP_EOL;
+  echo "xmlHttp = new XMLHttpRequest();" . PHP_EOL;
+  echo "xmlHttp.open('GET', '" . SERVER_IP . "/hinnasto/printable.php', true);" . PHP_EOL;
+  echo "xmlHttp.send('pupe_order=$tilausnumero&pdf_write=1');" . PHP_EOL;
+  echo "</script>" . PHP_EOL;
 }
 
 if (!isset($silent) or $silent == "") {
