@@ -526,7 +526,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
 	echo "<td id=\"tdM2\"></td>";
 	echo "<td id=\"tdPostalCode\">" . $laskurow['toim_postino'] . "</td>";
 	echo "<td id=\"Kaukoputki\"><a href=\"https://www.kaukokiito.fi/fi/kaukoputki\" target=\"_blank\">Kaukoputki</a></td>";
-    echo "<td id=\"Hintahaku\"><a href=\"#\" onclick=\"getShippingPrice(document.getElementById('tuotenimitys').value, $laskurow[tunnus], document.getElementById('kpl').value);\">Hintahaku</a></td>";
+    echo "<td id=\"Hintahaku\"><a href=\"#\" id=\"linkGetShippingPrice\" onclick=\"getShippingPrice(document.getElementById('tuotenimitys').value, $laskurow[tunnus], document.getElementById('kpl').value);\">Hintahaku</a></td>";
 	echo "</tr>";
   }
   if ($tila == "LISAAKERTARESEPTIIN" or $tila == "LISAAISAKERTARESEPTIIN" or $tila == "LISAARESEPTIIN") {
