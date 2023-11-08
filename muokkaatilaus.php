@@ -3305,7 +3305,7 @@ if (mysqli_num_rows($result) != 0) {
 
       if ($toim != "TARJOUS") {
         echo " <a href='/pupesoft/tilauskasittely/keraa.php?id=" . $row['tunnus'] . "'><input type='submit' name='keraa' value='Kerää'></a>";
-        if (file_exists("../toimitusvahvistus")) echo " <a href='/toimitusvahvistus/index.php?no_navi=1&summary=1&order=" . $row['tunnus'] . "'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a>";
+        if (file_exists("../toimitusvahvistus")) echo " <a href='/toimitusvahvistus/index.php?no_navi=1&summary=1&order_id=" . $row['tunnus'] . "'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a>";
       }
       echo "</td>";
 
