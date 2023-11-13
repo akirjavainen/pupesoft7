@@ -1310,7 +1310,7 @@ if ($tee == "ETSILASKU") {
             <input type='submit' value='".t("Näytä pdf")."' onClick=\"js_openFormInNewWindow('tulostakopioform_$row[tunnus]', 'tulostakopio_$row[tunnus]'); return false;\"></form>";
             
             // MUOKKAUS: lisatty tuotantonakyma-linkki:
-            if (file_exists("../../tuotanto")) echo "<a href='/tuotanto/index.php?order=$row[tunnus]&new_win=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>";
+            if (file_exists("../../tuotanto")) echo "<a href='/tuotanto/index.php?order_id=$row[tunnus]&new_win=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>";
 
         if ($kukarow["extranet"] == "") {
           echo "<br>

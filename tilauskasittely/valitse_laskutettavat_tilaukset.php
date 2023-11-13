@@ -1360,7 +1360,7 @@ echo "<b>Nyt on viikko " . date("W") . ".</b><br>"; // MUOKKAUS: lisatty
  <a href='/raportit/sopimusalennus.php?order_id=$tilrow[tunnukset]'><input type='submit' name='sopimusalennus' value='Ale-%'></a>
  <a href='/pupesoft/tilauskasittely/tilaus_myynti.php?tilausnumero=$tilrow[tunnukset_ruudulle]&mista=muokkaatilaus&toim=RIVISYOTTO'><input type='submit' name='muokkaa' value='Muokkaa'></a>
  <a href='/hinnasto/printable.php?pupe_order=$tilrow[tunnukset_ruudulle]' target='_blank'><input type='submit' value='Mittakuvat'></a>
- <a href='/tuotanto/index.php?order=$tilrow[tunnukset_ruudulle]&new_win=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>
+ <a href='/tuotanto/index.php?order_id=$tilrow[tunnukset_ruudulle]&new_win=1' target='_blank'><input type='submit' value='Tuotantonäkymä'></a>
  <a href='/raportit/ehtokorjaus.php?order_id=$tilrow[tunnukset_ruudulle]'><input type='submit' name='ehtokorjaus' value='Ehtokorjaus'></a>
  <a href='/toimitusvahvistus/index.php?no_navi=1&summary=1&order_id=$tilrow[tunnukset_ruudulle]'><input type='submit' name='kuljetustilaus' value='Kuljetustilaus'></a></td>
           </td>
