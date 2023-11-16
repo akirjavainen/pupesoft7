@@ -1357,6 +1357,7 @@ echo "<b>Nyt on viikko " . date("W") . ".</b><br>"; // MUOKKAUS: lisatty
           <input type='submit' name='tila' value='".t("Laskuta")."'>
           </form>
  <td class='' style='background-color: #E2E2E2;'>
+ <a href='/raportit/kerays_peru.php?order_id=$tilrow[tunnukset]'><input type='submit' name='kerays_peru' value='Peru keräys'></a>
  <a href='/raportit/sopimusalennus.php?order_id=$tilrow[tunnukset]'><input type='submit' name='sopimusalennus' value='Ale-%'></a>
  <a href='/pupesoft/tilauskasittely/tilaus_myynti.php?tilausnumero=$tilrow[tunnukset_ruudulle]&mista=muokkaatilaus&toim=RIVISYOTTO'><input type='submit' name='muokkaa' value='Muokkaa'></a>
  <a href='/hinnasto/printable.php?pupe_order=$tilrow[tunnukset_ruudulle]' target='_blank'><input type='submit' value='Mittakuvat'></a>
