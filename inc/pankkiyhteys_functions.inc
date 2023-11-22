@@ -918,7 +918,8 @@ function sepa_file_type_check($bank, $file_type) {
       return "VN";
     // Lähtevät verkkolaskut
     case 'LAHLASKUT':
-      return "VL";
+      return "XL";
+      //return "VL"; // HUOM! Palauta tämä käyttöön, jos "Pankki ei vastaa kyselyyn odotetulla tavalla" ja etsi XL:lle yrityskohtainen ratkaisu (sapu)
     // Lähtevä factoringaineisto
     case 'LAHFACTORING':
       return "FC";
