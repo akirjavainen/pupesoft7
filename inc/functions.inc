@@ -12553,7 +12553,7 @@ if (!function_exists("hae_kukarow")) {
     $result = pupe_query($query);
 
     if (mysqli_num_rows($result) == 0) {
-      echo "Käyttäjän yritys ei löydy! ($yhtio) ({$_SERVER['SCRIPT_NAME']})\n";
+      echo "Käyttäjän yritys ei löydy! (hae_kukarow(), $yhtio) ({$_SERVER['SCRIPT_NAME']})\n";
       return;
     }
 
@@ -12593,7 +12593,7 @@ if (!function_exists("hae_yhtion_parametrit")) {
     $result = pupe_query($query);
 
     if (mysqli_num_rows($result) == 0) {
-      echo "Käyttäjän yritys ei löydy! ($yhtio) ({$_SERVER['SCRIPT_NAME']})\n";
+      echo "Käyttäjän yritys ei löydy! (hae_yhtion_parametrit(), $yhtio) ({$_SERVER['SCRIPT_NAME']})\n";
       exit;
     }
     $yhtiorow = mysqli_fetch_assoc($result);
