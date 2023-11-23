@@ -21905,21 +21905,21 @@ if (!function_exists("kustannuspaikka_kohde_projekti")) {
     $returnarray = array();
 
     if ($kustp == 0) {
-      $returnarray[] = $kustp_kohde_proj_row["kustp"];
+      $returnarray[] = (int)$kustp_kohde_proj_row["kustp"]; // MUOKKAUS: Varmistetaan, että kustp = int
     }
     else {
       $returnarray[] = $kustp;
     }
 
     if ($kohde == 0) {
-      $returnarray[] = $kustp_kohde_proj_row["kohde"];
+      $returnarray[] = (int)$kustp_kohde_proj_row["kohde"]; // MUOKKAUS: Varmistetaan, että kohde = int
     }
     else {
       $returnarray[] = $kohde;
     }
 
     if ($projekti == 0) {
-      $returnarray[] = $kustp_kohde_proj_row["projekti"];
+      $returnarray[] = (int)$kustp_kohde_proj_row["projekti"]; // MUOKKAUS: Varmistetaan, että projekti = int
     }
     else {
       $returnarray[] = $projekti;
