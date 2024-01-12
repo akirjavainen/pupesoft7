@@ -1,7 +1,7 @@
 <?php
 
 if (!function_exists('finvoice_otsik')) {
-  function finvoice_otsik($tootfinvoice, $lasrow, $kieli, $pankkitiedot, $masrow, $myyrow, $tyyppi, $toimaikarow, $tulos_ulos, $silent, $nosoap = "", $tunnukset=false, $asiakas_apu_row=false) {
+  function finvoice_otsik($tootfinvoice, $lasrow, $kieli, $pankkitiedot, $masrow, $myyrow, $tyyppi, $toimaikarow, $tulos_ulos, $silent, $nosoap = "", $tunnukset = false, $asiakas_apu_row = false, $verkkolasku_talenom_saanto = false) {
     global $yhtiorow, $err_finvoice, $tulos_ulos, $palvelin2, $tulostettavat_email;
 
     //  Koitetaan ollaanko virheettömiä
@@ -496,12 +496,12 @@ if (!function_exists('finvoice_otsik')) {
 
       xml_add("BuyerContactPersonName", $asiakkaan_yhteyshenkilo, $tootfinvoice, 35);
 
-      if ($yhtiorow["verkkolasku_lah"] == "trustpoint" and $receiverintermediator == "EMAIL") {
+      if($verkkolasku_talenom_saanto and $asiakasrow['chn'] == "666") {
         fputs($tootfinvoice, "<BuyerCommunicationDetails>\r\n");
-        xml_add("BuyerEmailaddressIdentifier", $receiverpartyid, $tootfinvoice, 35);
+        xml_add("BuyerEmailaddressIdentifier", $asiakasrow['lasku_email'], $tootfinvoice, 35);
         fputs($tootfinvoice, "</BuyerCommunicationDetails>\r\n");
       }
-      else {
+      else if ($yhtiorow["verkkolasku_lah"] == "trustpoint" and $receiverintermediator == "EMAIL") {
         $BuyerEmailaddressIdentifier_avainsana_where = "and selitetark = 'BuyerEmailaddressIdentifier' and selitetark_2 !='' ";
         $BuyerEmailaddressIdentifier_avainsana_kentta = t_avainsana("VERKLASKKENTSIS", "", $BuyerEmailaddressIdentifier_avainsana_where, "", "", "selitetark_2");
         if ($BuyerEmailaddressIdentifier_avainsana_kentta != "" and isset($asiakasrow[$BuyerEmailaddressIdentifier_avainsana_kentta])){

@@ -11,10 +11,8 @@ if (!function_exists("uusi_karhukierros")) {
 
     if (!mysqli_num_rows($result)) {
       $query = "INSERT INTO karhukierros (pvm,yhtio) values (current_date,'$yhtio')";
-
-      // MUOKKAUS: mysqli_insert_id():
       $result = pupe_query($query, $GLOBALS["link"]);
-      $uusid = mysqli_insert_id($GLOBALS["link"]);
+      $uusid = mysqli_insert_id($GLOBALS["link"]); // MUOKKAUS: mysqli_insert_id()
     }
     else {
       $row = mysqli_fetch_assoc($result);
@@ -94,25 +92,25 @@ if (!function_exists("alku")) {
     else {
       // lähettäjä
       $iiso = array('height' => 11, 'font' => 'Times-Roman');
-      $pdf->draw_text(mm_pt(22), mm_pt(268), mb_strtoupper($yhtiorow["nimi"]),     $firstpage, $iiso);
-      $pdf->draw_text(mm_pt(22), mm_pt(264), mb_strtoupper($yhtiorow["nimitark"]),  $firstpage, $iiso);
-      $pdf->draw_text(mm_pt(22), mm_pt(260), mb_strtoupper($yhtiorow["osoite"]),   $firstpage, $iiso);
-      $pdf->draw_text(mm_pt(22), mm_pt(256), mb_strtoupper($yhtiorow["postino"]." ".$yhtiorow["postitp"]), $firstpage, $iiso);
+      $pdf->draw_text(mm_pt(22), mm_pt(268), strtoupper($yhtiorow["nimi"]),     $firstpage, $iiso);
+      $pdf->draw_text(mm_pt(22), mm_pt(264), strtoupper($yhtiorow["nimitark"]),  $firstpage, $iiso);
+      $pdf->draw_text(mm_pt(22), mm_pt(260), strtoupper($yhtiorow["osoite"]),   $firstpage, $iiso);
+      $pdf->draw_text(mm_pt(22), mm_pt(256), strtoupper($yhtiorow["postino"]." ".$yhtiorow["postitp"]), $firstpage, $iiso);
 
       // vastaanottaja
       if ($asiakastiedot["laskutus_nimi"] != "" and ($asiakastiedot["maksukehotuksen_osoitetiedot"] == "B" or ($yhtiorow["maksukehotuksen_osoitetiedot"] == "K" and $asiakastiedot["maksukehotuksen_osoitetiedot"] == ""))) {
-        $pdf->draw_text(mm_pt(22), mm_pt(234), mb_strtoupper($asiakastiedot["laskutus_nimi"]),   $firstpage, $iiso);
-        $pdf->draw_text(mm_pt(22), mm_pt(230), mb_strtoupper($asiakastiedot["laskutus_nimitark"]), $firstpage, $iiso);
-        $pdf->draw_text(mm_pt(22), mm_pt(226), mb_strtoupper($asiakastiedot["laskutus_osoite"]),   $firstpage, $iiso);
-        $pdf->draw_text(mm_pt(22), mm_pt(222), mb_strtoupper($asiakastiedot["laskutus_postino"]." ".$asiakastiedot["laskutus_postitp"]), $firstpage, $iiso);
+        $pdf->draw_text(mm_pt(22), mm_pt(234), strtoupper($asiakastiedot["laskutus_nimi"]),   $firstpage, $iiso);
+        $pdf->draw_text(mm_pt(22), mm_pt(230), strtoupper($asiakastiedot["laskutus_nimitark"]), $firstpage, $iiso);
+        $pdf->draw_text(mm_pt(22), mm_pt(226), strtoupper($asiakastiedot["laskutus_osoite"]),   $firstpage, $iiso);
+        $pdf->draw_text(mm_pt(22), mm_pt(222), strtoupper($asiakastiedot["laskutus_postino"]." ".$asiakastiedot["laskutus_postitp"]), $firstpage, $iiso);
         // Laitetaan laskutus_maa asiakas_maaksi niin saadaan ilman ehtomuuttujia kyselystä oikea lopputulos.
         $asiakastiedot['maa'] = $asiakastiedot["laskutus_maa"];
       }
       else {
-        $pdf->draw_text(mm_pt(22), mm_pt(234), mb_strtoupper($asiakastiedot["nimi"]),     $firstpage, $iiso);
-        $pdf->draw_text(mm_pt(22), mm_pt(230), mb_strtoupper($asiakastiedot["nimitark"]),   $firstpage, $iiso);
-        $pdf->draw_text(mm_pt(22), mm_pt(226), mb_strtoupper($asiakastiedot["osoite"]),   $firstpage, $iiso);
-        $pdf->draw_text(mm_pt(22), mm_pt(222), mb_strtoupper($asiakastiedot["postino"]." ".$asiakastiedot["postitp"]), $firstpage, $iiso);
+        $pdf->draw_text(mm_pt(22), mm_pt(234), strtoupper($asiakastiedot["nimi"]),     $firstpage, $iiso);
+        $pdf->draw_text(mm_pt(22), mm_pt(230), strtoupper($asiakastiedot["nimitark"]),   $firstpage, $iiso);
+        $pdf->draw_text(mm_pt(22), mm_pt(226), strtoupper($asiakastiedot["osoite"]),   $firstpage, $iiso);
+        $pdf->draw_text(mm_pt(22), mm_pt(222), strtoupper($asiakastiedot["postino"]." ".$asiakastiedot["postitp"]), $firstpage, $iiso);
       }
 
 
@@ -141,9 +139,9 @@ if (!function_exists("alku")) {
                 LIMIT 1";
       $pvm_result = pupe_query($query);
       $pvm_row = mysqli_fetch_assoc($pvm_result);
-      $paiva = mb_substr($pvm_row["pvm"], 8, 2);
-      $kuu   = mb_substr($pvm_row["pvm"], 5, 2);
-      $year  = mb_substr($pvm_row["pvm"], 0, 4);
+      $paiva = substr($pvm_row["pvm"], 8, 2);
+      $kuu   = substr($pvm_row["pvm"], 5, 2);
+      $year  = substr($pvm_row["pvm"], 0, 4);
     }
     else {
       $pvm_row = array();
@@ -258,11 +256,11 @@ if (!function_exists("alku")) {
       $pdf->draw_text(30,  $kala, t("Kohdistamattomia suorituksia", $kieli),  $firstpage, $norm);
 
       if ($yhtiorow['maksukehotus_kentat'] == 'J' or $yhtiorow['maksukehotus_kentat'] == 'L') {
-        $oikpos = $pdf->mb_strlen(sprintf("%.2f", $kaatosumma), $norm);
+        $oikpos = $pdf->strlen(sprintf("%.2f", $kaatosumma), $norm);
         $pdf->draw_text(565-$oikpos, $kala, sprintf("%.2f", $kaatosumma),    $firstpage, $norm);
       }
       else {
-        $oikpos = $pdf->mb_strlen(sprintf("%.2f", $kaatosumma), $norm);
+        $oikpos = $pdf->strlen(sprintf("%.2f", $kaatosumma), $norm);
         $pdf->draw_text(500-$oikpos, $kala, sprintf("%.2f", $kaatosumma),    $firstpage, $norm);
       }
 
@@ -322,26 +320,26 @@ if (!function_exists("rivi")) {
       $pdf->draw_text(130, $kala, tv1dateconv($row["tapvm"]),       $firstpage, $norm);
       $pdf->draw_text(190, $kala, tv1dateconv($row["erpcm"]),       $firstpage, $norm);
 
-      $oikpos = $pdf->mb_strlen($row["ika"], $norm);
+      $oikpos = $pdf->strlen($row["ika"], $norm);
       $pdf->draw_text(270-$oikpos, $kala, $row["ika"],           $firstpage, $norm);
 
       if ($row["valkoodi"] != $yhtiorow["valkoodi"]) {
-        $oikpos = $pdf->mb_strlen($row["summa_valuutassa"], $norm);
+        $oikpos = $pdf->strlen($row["summa_valuutassa"], $norm);
         $pdf->draw_text(460-$oikpos, $kala, $row["summa_valuutassa"],   $firstpage, $norm);
       }
       else {
-        $oikpos = $pdf->mb_strlen($row["summa"], $norm);
+        $oikpos = $pdf->strlen($row["summa"], $norm);
         $pdf->draw_text(460-$oikpos, $kala, $row["summa"],        $firstpage, $norm);
       }
       if ($yhtiorow["maksukehotus_kentat"] == "" or $yhtiorow["maksukehotus_kentat"] == "J") {
         $pdf->draw_text(295, $kala, tv1dateconv($karhuedpvm),       $firstpage, $norm);
-        $oikpos = $pdf->mb_strlen($karhukertanro, $norm);
+        $oikpos = $pdf->strlen($karhukertanro, $norm);
         $pdf->draw_text(385-$oikpos, $kala, $karhukertanro,       $firstpage, $norm);
       }
 
-      $oikpos = $pdf->mb_strlen(sprintf('%.2f', $row["korko"]), $norm);
+      $oikpos = $pdf->strlen(sprintf('%.2f', $row["korko"]), $norm);
       $pdf->draw_text(515-$oikpos, $kala, $row["korko"],                   $firstpage, $norm);
-      $oikpos = $pdf->mb_strlen(sprintf('%.2f', $row["summa"] + $row["korko"]), $norm);
+      $oikpos = $pdf->strlen(sprintf('%.2f', $row["summa"] + $row["korko"]), $norm);
       $pdf->draw_text(565-$oikpos, $kala, sprintf('%.2f', $row["summa"] + $row["korko"]),  $firstpage, $norm);
     }
     else {
@@ -349,21 +347,21 @@ if (!function_exists("rivi")) {
       $pdf->draw_text(180, $kala, tv1dateconv($row["tapvm"]),              $firstpage, $norm);
       $pdf->draw_text(240, $kala, tv1dateconv($row["erpcm"]),              $firstpage, $norm);
 
-      $oikpos = $pdf->mb_strlen($row["ika"], $norm);
+      $oikpos = $pdf->strlen($row["ika"], $norm);
       $pdf->draw_text(338-$oikpos, $kala, $row["ika"],                $firstpage, $norm);
 
       if ($row["valkoodi"] != $yhtiorow["valkoodi"]) {
-        $oikpos = $pdf->mb_strlen($row["summa_valuutassa"], $norm);
+        $oikpos = $pdf->strlen($row["summa_valuutassa"], $norm);
         $pdf->draw_text(500-$oikpos, $kala, $row["summa_valuutassa"]." ".$row["valkoodi"],  $firstpage, $norm);
       }
       else {
-        $oikpos = $pdf->mb_strlen($row["summa"], $norm);
+        $oikpos = $pdf->strlen($row["summa"], $norm);
         $pdf->draw_text(500-$oikpos, $kala, $row["summa"]." ".$row["valkoodi"],        $firstpage, $norm);
       }
 
       if ($yhtiorow["maksukehotus_kentat"] == "" or $yhtiorow["maksukehotus_kentat"] == "J") {
         $pdf->draw_text(365, $kala, tv1dateconv($karhuedpvm),   $firstpage, $norm);
-        $oikpos = $pdf->mb_strlen($karhukertanro, $norm);
+        $oikpos = $pdf->strlen($karhukertanro, $norm);
         $pdf->draw_text(560-$oikpos, $kala, $karhukertanro,   $firstpage, $norm);
       }
     }
@@ -416,14 +414,14 @@ if (!function_exists("loppu")) {
 
         $kokonaissumma = $korko+$summa;
 
-        $oikpos = $pdf->mb_strlen(sprintf("%.2f", $summa), $norm);
+        $oikpos = $pdf->strlen(sprintf("%.2f", $summa), $norm);
         $pdf->draw_text(535-$oikpos, 138, sprintf("%.2f", $summa),  $firstpage, $norm);
-        $oikpos = $pdf->mb_strlen(sprintf("%.2f", $korko), $norm);
+        $oikpos = $pdf->strlen(sprintf("%.2f", $korko), $norm);
         $pdf->draw_text(535-$oikpos, 128, sprintf("%.2f", $korko),  $firstpage, $norm);
-        $oikpos = $pdf->mb_strlen(sprintf("%.2f", $kokonaissumma), $norm);
+        $oikpos = $pdf->strlen(sprintf("%.2f", $kokonaissumma), $norm);
         $pdf->draw_text(535-$oikpos, 118, sprintf("%.2f", $kokonaissumma),  $firstpage, $norm);
 
-        $oikpos = $pdf->mb_strlen($laskutiedot["valkoodi"], $norm);
+        $oikpos = $pdf->strlen($laskutiedot["valkoodi"], $norm);
         $pdf->draw_text(575-$oikpos, 138, $laskutiedot["valkoodi"],  $firstpage, $norm);
         $pdf->draw_text(575-$oikpos, 128, $laskutiedot["valkoodi"],  $firstpage, $norm);
         $pdf->draw_text(575-$oikpos, 118, $laskutiedot["valkoodi"],  $firstpage, $norm);
@@ -431,7 +429,7 @@ if (!function_exists("loppu")) {
       else {
         $pdf->draw_text(380, 118,  t("YHTEENSÄ", $kieli).":",        $firstpage, $norm);
 
-        $oikpos = $pdf->mb_strlen(sprintf("%.2f", $summa), $norm);
+        $oikpos = $pdf->strlen(sprintf("%.2f", $summa), $norm);
         $pdf->draw_text(500-$oikpos, 118, sprintf("%.2f", $summa)." ".$laskutiedot["valkoodi"],                $firstpage, $norm);
       }
     }
@@ -834,17 +832,17 @@ if ($yhtiorow["verkkolasku_lah"] == "maventa" and $_REQUEST['maventa_laheta'] ==
   if (!function_exists("vlas_dateconv")) {
     function vlas_dateconv($date) {
       //kääntää mysqln vvvv-kk-mm muodon muotoon vvvvkkmm
-      return mb_substr($date, 0, 4).mb_substr($date, 5, 2).mb_substr($date, 8, 2);
+      return substr($date, 0, 4).substr($date, 5, 2).substr($date, 8, 2);
     }
   }
 
   if (!function_exists("pp")) {
     function pp($muuttuja, $round = "", $rmax = "", $rmin = "") {
-      if (mb_strlen($round) > 0) {
-        if (mb_strlen($rmax) > 0 and $rmax < $round) {
+      if (strlen($round) > 0) {
+        if (strlen($rmax) > 0 and $rmax < $round) {
           $round = $rmax;
         }
-        if (mb_strlen($rmin) > 0 and $rmin > $round) {
+        if (strlen($rmin) > 0 and $rmin > $round) {
           $round = $rmin;
         }
         return $muuttuja = number_format($muuttuja, $round, ",", "");
@@ -876,6 +874,9 @@ if ($yhtiorow["verkkolasku_lah"] == "maventa" and $_REQUEST['maventa_laheta'] ==
   // Tuotanto
   $client = new SoapClient('https://secure.maventa.com/apis/bravo/wsdl/');
 
+  if ($yhtiorow["finvoice_versio"] == "3") {
+    require "tilauskasittely/verkkolasku_finvoice_301.inc";
+  }
   if ($yhtiorow["finvoice_versio"] == "2") {
     require "tilauskasittely/verkkolasku_finvoice_201.inc";
   }
@@ -933,7 +934,15 @@ if ($yhtiorow["verkkolasku_lah"] == "maventa" and $_REQUEST['maventa_laheta'] ==
     'nimi' => ''
   );
 
-  finvoice_otsik($tootfinvoice, $laskurow, $kieli, $pankkitiedot, $masrow, $myyrow, $tyyppi, $toimaikarow, "", $silent);
+  if(!isset($verkkolasku_talenom_saanto)) {
+    $verkkolasku_talenom_saanto = false;
+  }
+
+  if($yhtiorow["finvoice_versio"] == "3") {
+    finvoice_otsik($tootfinvoice, $laskurow, $kieli, $pankkitiedot, $masrow, $myyrow, $tyyppi, $toimaikarow, "", $silent, "", $ltunnukset, $asiakastiedot, $verkkolasku_talenom_saanto);
+  } else {
+    finvoice_otsik($tootfinvoice, $laskurow, $kieli, $pankkitiedot, $masrow, $myyrow, $tyyppi, $toimaikarow, "", $silent, "", $verkkolasku_talenom_saanto);
+  }
   finvoice_alvierittely($tootfinvoice, $laskurow, $alvrow);
   finvoice_otsikko_loput($tootfinvoice, $laskurow, $masrow, $pankkitiedot);
 
@@ -977,7 +986,7 @@ if ($yhtiorow["verkkolasku_lah"] == "maventa" and $_REQUEST['maventa_laheta'] ==
 
   $return_value = $client->invoice_put_finvoice($api_keys, $files_out);
 
-  if (mb_stristr($return_value->status, 'OK')) {
+  if (stristr($return_value->status, 'OK')) {
     echo t("Maksukehotus lähetettiin Maventaan")."\n<br>";
   }
   else {

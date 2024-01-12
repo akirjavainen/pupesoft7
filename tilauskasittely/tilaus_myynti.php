@@ -9668,9 +9668,9 @@ if ($tee == '') {
                      $kehahin_select kehahin,
                      tilausrivi.tunnus,
                      tilausrivi.varattu+tilausrivi.jt varattu,
-                     tilausrivi.var,
                      tilausrivin_lisatiedot.osto_vai_hyvitys,
                      tuote.tuotemassa, (tuote.tuoteleveys * tuote.tuotekorkeus * tuote.tuotesyvyys) AS tuotetilavuus,
+                     tilausrivi.var,
                      {$lisat}
                      FROM tilausrivi
                      JOIN tuote ON tilausrivi.yhtio=tuote.yhtio and tilausrivi.tuoteno=tuote.tuoteno
