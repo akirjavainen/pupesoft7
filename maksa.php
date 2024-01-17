@@ -66,8 +66,8 @@ if (count($_POST) == 0) {
 }
 
 // MUOKKAUS: Lisatty laskujen merkitseminen maksetuksi myos ilman pankkiyhteytta:
-if (isset($_POST["maksettu"])) {
-  $maksettu_tunnus = (int)$_POST["maksettu"];
+if (isset($_GET["maksettu"])) {
+  $maksettu_tunnus = (int)$_GET["maksettu"];
 
   if ($maksettu_tunnus > 0) {
     $query = "UPDATE lasku SET mapvm=NOW() WHERE tunnus=$maksettu_tunnus;";
@@ -1501,8 +1501,9 @@ where lasku.yhtio=tiliointi.yhtio and lasku.tunnus = tiliointi.ltunnus and tilio
       
       // MUOKKAUS: Lisatty laskujen merkitseminen maksetuksi myos ilman pankkiyhteytta:
       echo "<br>";
-      echo "<a href='?maksettu=" . $trow["tunnus"] . "'>Merkitse maksetuksi</a>";
-      echo "</td>" . PHP_EOL;
+      echo "<a href='?maksettu=" . $trow["tunnus"] . "'>";
+      echo "<input type='submit' value='Merkitse maksetuksi'>";
+      echo "</a></td>" . PHP_EOL;
 
       echo "<td class='ptop'>$trow[viite] $trow[viesti]";
 
