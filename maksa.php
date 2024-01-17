@@ -1501,9 +1501,8 @@ where lasku.yhtio=tiliointi.yhtio and lasku.tunnus = tiliointi.ltunnus and tilio
       
       // MUOKKAUS: Lisatty laskujen merkitseminen maksetuksi myos ilman pankkiyhteytta:
       echo "<br>";
-      echo "<a href='?maksettu=" . $trow["tunnus"] . "'>";
-      echo "<input type='submit' name='maksettu' value='Merkitse maksetuksi'>";
-      echo "</a></td>" . PHP_EOL;
+      echo "<a href='?maksettu=" . $trow["tunnus"] . "'>Merkitse maksetuksi</a>";
+      echo "</td>" . PHP_EOL;
 
       echo "<td class='ptop'>$trow[viite] $trow[viesti]";
 
