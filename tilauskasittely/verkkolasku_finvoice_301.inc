@@ -502,6 +502,11 @@ if (!function_exists('finvoice_otsik')) {
         fputs($tootfinvoice, "</BuyerCommunicationDetails>\r\n");
       }
       else if ($yhtiorow["verkkolasku_lah"] == "trustpoint" and $receiverintermediator == "EMAIL") {
+        fputs($tootfinvoice, "<BuyerCommunicationDetails>\r\n");
+        xml_add("BuyerEmailaddressIdentifier", $receiverpartyid, $tootfinvoice, 35);
+        fputs($tootfinvoice, "</BuyerCommunicationDetails>\r\n");
+      }
+      else {
         $BuyerEmailaddressIdentifier_avainsana_where = "and selitetark = 'BuyerEmailaddressIdentifier' and selitetark_2 !='' ";
         $BuyerEmailaddressIdentifier_avainsana_kentta = t_avainsana("VERKLASKKENTSIS", "", $BuyerEmailaddressIdentifier_avainsana_where, "", "", "selitetark_2");
         if ($BuyerEmailaddressIdentifier_avainsana_kentta != "" and isset($asiakasrow[$BuyerEmailaddressIdentifier_avainsana_kentta])){
