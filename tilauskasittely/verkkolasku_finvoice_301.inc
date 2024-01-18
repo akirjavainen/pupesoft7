@@ -498,7 +498,7 @@ if (!function_exists('finvoice_otsik')) {
 
       if($verkkolasku_talenom_saanto and $asiakasrow['chn'] == "666") {
         fputs($tootfinvoice, "<BuyerCommunicationDetails>\r\n");
-        xml_add("BuyerEmailaddressIdentifier", $asiakasrow['lasku_email'], $tootfinvoice, 35);
+        xml_add("BuyerEmailaddressIdentifier", $asiakasrow['lasku_email'], $tootfinvoice, 512);
         fputs($tootfinvoice, "</BuyerCommunicationDetails>\r\n");
       }
       else if ($yhtiorow["verkkolasku_lah"] == "trustpoint" and $receiverintermediator == "EMAIL") {
