@@ -422,7 +422,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
               and tilausrivi.otunnus  = '$otunnus'
               and tilausrivi.tyyppi  != 'D'
               $tilrivilisa
-              ORDER by tilausrivi.perheid2, tilausrivi.perheid, tilausrivi.tunnus";
+              ORDER BY tilaajanrivinro"; // MUOKKAUS: Säilytetään rivijärjestys tarjouksesta tai alkuperäisestä tilauksesta
     $copresult = pupe_query($query);
 
     while ($coprivirow = mysqli_fetch_array($copresult)) {
