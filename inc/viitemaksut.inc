@@ -39,7 +39,7 @@ elseif ($type == '3' or ($type == 'S' and
 
   $payer_name = trim(substr($tietue, 63, 12));
   $reference = ltrim(substr($tietue, 43, 20), '0');
-  $sum = substr($tietue, 78, 11); // MUOKKAUS: BUGIKORJAUS pos 77 -> 78, length 10 -> 11
+  $sum = substr($tietue, strrpos($tietue, " ") + 1); // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos-funktiolla, ei kiintealla (77/78) paikalla
   $sum = (float)preg_replace("/[^0-9]/", "", $sum); // MUOKKAUS: lisatty
   $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MUOKKAUS: BUGIKORJAUS 100 -> 1000
   //if ($factoring_oikaisutunnus != '0') { // MUOKKAUS: BUGIKORJAUS (kommentoitu ulos)

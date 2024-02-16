@@ -10334,7 +10334,7 @@ if ($tee == '') {
               </form>";
             
             // MUOKKAUS: lisatty:
-            if (file_exists("../../hinnasto")) echo "<a href='/hinnasto/printable.php?pupe_order=$laskurow[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
+            if (file_exists("../../hinnasto")) echo "<a href='/hinnasto/printable.php?make_images=1&pupe_order=$laskurow[tunnus]' target='_blank'><input type='submit' value='Mittakuvat'></a>";
 	    if (file_exists("../../toimitusvahvistus") and $toim != 'TARJOUS') echo "<a href='/toimitusvahvistus/?no_navi=1&summary=1&order_id=$laskurow[tunnus]'><input type='submit' value='Kuljetustilaus'></a>";
             echo "</td>";
 
