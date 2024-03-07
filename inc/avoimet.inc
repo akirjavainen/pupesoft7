@@ -1031,7 +1031,7 @@ if ($tee != '' and isset($ajaraportti)) {
           else $summa[$trow["valkoodi"]] += $trow["tiliointiavoinsaldo_valuutassa"];  // paljo kirjanpidossa avoimena valuutassa
         }
         else {
-          echo "<td align='right'>$trow[tiliointisumma]</td>";
+          echo "<td align='right'><a href='muutosite.php?tee=E&tunnus=$trow[tunnus]'>$trow[tiliointisumma]</a></td>"; // MUOKKAUS: Lisätty linkki laskun tiliöintiin
           echo "<td align='right' class='avoin'>$trow[tiliointiavoinsaldo]</td>";
           echo "<td align='right'>$yhtiorow[valkoodi]</td>";
 
