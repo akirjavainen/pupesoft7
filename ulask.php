@@ -1296,7 +1296,7 @@ if ($tee == 'P' or $tee == 'E') {
 
     if ($errormsg != '') echo "$errormsg<br>";
 
-    if ($tyyppi != mb_strtoupper($yhtiorow['maa'])) {
+    if ($tyyppi != mb_strtoupper($yhtiorow['maa'])) { // MUOKKAUS: Konvertoidaan postitp uppercase
       echo "
         <font class='message'>".t("Ulkomaalaisen toimittajan tiedot")."</font>
         <table><tr><td class='back' valign='top'>
@@ -1308,7 +1308,7 @@ if ($tee == 'P' or $tee == 'E') {
         <tr><th>".t("osoite")."</th>    <td><input type='text' name='trow[osoite]'     maxlength='45' size=45 value='$trow[osoite]'></td></tr>
         <tr><th>".t("osoitetark")."</th>  <td><input type='text' name='trow[osoitetark]' maxlength='45' size=45 value='$trow[osoitetark]'></td></tr>
         <tr><th>".t("postino")."</th>  <td><input type='text' name='trow[postino]'    maxlength='15' size=10 value='$trow[postino]'></td></tr>
-        <tr><th>".t("postitp")."</th>  <td><input type='text' name='trow[postitp]'    maxlength='45' size=45 value='$trow[postitp]'></td></tr>
+        <tr><th>".t("postitp")."</th>  <td><input type='text' name='trow[postitp]'    maxlength='45' size=45 value='" . mb_strtoupper($trow["postitp"]) . "'></td></tr>
         </table>
 
         </td><td class='back'>
@@ -1345,7 +1345,7 @@ if ($tee == 'P' or $tee == 'E') {
 
         </td></tr></table>";
     }
-    else {
+    else { // MUOKKAUS: Konvertoidaan postitp uppercase
       echo "
         <font class='message'>".t("Kotimaisen toimittajan tiedot")."</font>
         <input type='hidden' name = 'trow[maa]' value = ".mb_strtoupper($yhtiorow['maa']).">
@@ -1356,7 +1356,7 @@ if ($tee == 'P' or $tee == 'E') {
         <tr><th>".t("osoite")."</th>  <td><input type='text' name='trow[osoite]'     maxlength='45' size=45 value='$trow[osoite]'></td></tr>
         <tr><th>".t("osoitetark")."</th><td><input type='text' name='trow[osoitetark]' maxlength='45' size=45 value='$trow[osoitetark]'></td></tr>
         <tr><th>".t("postino")."</th>  <td><input type='text' name='trow[postino]'    maxlength='5'  size=10 value='$trow[postino]'></td></tr>
-        <tr><th>".t("postitp")."</th>  <td><input type='text' name='trow[postitp]'    maxlength='45' size=45 value='$trow[postitp]'></td></tr>
+        <tr><th>".t("postitp")."</th>  <td><input type='text' name='trow[postitp]'    maxlength='45' size=45 value='" . mb_strtoupper($trow["postitp"]) . "'></td></tr>
         <tr><th>".t("Tilinumero")."</th><td><input type='text' name='trow[tilinumero]' maxlength='45' size=45 value='$trow[tilinumero]'></td></tr>
         <tr><th>".t("IBAN")."</th>    <td><input type='text' name='trow[ultilno]'    maxlength='35' size=45 value='$trow[ultilno]'></td></tr>
         <tr><th>".t("SWIFT")."</th>    <td><input type='text' name='trow[swift]'      maxlength='11' size=45 value='$trow[swift]'></td></tr>
@@ -2081,7 +2081,7 @@ if ($tee == 'I') {
 
   $toimipaikka = isset($toimipaikka) ? $toimipaikka : 0;
 
-  // Kirjoitetaan lasku
+  // Kirjoitetaan lasku MUOKKAUS: Konvertoidaan postitp uppercase
   $query = "INSERT into lasku set
             yhtio              = '$kukarow[yhtio]',
             yhtio_toimipaikka  = '{$toimipaikka}',
@@ -2105,7 +2105,7 @@ if ($tee == 'I') {
             osoite             = '$trow[osoite]',
             osoitetark         = '$trow[osoitetark]',
             postino            = '$trow[postino]',
-            postitp            = '$trow[postitp]',
+            postitp            = '" . mb_strtoupper((string)$trow["postitp"]) . "',
             maa                = '$trow[maa]',
             toim_maa           = '$trow[verovelvollinen]',
             ultilno_maa        = '$trow[ultilno_maa]',

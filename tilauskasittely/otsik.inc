@@ -3886,7 +3886,7 @@ if ($tila == "" and !isset($jatka)) {
 
     echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Kommentti")." 2:</td><td><textarea name='sisviesti2' rows='2' cols='40'>$srow[sisviesti2]</textarea></td><td>".t("keräyslista")." + ".t("valmistus")."</td></tr>";
     echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Kommentti")." 3:</td><td><textarea name='sisviesti1' rows='2' cols='40'>$srow[sisviesti1]</textarea></td><td>".t("lasku")."</td></tr>";
-    echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Sisäinen viesti").":</td><td><textarea name='sisviesti3' rows='2' cols='40'>$srow[sisviesti3]</textarea></td><td></td></tr>";
+    echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Sisäinen viesti").":</td><td><textarea name='sisviesti3' rows='10' cols='40'>$srow[sisviesti3]</textarea></td><td></td></tr>"; // MUOKKAUS: suurennettu tekstikenttaa
 
     if ($toim == "TARJOUS" or $toim == "EXTTARJOUS" or $toim == "EXTENNAKKO") {
       echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Saateteksti").":</td><td><textarea name='saate' rows='2' cols='40'>$srow[saate]</textarea></td><td></td></tr>";

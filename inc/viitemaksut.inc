@@ -39,9 +39,13 @@ elseif ($type == '3' or ($type == 'S' and
 
   $payer_name = trim(substr($tietue, 63, 12));
   $reference = ltrim(substr($tietue, 43, 20), '0');
+echo "SUORITUS TIETUE: $tietue";
   $sum = substr($tietue, strrpos($tietue, " ") + 1); // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos-funktiolla, ei kiintealla (77/78) paikalla
+echo "SUORITUS1: $sum";
   $sum = (float)preg_replace("/[^0-9]/", "", $sum); // MUOKKAUS: lisatty
+echo "SUORITUS2: $sum";
   $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MUOKKAUS: BUGIKORJAUS 100 -> 1000
+echo "SUORITUS3: $sum";
   //if ($factoring_oikaisutunnus != '0') { // MUOKKAUS: BUGIKORJAUS (kommentoitu ulos)
   //  $sum = $sum * -1;
   //}
@@ -150,7 +154,7 @@ elseif ($type == '3' or ($type == 'S' and
               kurssi       = '$kurssi',
               maksupvm     = '$payment_date',
               kirjpvm      = '$entry_date'";
-    
+   echo $query . PHP_EOL . PHP_EOL; 
     // MUOKKAUS: mysqli_insert_id():
     $result = pupe_query($query, $GLOBALS["link"]);
     $tiliointitunnus = mysqli_insert_id($GLOBALS["link"]);
