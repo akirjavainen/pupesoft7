@@ -111,6 +111,9 @@ $kuu  = date("n");
 if (!isset($vv)) $vv = date("Y");
 if (!isset($kk)) $kk = date("n");
 if (!isset($pp)) $pp = date("j");
+if (!isset($vv2)) $vv2 = date("Y"); // MUOKKAUS: lisatty
+if (!isset($kk2)) $kk2 = "01"; // MUOKKAUS: lisatty
+if (!isset($pp2)) $pp2 = "01"; // MUOKKAUS: lisatty
 
 $sel = array_fill_keys(array($laji), " selected") + array_fill_keys(array('M', 'MF', 'MK', 'MMK', 'MA', 'O', 'OK', 'OOK'), '');
 

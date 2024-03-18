@@ -1875,7 +1875,6 @@ if (!function_exists("verkkolasku_in")) {
         $kuvalaskurow = mysqli_fetch_assoc($kuvalaskures);
 
         $ebid   = $kuvalaskurow['ebid'];
-        $selite = sanitize_string("$kuvalaskurow[nimi] $kuvalaskurow[summa] $kuvalaskurow[valkoodi]");
 
         // Tallennetaan laskun XML liitetiedostoksi
         $_tmfilename = explode("/", $file);

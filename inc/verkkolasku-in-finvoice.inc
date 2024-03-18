@@ -5,7 +5,7 @@ if (!function_exists("xml_float")) {
     $value = (string) $value;
 
     if (!PUPE_UNICODE and mb_detect_encoding($value, 'UTF-8', true) !== FALSE) {
-      $value = $value;
+      $value = utf8_decode($value);
     }
 
     return pupesoft_cleannumber($value);
@@ -17,7 +17,7 @@ if (!function_exists("xml_string")) {
     $value = (string) $value;
 
     if (!PUPE_UNICODE and mb_detect_encoding($value, 'UTF-8', true) !== FALSE) {
-      $value = $value;
+      $value = utf8_decode($value);
     }
 
     return pupesoft_cleanstring($value);
@@ -27,12 +27,30 @@ if (!function_exists("xml_string")) {
 $laskuformaatti = "FINVOICE";
 $laskun_ebid = "FINVOICEXML";
 
-if (mb_strpos($file, "maventa") !== false) {
+if (strpos($file, "maventa") !== false) {
   $laskun_ebid = $ebid = "MAVENTAXML";
 }
 
+$ohita_InvoiceRecipientOrganisationUnitNumber = false;
+$ohita_InvoiceRecipientOrganisationUnitNumber_q = "SELECT distinct selite
+                                                    FROM avainsana 
+                                                    WHERE laji  = 'EDI_OHITA_ORGUN'
+                                                  ";
+$ohita_InvoiceRecipientOrganisationUnitNumber_a = pupe_query($ohita_InvoiceRecipientOrganisationUnitNumber_q);
+while ($ohita_InvoiceRecipientOrganisationUnitNumber_t = mysqli_fetch_assoc($ohita_InvoiceRecipientOrganisationUnitNumber_a)) {
+  if($ohita_InvoiceRecipientOrganisationUnitNumber_t['selite'] == 1) {
+    $ohita_InvoiceRecipientOrganisationUnitNumber = true;
+    break;
+  }
+}
+
 // parseroidaan xml
-$yhtio = xml_string($xml->InvoiceRecipientOrganisationUnitNumber);
+if(!$ohita_InvoiceRecipientOrganisationUnitNumber) {
+  $yhtio = xml_string($xml->InvoiceRecipientOrganisationUnitNumber);
+} else {
+  $yhtio = "";
+}
+
 $verkkotunnus_vas = xml_string($xml->BuyerPartyDetails->BuyerOrganisationTaxCode);
 $verkkotunnus_vas_inv = xml_string($xml->InvoiceRecipientPartyDetails->InvoiceRecipientOrganisationTaxCode);
 
@@ -111,7 +129,7 @@ if ($verkkotunnus_vas == "" and $verkkotunnus_vas_inv != "") {
 
 $laskuttajan_toimittajanumero = "";
 
-if (mb_strpos($file, "maventa") !== false and $laskuttajan_identifier != "") {
+if (strpos($file, "maventa") !== false and $laskuttajan_identifier != "") {
   $laskuttajan_toimittajanumero = trim(str_replace("-", "", $laskuttajan_identifier));
 }
 
@@ -127,11 +145,11 @@ if ($yhtio == "") {
 }
 
 // Onko tunnus IBAN-muodossa, jos ei niin varmistetaan, että se on ovtmuodossa
-if (mb_strlen($yhtio) != 18 or mb_strtoupper(mb_substr($yhtio, 0, 2)) != "FI") {
+if (strlen($yhtio) != 18 or strtoupper(substr($yhtio, 0, 2)) != "FI") {
   // Varmistetaan, että tunnus on ovtunnus muodossa
   $yhtio = preg_replace("/[^0-9]/", "", $yhtio);
 
-  if (mb_strpos($yhtio, "0037") === false) {
+  if (strpos($yhtio, "0037") === false) {
     $yhtio = "0037".$yhtio;
   }
 }
@@ -178,7 +196,7 @@ $osto_rahti_alv = 0;
 $osto_rivi_kulu_alv = 0;
 $ei_oteta_kulua_pois = true;
 $rivien_summa_yhteensa = 0;
-$poistettava_merkit = array("'", '"', "”");
+$poistettava_merkit = array("'", '"', "â");
 
 if (count($tuotetiedot) > 0) {
   foreach ($tuotetiedot as $tuotetieto) {
