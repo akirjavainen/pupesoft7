@@ -488,7 +488,7 @@ if ($handle = opendir($verkkolaskuvirheet_vaarat)) {
           echo "<br/>";
 
           echo t("Perusta uusi toimittaja").":<br>";
-	  $lvat = preg_replace("[\D]", "", $laskuttajan_ovt); // MUOKKAUS: haetaan Y-tunnus OVT:sta, caset laskuttajan_nimi & osoite & postitp
+	  $lvat = preg_replace("[\D]", "", $laskuttajan_ovt); // MUOKKAUS: haetaan Y-tunnus OVT:sta, caset laskuttajan_nimi & osoite & postitp, tilinumero & Y-tunnus oikealle kohtaa
           echo "<form action='{$palvelin2}yllapito.php' method='post'>
               <input type = 'hidden' name = 'toim' value = 'toimi'>
               <input type = 'hidden' name = 'uusi' value = '1'>
@@ -497,9 +497,9 @@ if ($handle = opendir($verkkolaskuvirheet_vaarat)) {
               <input type = 'hidden' name = 't[5]' value = '$laskuttajan_postino'>
               <input type = 'hidden' name = 't[6]' value = '" . mb_strtoupper($laskuttajan_postitp) . "'>
               <input type = 'hidden' name = 't[7]' value = '$laskuttajan_maa'>
-              <input type = 'hidden' name = 't[29]' value = '$laskuttajan_tilino'>
-              <input type = 'hidden' name = 't[66]' value = '$lvat'>
-              <input type = 'hidden' name = 't[67]' value = '$laskuttajan_ovt'>
+              <input type = 'hidden' name = 't[28]' value = '$laskuttajan_tilino'>
+              <input type = 'hidden' name = 't[65]' value = '$lvat'>
+              <input type = 'hidden' name = 't[66]' value = '$laskuttajan_ovt'>
               <input type = 'hidden' name = 'lopetus' value = '".$palvelin2."verkkolaskuvirheet.php////'>
               <input type='submit' value = '".t("Perusta")."'></form><br><br>";
         }
