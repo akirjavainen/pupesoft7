@@ -202,7 +202,9 @@ if ($tee == "") {
 
 	if (empty($viite_tiedostot["files"])) echo "Ei uusia ladattavia viiteaineistoja pankissa.\n";
 	if (empty($tiliote_tiedostot["files"])) echo "Ei uusia ladattavia tilioteaineistoja pankissa.\n";
-	if (empty($viite_tiedostot["files"]) && empty($tiliote_tiedostot["files"])) exit("");
+	if (empty($viite_tiedostot["files"]) && empty($tiliote_tiedostot["files"])) {
+		continue;
+	}
 
 	foreach ($viite_tiedostot["files"] as $viiteref) {
 		array_push($viite_references, $viiteref["fileReference"]);
@@ -279,6 +281,9 @@ if ($tee == "") {
 
     }
 
+    if (php_sapi_name() == 'cli') {
+	    exit();
+    }
     echo "</select>";
     echo "</td>";
     echo "</tr>";
