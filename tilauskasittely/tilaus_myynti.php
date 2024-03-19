@@ -92,8 +92,7 @@ if ($tila == "KORVAMERKITSE" or $tila == "KORVAMERKITSE_AJAX") {
             WHERE yhtio = '{$kukarow['yhtio']}'
             AND tunnus  = '{$rivitunnus}'";
   $result = pupe_query($query);
-
-  if (mysqli_num_rows($result) > 0 and mysqli_fetch_array($result, 0) == $tilausnumero) {
+  if (mysqli_num_rows($result) > 0 and mysqli_fetch_array($result)["otunnus"] == $tilausnumero) { // MUOKKAUS: korjattu mysqli_fetch_array()
 
     $korvamerkinta = sanitize_string($korvamerkinta);
 
