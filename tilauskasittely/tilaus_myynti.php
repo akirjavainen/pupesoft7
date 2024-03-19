@@ -41,7 +41,6 @@ foreach (array("perusta_tilaustyyppi", "projekti", "jarjlisa", "yt", "postitp", 
 if (@include "../inc/parametrit.inc");
 elseif (@include "parametrit.inc");
 else exit;
-include("../../raportit/javascript/jspupesoft_m2_m3.js"); // MUOKKAUS: lisatty
 
 if (@include "rajapinnat/logmaster/logmaster-functions.php");
 elseif (@include "logmaster-functions.php");
@@ -59,6 +58,12 @@ if ($toim == "EXTRANET") {
 foreach (array("tila", "tee", "myyjanumero", "options", "required", "myyjanumero_virhe", "javascript", "vastaavat_html") as $v) {
 	if (!isset(${$v})) ${$v} = NULL;
 }
+
+// MUOKKAUS: lisatty:
+if ($tila != "KORVAMERKITSE_AJAX") {
+  include("../../raportit/javascript/jspupesoft_m2_m3.js");
+}
+
 
 if ($tila == "YHENKPUHELIN") {
 
@@ -95,11 +100,12 @@ if ($tila == "KORVAMERKITSE" or $tila == "KORVAMERKITSE_AJAX") {
   if (mysqli_num_rows($result) > 0 and mysqli_fetch_array($result)["otunnus"] == $tilausnumero) { // MUOKKAUS: korjattu mysqli_fetch_array()
 
     $korvamerkinta = sanitize_string($korvamerkinta);
-
+/*
+    // MUOKKAUS: kommentoitu ulos:
     if (empty($korvamerkinta)) {
       $korvamerkinta = '.';
     }
-
+ */
     $query = "UPDATE tilausrivin_lisatiedot
               JOIN tilausrivi
                 ON tilausrivi.yhtio = tilausrivin_lisatiedot.yhtio
@@ -9097,7 +9103,7 @@ if ($tee == '') {
                     $('.korvabutton').show();
                     $(this).hide();
                     $('.korvaspan').hide();
-                    $('.korvamerkinta').val('');
+                    $('.korvamerkinta').val('K');
                     $('#korvaspan_{$row['tunnus']}').show();
                   });
 
@@ -9469,6 +9475,13 @@ if ($tee == '') {
             echo "<select name='korvamerkinta' class='korva_dd' id='korva_dd_$row[tunnus]'>";
             echo "<option value = ''> *** </option>";
 
+	    // MUOKKAUS: lisatty:
+	    $arr_korvamerkki = array("Muista", "Viimeisin");
+	    foreach ($arr_korvamerkki as $opt_korvamerkki) {
+	      $sel = ($row['korvamerkinta'] == $opt_korvamerkki) ? 'SELECTED' : '';
+              echo "<option value = '$opt_korvamerkki' $sel>$opt_korvamerkki</option>";
+	    }
+
             while ($krow = mysqli_fetch_assoc($kresult)) {
               $sel = $row['korvamerkinta'] == $krow['selite'] ? 'SELECTED' : '';
               echo "<option value='$krow[selite]' $sel>$krow[selitetark]</option>";
@@ -9486,11 +9499,16 @@ if ($tee == '') {
 
             echo t("Kommentti").": <font {$font_color} style='font-weight: bold;'>".str_replace("\n", "<br>", $row["kommentti"])."</font><br>";
             // MUOKKAUS: lisatty:
+	    if (!empty($row['korvamerkinta'])) {
+              echo "<br><font color='red' style='font-weight: bold; background: red; color: white; border: 5px solid black; border-style: double; padding: 5px;'>Korvamerkitty rivi: " . (string)$row['korvamerkinta'] . "</font><br>";
+	    }
+	    /*
             if (file_exists("../../raportit")) {
               if (!Pupesoft_Internals::is_description_matching_glass_type((int)$row["tunnus"], (string)$row["nimitys"], (string)$row["kommentti"])) {
                 echo "<br><font color='red'>HUOM! Laskuriin valittu lasityyppi ei vastaa tekstikuvausta.</font><br>";
               }
-            }
+	    }
+	     */
           }
 
           if ($yhtiorow['naytetaanko_ale_peruste_tilausrivilla'] != '' and $row['ale_peruste'] != '') {
