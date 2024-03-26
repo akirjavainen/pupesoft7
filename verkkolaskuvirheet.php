@@ -499,7 +499,7 @@ if ($handle = opendir($verkkolaskuvirheet_vaarat)) {
               <input type = 'hidden' name = 't[7]' value = '$laskuttajan_maa'>
               <input type = 'hidden' name = 't[28]' value = '$laskuttajan_tilino'>
               <input type = 'hidden' name = 't[65]' value = '$lvat'>
-              <input type = 'hidden' name = 't[66]' value = '$laskuttajan_ovt'>
+              <input type = 'hidden' name = 't[66]' value = '" . substr($laskuttajan_ovt, -8) . "'>
               <input type = 'hidden' name = 'lopetus' value = '".$palvelin2."verkkolaskuvirheet.php////'>
               <input type='submit' value = '".t("Perusta")."'></form><br><br>";
         }
