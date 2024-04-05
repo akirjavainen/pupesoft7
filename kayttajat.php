@@ -527,7 +527,7 @@ if ($tee == 'MUUTA') {
 
   if (strlen($firname) > 0 and isset($submit_button)) {
 
-    if (count($profiili) > 0) {
+    if (isset($profiili) && count($profiili) > 0) { // MUOKKAUS: isset()
       $profile = implode(",", $profiili);
     }
 
