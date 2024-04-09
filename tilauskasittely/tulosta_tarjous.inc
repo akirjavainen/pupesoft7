@@ -655,7 +655,7 @@ if (!function_exists('uusi_sivu_tarjous')) {
 
         $taika = t("Vko", $kieli)." ".date("W", strtotime($laskurow["toimaika"]));
 
-        if ($laskurow['toimvko'] != '7') {
+        if ($laskurow['toimvko'] != '7' && isset($DAY_ARRAY[$laskurow["toimvko"]])) { // MUOKKAUS: isset()
           $taika .= "/" .$DAY_ARRAY[$laskurow["toimvko"]];
         }
 
