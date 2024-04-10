@@ -1809,7 +1809,7 @@ if (!function_exists("verkkolasku_in")) {
           list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($ostovelat);
 
           // Oletustiliöinnit
-          // Ostovelat
+          // Ostovelat, MUOKKAUS: Sailytetaan selite:
           $query = "INSERT into tiliointi set
                     yhtio            = '$yhtio',
                     ltunnus          = '$tunnus',
@@ -1821,6 +1821,7 @@ if (!function_exists("verkkolasku_in")) {
                     summa            = '$omasumma',
                     summa_valuutassa = '$omasumma_valuutassa',
                     valkoodi         = '$valkoodi',
+                    selite           = '$selite',
                     vero             = 0,
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
@@ -1829,7 +1830,7 @@ if (!function_exists("verkkolasku_in")) {
 
           list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($yhtiorow["selvittelytili"]);
 
-          // Rahatili
+          // Rahatili, MUOKKAUS: Sailytetaan selite:
           $query = "INSERT into tiliointi set
                     yhtio            = '$yhtio',
                     ltunnus          = '$tunnus',
@@ -1841,6 +1842,7 @@ if (!function_exists("verkkolasku_in")) {
                     summa            = $vassumma,
                     summa_valuutassa = '$vassumma_valuutassa',
                     valkoodi         = '$valkoodi',
+                    selite           = '$selite',
                     vero             = 0,
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
