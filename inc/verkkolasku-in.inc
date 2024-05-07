@@ -1274,6 +1274,7 @@ if (!function_exists("verkkolasku_in")) {
                 lukko            = '1',
                 laatija          = 'verkkolas',
                 laadittu         = now()";
+error_log("VIN1277: $query");
       
       // MUOKKAUS: mysqli_insert_id():
       $result = pupe_query($query, $GLOBALS["link"]);
@@ -1412,6 +1413,7 @@ if (!function_exists("verkkolasku_in")) {
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
                     laadittu         = now()";
+error_log("VIN1416: $query");
           $result = pupe_query($query);
 
           $varastonmuutostili = $yhtiorow["varastonmuutos"];
@@ -1443,6 +1445,7 @@ if (!function_exists("verkkolasku_in")) {
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
                     laadittu         = now()";
+error_log("VIN1448: $query");
           $result = pupe_query($query);
         }
       }
@@ -1611,6 +1614,7 @@ if (!function_exists("verkkolasku_in")) {
                         lukko            = '',
                         laatija          = '$kukarow[kuka]',
                         laadittu         = now()";
+error_log("VIN1617: $query");
               $result = pupe_query($query);
 
               $varastonmuutostili = $yhtiorow["varastonmuutos"];
@@ -1642,6 +1646,7 @@ if (!function_exists("verkkolasku_in")) {
                         lukko            = '',
                         laatija          = '$kukarow[kuka]',
                         laadittu         = now()";
+error_log("VIN1649: $query");
               $result = pupe_query($query);
             }
           }
@@ -1826,6 +1831,7 @@ if (!function_exists("verkkolasku_in")) {
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
                     laadittu         = now()";
+error_log("VIN1834: $query");
           $xresult = pupe_query($query);
 
           list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($yhtiorow["selvittelytili"]);
@@ -1847,6 +1853,7 @@ if (!function_exists("verkkolasku_in")) {
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
                     laadittu         = now()";
+error_log("VIN1856: $query");
           $xresult = pupe_query($query);
 
           if ($tila == 'M') {

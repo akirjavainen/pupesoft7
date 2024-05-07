@@ -13,7 +13,7 @@ else {
   exit;
 }
 
-$session = sanitize_string($_COOKIE["pupesoft_session"]);
+$session = isset($_COOKIE["pupesoft_session"]) ? sanitize_string($_COOKIE["pupesoft_session"]) : ""; // MUOKKAUS: isset()
 
 $query = "SELECT *
           FROM kuka
