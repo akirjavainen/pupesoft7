@@ -293,6 +293,12 @@ class pdffile {
       $this->objects[$o]["width"] = 595;
       break;
 
+    case "a4-landscape" :
+      $o = $this->_addnewoid();
+      $this->objects[$o]["height"] = 595;
+      $this->objects[$o]["width"] = 842;
+      break;
+
     case "a5" :
       $o = $this->_addnewoid();
       $this->objects[$o]["height"] = 598;
@@ -1165,7 +1171,7 @@ class pdffile {
 
   function enable($name) {
     $name = strtolower($name);
-    include_once dirname(__FILE__) . "/$name.class.php";
+    include_once dirname(__FILE__) . "/" . $name . ".class.php";
     $this->x[$name] = new $name;
     $this->x[$name]->pdf = &$this;
     switch ($name) {
