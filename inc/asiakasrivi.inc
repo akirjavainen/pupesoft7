@@ -321,7 +321,7 @@ if ($fieldname == "ytunnus") {
     if (file_exists("../raportit/javascript/jspupesoft_extensions.js")) {
 	    $ulos .= "<br><a href='#' onclick='get_ytj_info(); get_finvoice_address(); set_dap();'>Automaattihaku:</a> ";
 	    $ulos .= "<a href='#' onclick='get_ytj_info();'>YTJ</a> ";
-	    $ulos .= "<a href='#' onclick='get_finvoice_address();'>Verkkolaskuosoite</a> ";
+	    $ulos .= "<a href='#' onclick='get_finvoice_address();'>TIEKE</a> ";
 	    $ulos .= "<a href='#' onclick='set_dap();'>DAP</a> ";
     }
   }
