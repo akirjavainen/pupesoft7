@@ -389,7 +389,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
     }
     else {
       $tymlisa    = t("myyntitilaukselle");
-      $linkkilisa = "<a href='tilaus_myynti.php?toim=PIKATILAUS&tilausnumero=$utunnus'>".t("Siirry myyntitilaukselle")."</a>";
+      $linkkilisa = "<a href='tilaus_myynti.php?toim=RIVISYOTTO&tilausnumero=$utunnus'>".t("Siirry myyntitilaukselle")."</a>"; // MUOKKAUS: PIKATILAUS --> RIVISYOTTO
     }
 
     $tilauksesta_myyntitilaus .= "<font class='message'>".t("Lisätään valitut rivit")." $tymlisa: $utunnus</font><br>";
