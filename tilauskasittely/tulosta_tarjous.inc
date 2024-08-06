@@ -412,7 +412,7 @@ if (!function_exists('alku_tarjous')) {
       
       // MUOKKAUS: lisatty:
       $pdf_tarjous->draw_text(295, 662, t("HUOM! 1.9. yleinen ALV-kanta nousee, mikä vaikuttaa", $kieli), $page_tarjous[$sivu], $boldi);
-      $pdf_tarjous->draw_text(295, 649, t("tarjouksen hintoihin. Uusi ALV on 25,5 %.", $kieli) . ".", $page_tarjous[$sivu], $boldi);
+      $pdf_tarjous->draw_text(295, 649, t("tarjouksen hintoihin. Uusi ALV on 25,5 %", $kieli) . ".", $page_tarjous[$sivu], $boldi);
       $pdf_tarjous->draw_text(295, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli) . ".", $page_tarjous[$sivu], $boldi);
       $pdf_tarjous->draw_text(295, 610, t("Mittatilaustuotteilla ei ole kuluttajansuojalain mukaista", $kieli), $page_tarjous[$sivu], $boldi);
       $pdf_tarjous->draw_text(295, 597, t("peruutusoikeutta (kohta 16 peruutusoikeuksien rajoitus)", $kieli) . ".", $page_tarjous[$sivu], $boldi);
