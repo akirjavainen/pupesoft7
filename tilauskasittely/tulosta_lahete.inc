@@ -553,7 +553,7 @@ if (!function_exists('alku_lahete')) {
         }
         else {
           // MUOKKAUS: tekstin siirto vasemmalle:
-          $pdf->draw_text(290, 640, t("Hintoihin lisätään arvonlisävero 24 %", $kieli).".",  $thispage, $boldi);
+          $pdf->draw_text(290, 640, t("Hintoihin lisätään arvonlisävero 24 % (1.9. alkaen 25,5 %).", $kieli).".",  $thispage, $boldi);
         }
       }
     }

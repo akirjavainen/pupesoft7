@@ -520,12 +520,6 @@ if (!function_exists('alku')) {
 
     $pdf_lasku->draw_text(310, 595, t("Mahdolliset huomautukset tehtävä 8 päivän kuluessa", $kieli), $page_lasku[$sivu], $pieni);
 
-    // MUOKKAUS: Väliaikainen lisäys:
-    if ($laskurow["yhtio"] == "sapu") {
-      $pdf_lasku->draw_text(245, 582, t("HUOM! Uusi pankkitilimme on: FI38 4712 0010 1323 07 (SWIFT: POPFFI22)", $kieli), $page_lasku[$sivu], $boldi);
-      $pdf_lasku->draw_text(245, 570, t("Päivitättehän tiedon maksatusjärjestelmäänne.", $kieli), $page_lasku[$sivu], $boldi);
-    }
-    
     if ($laskutyyppi != 21 and $laskutyyppi != 22) {
       list($page_lasku, $sivu, $kala) = laskun_kommentit($laskurow, $asiakasrow, $kieli, $pdf_lasku, $toim, $laskutyyppi, $kaanteinen_verotus, $page_lasku, $sivu, $pohja);
     }
