@@ -34,7 +34,7 @@ if (!isset($verkkokauppa) or $verkkokauppa == "") {
              suoritusaika  = '$aika',
              laatija       = '$kukarow[kuka]',
              luontiaika    = now()";
-  $suores = pupe_query($suoque, $GLOBALS["masterlink"]);
+  //$suores = pupe_query($suoque, $GLOBALS["masterlink"]); // MUOKKAUS: suorityskykyloki pois käytöstä
 }
 
 $lopeta_body = TRUE;

@@ -549,7 +549,7 @@ if ($yhtiorow['iltasiivo_mitatoi_kassamyynti_tilauksia'] != '') {
 if (table_exists('suorituskykyloki')) {
   $query = "DELETE FROM suorituskykyloki
             WHERE yhtio    = '{$kukarow['yhtio']}'
-            AND luontiaika < date_sub(now(), INTERVAL 1 YEAR)";
+            AND luontiaika < date_sub(now(), INTERVAL 1 DAY)"; // MUOKKAUS: Ei tehdä suorituskykylokista niin suurta
   pupe_query($query);
 
   $laskuri = mysqli_affected_rows($link);
