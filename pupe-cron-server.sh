@@ -18,7 +18,7 @@ cd ${POLKU}
 php ${POLKU}/check-tables.php
 
 # Päivitetään pupesoftin valuuttakurssit
-php ${POLKU}/hae_valuutat_cron.php
+#php ${POLKU}/hae_valuutat_cron.php
 
 # Haetaan APIX -laskut
 php ${POLKU}/apix-api.php
