@@ -2194,7 +2194,7 @@ if ($tila == "" and !isset($jatka)) {
       $vasen_sarake[$vasen] .= "</select>";
     }
 
-    if (file_exists("../../raportit")) $vasen_sarake[$vasen] .= "<br><br><a href=\"#\" onclick=\"document.cookie = 'filter=KUORMITUS'; window.open('../../raportit/tuotevko.php?txtFilter=KUORMITUS&no_calendar=1&no_product_filter=1', '_blank', 'toolbar=no,scrollbars=no,resizable=no,top=50,left=280,width=800,height=800'); return false;\">N&auml;yt&auml; tuotannon kuormitustilanne</a><br>"; // MUOKKAUS: lisatty
+    if (file_exists("../../raportit")) $vasen_sarake[$vasen] .= "<br><br><a href=\"#\" onclick=\"document.cookie = 'filter=KUORMITUS'; window.open('../../tuotanto/backlog.php?txtFilter=KUORMITUS&no_calendar=1&no_product_filter=1', '_blank', 'toolbar=no,scrollbars=no,resizable=no,top=50,left=280,width=800,height=800'); return false;\">N&auml;yt&auml; tuotannon kuormitustilanne</a><br>"; // MUOKKAUS: lisatty
     $vasen_sarake[$vasen] .= "</td>";
     $vasen++;
 
