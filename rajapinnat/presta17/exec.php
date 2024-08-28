@@ -46,7 +46,7 @@ class Presta17RestApi
   /*
   Default variables and values in the class
   */
-  public function __construct($yhtiorow, $rest, $url, $presta_varastot, $edi, $presta17_api_customer, $presta17_api_edipath, $presta17_api_payment_rule, $presta17_api_ovt)
+  public function __construct($yhtiorow, $rest, $url, $presta_varastot, $edi, $presta17_api_customer, $presta17_api_edipath, $presta17_api_payment_rule, $presta17_api_ovt, $presta17_api_taxes)
   {
     $php_cli = true;
     $this->kukarow = hae_kukarow('admin', $yhtiorow['yhtio']);
@@ -60,6 +60,7 @@ class Presta17RestApi
     $this->presta17_api_edipath = $presta17_api_edipath;
     $this->edi = $edi;
     $this->presta17_api_ovt = $presta17_api_ovt;
+    $this->presta17_api_taxes = $presta17_api_taxes;
     $this->fi_countries = Array(
       'Suomi' => 'Finland',
       'Ruotsi' => 'Sweden',
@@ -524,13 +525,7 @@ class Presta17RestApi
   }
 
   public function get_tax_group_id($vat) {
-    $taxes = array(
-      "0" => "0",
-      "10.00" => "3",
-      "14.00" => "2",
-      "24.00" => "1"
-    );
-    return $taxes[$vat];
+    return $this->presta17_api_taxes[$vat];
   }
 
   public function updatePrestashopCategory($cat)
@@ -637,9 +632,6 @@ class Presta17RestApi
 
       $pupesoft_product = $pupesoft_products_arr[0];
 
-      $pupesoft_product['try_nimike'] = $pupesoft_product['try_nimike'];
-      $pupesoft_product['tuotemerkki'] = $pupesoft_product['tuotemerkki'];
-
       if (isset($pupesoft_product['tuotemerkki'])
       and $pupesoft_product['tuotemerkki']
       and $pupesoft_product['tuotemerkki'] != ''
@@ -690,7 +682,9 @@ class Presta17RestApi
       $productFields->link_rewrite->language[0] = $this->slugify($pupesoft_product['nimitys']);
       $productFields->meta_title->language[0] = $pupesoft_product['nimitys'];
 
-      $productFields->meta_keywords->language[0] = $pupesoft_product['try_nimike'];
+      if(isset($pupesoft_product['try_nimike'])) {
+        $productFields->meta_keywords->language[0] = $pupesoft_product['try_nimike'];
+      }
 
       $productFields->available_later->language[0] = 'TILAUSTUOTE';
 
@@ -795,7 +789,9 @@ class Presta17RestApi
       $productFields->name->language[0] = $pupesoft_product['nimitys'];
       $productFields->meta_title->language[0] = $pupesoft_product['nimitys'];
       $productFields->link_rewrite->language[0] = $this->slugify($pupesoft_product['nimitys']);
-      $productFields->meta_keywords->language[0] = $pupesoft_product['try_nimike'];
+      if(isset($pupesoft_product['try_nimike'])) {
+        $productFields->meta_keywords->language[0] = $pupesoft_product['try_nimike'];
+      }
 
       $productFields->available_later->language[0] = 'TILAUSTUOTE';
 
@@ -1999,7 +1995,8 @@ $execute = new Presta17RestApi(
   $presta17_api_customer,
   $presta17_api_edipath,
   $presta17_api_payment_rule,
-  $presta17_api_ovt
+  $presta17_api_ovt,
+  $presta17_api_taxes
 );
 
 $execute->begin($resource, $days);
