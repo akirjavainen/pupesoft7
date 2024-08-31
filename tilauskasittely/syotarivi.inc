@@ -67,8 +67,8 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
     echo "<th align='left'>", t("Kate"), "</th>";
   }
 
-  $bruttohinta = (float)$hinta * 1.24;
-  if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".(5+$yhtiorow['hintapyoristys']-2)."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.24; document.getElementById('hinta').value = netto;\">/<input type='text' size='".(5+$yhtiorow['hintapyoristys']-2)."' name='bruttohinta' id='bruttohinta' value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.80645161290323; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MUOKKAUS: lisatty onkeyup()
+  $bruttohinta = (float)$hinta * 1.255;
+  if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".(5+$yhtiorow['hintapyoristys']-2)."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.255; document.getElementById('hinta').value = netto;\">/<input type='text' size='".(5+$yhtiorow['hintapyoristys']-2)."' name='bruttohinta' id='bruttohinta' value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.79681274900398; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MUOKKAUS: lisatty onkeyup()
   echo "  <td valign='top' class='back'></td>
       </tr>";
 
@@ -434,7 +434,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
   if ($kukarow['hinnat'] == 0) {
     $siemenluku = mb_strlen((int) $hinta) > 5 ? mb_strlen((int) $hinta) : 5;
     $disabled_text = defined("NO_PRICE_WITH_VAT") ? "disabled" : ""; // MUOKKAUS: lisatty
-    $bruttohinta = (float)$hinta * 1.24; if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.24; document.getElementById('hinta').value = netto;\">/<input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='bruttohinta' id='bruttohinta' $disabled_text value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.80645161290323; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MUOKKAUS: lisatty onkeyup()
+    $bruttohinta = (float)$hinta * 1.255; if ($kukarow['hinnat'] == 0) echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' id='hinta' value='$hinta' onkeyup=\"var netto = document.getElementById('hinta').value; netto = netto.replace(/\,/g, '.'); document.getElementById('bruttohinta').value = netto * 1.255; document.getElementById('hinta').value = netto;\">/<input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='bruttohinta' id='bruttohinta' $disabled_text value='$bruttohinta' onkeyup=\"var brutto = document.getElementById('bruttohinta').value; brutto = brutto.replace(/\,/g, '.'); document.getElementById('hinta').value = brutto * 0.79681274900398; document.getElementById('bruttohinta').value = brutto;\"></td>"; // MUOKKAUS: lisatty onkeyup()
 
     //echo "<td valign='top'><input type='text' size='".($siemenluku+$yhtiorow['hintapyoristys'])."' name='hinta' value='$hinta'></td>"; // MUOKKAUS: kommentoitu ulos
   }
