@@ -44,7 +44,7 @@ function laske_hinta($laskurow, $tunnus) {
     else $simualv = 0;
 
     // Onko miellä oletuksista poikkeava alvi. Verokantoja ennen viimeisintä alv-muutosta.
-    if (in_array($simualv, array(23, 13, 9))) {
+    if (in_array($simualv, array(24, 23, 13, 9))) {
       $alvti = $simualv;
       $alvit = $simualv;
     }
@@ -541,7 +541,7 @@ elseif ($_POST['ajax_toiminto'] == 'lisaa_suuntalava') {
     "usea_keraysvyohyke" => "K",
     "keraysvyohyke" => $_POST['keraysvyohyke'],
     "kaytettavyys" => $_POST['kaytettavyys'],
-    "terminaalialue" => $_POST['terminaalialue'],
+    "terminaalialue" => utf8_decode($_POST['terminaalialue']),
     "automaattinen_paivitys" => "S",
     "valittutunnus" => $_POST['tunnus'],
     "tyyppi" => $_POST['tyyppi'],

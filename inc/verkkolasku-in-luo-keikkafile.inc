@@ -637,10 +637,10 @@ if (!function_exists('kopioi_tapahtuma')) {
       }
 
       $kysely  = "INSERT INTO tapahtuma ({$fields}) VALUES ({$values})";
-
       // MUOKKAUS: mysqli_insert_id():
       $uusires = pupe_query($kysely, $GLOBALS["link"]);
       $tapahtuma_id = mysqli_insert_id($GLOBALS["link"]);
+
 
       $query = "UPDATE tapahtuma
                 SET kpl = '{$kpl}'
@@ -904,7 +904,7 @@ $osrow = mysqli_fetch_assoc($osres);
 
 $laskun_numero = $osrow["laskunro"]; // älä mene muuttaamaan tai poistamaan tätä muuttujaa.!!! Tai no joo... Ongelma..
 
-$lajilisa = mb_strtolower(mb_substr($osrow['ebid'], 0, 3));
+$lajilisa = strtolower(substr($osrow['ebid'], 0, 3));
 
 // Luodaan saapuminen, jos toimittajalle on määritelty, että verkkolaskulta luodaan saapuminen tai
 // manuaalisesti laskua syötettäessä ruksataan 'Luo saapuminen'
@@ -959,7 +959,6 @@ if (($osrow['ebid'] == "FINVOICEXML" and $trow['asn_sanomat'] == 'F') or $osrow[
             tila                    = 'K',
             luontiaika              = now(),
             laatija                 = 'verkkolas'";
-  
   // MUOKKAUS: mysqli_insert_id():
   $result = pupe_query($query, $GLOBALS["link"]);
   $keikantunnus = mysqli_insert_id($GLOBALS["link"]); // tätä tarvitaan tilausrivien uusiotunnukseen
@@ -1529,10 +1528,10 @@ for ($i = 0; $i < count($rtuoteno); $i++) {
             echo "<pre>$kysely</pre>";
           }
 
-
           // MUOKKAUS: mysqli_insert_id():
           $uusires = pupe_query($kysely, $GLOBALS["link"]);
           $extraa = mysqli_insert_id($GLOBALS["link"]);
+
           $lisa_array[]      = $extraa;
 
           // Tarkistetaan onko tämä isärivi ($i+1 tarkoittaa sitä että ollaan laitettu lapsialkiolle isän tunnus talteen "isa_olemassa"-kenttään)
@@ -1753,10 +1752,10 @@ if (($osrow["ebid"] == "TECCOM-INVOICE"  and $trow['asn_sanomat'] == 'K') or ($o
               tila                    = 'K',
               luontiaika              = now(),
               laatija                 = '$kukarow[kuka]'";
-	  
     // MUOKKAUS: mysqli_insert_id():
     $insertres = pupe_query($query, $GLOBALS["link"]);
     $keikan_tunnus = mysqli_insert_id($GLOBALS["link"]);
+
     if ($debug == 1) {
       echo "<pre>", str_replace("\t", "", $query), "</pre>Keikan tunnus:$keikan_tunnus<br><br>";
       echo "<font class='message'>Liitetty saapumiseen {$id}</font><br><br>";
@@ -1854,10 +1853,10 @@ if (($osrow["ebid"] == "TECCOM-INVOICE"  and $trow['asn_sanomat'] == 'K') or ($o
                 tila                    = 'K',
                 luontiaika              = now(),
                 laatija                 = '$kukarow[kuka]'";
-    
       // MUOKKAUS: mysqli_insert_id():
       $insertres = pupe_query($query, $GLOBALS["link"]);
       $keikan_tunnus = mysqli_insert_id($GLOBALS["link"]);
+
       if ($debug == 1) {
         echo "<pre>", str_replace("\t", "", $query), "</pre>Keikan tunnus:$keikan_tunnus<br><br>";
       }
@@ -2121,7 +2120,7 @@ if (!function_exists('saapumisen_pyoristyserot')) {
         $alvit = 0;
       }
       // Onko miellä oletuksista poikkeava alvi. Verokantoja ennen viimeisintä alv-muutosta.
-      elseif (in_array($simualv, array(23, 13, 9))) {
+      elseif (in_array($simualv, array(24, 23, 13, 9))) {
         $alvit = $simualv;
       }
       else {

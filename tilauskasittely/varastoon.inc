@@ -225,12 +225,12 @@ elseif ($toiminto == "kalkyyli" and $tee == "varastoon") {
                        perheid     = '{$chk_row['tunnus']}',
                        suuntalava  = '{$chk_row['suuntalava']}',
                        uusiotunnus = '{$chk_row['uusiotunnus']}'";
-
         // MUOKKAUS: mysqli_insert_id():
         $inskres = pupe_query($lisainsert, $GLOBALS["link"]);
 
+
         if (!empty($varastoon_tilausrivirajaus)) {
-          $runkoinsert = mysqli_insert_id($GLOBALS["link"]);
+	  $runkoinsert = mysqli_insert_id($GLOBALS["link"]);
           $runkotunnukset .= $runkoinsert . ",";
         }
 
@@ -453,7 +453,7 @@ if ($kurssirow["arvo"] != 0) $simualv = round(100 * (($kurssirow["summa"]/$kurss
 else $simualv = 0;
 
 // Onko miellä oletuksista poikkeava alvi. Verokantoja ennen viimeisintä alv-muutosta.
-if (in_array($simualv, array(23, 13, 9))) {
+if (in_array($simualv, array(24, 23, 13, 9))) {
   $simualv = (float) $simualv;
 }
 else {
@@ -935,10 +935,10 @@ while ($tilrivirow = mysqli_fetch_assoc($presult)) {
               laatija    = '$kukarow[kuka]',
               rivitunnus = '$tilrivirow[tunnus]',
               laadittu   = '$varastoonvientipva'";
-    
     // MUOKKAUS: mysqli_insert_id():
     $result = pupe_query($query, $GLOBALS["link"]);
     $tapahtumaid = mysqli_insert_id($GLOBALS["link"]);
+
 
     // Viedään koko suuntalava varastoon. Eli kaikille suuntalavalla oleville tuotteille päivitetään sama tuotepaikka
     if ($yhtiorow['suuntalavat'] == 'S' and is_numeric($suuntalavan_tunnus) and trim($koko_suuntalava) == 'X') {
