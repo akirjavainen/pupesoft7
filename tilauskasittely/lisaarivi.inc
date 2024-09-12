@@ -2255,7 +2255,7 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
                           WHERE yhtio            = '$kukarow[yhtio]'
                           and tilausrivitunnus   = '$lisatty_tun'";
                 $result = pupe_query($query);
-                if (file_exists("../../raportit")) file_get_contents("http://localhost/raportit/rivinumerokorjaus.php?order=" . $kukarow["kesken"]);
+                if (file_exists("../../raportit")) file_get_contents("http://localhost/raportit/rivinumerokorjaus.php?order_id=" . $kukarow["kesken"]);
               }
               else {
                 if ($yhtiorow["tilauksen_jarjestys"] == "M") {
@@ -2289,7 +2289,7 @@ if ($rivityyppi != 'O' and trim($var) == "" and $trow["tuoteno"] != "") {
                 }
 
                 $result = pupe_query($query);
-		if (file_exists("../../raportit")) file_get_contents("http://localhost/raportit/rivinumerokorjaus.php?order=" . $kukarow["kesken"]);
+		if (file_exists("../../raportit")) file_get_contents("http://localhost/raportit/rivinumerokorjaus.php?order_id=" . $kukarow["kesken"]);
               }
 
               $lisatyt_rivit1[] = $lisatty_tun;
@@ -3637,7 +3637,7 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
                 WHERE yhtio          = '$kukarow[yhtio]'
                 and tilausrivitunnus = '$lisatty_tun'";
       $result = pupe_query($query);
-      if (file_exists("../../raportit")) file_get_contents("http://localhost/raportit/rivinumerokorjaus.php?order=" . $kukarow["kesken"]);
+      if (file_exists("../../raportit")) file_get_contents("http://localhost/raportit/rivinumerokorjaus.php?order_id=" . $kukarow["kesken"]);
     }
     else {
       if ($yhtiorow["tilauksen_jarjestys"] == "M") {
@@ -3674,7 +3674,7 @@ if ($toimittamatta > 0 or trim($var) != '' or $rivityyppi == 'O') {
       }
 
       $result = pupe_query($query);
-      if (file_exists("../../raportit")) file_get_contents("http://localhost/raportit/rivinumerokorjaus.php?order=" . $kukarow["kesken"]);
+      if (file_exists("../../raportit")) file_get_contents("http://localhost/raportit/rivinumerokorjaus.php?order_id=" . $kukarow["kesken"]);
     }
 
     if ($var == "H") {
