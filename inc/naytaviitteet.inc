@@ -49,8 +49,14 @@ if ($type == '0' and substr($tietue, 0, 3) != "\$\$E" and substr($tietue, 0, 3) 
   echo "<th>".t("Tila")."</th></tr>";
 }
 elseif ($type == '3' or $type == 'S') {
-  // MUOKKAUS: BUGIKORJAUS (string / int):
-  $viiteaineisto_summa = sprintf('%01.2f', (float)substr($tietue, 77, 10) / 100);
+  // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos-funktiolla, ei kiintealla (77/78) paikalla
+  // ---
+  $tietue = trim($tietue);
+  $sum = substr($tietue, strrpos($tietue, " ") + 1); // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos-funktiolla, ei kiintealla (77/78) paikalla
+  $sum = (float)preg_replace("/[^0-9]/", "", $sum); // MUOKKAUS: lisatty
+  $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MUOKKAUS: BUGIKORJAUS 100 -> 1000
+  $viiteaineisto_summa = sprintf('%01.2f', $sum);
+  // ---
 
   if (substr($tietue, 87, 1) == '1') {
     $viiteaineisto_summa = sprintf('%.2f', $viiteaineisto_summa * -1);
