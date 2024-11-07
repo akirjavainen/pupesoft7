@@ -305,6 +305,12 @@ class pdffile {
       $this->objects[$o]["width"] = 418;
       break;
 
+    case "thermal" :
+      $o = $this->_addnewoid();
+      $this->objects[$o]["height"] = 303;
+      $this->objects[$o]["width"] = 303;
+      break;
+
     default :
       if (preg_match("/in/", $size)) {
         $o = $this->_addnewoid();
