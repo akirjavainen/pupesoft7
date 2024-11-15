@@ -1,5 +1,7 @@
 <?php
-include("../../raportit/javascript/jspupesoft_extensions.js"); // MUOKKAUS: lisatty
+if (file_exists("../../raportit/javascript/jspupesoft_extensions.js")) {
+  include("../../raportit/javascript/jspupesoft_extensions.js"); // MUOKKAUS: lisatty
+}
 
 if (!function_exists("pupe_strtoupper")) {
   function pupe_strtoupper(&$item, $key) {

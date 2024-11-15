@@ -61,7 +61,9 @@ foreach (array("tila", "tee", "myyjanumero", "options", "required", "myyjanumero
 
 // MUOKKAUS: lisatty:
 if ($tila != "KORVAMERKITSE_AJAX") {
-  include("../../raportit/javascript/jspupesoft_m2_m3.js");
+  if (file_exists("../raportit/javascript/jspupesoft_m2_m3.js")) {
+    include("../../raportit/javascript/jspupesoft_m2_m3.js");
+  }
 }
 
 
