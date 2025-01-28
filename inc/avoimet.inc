@@ -46,6 +46,11 @@ if ($tee != '') {
 
   if ($pp2 !='' and $kk2 !='' and $vv2 !='') {
 
+    // MUOKKAUS: BUGIKORJAUS string --> int:
+    $kk2 = (int)$kk2;
+    $pp2 = (int)$pp2;
+    $vv2 = (int)$vv2;
+
     if (!checkdate($kk2, $pp2, $vv2)) {
       echo "<font class='error'>".t("Virheellinen alkupäivämäärä")."</font><br>";
       $tee = '';
