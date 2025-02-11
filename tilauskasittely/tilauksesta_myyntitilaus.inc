@@ -415,14 +415,14 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
       }
     }
 
-    $query = "SELECT tilausrivi.*, tilausrivin_lisatiedot.positio, tilausrivin_lisatiedot.toimittajan_tunnus
+    $query = "SELECT tilausrivi.*, tilausrivin_lisatiedot.positio, tilausrivin_lisatiedot.toimittajan_tunnus 
               FROM tilausrivi
               LEFT JOIN tilausrivin_lisatiedot ON tilausrivi.yhtio = tilausrivin_lisatiedot.yhtio and tilausrivi.tunnus = tilausrivin_lisatiedot.tilausrivitunnus
               WHERE tilausrivi.yhtio  = '$kukarow[yhtio]'
               and tilausrivi.otunnus  = '$otunnus'
               and tilausrivi.tyyppi  != 'D'
               $tilrivilisa
-              ORDER BY tilaajanrivinro"; // MUOKKAUS: Säilytetään rivijärjestys tarjouksesta tai alkuperäisestä tilauksesta
+              ORDER BY tilausrivi.tilaajanrivinro"; // MUOKKAUS: Kopioidaan rivit käyttäjän määrittämässä järjestyksessä
     $copresult = pupe_query($query);
 
     while ($coprivirow = mysqli_fetch_array($copresult)) {
@@ -502,6 +502,7 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
       $alv    = $coprivirow['alv'];
       $ytunnus  = $laskurow["ytunnus"];
       $rivinumero = $coprivirow['tilaajanrivinro'];
+      $tilrivinumero = $rivinumero; // MUOKKAUS: BUGIKORJAUS pidetään rivit samassa järjestyksessä kopiota tehdessä, kts. lisaarivi.inc: 2069
 
       $perheid  = $coprivirow['perheid'];
       $perheid2  = $coprivirow['perheid2'];
