@@ -2377,9 +2377,16 @@ if ($luottorajavirhe_ylivito_valmis) {
 if ($kukarow["yhtio"] == "sapu") {
   echo "<script>" . PHP_EOL;
   echo "xmlHttp = new XMLHttpRequest();" . PHP_EOL;
-  echo "xmlHttp.open('GET', '" . SERVER_IP . "/hinnasto/printable.php', true);" . PHP_EOL;
+  echo "xmlHttp.open('GET', 'http://" . SERVER_IP . "/hinnasto/printable.php', true);" . PHP_EOL;
   echo "xmlHttp.send('pupe_order=$tilausnumero&pdf_write=1');" . PHP_EOL;
   echo "</script>" . PHP_EOL;
+  
+  echo "<iframe src='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tilausnumero&lasku_yhtio=sapu&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS'></iframe>";
+  /*
+  echo "xmlHttp = new XMLHttpRequest();" . PHP_EOL;
+  echo "xmlHttp.open('GET', 'http://" . SERVER_IP . "/pupesoft/tilauskasittely/tulostakopio.php', true);" . PHP_EOL;
+  echo "xmlHttp.send('otunnus=$tilausnumero&lasku_yhtio=sapu&toim=TILAUSVAHVISTUS&tee=NAYTATILAUS');" . PHP_EOL;
+   */
 }
 
 if (!isset($silent) or $silent == "") {
