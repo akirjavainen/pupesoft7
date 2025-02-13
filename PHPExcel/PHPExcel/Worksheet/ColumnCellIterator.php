@@ -56,7 +56,7 @@ class PHPExcel_Worksheet_ColumnCellIterator extends PHPExcel_Worksheet_CellItera
      * @param    integer                $startRow        The row number at which to start iterating
      * @param    integer                $endRow            Optionally, the row number at which to stop iterating
      */
-    public function __construct(PHPExcel_Worksheet $subject = null, $columnIndex = 'A', $startRow = 1, $endRow = null)
+    public function __construct(?PHPExcel_Worksheet $subject = null, $columnIndex = 'A', $startRow = 1, $endRow = null)
     {
         // Set subject
         $this->subject = $subject;

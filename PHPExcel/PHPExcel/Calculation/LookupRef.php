@@ -264,7 +264,7 @@ class PHPExcel_Calculation_LookupRef
      * @param    PHPExcel_Cell    $pCell            The cell to set the hyperlink in
      * @return    mixed    The value of $displayName (or $linkURL if $displayName was blank)
      */
-    public static function HYPERLINK($linkURL = '', $displayName = null, PHPExcel_Cell $pCell = null)
+    public static function HYPERLINK($linkURL = '', $displayName = null, ?PHPExcel_Cell $pCell = null)
     {
         $args = func_get_args();
         $pCell = array_pop($args);
@@ -305,7 +305,7 @@ class PHPExcel_Calculation_LookupRef
      * @todo    Support for the optional a1 parameter introduced in Excel 2010
      *
      */
-    public static function INDIRECT($cellAddress = null, PHPExcel_Cell $pCell = null)
+    public static function INDIRECT($cellAddress = null, ?PHPExcel_Cell $pCell = null)
     {
         $cellAddress    = PHPExcel_Calculation_Functions::flattenSingleValue($cellAddress);
         if (is_null($cellAddress) || $cellAddress === '') {
