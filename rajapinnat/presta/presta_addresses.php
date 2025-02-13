@@ -23,7 +23,7 @@ class PrestaAddresses extends PrestaClient {
    * @param SimpleXMLElement $existing_address
    * @return \SimpleXMLElement
    */
-  protected function generate_xml($address, SimpleXMLElement $existing_address = null) {
+  protected function generate_xml($address, ?SimpleXMLElement $existing_address = null) {
     if (is_null($existing_address)) {
       $xml = $this->empty_xml();
     }

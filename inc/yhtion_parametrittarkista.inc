@@ -15,7 +15,7 @@ if (!function_exists("yhtion_parametrittarkista")) {
     $alennus_tuotenumero,
     $kuljetusvakuutus_tuotenumero,
     $erilliskasiteltava_tuotenumero,
-    $ennakkomaksu_tuotenumero,
+    $ennakkomaksu_tuotenumero2, // MUOKKAUS: BUGIKORJAUS sama muuttuja määritelty kahteen kertaan
     $lisakulu_tuotenumero,
     $ind_maksuehto_tuotenumero,
     $ind_rahti_tuotenumero,
@@ -26,7 +26,7 @@ if (!function_exists("yhtion_parametrittarkista")) {
     $ind_alennus_tuotenumero,
     $ind_kuljetusvakuutus_tuotenumero,
     $ind_erilliskasiteltava_tuotenumero,
-    $ind_ennakkomaksu_tuotenumero,
+    $ind_ennakkomaksu_tuotenumero2, // MUOKKAUS: BUGIKORJAUS sama muuttuja määritelty kahteen kertaan
     $ind_lisakulu_tuotenumero;
 
     $fieldname = mysqli_field_name($result, $i);

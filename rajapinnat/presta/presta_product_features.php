@@ -14,7 +14,7 @@ class PrestaProductFeatures extends PrestaClient {
     return 'product_features';
   }
 
-  protected function generate_xml($record, SimpleXMLElement $existing_record = null) {
+  protected function generate_xml($record, ?SimpleXMLElement $existing_record = null) {
     if (is_null($existing_record)) {
       $xml = $this->empty_xml();
     }

@@ -47,7 +47,7 @@ class PrestaCarrierFiles extends PrestaClient {
     return 'carrier_file';
   }
 
-  protected function generate_xml($resource, SimpleXMLElement $existing_resource = null) {
+  protected function generate_xml($resource, ?SimpleXMLElement $existing_resource = null) {
     throw new Exception('You shouldnt be here, CRUD is not implemented!');
   }
 }

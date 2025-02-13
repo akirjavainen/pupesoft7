@@ -53,7 +53,7 @@ class PrestaProducts extends PrestaClient {
    */
 
 
-  protected function generate_xml($product, SimpleXMLElement $existing_product = null) {
+  protected function generate_xml($product, ?SimpleXMLElement $existing_product = null) {
     if (is_null($existing_product)) {
       $xml = $this->empty_xml();
     }

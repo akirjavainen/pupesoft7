@@ -11,7 +11,7 @@ class PrestaOrderHistories extends PrestaClient {
     return 'order_histories';
   }
 
-  protected function generate_xml($order_history, SimpleXMLElement $existing_order_history = null) {
+  protected function generate_xml($order_history, ?SimpleXMLElement $existing_order_history = null) {
     if (is_null($existing_order_history)) {
       $xml = $this->empty_xml();
     }

@@ -606,7 +606,7 @@ abstract class PrestaClient {
   }
 
   //Child has to implement function which returns schema=blank or repopulated xml
-  protected abstract function generate_xml($resource, SimpleXMLElement $existing_resource = null);
+  protected abstract function generate_xml($resource, ?SimpleXMLElement $existing_resource = null);
 
   //Child needs to implement function which return resource as string: 'products'...
   protected abstract function resource_name();

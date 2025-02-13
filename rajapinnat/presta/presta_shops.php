@@ -13,7 +13,7 @@ class PrestaShops extends PrestaClient {
     return 'shops';
   }
 
-  protected function generate_xml($record, SimpleXMLElement $existing_record = null) {
+  protected function generate_xml($record, ?SimpleXMLElement $existing_record = null) {
     throw new Exception('You shouldnt be here, CRUD is not implemented!');
   }
 

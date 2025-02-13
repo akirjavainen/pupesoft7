@@ -18,7 +18,7 @@ class PrestaProductStocks extends PrestaClient {
     return 'stock_availables';
   }
 
-  protected function generate_xml($stock, SimpleXMLElement $existing_stock = null) {
+  protected function generate_xml($stock, ?SimpleXMLElement $existing_stock = null) {
     if (is_null($existing_stock)) {
       $xml = $this->empty_xml();
     }

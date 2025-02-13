@@ -67,7 +67,7 @@ class PrestaCustomerThreads extends PrestaClient {
     return 'customer_threads';
   }
 
-  protected function generate_xml($record, SimpleXMLElement $existing_record = null) {
+  protected function generate_xml($record, ?SimpleXMLElement $existing_record = null) {
     throw new Exception('You shouldnt be here, CRUD is not implemented!');
   }
 }

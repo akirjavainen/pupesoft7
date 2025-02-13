@@ -22,7 +22,7 @@ class PrestaCustomerGroups extends PrestaClient {
    */
 
 
-  protected function generate_xml($group, SimpleXMLElement $existing_group = null) {
+  protected function generate_xml($group, ?SimpleXMLElement $existing_group = null) {
     if (is_null($existing_group)) {
       $xml = $this->empty_xml();
     }
