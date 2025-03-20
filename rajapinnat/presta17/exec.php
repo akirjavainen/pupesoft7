@@ -1447,6 +1447,7 @@ class Presta17RestApi
             foreach($address_arr['osoitteet'] as $address) {
 
               if($address['asiakas_id']) {
+                
                 $found_invoice_add = $this->rest->get(Array(
                   'resource' => 'addresses',
                   'filter[id_customer]' => '[' . $customer_id . ']',
@@ -1454,6 +1455,41 @@ class Presta17RestApi
                   'filter[id]' => '[' . $order->id_address_invoice->__toString() . ']',
                   'display' => 'full'
                 ));
+
+                if(!$found_invoice_add->addresses->address) {
+                  $found_invoice_add = $this->rest->get(Array(
+                    'resource' => 'addresses',
+                    'filter[id_customer]' => '[' . $customer_id . ']',
+                    'filter[id]' => '[' . $order->id_address_invoice->__toString() . ']',
+                    'display' => 'full'
+                  ));
+
+                  if($found_invoice_add->addresses->address) {
+
+                    $xml = $this->rest->get(Array(
+                      'resource' => 'addresses',
+                      'id' => $found_invoice_add->addresses->address->id,
+                    ));
+  
+                    $addressesFields = $xml->address->children();
+  
+                    $addressesFields->dni = $address['asiakas_id'];
+  
+                    $found_invoice_add = $this->rest->edit(Array(
+                      'resource' => 'addresses',
+                      'id' => $found_invoice_add->addresses->address->id,
+                      'putXml' => $xml->asXML(),
+                    ));
+
+                    $found_invoice_add = $this->rest->get(Array(
+                      'resource' => 'addresses',
+                      'filter[id_customer]' => '[' . $customer_id . ']',
+                      'filter[dni]' => '[' . $address['asiakas_id'] . ']',
+                      'filter[id]' => '[' . $order->id_address_invoice->__toString() . ']',
+                      'display' => 'full'
+                    ));
+                  }
+                }
   
                 $found_delivery_add = $this->rest->get(Array(
                   'resource' => 'addresses',
@@ -1462,6 +1498,41 @@ class Presta17RestApi
                   'filter[id]' => '[' . $order->id_address_delivery->__toString() . ']',
                   'display' => 'full'
                 ));
+
+                if(!$found_delivery_add->addresses->address) {
+                  $found_delivery_add = $this->rest->get(Array(
+                    'resource' => 'addresses',
+                    'filter[id_customer]' => '[' . $customer_id . ']',
+                    'filter[id]' => '[' . $order->id_address_delivery->__toString() . ']',
+                    'display' => 'full'
+                  ));
+
+                  if($found_delivery_add->addresses->address) {
+
+                    $xml = $this->rest->get(Array(
+                      'resource' => 'addresses',
+                      'id' => $found_delivery_add->addresses->address->id,
+                    ));
+  
+                    $addressesFields = $xml->address->children();
+  
+                    $addressesFields->dni = $address['asiakas_id'];
+  
+                    $found_delivery_add = $this->rest->edit(Array(
+                      'resource' => 'addresses',
+                      'id' => $found_delivery_add->addresses->address->id,
+                      'putXml' => $xml->asXML(),
+                    ));
+
+                    $found_delivery_add = $this->rest->get(Array(
+                      'resource' => 'addresses',
+                      'filter[id_customer]' => '[' . $customer_id . ']',
+                      'filter[dni]' => '[' . $address['asiakas_id'] . ']',
+                      'filter[id]' => '[' . $order->id_address_delivery->__toString() . ']',
+                      'display' => 'full'
+                    ));
+                  }
+                }
 
                 $pupesoft_customer_id = $address['a_tun'];
               } else {
