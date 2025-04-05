@@ -982,7 +982,7 @@ class Presta17RestApi
     }
 
     $customerFields->email = filter_var((string) $customer['email'], FILTER_VALIDATE_EMAIL);
-    if (!$customerFields->email) {
+    if (!$customer['email'] or !$customerFields->email) {
       return;
     }
 
