@@ -8887,7 +8887,7 @@ if ($tee == '') {
             if (empty($muokkauslukko_rivi) and (!$_luottoraja_ylivito or $_keratty_ja_ylitetty)) {
 
               $_btn_class = $_keratty_toimitettu ? 'muokkaa_btn' : '';
-
+	      
               echo "<form method='post' action='{$palvelin2}{$tilauskaslisa}tilaus_myynti.php' name='muokkaa' class='muokkaa_form'>
                   <input type='hidden' name='toim'         value = '$toim'>
                   <input type='hidden' name='lopetus'      value = '$lopetus'>
@@ -8912,6 +8912,12 @@ if ($tee == '') {
                   <input type='submit' class='{$_btn_class}' value='".t("Muokkaa")."'>
                   </form> ";
             }
+
+	    // MUOKKAUS: rivisplittauksen varmistuskysymys:
+	    if (file_exists("../../raportit")) {
+              $splittaa_onclick = "onclick='if (confirm(\"Splittaa rivi?\")) { fetch(\"/raportit/tilauksen_jako.php?yhtio=$row[yhtio]&order_id=$row[otunnus]&split_order_rows=1&order_row_ids=$row[tunnus]\"); location.reload(); }'";
+	      echo "<input type='submit' class='{$_btn_class}' value='".t("Splittaa")."' $splittaa_onclick>";
+	    }
 
             // MUOKKAUS: rivipoiston varmistuskysymys:
             $poista_onclick = "onclick='return nappi_onclick_confirm(\"".t('Olet poistamassa riviä, oletko varma')."?\");'";
