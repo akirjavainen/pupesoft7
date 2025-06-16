@@ -14,6 +14,11 @@ if ($kieli == '') {
   $kieli = mb_strtolower($kielrow['kieli']);
 }
 
+// MUOKKAUS: Tilausvahvistuksen rivihinnat piiloon:
+if ($kukarow["yhtio"] == "sapu") {
+	$naytetaanko_rivihinta = "ei_rivihintaa";
+}
+
 $norm["height"] = 9;
 $norm["font"] = "Times-Roman";
 
@@ -1012,7 +1017,11 @@ if (!function_exists('rivi_otsikot_lahete')) {
 
       $pdf->draw_text(330, $kala+15, t("Tilattu", $kieli),    $thispage, $norm);
       $pdf->draw_text(375, $kala+15, t("Toimitus", $kieli),    $thispage, $norm);
-      $pdf->draw_text(425, $kala+15, t("Yks.hinta", $kieli),    $thispage, $norm);
+
+      // MUOKKAUS: Lisätty:
+      if ($naytetaanko_rivihinta == '') {
+        $pdf->draw_text(425, $kala+15, t("Yks.hinta", $kieli),    $thispage, $norm);
+      }
       $pdf->draw_text(480, $kala+15, t("Ale", $kieli),      $thispage, $norm);
 
       if (trim($naytetaanko_rivihinta) == '') {
@@ -2175,8 +2184,11 @@ if (!function_exists('rivi_hinta_ale_lahete')) {
       $pdf->draw_text(415-$oikpos, $kala, $row["varattu"], $thispage, $norm);
     }
 
-    $oikpos = $pdf->mb_strlen(hintapyoristys($row["hinta"]), $norm);
-    $pdf->draw_text(465-$oikpos, $kala, hintapyoristys($row["hinta"]), $thispage, $norm);
+    // MUOKKAUS: Lisätty:
+    if ($naytetaanko_rivihinta == '') {
+      $oikpos = $pdf->mb_strlen(hintapyoristys($row["hinta"]), $norm);
+      $pdf->draw_text(465-$oikpos, $kala, hintapyoristys($row["hinta"]), $thispage, $norm);
+    }
 
     if (trim($naytetaanko_rivihinta) == '') {
       $oikpos = $pdf->mb_strlen(hintapyoristys($row["rivihinta"]), $norm);
