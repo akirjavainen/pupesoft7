@@ -3929,7 +3929,7 @@ if (!function_exists('loppu_lahete')) {
         extract($params);
       }
       else {
-        $pdf->draw_text(410, 92, t("Yhteensä", $kieli) . ":", $thispage, $norm); // MUOKKAUS: lisatty
+        //$pdf->draw_text(410, 92, t("Yhteensä", $kieli) . ":", $thispage, $norm); // MUOKKAUS: lisatty
         $oikpos = $pdf->mb_strlen(round($GLOBALS["total_tilkpl"], 1) . " kpl", $norm); // MUOKKAUS: lisatty
         $pdf->draw_text(565-$oikpos, 92, round($GLOBALS["total_tilkpl"], 1) . " " . t("kpl", $kieli), $thispage, $norm); // MUOKKAUS: lisatty
         // Verolliset hinnat yhtiönparametreistä tai lähetetyypistä
