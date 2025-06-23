@@ -3125,15 +3125,14 @@ if ($tee == '') {
           $apuqu = "SELECT *
                     FROM toimitustapa
                     WHERE yhtio  = '$kukarow[yhtio]'
-                    AND nouto   != ''
+                    AND nouto   = ''
                     ORDER BY jarjestys
-                    LIMIT 1";
+                    LIMIT 1"; // MUOKKAUS: nouto != --> =, ei muuteta toimitustapaa noudoksi
           $meapu = pupe_query($apuqu);
           $apuro = mysqli_fetch_assoc($meapu);
 
-          // MUOKKAUS: kommentoitu ulos::
-          //$toimitustapa = $apuro['selite'];
-          //echo "<font class='error'>".t("Toimitustapa on oltava nouto, koska maksuehto on käteinen")."!</font><br><br>";
+          $toimitustapa = $apuro['selite'];
+          echo "<font class='error'>".t("Toimitustapa on oltava nouto, koska maksuehto on käteinen")."!</font><br><br>";
         }
 
         if (empty($laskurow["kassalipas"])) {

@@ -154,9 +154,10 @@ if ($rivirow["riveja"] == 0 or ($kerattavia == 0 and $ei_kerattavia == 0 and $ku
              SET tila='D', alatila='$laskurow[tila]', comments = '$komm'
              where tunnus='$laskurow[tunnus]'
              and yhtio='$kukarow[yhtio]'";
-  $result = pupe_query($query);
+  // MUOKKAUS: Kommentoitu ulos:
+  //$result = pupe_query($query);
 
-  $tilaus_valmis_message .= "<font class='message'>".sprintf(t("Tilaus %s mitätöitiin koska tilauksella ei ollut yhtään kerättävää/laskutettavaa riviä."), $laskurow["tunnus"])."</font><br><br>\n";
+  //$tilaus_valmis_message .= "<font class='message'>".sprintf(t("Tilaus %s mitätöitiin koska tilauksella ei ollut yhtään kerättävää/laskutettavaa riviä."), $laskurow["tunnus"])."</font><br><br>\n";
   $toimitusvahvitus_laheta = TRUE;
 }
 elseif ($rivirow["jteet"] > 0 and $laskurow["osatoimitus"] != '') {
