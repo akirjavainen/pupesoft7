@@ -3125,9 +3125,9 @@ if ($tee == '') {
           $apuqu = "SELECT *
                     FROM toimitustapa
                     WHERE yhtio  = '$kukarow[yhtio]'
-                    AND nouto   = ''
+                    AND nouto   != ''
                     ORDER BY jarjestys
-                    LIMIT 1"; // MUOKKAUS: nouto != --> =, ei muuteta toimitustapaa noudoksi
+                    LIMIT 1";
           $meapu = pupe_query($apuqu);
           $apuro = mysqli_fetch_assoc($meapu);
 
