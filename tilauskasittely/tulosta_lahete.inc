@@ -14,8 +14,9 @@ if ($kieli == '') {
   $kieli = mb_strtolower($kielrow['kieli']);
 }
 
-// MUOKKAUS: Tilausvahvistuksen rivihinnat piiloon:
-if ($kukarow["yhtio"] == "sapu") {
+// MUOKKAUS: Tilausvahvistuksen rivihinnat piiloon, paitsi jos käyttäjä
+// halunnut hinnat näkyviin Tilausvahvistus kopio -toiminnon kautta:
+if ($kukarow["yhtio"] == "sapu" && !isset($_POST["tulosta"])) {
 	$naytetaanko_rivihinta = "ei_rivihintaa";
 }
 
