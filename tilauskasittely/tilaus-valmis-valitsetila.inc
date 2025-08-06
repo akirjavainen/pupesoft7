@@ -146,7 +146,7 @@ if ($rivirow["riveja"] == 0 or ($kerattavia == 0 and $ei_kerattavia == 0 and $ku
   $query  = "UPDATE tilausrivi
              SET tyyppi='D'
              WHERE otunnus = '$laskurow[tunnus]' and yhtio = '$kukarow[yhtio]'";
-  $result = pupe_query($query);
+  //$result = pupe_query($query); // MUOKKAUS: Kommentoitu ulos
 
   $komm = "(" . $kukarow['kuka'] . "@" . date('Y-m-d') .") ".t("Mitätöi ohjelmassa tilaus-valmis-valitsetila.php (1)")."<br>";
 
@@ -190,7 +190,7 @@ elseif ($kerattavia == 0 or $tilaus_toimitetuksi) {
                SET tila='D', alatila='$laskurow[tila]', comments = '$komm'
                WHERE tunnus = '$laskurow[tunnus]'
                AND yhtio    = '$kukarow[yhtio]'";
-    $result = pupe_query($query);
+    //$result = pupe_query($query); // MUOKKAUS: Kommentoitu ulos
 
     $tilaus_valmis_message .= "<font class='message'>".sprintf(t("Tilauksella %s  oli pelkästään Puuterivejä. Otsikko mitätöitiin."), $laskurow["tunnus"])."</font><br><br>\n";
     $toimitusvahvitus_laheta = TRUE;
