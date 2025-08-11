@@ -49,7 +49,7 @@ if (!$variaaritorivi and $kukarow["extranet"] == '' and $toim == "PIKATILAUS") {
       <th align='left'>".t("Määrä")."</th>
       <th align='left'>".t("Tila")."</th>";
 
-  if ($kukarow['hinnat'] == 0) echo "<th align='left'>".t("Hinta")." (ALV 0/24 %)</th>"; // MUOKKAUS: lisatty verollinen hintaboksi
+  if ($kukarow['hinnat'] == 0) echo "<th align='left'>".t("Hinta")." (ALV 0/25,5 %)</th>"; // MUOKKAUS: lisatty verollinen hintaboksi
 
   for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
     echo "<th align='left'>".t("Ale")."{$alepostfix}</th>";
@@ -321,7 +321,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
       <th align='left'>".t("Määrä")."</th>
       <th align='left'>".t("Tila")."</th>";
 
-  if ($kukarow['hinnat'] == 0) echo "<th align='left'>".t("Hinta")." (ALV 0/24)</th>"; // MUOKKAUS: lisatty
+  if ($kukarow['hinnat'] == 0) echo "<th align='left'>".t("Hinta")." (ALV 0/25,5)</th>"; // MUOKKAUS: lisatty
 
   for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
     echo "<th align='left'>".t("Ale")."{$alepostfix}</th>";
