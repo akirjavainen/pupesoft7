@@ -3131,7 +3131,7 @@ if ($tee == '') {
           $meapu = pupe_query($apuqu);
           $apuro = mysqli_fetch_assoc($meapu);
 
-          $toimitustapa = $apuro['selite'];
+          //$toimitustapa = $apuro['selite']; // MUOKKAUS: Kommentoitu ulos
           echo "<font class='error'>".t("Toimitustapa on oltava nouto, koska maksuehto on käteinen")."!</font><br><br>";
         }
 
