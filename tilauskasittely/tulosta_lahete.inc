@@ -15,8 +15,9 @@ if ($kieli == '') {
 }
 
 // MUOKKAUS: Tilausvahvistuksen rivihinnat piiloon, paitsi jos käyttäjä
-// halunnut hinnat näkyviin Tilausvahvistus kopio -toiminnon kautta:
-if ($kukarow["yhtio"] == "sapu" && !isset($_POST["tulosta"])) {
+// halunnut hinnat näkyviin Tilausvahvistus kopio -toiminnon kautta.
+// Yliajettavissa $_GET["nayta_rivihinnat"] -parametrilla nimihaku.php -modulista:
+if ($kukarow["yhtio"] == "sapu" && !isset($_POST["tulosta"]) && !isset($_GET["nayta_rivihinnat"])) {
 	$naytetaanko_rivihinta = "ei_rivihintaa";
 }
 

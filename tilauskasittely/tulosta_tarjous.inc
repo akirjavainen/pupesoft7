@@ -22,8 +22,10 @@ if (!isset($verolliset_verottomat_hinnat)) $verolliset_verottomat_hinnat = "";
 if (strlen($verolliset_verottomat_hinnat) === 0) $verolliset_verottomat_hinnat = "verottomat";
 //$naytetaanko_tuoteno = "ei";
 
-// MUOKKAUS: Tarjouksen rivihinnat piiloon:
-if ($kukarow["yhtio"] == "sapu") {
+// MUOKKAUS: Tarjouksen rivihinnat piiloon, paitsi jos käyttäjä
+// halunnut hinnat näkyviin Tilausvahvistus kopio -toiminnon kautta.
+// Yliajettavissa $_GET["nayta_rivihinnat"] -parametrilla nimihaku.php -modulista:
+if ($kukarow["yhtio"] == "sapu" && !isset($_POST["tulosta"]) && !isset($_GET["nayta_rivihinnat"])) {
 	$naytetaanko_rivihinta = "ei_rivihintaa";
 }
 
