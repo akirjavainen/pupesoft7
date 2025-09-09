@@ -2382,7 +2382,7 @@ if ($kukarow["yhtio"] == "sapu") {
   echo "</script>" . PHP_EOL;
   
   $toim_tallennus = ($laskurow["tila"] == "T") ? "TARJOUS" : "TILAUSVAHVISTUS";
-  echo "<iframe src='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tilausnumero&lasku_yhtio=sapu&toim=$toim_tallennus&tee=NAYTATILAUS'></iframe>";
+  echo "<iframe src='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tilausnumero&lasku_yhtio=sapu&toim=$toim_tallennus&tee=NAYTATILAUS&naytetaanko_rivihinta=ei_rivihintaa'></iframe>";
 }
 
 if (!isset($silent) or $silent == "") {
