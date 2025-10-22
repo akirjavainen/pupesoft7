@@ -4396,6 +4396,7 @@ if (isset($jatka)) {
     $meapu2row = mysqli_fetch_assoc($meapu2);
 
     // ja toimitustapa ei ole nouto eikä kyseessä ole verkkokauppatilaus laitetaan toimitustavaksi nouto... hakee järjestyksessä ekan
+    /* MUOKKAUS: Poistettu käytöstä
     if ($meapu2row["nouto"] == "" and ($tilaustyyppi != "W" and !$_etukateen_maksettu)) {
       $apuqu = "SELECT *
                 FROM toimitustapa
@@ -4408,6 +4409,7 @@ if (isset($jatka)) {
 
       $toimitustapa = $apuro['selite'];
     }
+     */
 
     $kassalipas = !empty($laskurow['kassalipas']) ? $laskurow['kassalipas'] : $kukarow["kassamyyja"];
   }
