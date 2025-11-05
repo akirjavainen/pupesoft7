@@ -22,21 +22,21 @@ if (!function_exists("pankkitiedot")) {
     global $yhtiorow;
 
     // Onko IBAN?
-    if (mb_substr($tilino, 0, 2) == "FI") {
-      $rahalaitoskoodi1 = mb_substr($tilino, 4, 1);
-      $rahalaitoskoodi2 = mb_substr($tilino, 5, 1);
-      $rahalaitoskoodi3 = mb_substr($tilino, 4, 3);
+    if (substr($tilino, 0, 2) == "FI") {
+      $rahalaitoskoodi1 = substr($tilino, 4, 1);
+      $rahalaitoskoodi2 = substr($tilino, 5, 1);
+      $rahalaitoskoodi3 = substr($tilino, 4, 3);
     }
     else {
-      $rahalaitoskoodi1 = mb_substr($tilino, 0, 1);
-      $rahalaitoskoodi2 = mb_substr($tilino, 1, 1);
-      $rahalaitoskoodi3 = mb_substr($tilino, 0, 3);
+      $rahalaitoskoodi1 = substr($tilino, 0, 1);
+      $rahalaitoskoodi2 = substr($tilino, 1, 1);
+      $rahalaitoskoodi3 = substr($tilino, 0, 3);
     }
 
     // oletuksia
     // väliviivallinen ytunnus 11 merkkiä
     $ytunnus = sprintf("%08.8s", str_replace('-', '', $yhtiorow["ytunnus"]));
-    $ytunnus = mb_substr($ytunnus, 0, 7) . "-" . mb_substr($ytunnus, -1);
+    $ytunnus = substr($ytunnus, 0, 7) . "-" . substr($ytunnus, -1);
     $ytunnus_valiviivalla = sprintf('%-11.11s', $ytunnus);
     $ytunnus = $yhtiorow["ytunnus"];
 
@@ -159,6 +159,10 @@ if (!function_exists("pankkitiedot")) {
         $pankki["pankkilaitos"] = "Calyon";
         $pankki["swift"] = "BSUIFIHH";
         break;
+      case (714):
+        $pankki["rahalaitos"] = '  ';
+        $pankki["pankkilaitos"] = "Alisa Pankki";
+        $pankki["swift"] = "EVSEFIHH";
       case (715) : // Itella Pankki
         $pankki["rahalaitos"] = '  ';
         $pankki["pankkilaitos"] = "Itella Pankki";
@@ -184,7 +188,7 @@ if (!function_exists("pankkitiedot")) {
       $pankki["swift"] = "DABAFIHH";
       break;
     default :
-      $_tilino = mb_substr($tilino, 0, 1);
+      $_tilino = substr($tilino, 0, 1);
 
       // Maksetaan kassasta tai selvittelytililtä
       if (trim($_tilino) != "" and !is_numeric($_tilino)) {
@@ -196,7 +200,7 @@ if (!function_exists("pankkitiedot")) {
       break;
     }
 
-    if ($pankki["rahalaitos"] == "" or mb_strlen($pankki["rahalaitos"]) != 2) {
+    if ($pankki["rahalaitos"] == "" or strlen($pankki["rahalaitos"]) != 2) {
       echo "Tilinumerosta $tilino ei voitu tunnistaa rahalaitoskoodia!\n";
       return false;
     }

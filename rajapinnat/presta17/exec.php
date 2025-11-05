@@ -1216,6 +1216,15 @@ class Presta17RestApi
         continue;
       }
 
+      if(empty($customer['selitetark_5']) and !empty($customer['presta_customergroup'])) {
+        $group_id = $this->setPupesoftCustomerGroup(Array('selite' => $customer['presta_customergroup']));
+        $query = "UPDATE avainsana
+                    SET selitetark_5 = '{$group_id}'
+                    WHERE yhtio = '{$yhtio}'
+                    AND tunnus  = {$customer['presta_customergroupt']}";
+        pupe_query($query);
+      }
+
       $customers[$presta_id][] = Array(
         'email' => $customer['email'],
         'kuljetusohje' => $customer['kuljetusohje'],
