@@ -9893,7 +9893,9 @@ if (!function_exists("livesearch_tuotehaku")) {
     $haku = trim($_REQUEST["livesearch_haku"]);
 
     if (!PUPE_UNICODE and mb_detect_encoding($haku, mb_detect_order(), TRUE) == "UTF-8") {
-      $haku = iconv("UTF-8", "latin1//TRANSLIT", $haku);
+      // MUOKKAUS: iconv vaihdettu mb_convert_encoding(), gcc-libs päivityksistä (TRANSLIT-tuen loppuminen) johtuen:
+      $haku = mb_convert_encoding($text, "ISO-8859-15", "UTF-8");
+      //$haku = iconv("UTF-8", "latin1//TRANSLIT", $haku);
     }
 
     if (mb_strlen($haku) >= $yhtiorow['livetuotehaku_minimi'] and mb_substr($haku, 0, 1) != "*" and mb_substr($haku, -1) != '*' and mb_substr($haku, 0, 1) != "?" and mb_substr($haku, 0, 1) != "#") {

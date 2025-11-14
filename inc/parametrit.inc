@@ -33,7 +33,9 @@ unset($_GET["param_clean"], $_POST["param_clean"], $_REQUEST["param_clean"]);
 if (!PUPE_UNICODE) {
   if (!function_exists("pupe_iconv")) {
     function pupe_iconv(&$item, $key) {
-      $item = iconv("UTF-8", "latin1//TRANSLIT", $item);
+      // MUOKKAUS: iconv vaihdettu mb_convert_encoding(), gcc-libs päivityksistä (TRANSLIT-tuen loppuminen) johtuen:
+      $item = mb_convert_encoding($item, "ISO-8859-15", "UTF-8");
+      //$item = iconv("UTF-8", "latin1//TRANSLIT", $item);
     }
   }
 
@@ -48,7 +50,9 @@ if (!PUPE_UNICODE) {
             array_walk_recursive($param_clean[$key], "pupe_iconv");
           }
           else {
-            $param_clean[$key] = iconv("UTF-8", "latin1//TRANSLIT", $param_clean[$key]);
+            // MUOKKAUS: iconv vaihdettu mb_convert_encoding(), gcc-libs päivityksistä (TRANSLIT-tuen loppuminen) johtuen:
+            $param_clean[$key] = mb_convert_encoding($param_clean[$key], "ISO-8859-15", "UTF-8");
+            //$param_clean[$key] = iconv("UTF-8", "latin1//TRANSLIT", $param_clean[$key]);
           }
         }
 
