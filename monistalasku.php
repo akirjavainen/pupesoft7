@@ -1417,7 +1417,7 @@ if ($tee == 'MONISTA') {
             $values .= ", '" . $monistarow["viesti"] . "'"; // MUOKKAUS: lisatty
           }
           break;
-        case 'vienti_kurssi';
+        case 'vienti_kurssi':
           // hyvityksissä pidetään kurssi samana, tai jos korjataan rahtikuluja
           if ($kumpi == 'HYVITA' or $kumpi == 'REKLAMA' or ($toim == '' and $kumpi == 'MONISTA' and $korjrahdit == 'on')) {
             if ($monistarow[$fieldname] == 0) {

@@ -4931,26 +4931,26 @@ if (isset($jatka)) {
             $fieldname = mysqli_field_name($monistares, $i);
 
             switch (mysqli_field_name($monistares, $i)) {
-            case "otunnus";
+            case "otunnus":
               $values .= ", '$tilausnumero'";
               break;
-            case "laatija";
+            case "laatija":
               $values .= ", '$kukarow[kuka]'";
               break;
-            case "luontiaika";
-            case "laadittu";
+            case "luontiaika":
+            case "laadittu":
               $values .= ", now()";
               break;
-            case "kerayspvm";
+            case "kerayspvm":
               $values .= ", '$kervv-$kerkk-$kerpp'";
               break;
-            case "toimaika";
+            case "toimaika":
               $values .= ", '$toimvv-$toimkk-$toimpp'";
               break;
-            case "kate_korjattu";
+            case "kate_korjattu":
               $values .= ", NULL";
               break;
-            default;
+            default:
               $values .= ", '".$monistarow[$fieldname]."'";
               break;
             }
@@ -4998,16 +4998,16 @@ if (isset($jatka)) {
                 $fieldname = mysqli_field_name($monistares2, $i);
 
                 switch (mysqli_field_name($monistares2, $i)) {
-                case "laatija";
+                case "laatija":
                   $values2 .= ", '$kukarow2[kuka]'";
                   break;
-                case "luontiaika";
+                case "luontiaika":
                   $values2 .= ", now()";
                   break;
-                case "tilausrivitunnus";
+                case "tilausrivitunnus":
                   $values2 .= ", '$lisattyRivitunnus'";
                   break;
-                default;
+                default:
                   $values2 .= ", '".$monistarow2[$fieldname]."'";
                   break;
                 }
