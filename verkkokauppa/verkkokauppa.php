@@ -36,7 +36,7 @@ if ($_REQUEST["tee"] == "login") {
 
     if (mysqli_num_rows($result) == 1 and $vertaa == $krow['salasana']) {
 
-      srand((double) microtime() * 1000000);
+      srand((float) microtime() * 1000000);
 
       for ($i = 0; $i < 25; $i++) {
         $session = $session . chr(rand(65, 90)) ;

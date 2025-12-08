@@ -12,7 +12,7 @@ if (!$php_cli) {
   die;
 }
 
-if (!`which recode`) {
+if (!shell_exec("which recode")) {
   echo "Tarvitaan recode -ohjelma!\n";
   die;
 }

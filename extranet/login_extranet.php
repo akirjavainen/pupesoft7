@@ -12,7 +12,7 @@ if (isset($_REQUEST["user"]) and $_REQUEST["user"] != '') {
   $yhtio = empty($yhtio) ? '' : $yhtio;
 
   $session = "";
-  srand((double) microtime() * 1000000);
+  srand((float) microtime() * 1000000);
 
   $query = "SELECT
               kuka.kuka,

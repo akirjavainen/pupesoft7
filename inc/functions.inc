@@ -27,7 +27,7 @@ if (!function_exists("pupesoft_login")) {
       'message' => ''
     );
 
-    srand((double) microtime() * 1000000);
+    srand((float) microtime() * 1000000);
 
     $query = "SELECT kuka.kuka, kuka.session, kuka.salasana, kuka.yhtio
               FROM kuka

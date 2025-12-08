@@ -3004,7 +3004,7 @@ function listdir($start_dir = '.') {
   }
 
   $start_dir = rtrim($start_dir, '/');
-  $file_list = explode("\n", trim(`ls $start_dir/ | sort`));
+  $file_list = explode("\n", trim(shell_exec("ls $start_dir/ | sort")));
 
   foreach ($file_list as $file) {
 
