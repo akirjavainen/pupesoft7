@@ -75,7 +75,6 @@ if ($tee == "SendRegistrationInfo") {
 
   $response = curl_exec($ch);
 
-  curl_close($ch);
   fclose($tempfile);
 
   $xml = simplexml_load_string($response);
@@ -109,7 +108,6 @@ if ($tee == "RetrieveTransferID") {
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
   $response = curl_exec($ch);
-  curl_close($ch);
 
   $xml = simplexml_load_string($response);
 

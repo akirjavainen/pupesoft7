@@ -285,7 +285,6 @@ class Unifaun {
         }
       }
 
-      curl_close($ch);
     }
   }
 

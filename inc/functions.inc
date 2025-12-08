@@ -1243,7 +1243,6 @@ if (!function_exists("apix_invoice_put_file")) {
     $apix_ulos .= "Lähetetään aineisto APIX:lle...<br>\n";
     $response = curl_exec($ch);
 
-    curl_close($ch);
     fclose($apix_fh);
 
     $xml = simplexml_load_string($response);
@@ -1335,7 +1334,6 @@ if (!function_exists("apix_edi_put_file")) {
     $apix_ulos .= "Lähetetään aineisto APIX:lle...<br>\n";
     $response = curl_exec($ch);
 
-    curl_close($ch);
     fclose($apix_fh);
 
     $xml = simplexml_load_string($response);
@@ -22304,8 +22302,6 @@ if (!function_exists('zendesk_curl')) {
     $info   = curl_getinfo($ch);
     $header = mb_substr($result, 0, $info['header_size']);
     $body   = mb_substr($result, $info['header_size']);
-
-    curl_close($ch);
 
     $statukset = array();
     $statukset[0] = "New";

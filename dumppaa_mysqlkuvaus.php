@@ -85,7 +85,6 @@ if ($result === FALSE) {
   echo curl_errno($ch) . " - " . curl_error($ch) . "</font><br>";
   exit(1);
 }
-curl_close($ch);
 
 $alterit = trim($result);
 
@@ -103,7 +102,6 @@ if ($result === FALSE) {
   echo curl_errno($ch) . " - " . curl_error($ch) . "</font><br>";
   exit(1);
 }
-curl_close($ch);
 
 $updatet = trim($result);
 
