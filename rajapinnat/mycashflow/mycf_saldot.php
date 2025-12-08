@@ -38,7 +38,6 @@ class MyCashflowSaldot {
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
       $response = curl_exec($ch);
-      curl_close($ch);
 
       $current++;
       $this->logger->log("[{$current}/{$total}] tuote {$product_row["tuoteno"]} saldo {$product_row['saldo']}");

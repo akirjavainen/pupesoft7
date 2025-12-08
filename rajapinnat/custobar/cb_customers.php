@@ -37,8 +37,6 @@ class CustobarCustomers {
     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
     $response = curl_exec($ch);
 
-    curl_close($ch);
-
     if (mb_strpos($response, '"response":"ok"') === FALSE) {
       $this->logger->log("---------Asiakkaiden lisääminen epäonnistui!---------");
       $this->logger->log($response);

@@ -33,7 +33,6 @@ function mycf_toimita_tilaus($params) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     $response = curl_exec($ch);
-    curl_close($ch);
 
     // Päivitetään toimitetuksi
     $data = array("action" => "deliver",
@@ -48,7 +47,6 @@ function mycf_toimita_tilaus($params) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     $response = curl_exec($ch);
-    curl_close($ch);
   }
 }
 
