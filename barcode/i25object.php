@@ -124,7 +124,7 @@ class I25Object extends BarcodeObject {
     if ($this->mStyle & BCS_DRAW_TEXT) $ysize = $this->mHeight - BCD_DEFAULT_MAR_Y1 - BCD_DEFAULT_MAR_Y2 - $this->GetFontHeight($this->mFont);
     else $ysize = $this->mHeight - BCD_DEFAULT_MAR_Y1 - BCD_DEFAULT_MAR_Y2;
 
-    if ($this->mStyle & BCS_ALIGN_CENTER) $sPos = (integer)(($this->mWidth - $size ) / 2);
+    if ($this->mStyle & BCS_ALIGN_CENTER) $sPos = (int)(($this->mWidth - $size ) / 2);
     elseif ($this->mStyle & BCS_ALIGN_RIGHT) $sPos = $this->mWidth - $size;
     else $sPos = 0;
 

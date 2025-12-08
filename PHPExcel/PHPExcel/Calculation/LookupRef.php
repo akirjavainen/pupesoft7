@@ -119,7 +119,7 @@ class PHPExcel_Calculation_LookupRef
         if (is_array($cellAddress)) {
             foreach ($cellAddress as $columnKey => $value) {
                 $columnKey = preg_replace('/[^a-z]/i', '', $columnKey);
-                return (integer) PHPExcel_Cell::columnIndexFromString($columnKey);
+                return (int) PHPExcel_Cell::columnIndexFromString($columnKey);
             }
         } else {
             if (strpos($cellAddress, '!') !== false) {
@@ -131,12 +131,12 @@ class PHPExcel_Calculation_LookupRef
                 $endAddress = preg_replace('/[^a-z]/i', '', $endAddress);
                 $returnValue = array();
                 do {
-                    $returnValue[] = (integer) PHPExcel_Cell::columnIndexFromString($startAddress);
+                    $returnValue[] = (int) PHPExcel_Cell::columnIndexFromString($startAddress);
                 } while ($startAddress++ != $endAddress);
                 return $returnValue;
             } else {
                 $cellAddress = preg_replace('/[^a-z]/i', '', $cellAddress);
-                return (integer) PHPExcel_Cell::columnIndexFromString($cellAddress);
+                return (int) PHPExcel_Cell::columnIndexFromString($cellAddress);
             }
         }
     }
@@ -196,7 +196,7 @@ class PHPExcel_Calculation_LookupRef
         if (is_array($cellAddress)) {
             foreach ($cellAddress as $columnKey => $rowValue) {
                 foreach ($rowValue as $rowKey => $cellValue) {
-                    return (integer) preg_replace('/[^0-9]/i', '', $rowKey);
+                    return (int) preg_replace('/[^0-9]/i', '', $rowKey);
                 }
             }
         } else {
@@ -209,12 +209,12 @@ class PHPExcel_Calculation_LookupRef
                 $endAddress = preg_replace('/[^0-9]/', '', $endAddress);
                 $returnValue = array();
                 do {
-                    $returnValue[][] = (integer) $startAddress;
+                    $returnValue[][] = (int) $startAddress;
                 } while ($startAddress++ != $endAddress);
                 return $returnValue;
             } else {
                 list($cellAddress) = explode(':', $cellAddress);
-                return (integer) preg_replace('/[^0-9]/', '', $cellAddress);
+                return (int) preg_replace('/[^0-9]/', '', $cellAddress);
             }
         }
     }

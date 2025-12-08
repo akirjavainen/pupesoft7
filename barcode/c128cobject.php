@@ -316,7 +316,7 @@ class C128CObject extends BarcodeObject {
       return false;
     }
 
-    if ($this->mStyle & BCS_ALIGN_CENTER) $sPos = (integer)(($this->mWidth - $size ) / 2);
+    if ($this->mStyle & BCS_ALIGN_CENTER) $sPos = (int)(($this->mWidth - $size ) / 2);
     elseif ($this->mStyle & BCS_ALIGN_RIGHT) $sPos = $this->mWidth - $size;
     else $sPos = 0;
 
