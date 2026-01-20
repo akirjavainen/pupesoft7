@@ -7,8 +7,9 @@ if (strpos($_SERVER['SCRIPT_NAME'], "viranomaisilmoitukset.php") === FALSE) {
 /*
 300 "Vero kotimaan myynnistä verokannoittain"
 301 "24% + 25.5% vero"
-302 "14% vero"
-303 "10% vero"
+302.1 "14% vero"
+302.2 "13.5% vero"
+302 "13.5% + 14% vero"
 305 "Vero tavaraostoista muista EU maista"
 306 "Vero palveluostoista muista EU maista"
 307 "Kohdekuukauden vähennettävä vero"
@@ -272,7 +273,7 @@ if (isset($tee) and $tee == 'VSRALVKK_UUSI_erittele') {
       $tiliointilisa .= " and tiliointi.vero in (22, 23, 24, 25.5) ";
       break;
     case 'fi302' :
-      $tiliointilisa .= " and tiliointi.vero in (12, 13, 14) ";
+      $tiliointilisa .= " and tiliointi.vero in (12, 13, 14, 13.5) ";
       break;
     case 'fi303' :
       $tiliointilisa .= " and tiliointi.vero in (8, 9, 10) ";
@@ -955,6 +956,8 @@ function alvlaskelma($kk, $vv) {
 
     $fi301 = 0.0;
     $fi302 = 0.0;
+    $fi3021 = 0.0;
+    $fi3022 = 0.0;
     $fi303 = 0.0;
 
     $tilirow = mysqli_fetch_assoc($tilires);
@@ -981,6 +984,10 @@ function alvlaskelma($kk, $vv) {
         case 23 :
         case 22 :
           $fi301 += $verorow['veronmaara'];
+          break;
+        case 13.5 :
+          $fi302 += $verorow['veronmaara'];
+          $fi3022 += $verorow['veronmaara'];
           break;
         case 14 :
         case 13 :
@@ -1071,7 +1078,9 @@ function alvlaskelma($kk, $vv) {
     }
     else {
       echo "<tr class='aktiivi'><td><a href = '?tee=VSRALVKK_UUSI_erittele&ryhma=fi301&vv=$vv&kk=$kk&etsivirheita=$etsivirheita'>301</a> ", t("24% :n ja 25.5% :n vero"), "</td><td align='right'>".sprintf('%.2f', $fi301)."</td></tr>";
-      echo "<tr class='aktiivi'><td><a href = '?tee=VSRALVKK_UUSI_erittele&ryhma=fi302&vv=$vv&kk=$kk&etsivirheita=$etsivirheita'>302</a> ", t("14% :n vero"), "</td><td align='right'>".sprintf('%.2f', $fi302)."</td></tr>";
+      echo "<tr class='aktiivi'><td>302.1 ", t("14% :n vero"), "</td><td align='right'>".sprintf('%.2f', $fi302-$fi3022)."</td></tr>";
+      echo "<tr class='aktiivi'><td>302.2 ", t("13.5% :n vero"), "</td><td align='right'>".sprintf('%.2f', $fi3022)."</td></tr>";
+      echo "<tr class='aktiivi'><td><a href = '?tee=VSRALVKK_UUSI_erittele&ryhma=fi302&vv=$vv&kk=$kk&etsivirheita=$etsivirheita'>302</a> ", t("14% :n ja 13.5% :n vero"), "</td><td align='right'>".sprintf('%.2f', $fi302)."</td></tr>";
       echo "<tr class='aktiivi'><td><a href = '?tee=VSRALVKK_UUSI_erittele&ryhma=fi303&vv=$vv&kk=$kk&etsivirheita=$etsivirheita'>303</a> ", t("10% :n vero"), "</td><td align='right'>".sprintf('%.2f', $fi303)."</td></tr>";
     }
 
