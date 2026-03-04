@@ -1,5 +1,10 @@
 <?php
 
+// MUOKKAUS: isset():
+if (!isset($tm_toimitustaparow)) {
+	$tm_toimitustaparow = NULL;
+}
+
 $params = array(
   'asiakas_tunnus' => $laskurow['liitostunnus'],
   'toimipaikka_tunnus' => $laskurow['yhtio_toimipaikka'],
