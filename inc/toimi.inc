@@ -15,6 +15,11 @@ else {
   $otsikko   = "Toimittajat";
   $otsikko_nappi = "toimittaja";
 
+  // MUOKKAUS: Lisätty YTJ-haku:
+  if (isset($_POST["uusi"]) && file_exists("../raportit/javascript/jspupesoft_extensions.js")) {
+    $otsikko .= "<br><a href='#' onclick='get_ytj_info(true); set_ovt();'>YTJ-haku</a>";
+  }
+
   if (mysqli_num_rows(t_avainsana("TOIMITTAJARYHMA")) > 0) {
     $ryhmalisa = "(SELECT IF(selitetark != '', CONCAT(selite, ' ', selitetark), selite) FROM avainsana WHERE yhtio = '{$kukarow['yhtio']}' AND laji = 'TOIMITTAJARYHMA' AND selite = toimi.toimittajaryhma) AS toimittajaryhma,";
     $hakuryhmalisa = ', toimittajaryhma';

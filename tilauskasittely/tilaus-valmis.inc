@@ -2381,7 +2381,7 @@ if ($kukarow["yhtio"] == "sapu") {
   echo "xmlHttp.send('pupe_order=$tilausnumero&pdf_write=1');" . PHP_EOL;
   echo "</script>" . PHP_EOL;
   
-  $toim_tallennus = ($laskurow["tila"] == "T") ? "TARJOUS" : "TILAUSVAHVISTUS";
+  $toim_tallennus = ($laskurow["tilausvahvistus"] != "") ? "TILAUSVAHVISTUS" : "TARJOUS";
   echo "<iframe src='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tilausnumero&lasku_yhtio=sapu&toim=$toim_tallennus&tee=NAYTATILAUS&naytetaanko_rivihinta=ei_rivihintaa'></iframe>";
 }
 
