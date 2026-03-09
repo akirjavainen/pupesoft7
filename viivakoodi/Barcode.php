@@ -94,19 +94,19 @@ class Image_Barcode extends PEAR
                 case 'gif':
                     header('Content-type: image/gif');
                     imagegif($img);
-                    imagedestroy($img);
+                    //imagedestroy($img); // MUOKKAUS: deprecated, poistettu
                     break;
 
                 case 'jpg':
                     header('Content-type: image/jpg');
                     imagejpeg($img);
-                    imagedestroy($img);
+                    //imagedestroy($img); // MUOKKAUS: deprecated, poistettu
                     break;
 
                 default:
                     header('Content-type: image/png');
                     imagepng($img);
-                    imagedestroy($img);
+                    //imagedestroy($img); // MUOKKAUS: deprecated, poistettu
                     break;
             }
         } else {

@@ -187,6 +187,6 @@ class BarcodeObject {
   }
 
   function DestroyObject() {
-    imagedestroy($this->mImg);
+    //imagedestroy($this->mImg); // MUOKKAUS: deprecated, poistettu
   }
 }
