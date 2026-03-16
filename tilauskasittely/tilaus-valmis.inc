@@ -2373,14 +2373,23 @@ if ($luottorajavirhe_ylivito_valmis) {
   $result = pupe_query($query);
 }
 
-// MUOKKAUS: PDF-mittakuvien tallennus verkkolevylle:
+// MUOKKAUS: Käänteinen ALV kaikille tilaus- tai tarjousriveille (mikäli valittu yhdelle)
+// ja PDF-mittakuvien tallennus verkkolevylle:
 if ($kukarow["yhtio"] == "sapu") {
+  $query = "SELECT alv FROM tilausrivi WHERE alv >= 600 AND otunnus=$tilausnumero;";
+  $result = pupe_query($query);
+  if (mysqli_num_rows($result) > 0) {
+    $query = "UPDATE tilausrivi SET alv=alv + 600 WHERE alv < 600 AND otunnus=$tilausnumero;";
+    pupe_query($query);
+    error_log("ALV: Muutettiin kaanteinen ALV kaikille riveille tilauksessa tai tarjouksessa $tilausnumero.");
+  }
+
   echo "<script>" . PHP_EOL;
   echo "xmlHttp = new XMLHttpRequest();" . PHP_EOL;
   echo "xmlHttp.open('GET', 'http://" . SERVER_IP . "/hinnasto/printable.php', true);" . PHP_EOL;
   echo "xmlHttp.send('pupe_order=$tilausnumero&pdf_write=1');" . PHP_EOL;
   echo "</script>" . PHP_EOL;
-  
+
   $toim_tallennus = ($laskurow["tilausvahvistus"] != "") ? "TILAUSVAHVISTUS" : "TARJOUS";
   echo "<iframe src='/pupesoft/tilauskasittely/tulostakopio.php?otunnus=$tilausnumero&lasku_yhtio=sapu&toim=$toim_tallennus&tee=NAYTATILAUS&naytetaanko_rivihinta=ei_rivihintaa'></iframe>";
 }
