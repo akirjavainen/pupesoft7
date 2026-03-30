@@ -2375,7 +2375,7 @@ if ($luottorajavirhe_ylivito_valmis) {
 
 // MUOKKAUS: Käänteinen ALV kaikille tilaus- tai tarjousriveille (mikäli valittu yhdelle)
 // ja PDF-mittakuvien tallennus verkkolevylle:
-if ($kukarow["yhtio"] == "sapu") {
+if ($kukarow["yhtio"] == "sapu" && !empty($tilausnumero)) {
   $query = "SELECT alv FROM tilausrivi WHERE alv >= 600 AND otunnus=$tilausnumero;";
   $result = pupe_query($query);
   if (mysqli_num_rows($result) > 0) {
