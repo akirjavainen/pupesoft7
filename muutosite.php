@@ -1477,6 +1477,11 @@ if ($tee == 'E' or $tee == 'F') {
     $liitetiedosto = 1;
   }
 
+  // MUOKKAUS: Lisatty:
+  if (file_exists("../raportit")) {
+    echo "<a href='/raportit/monista_tosite.php?order_id=$tunnus&clone=1'><input type='submit' name='btnClone' id='btnClone' value='Monista tosite'></a>";
+  }
+
   // Näytetään nappi vain jos tieoja on
   if ($trow['vienti'] != '' and $trow['vienti'] != 'A' and $trow['vienti'] != 'D' and $trow['vienti'] != 'G') {
     if ($tee2 != 1) {
