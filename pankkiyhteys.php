@@ -169,7 +169,6 @@ if ($tee == "") {
       if (php_sapi_name() == 'cli') {
 	$viite_references = array();
 	$tiliote_references = array();
-    	$pankki = hae_pankkiyhteys_ja_pura_salaus($pankkiyhteys["tunnus"], $sepa_pankkiyhteys_salasana);
 
         $params_ktl = array(
           "file_type"             => "KTL", // TITO (tiliotteet) tai KTL (viitemaksut)
@@ -185,6 +184,7 @@ if ($tee == "") {
         );
 
         $viite_tiedostot = sepa_download_file_list($params_ktl);
+        //$viite_tiedostot = sepa_download_file_list_samlink($params_ktl); // ZEPA
         $tiliote_tiedostot = sepa_download_file_list($params_tito);
         unset($params_ktl);
 	unset($params_tito);

@@ -77,6 +77,7 @@ class Presta17RestApi
                 JOIN puun_alkio on (tuote.yhtio =  puun_alkio.yhtio and tuote.tuoteno = puun_alkio.liitos) 
                 JOIN dynaaminen_puu on (puun_alkio.yhtio = dynaaminen_puu.yhtio and puun_alkio.puun_tunnus = dynaaminen_puu.tunnus) 
                 where tuote.yhtio='$yhtio' and tuote.nakyvyys = 1
+                and tuote.status != 'P'
                 and (
                 (tuote.muutospvm between date_sub(now(),INTERVAL '$days' DAY) and now()) 
                 or 
@@ -245,7 +246,11 @@ class Presta17RestApi
   {
     $blankXml = $this->rest->get(Array('url' => $this->url . 'api/product_features?schema=synopsis'));
     $product_featureFields = $blankXml->product_feature->children();
-    $product_featureFields->name->language[0] = (string) $product_feature;
+    $name = (string) $product_feature;
+    $langs = $product_featureFields->name->language;
+    for ($i = 0; $i < count($langs); $i++) {
+      $langs[$i] = $name;
+    }
     $product_features = Array(
       'resource' => 'product_features',
       'postXml' => $blankXml->asXML(),
@@ -590,7 +595,11 @@ class Presta17RestApi
   {
     $blankXml = $this->rest->get(Array('url' => $this->url . 'api/product_feature_values?schema=synopsis'));
     $product_feature_valueFields = $blankXml->product_feature_value->children();
-    $product_feature_valueFields->value->language[0] = (string) $product_feature_value;
+    $val = (string) $product_feature_value;
+    $langs = $product_feature_valueFields->value->language;
+    for ($i = 0; $i < count($langs); $i++) {
+      $langs[$i] = $val;
+    }
     $product_feature_valueFields->id_feature = $product_feature_id;
     $product_feature_values = Array(
       'resource' => 'product_feature_values',

@@ -41,6 +41,9 @@ elseif ($type == '3' or ($type == 'S' and
   $reference = ltrim(substr($tietue, 43, 20), '0');
   $tietue = trim($tietue);
   $sum = substr($tietue, strrpos($tietue, " ") + 1); // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos-funktiolla, ei kiintealla (77/78) paikalla
+  if (strpos($sum, "1A") >= 0) { // MUOKKAUS: Lisätty POP Pankin suuren 2026 kesäpäivityksen jälkeen
+    $sum = str_replace("1A", "", $sum);
+  }
   $sum = (float)preg_replace("/[^0-9]/", "", $sum); // MUOKKAUS: lisatty
   $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MUOKKAUS: BUGIKORJAUS 100 -> 1000
   //if ($factoring_oikaisutunnus != '0') { // MUOKKAUS: BUGIKORJAUS (kommentoitu ulos)

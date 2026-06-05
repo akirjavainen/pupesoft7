@@ -1,7 +1,15 @@
 <?php
 
 define('SEPA_ENVIRONMENT', 'production');
-define('SEPA_ADDRESS'    , 'https://sepa.ahkio.com');
+define('SEPA_ADDRESS', 'https://sepa.ahkio.com');
+define('SEPA_ADDRESS_SAMLINK', 'https://ws.samlink.fi/services/CorporateFileService'); // MUOKKAUS: Lisatty
+define('SEPA_WSDL_SAMLINK', 'https://ws.samlink.fi/wsdl/CertificateService.xml'); // MUOKKAUS: Lisatty varmennepalvelun osoite
+
+include("/var/www/robrichards/vendor/robrichards/wse-php/src/WSSESoap.php");
+
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use RobRichards\WsePhp\WSSESoap;
 
 // Käyttöliittymän funktiot
 
@@ -407,7 +415,9 @@ function sepa_download_file_list($params) {
       "status"                      => $status,
       "environment"                 => SEPA_ENVIRONMENT,
     ),
-    "url" => SEPA_ADDRESS . "/" . bank_provider($bank) . "/download_file_list",
+    "url" => SEPA_ADDRESS . "/" . bank_provider($bank) . "/download_file_list", // ZEPA
+    //"url" => SEPA_ADDRESS, // ZEPA
+    //"url" => SEPA_ADDRESS . "/download_file_list", // ZEPA
     "headers" => array(
       "Content-Type: application/json",
       "Authorization: Token token={$sepa_pankkiyhteys_token}"
@@ -425,6 +435,190 @@ function sepa_download_file_list($params) {
 
   return $response;
 }
+
+// MUOKKAUS: Lisatty suora tuki POP Pankille:
+// ---
+function sepa_download_file_list_samlink(array $params): array | bool {
+	global $kukarow, $yhtiorow, $sepa_pankkiyhteys_token;
+
+	ini_set('display_errors', '1');
+	ini_set('display_startup_errors', '1');
+	error_reporting(E_ALL & ~E_DEPRECATED);
+
+	// Noudetaan pankkiyhteyteen vaaditut tiedot tietokannasta:
+	$tunnus = parameter($params["pankkiyhteys_tunnus"]);
+	$salasana = parameter($params["pankkiyhteys_salasana"]);
+	//$pankkiyhteys = hae_pankkiyhteys_ja_pura_salaus($tunnus, $salasana);
+	$pankkiyhteys = hae_pankkiyhteys($tunnus);
+
+	if (!$pankkiyhteys) {
+		return false;
+	}
+
+	// Tarkistetaan salasana ja haetaan salaamaton private key:
+	$_c = pura_salaus($pankkiyhteys["signing_certificate"], $salasana);
+	$_pk = pura_salaus($pankkiyhteys["signing_private_key"], $salasana);
+	$_ssl = pura_salaus($pankkiyhteys["encryption_private_key"], $salasana);
+
+	// Jos salauksen purkaminen ei onnistu, lopetetaan tähän:
+	if (!openssl_pkey_get_private($_pk)) {
+		return false;
+	}
+
+	// SOAP Envelope:
+	$soap_envelope = '<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cor="http://bxd.fi/CorporateFileService" xmlns:mod="http://model.bxd.fi">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cor:ApplicationRequest></cor:ApplicationRequest>
+   </soapenv:Body>
+</soapenv:Envelope>';
+
+	// DOM:
+	$doc = new DOMDocument("1.0", "UTF-8");
+	$doc->loadXML($soap_envelope);
+	$application_request = $doc->createElement("ApplicationRequest");
+	$application_request->setAttribute("xmlns", "http://bxd.fi/xmldata/");
+	$application_request->appendChild($doc->createElement("CustomerID", $pankkiyhteys["customer_id"]));
+	$application_request->appendChild($doc->createElement("TimeStamp", date("c")));
+	$application_request->appendChild($doc->createElement("Environment", SEPA_ENVIRONMENT)); // production/test
+	//$application_request->appendChild($doc->createElement("TargetID", "POPFFI22"));
+	$application_request->appendChild($doc->createElement("TargetID", "POPPANKKI"));
+	$application_request->appendChild($doc->createElement("Encryption", "false"));
+	$application_request->appendChild($doc->createElement("Compression", "true"));
+	$application_request->appendChild($doc->createElement("SoftwareID", "Pupesoft"));
+	$application_request->appendChild($doc->createElement("FileType", "OP")); // OP (vai KTL) = viitemaksut, TITO = tiliotteet
+	$application_request->appendChild($doc->createElement("Command", "DownloadFileList"));
+	$application_request->appendChild($doc->createElement("Status", "ALL")); // NEW/ALL/DLD
+	//$application_request->appendChild($doc->createElement("Content", ""));
+	//$application_request->appendChild($doc->createElement("StartDate", $start_date));
+	//$application_request->appendChild($doc->createElement("EndDate", $end_date));
+
+	// Lisää $application_request placeholderin ApplicationRequest tilalle:
+	//$doc->appendChild($application_request);	
+	$placeholder = $doc->getElementsByTagName("ApplicationRequest")->item(0);
+	$placeholder->value = base64_encode($application_request->saveXML());
+	//$placeholder->parentNode->replaceChild($application_request, $placeholder);
+	//$doc->saveXML();
+
+	$wsse = new WSSESoap($doc); // robrichards/wse-php
+	$wsse->addTimestamp(300);
+
+	// Sign ApplicationRequest:
+	$signed_application_request = sepa_sign_xml(
+		doc: $doc,
+		wsse: $wsse,
+		certificate: $pankkiyhteys["signing_certificate"],
+		token: $sepa_pankkiyhteys_token,
+		private_key: $_pk
+	);
+/*
+	$final_xml = '<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cor="http://bxd.fi/CorporateFileService" xmlns:mod="http://model.bxd.fi">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cor:ApplicationRequest>' . $signed_application_request->saveXML() . '</cor:ApplicationRequest>
+   </soapenv:Body>
+</soapenv:Envelope>';
+*/
+
+	$final_xml = $signed_application_request->saveXML();
+echo $final_xml . PHP_EOL . PHP_EOL;
+exit;
+	$response = sepa_request_samlink(
+		command: "DownloadFileList",
+		final_xml: $final_xml,
+		token: $sepa_pankkiyhteys_token,
+		certificate: $_c,
+		private_key: $_pk
+	);
+
+	print_r($response);
+	exit();
+
+	// Tarkistus:
+	if (!vastaus_kunnossa($response["code"])) {
+		return false;
+	}
+
+	// Lisätään target id_responseen, niin ei tartte hakea uudestaan jos kutsutaan peräkkäin
+	$response["target_id"] = $target_id;
+	return $response;
+}
+
+function sepa_sign_xml(DOMDocument $doc, WSSESoap $wsse, string $certificate, string $token, string $private_key): DOMDocument {
+	ini_set('display_errors', '1');
+	ini_set('display_startup_errors', '1');
+	error_reporting(E_ALL & ~E_DEPRECATED);
+
+	// Security-objekti:
+	$sig = new XMLSecurityDSig(); // robrichards/xmlseclibs
+	$sig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
+	$sig->addReference(
+		$doc,
+		XMLSecurityDSig::SHA256,
+		array("http://w3.org", XMLSecurityDSig::EXC_C14N),
+		array("force_uri" => true)
+	);
+
+	// Avain:
+	$key = new XMLSecurityKey(
+		XMLSecurityKey::RSA_SHA256,
+		array("type" => "private")
+	);
+	$key->passphrase = $token;
+	$key->loadKey($private_key);
+
+	// Sign XML:
+	//$sig->sign($key);
+	//$sig->add509Cert($certificate);
+	//$sig->appendSignature($doc->documentElement);
+	$wsse->signSoapDoc($key, ["insertBefore" => false]);
+	$added_token = $wsse->addBinaryToken($token);
+	$wsse->attachTokentoSig($added_token);
+
+	// Valmis!
+	return $doc;
+}
+
+function sepa_request_samlink(string $command, string $final_xml, string $token, string $certificate, string $private_key): string | bool {
+	$ch = curl_init(SEPA_ADDRESS_SAMLINK);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+
+    // SEPA XML vaatii oikean Content-Type -otsikon:
+	$headers = [
+        "Content-Type: text/xml; charset=utf-8",
+        "SOAPAction: \"$command\""
+    ];
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+    // XML-data:
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $final_xml);
+
+	// Sertifikaatit:
+	curl_setopt($ch, CURLOPT_SSLCERT_BLOB, $certificate);
+	curl_setopt($ch, CURLOPT_SSLKEY_BLOB, $private_key);
+	//curl_setopt($ch, CURLOPT_SSLCERTPASSWD, $token);
+
+    // Yhdistetaan:
+    $response = curl_exec($ch);
+    $info = curl_getinfo($ch);
+
+    if (curl_errno($ch)) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        echo "ERROR: $error";
+        return false;
+    }
+
+    curl_close($ch);
+
+    // Palautetaan vastaus (pankki vastaa yleensä XML-muodossa):
+    return $response;
+}
+// ---
 
 function sepa_download_files($params) {
   global $kukarow, $yhtiorow, $sepa_pankkiyhteys_token;
