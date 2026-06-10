@@ -65,7 +65,7 @@ class Presta17RestApi
       'Suomi' => 'Finland',
       'Ruotsi' => 'Sweden',
       'Viro' => 'Estonia',
-      'Venäjä' => 'Russian Federation',
+      'VenÃ¤jÃ¤' => 'Russian Federation',
       'Saksa' => 'Germany'
     );
   } 
@@ -225,6 +225,7 @@ class Presta17RestApi
 
   public function getPrestashopProductFeature($product_feature)
   {
+    $product_feature = mb_convert_encoding((string) $product_feature, 'UTF-8', 'Windows-1252');
     $product_feature_name = $product_feature;
     $product_features = Array(
       'resource' => 'product_features',
@@ -572,6 +573,7 @@ class Presta17RestApi
 
   public function getPrestashopProductFeatureValues($product_feature, $product_feature_id)
   {
+    $product_feature = mb_convert_encoding((string) $product_feature, 'UTF-8', 'Windows-1252');
     $product_feature_name = $product_feature;
     $product_feature_values = Array(
       'resource' => 'product_feature_values',
@@ -654,15 +656,15 @@ class Presta17RestApi
 
       if ($pupesoft_product['yksikko'] and $pupesoft_product['yksikko'] != '') {
         $new_feat = $productFields->associations->product_features->addChild('product_feature');
-        $new_feat->addChild('id', $this->getPrestashopProductFeature('Yksikkö'));
-        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['yksikko'], $this->getPrestashopProductFeature('Yksikkö'));
+        $new_feat->addChild('id', $this->getPrestashopProductFeature('YksikkÃ¶'));
+        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['yksikko'], $this->getPrestashopProductFeature('YksikkÃ¶'));
         $new_feat->addChild('id_feature_value', $product_val);
       }
 
       if ($pupesoft_product['myynti_era'] and $pupesoft_product['myynti_era'] != '' and $pupesoft_product['myynti_era'] > 0) {
           $new_feat = $productFields->associations->product_features->addChild('product_feature');
-          $new_feat->addChild('id', $this->getPrestashopProductFeature('Myyntierä'));
-          $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['myynti_era'], $this->getPrestashopProductFeature('Myyntierä'));
+          $new_feat->addChild('id', $this->getPrestashopProductFeature('MyyntierÃ¤'));
+          $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['myynti_era'], $this->getPrestashopProductFeature('MyyntierÃ¤'));
           $new_feat->addChild('id_feature_value', $product_val);
       }
 
@@ -776,15 +778,15 @@ class Presta17RestApi
 
       if ($pupesoft_product['yksikko'] and $pupesoft_product['yksikko'] != '') {
         $new_feat = $productFields->associations->product_features->addChild('product_feature');
-        $new_feat->addChild('id', $this->getPrestashopProductFeature('Yksikkö'));
-        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['yksikko'], $this->getPrestashopProductFeature('Yksikkö'));
+        $new_feat->addChild('id', $this->getPrestashopProductFeature('YksikkÃ¶'));
+        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['yksikko'], $this->getPrestashopProductFeature('YksikkÃ¶'));
         $new_feat->addChild('id_feature_value', $product_val);
       }
 
       if ($pupesoft_product['myynti_era'] and $pupesoft_product['myynti_era'] != '' and $pupesoft_product['myynti_era'] > 0) {
         $new_feat = $productFields->associations->product_features->addChild('product_feature');
-        $new_feat->addChild('id', $this->getPrestashopProductFeature('Myyntierä'));
-        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['myynti_era'], $this->getPrestashopProductFeature('Myyntierä'));
+        $new_feat->addChild('id', $this->getPrestashopProductFeature('MyyntierÃ¤'));
+        $product_val = $this->getPrestashopProductFeatureValues($pupesoft_product['myynti_era'], $this->getPrestashopProductFeature('MyyntierÃ¤'));
         $new_feat->addChild('id_feature_value', $product_val);
       }
 
@@ -1001,7 +1003,7 @@ class Presta17RestApi
 
     $customerFields->firstname = '-';
 
-    if (!preg_match("/^[a-zA-Z\s\ä\Ä\ö\Ö]+$/", $customer['nimi'])) {
+    if (!preg_match("/^[a-zA-Z\s\Ã¤\Ã\Ã¶\Ã]+$/", $customer['nimi'])) {
       $address['nimi'] = 'Tuntematon';
     } 
     $customerFields->lastname = str_replace(array(".","@"), " ", $customer['nimi']);
@@ -1972,7 +1974,7 @@ class Presta17RestApi
           $addressesFields->alias = $address['nimi'];
 
           $addressesFields->firstname = '-';
-          if (!preg_match("/^[a-zA-Z\s\ä\Ä\ö\Ö]+$/", $address['nimi'])) {
+          if (!preg_match("/^[a-zA-Z\s\Ã¤\Ã\Ã¶\Ã]+$/", $address['nimi'])) {
             $address['nimi'] = 'Tuntematon';
           }
           $addressesFields->lastname = str_replace(array(".","@"), " ", $address['nimi']);
