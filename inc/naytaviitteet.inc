@@ -53,8 +53,10 @@ elseif ($type == '3' or $type == 'S') {
   // ---
   $tietue = trim($tietue);
   $sum = substr($tietue, strrpos($tietue, " ") + 1); // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos-funktiolla, ei kiintealla (77/78) paikalla
-  if (strpos($sum, "1A") >= 0) { // MUOKKAUS: Lisätty POP Pankin suuren 2026 kesäpäivityksen jälkeen
-    $sum = substr($sum, strpos($sum, "1A") + 2);
+  if (strpos($sum, "1A0") > 0) { // MUOKKAUS: Lisätty POP Pankin suuren 2026 kesäpäivityksen jälkeen
+    $sum = substr($sum, strpos($sum, "1A0") + 3);
+  } elseif (strpos($sum, "1J0") > 0) {
+    $sum = substr($sum, strpos($sum, "1J0") + 3);
   }
   $sum = (float)preg_replace("/[^0-9]/", "", $sum); // MUOKKAUS: lisatty
   $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MUOKKAUS: BUGIKORJAUS 100 -> 1000
