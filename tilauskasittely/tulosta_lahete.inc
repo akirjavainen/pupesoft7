@@ -567,6 +567,10 @@ if (!function_exists('alku_lahete')) {
     
     // MUOKKAUS: lisatty:
     $pdf->draw_text(290, 623, t("Mitat aina karmin ulkomittoja LEVEYSxKORKEUS", $kieli).".", $thispage, $boldi);
+    if ((string)$laskurow["yhtio"] == "sapu") {
+      $pdf->draw_text(290, 606, t("Tarkistattehan vahvistuksen, myös laskutustietojen osalta (yhtiö)", $kieli).".", $thispage, $boldi);
+      $pdf->draw_text(290, 589, t("Laskun korjaamisesta veloitamme 30 EUR toimistomaksun", $kieli).".", $thispage, $boldi);
+    }
 
     if (strlen((string)$laskurow["ytunnus"]) < 7) {
 	    $pdf->draw_text(290, 606, t("Mittatilaustuotteilla ei ole kuluttajansuojalain mukaista", $kieli), $thispage, $boldi);
