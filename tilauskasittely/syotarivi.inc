@@ -476,7 +476,8 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
     echo "<input type='hidden' name='alv' value='$rivin_tallennettu_alv'>";
   }
   else {
-    echo "<td valign='top'>".alv_popup_oletus('alv', $alv, $laskurow["maa"])."</td>";
+    if (!isset($rivin_tallennettu_alv)) $rivin_tallennettu_alv = $alv; // MUOKKAUS: Lisätty
+    echo "<td valign='top'>".alv_popup_oletus('alv', $rivin_tallennettu_alv, $laskurow["maa"])."</td>"; // MUOKKAUS: $alv -> $rivin_tallennettu_alv, jotta säilyy muokkauksessa
   }
 
   if ($yhtiorow['tilausrivi_omalle_tilaukselle'] != '' and $tuoteno != '') {

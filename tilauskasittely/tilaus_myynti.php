@@ -5140,7 +5140,7 @@ if ($tee == '') {
 
         $netto = $tilausrivi['netto'];
         $alv = $tilausrivi['alv'];
-	$rivin_tallennettu_alv = $tilausrivi['alv'];
+	$rivin_tallennettu_alv = $tilausrivi['alv']; // MUOKKAUS: Lisätty, jotta tallennettu ALV säilyy rivimuokkauksessa
         $kommentti = $tilausrivi['kommentti'];
         $ale_peruste = $tilausrivi['ale_peruste'];
         $kerayspvm = $tilausrivi['kerayspvm'];
