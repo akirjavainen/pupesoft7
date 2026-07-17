@@ -1,6 +1,7 @@
 <?php
 
 if (!isset($alv)) $alv = "";
+if (!isset($rivin_tallennettu_alv)) $rivin_tallennettu_alv = $alv; // MUOKKAUS: kiinteä kopio rivin alkuperäisestä alv-arvosta, ei nollaannu myöhemmin
 if (!isset($kentta)) $kentta = "";
 if (!isset($kommentti)) $kommentti = "";
 if (!isset($netto)) $netto = "";
@@ -185,7 +186,7 @@ if (file_exists("../../hinnasto") and isset($laskurow['tunnus'])) {
   if ($rivitunnus != '') {
 
     // ALVimuutoksen takia: eli päässätään rivin alvi jos sitä muokataan niin se ei automaattisesti vaihdu oletukseksi
-    echo "<input type='hidden' name='alv' value = '$alv'>";
+    echo "<input type='hidden' name='alv' value = '$rivin_tallennettu_alv'>"; // MUOKKAUS: käytetään pysyvää $rivin_tallennettu_alv:ia $alv:in sijaan
 
     $nrospanni = 6;
 
@@ -286,8 +287,8 @@ if (file_exists("../../hinnasto") and isset($laskurow['tunnus'])) {
     }
 
     //Jos meillä on marginaalimyyntiä/käänteinen alv niin pitää muistaa ja kertoa se myös lisääriville
-    if (isset($alv) and $alv >= 500) {
-      echo "<input type='hidden' name='alv' value='$alv'>";
+    if (isset($rivin_tallennettu_alv) and $rivin_tallennettu_alv >= 500) { // MUOKKAUS: käytetään pysyvää $rivin_tallennettu_alv:ia $alv:in sijaan
+      echo "<input type='hidden' name='alv' value='$rivin_tallennettu_alv'>";
     }
 
     echo "<input type='hidden' name='rivitunnus' value='$rivitunnus'>";
@@ -468,11 +469,11 @@ elseif (!$variaaritorivi and $kukarow["extranet"] == '' and ($toim == "RIVISYOTT
   echo "</select></td>";
 
   // vaikka aluperin olisi marginaalimyyntiä/käänteinen alv (alv >= 500), saa alvia muuttaa rivillä
-  if (isset($alv) and $alv >= 500 and $alv < 600) {
+  if (isset($rivin_tallennettu_alv) and $rivin_tallennettu_alv >= 500 and $rivin_tallennettu_alv < 600) { // MUOKKAUS: käytetään pysyvää $rivin_tallennettu_alv:ia $alv:in sijaan, ei enää nollaannu editoitaessa
     echo "<td valign='top'>";
     echo t("M.V.");
     echo "</td>";
-    echo "<input type='hidden' name='alv' value='$alv'>";
+    echo "<input type='hidden' name='alv' value='$rivin_tallennettu_alv'>";
   }
   else {
     echo "<td valign='top'>".alv_popup_oletus('alv', $alv, $laskurow["maa"])."</td>";
@@ -1010,7 +1011,7 @@ elseif (!$variaaritorivi and $kukarow["extranet"] != '') {
     $_th_lisa = "<th></th>";
     $_td_lisa = "<td></td>";
   }
-  
+
   // MUOKKAUS: lisatty button id (butAddProduct):
   echo "
       <td valign='top' class='back'><input type='submit' class='lisaa_btn' id='butAddProduct' value='".t("Lisää")."'></td>
