@@ -42,7 +42,11 @@ elseif ($type == '3' or ($type == 'S' and
   $tietue = trim($tietue);
 
   // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos- ja substr-funktioilla, ei kiintealla (77/78) paikalla:
-  $sum = substr($tietue, strrpos($tietue, " ") + 1);
+  if (strrpos($tietue, " ") > 0) {
+    $sum = substr($tietue, strrpos($tietue, " ") + 1);
+  } else {
+    $sum = substr($tietue, strrpos($tietue, "1A") + 2);
+  }
   $sum = substr($sum, strpos($sum, "0"));
   $sum = (float)preg_replace("/[^0-9]/", "", $sum);
 

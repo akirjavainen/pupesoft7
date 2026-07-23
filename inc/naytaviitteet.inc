@@ -49,12 +49,15 @@ if ($type == '0' and substr($tietue, 0, 3) != "\$\$E" and substr($tietue, 0, 3) 
   echo "<th>".t("Tila")."</th></tr>";
 }
 elseif ($type == '3' or $type == 'S') {
-  // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos-funktiolla, ei kiintealla (77/78) paikalla
   // ---
   $tietue = trim($tietue);
 
   // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos- ja substr-funktioilla, ei kiintealla (77/78) paikalla:
-  $sum = substr($tietue, strrpos($tietue, " ") + 1);
+  if (strrpos($tietue, " ") > 0) {
+    $sum = substr($tietue, strrpos($tietue, " ") + 1);
+  } else {
+    $sum = substr($tietue, strrpos($tietue, "1A") + 2);
+  }
   $sum = substr($sum, strpos($sum, "0"));
   $sum = (float)preg_replace("/[^0-9]/", "", $sum);
 
