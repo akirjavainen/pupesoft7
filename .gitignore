@@ -5,6 +5,7 @@ datain/magento-order*
 datain/presta-order*
 dataout/*
 .idea
+p.php
 pics/logo.png
 pupenext
 verkkolaskut_error
