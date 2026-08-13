@@ -444,6 +444,12 @@ if ($kukarow["extranet"] == "") {
   echo "<script src='../js/tilaus.js'></script>";
   echo "<script src='../js/tilaus_myynti/tilaus_myynti.js'></script>";
   echo "<script src='../js/maksupaate.js'></script>";
+
+  // MUOKKAUS: Sivu postittaa itsensä ja piirtyy uudestaan jokaisesta muutoksesta, jolloin
+  // selain vie sen takaisin ylös. Tämä skripti palauttaa katselukohdan ja kohdistuksen sinne
+  // missä työ oli, eli pitkän tarjouksen muokkaaminen ei enää hyppää alkuun joka rivistä.
+  // Ei riippuvuuksia eikä vaikutusta sivun toimintaan muuten.
+  echo "<script src='scroll-position.js'></script>";
 }
 
 if ((int) $luotunnusnippu > 0 and $tilausnumero == $kukarow["kesken"] and (int) $kukarow["kesken"] > 0) {
