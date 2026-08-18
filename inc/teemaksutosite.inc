@@ -10,7 +10,7 @@ if ($tpv < 1000) $tpv += 2000;
 $teemaksutosite = TRUE;
 
 // Haetaan ostovelkatili
-$query = "SELECT tilino, kustp, kohde, projekti
+$query = "SELECT tilino, kustp, kohde, projekti, selite
           FROM tiliointi
           WHERE ltunnus = '$trow[tunnus]'
           and yhtio     = '$yritirow[yhtio]'
@@ -22,6 +22,14 @@ $result = pupe_query($query);
 
 if (mysqli_num_rows($result) == 1) {
   $ostovelkarow = mysqli_fetch_assoc($result);
+
+  // MUOKKAUS: säilytetään alkuperäisen ostovelkatiliöinnin selite maksutiliöinnillä,
+  // jottei se katoa kun lasku poistuu Ostovelasta. Jos alkuperäisellä rivillä ei ole
+  // selitettä, käytetään tiliotteelta/viitemaksusta tullutta selitettä varakeinona.
+  $ostovelka_selite = str_replace("'", " ", $ostovelkarow['selite']);
+  if (trim($ostovelka_selite) == '') {
+    $ostovelka_selite = $selite;
+  }
 }
 else {
   echo "<font class='error'>".t("VIRHE: Ostovelkatilin määrittely epäonnistui")."!<br>\n".t("Summaa ei kirjattu")."!</font><br>\n";
@@ -217,6 +225,7 @@ if ($teemaksutosite) {
             summa_valuutassa = '{$summavaluutassa}',
             valkoodi         = '{$summavaluuttakoodi}',
             vero             = 0,
+            selite           = '$ostovelka_selite',
             lukko            = '',
             laatija          = 'tiliote',
             laadittu         = now()";
@@ -238,6 +247,7 @@ if ($teemaksutosite) {
             summa_valuutassa = '{$summavaluutassa}',
             valkoodi         = '{$summavaluuttakoodi}',
             vero             = 0,
+            selite           = '$ostovelka_selite',
             lukko            = '',
             laatija          = 'tiliote',
             laadittu         = now()";
