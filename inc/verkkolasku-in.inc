@@ -250,6 +250,22 @@ if (!function_exists("verkkolasku_in")) {
       }
     }
 
+    if (!isset($yhtiorow) and $laskun_asiakastunnus != "") {
+      // 10 viimeisenä yritetään ostajan (BuyerPartyIdentifier) oikealla y-tunnuksella -- Finvoicen
+      // InvoiceRecipientOrganisationUnitNumber/BuyerOrganisationUnitNumber saa spesifikaation mukaan
+      // olla mikä tahansa lähettäjän oma asiakas/sopimustunnus, ei pelkkä ovt-tunnus, jolloin
+      // strategiat 1-9 eivät koskaan osu tähän -- mutta ostajan oma y-tunnus on aina yksiselitteinen.
+      $yyhtio5 = mb_substr(preg_replace("/[^0-9]/", "", $laskun_asiakastunnus), 0, 8);
+      $yyhtio6 = (int) $yyhtio5;
+
+      $query = "SELECT * FROM yhtio WHERE ytunnus in ('$yyhtio5', '$yyhtio6')";
+      $result = pupe_query($query);
+
+      if (mysqli_num_rows($result) == 1) {
+        $yhtiorow = mysqli_fetch_assoc($result);
+      }
+    }
+
     if (!isset($yhtiorow) and $luolasku === TRUE) {
       // ei löydetty VASTAANOTTAVAA yhtiötä, lähetetään meili kaikille tän serverin talhal-meileihin!
       $query = "SELECT distinct yhtio nimi, talhal_email, postittaja_email

@@ -43,7 +43,7 @@ function is_variable_empty($variable, $allow_zero_length = false) {
 function sanitize_string($string) {
 	// Paranoid sanitize, but do NOT use for filesystem (slash allowed):
 	if (is_variable_empty($string)) return "";
-	$string = preg_replace_callback("/([^a-z0-9.,-_\/ ])/i", function($matches) { return ""; }, $string);
+	$string = preg_replace_callback("/([^a-z0-9.,-_\/ ÖöÄäÅåÜüÕõ])/iu", function($matches) { return ""; }, $string);
 	//if (mb_strlen($string) > $allowedlength) $string = mb_substr($string, 0, $allowedlength);
 	return $string;
 }
