@@ -2222,7 +2222,15 @@ if ((int)$tunnus > 0 or (int)$uusi != 0 or $errori != '') {
       echo $ulos;
     }
     elseif ($tyyppi == 1) {
-      echo "<td><input type = 'text' name = '$nimi' value = '$trow[$i]' size='$size' maxlength='$maxsize'></td>";
+
+      // MUOKKAUS: kiinteä id asiakkaan nimikentälle, jotta
+      // inc/asiakas_samankaltaiset.js osaa tunnistaa juuri tämän kentän
+      // (katso myös inc/asiakas.inc, "asiakas_nimi_samankaltaiset" -ajax):
+      $samankalt_id = ($toim == "asiakas" and mysqli_field_name($result, $i) == "nimi")
+        ? " id='asiakas_nimi_kentta'"
+        : "";
+
+      echo "<td><input type = 'text' name = '$nimi' value = '$trow[$i]' size='$size' maxlength='$maxsize'{$samankalt_id}></td>";
     }
     elseif ($tyyppi == 1.5) {
       $vva = mb_substr($trow[$i], 0, 4);

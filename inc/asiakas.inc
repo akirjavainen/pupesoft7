@@ -85,6 +85,58 @@ if ($haku == "asiakasnro" or $haku == "ytunnus") {
   exit;
 }
 
+// MUOKKAUS: asiakkaan nimen samankaltaisuusvaroitus (uusi tiedosto:
+// inc/asiakas_samankaltaiset.inc, uusi js: inc/asiakas_samankaltaiset.js).
+// Ei koskaan estä tallennusta, ainoastaan varoittaa käyttäjää mahdollisesta
+// jo olemassa olevasta samankaltaisesta asiakkaasta.
+if ($haku == "asiakas_nimi_samankaltaiset") {
+
+  require_once "inc/asiakas_samankaltaiset.inc";
+
+  $nimi_ehdotus_apu = isset($nimi_ehdotus) ? $nimi_ehdotus : "";
+  $pl_tunnus_apu    = isset($tunnus) ? $tunnus : 0;
+
+  $osumat = asiakas_hae_samankaltaiset($kukarow["yhtio"], $nimi_ehdotus_apu, $pl_tunnus_apu);
+
+  if (count($osumat) > 0) {
+
+    echo "<div style='background:#fff8e1; border:1px solid #e0c36a; ".
+      "border-radius:4px; padding:6px 10px; margin-top:4px; font-size:11px; max-width:500px;'>";
+    echo "<b>".t("Huomio! Löytyi samannimisiä tai samankaltaisia asiakkaita")."</b>";
+    echo "<ul style='margin:4px 0 0 16px; padding:0;'>";
+
+    foreach ($osumat as $osuma) {
+      $osuma_nimi     = (string) ($osuma["nimi"] ?? "");
+      $osuma_nimitark = (string) ($osuma["nimitark"] ?? "");
+      $osuma_ytunnus  = (string) ($osuma["ytunnus"] ?? "");
+      $osuma_postitp  = (string) ($osuma["postitp"] ?? "");
+      $rivi           = trim("{$osuma_nimi} {$osuma_nimitark}");
+
+      echo "<li>".htmlspecialchars($rivi, ENT_QUOTES, "UTF-8");
+      echo " (".t("asnro")." ".htmlspecialchars((string) $osuma["asiakasnro"], ENT_QUOTES, "UTF-8").")";
+
+      if (trim($osuma_ytunnus) != "") {
+        echo ", ".htmlspecialchars($osuma_ytunnus, ENT_QUOTES, "UTF-8");
+      }
+
+      if (trim($osuma_postitp) != "") {
+        echo ", ".htmlspecialchars($osuma_postitp, ENT_QUOTES, "UTF-8");
+      }
+
+      echo "</li>";
+    }
+
+    echo "</ul></div>";
+  }
+
+  exit;
+}
+
+// MUOKKAUS: ladataan asiakkaan nimen samankaltaisuusvaroituksen JS, joka
+// aktivoituu vain jos sivulla on kentta id:llä "asiakas_nimi_kentta"
+// (ks. yllapito.php, kentän piirto):
+echo "<script src='inc/asiakas_samankaltaiset.js'></script>";
+
 enable_ajax();
 
 $otsikko   = 'Asiakkaat';
