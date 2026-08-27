@@ -1355,7 +1355,7 @@ if ($jarjesta == "siirraKohteeseen" and (int)$rivitunnus > 0 and (int)$kohderivi
     unset($jarjestysluettelo[$lahde_avain]);
     $jarjestysluettelo = array_values($jarjestysluettelo);
     $kohde_avain = array_search((int)$kohderivitunnus, $jarjestysluettelo, true);
-    $lisayskohta = $raahataan_ylospain ? ($kohde_avain + 1) : $kohde_avain;
+    $lisayskohta = $raahataan_ylospain ? $kohde_avain : ($kohde_avain + 1);
     array_splice($jarjestysluettelo, $lisayskohta, 0, array((int)$rivitunnus));
 
     $i = 0;
