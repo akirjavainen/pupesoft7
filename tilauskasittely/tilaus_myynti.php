@@ -34,7 +34,7 @@ if (isset($_REQUEST['ajax_popup'])) {
 }
 
 // MUOKKAUS: isset():
-foreach (array("perusta_tilaustyyppi", "projekti", "jarjlisa", "yt", "postitp", "kantaasiakastunnus", "ytunnus", "kateinen", "projektilask", "rivitunnus", "kplmaara", "myyjanro", "yllapidossa", "toimitusaikaikkuna") as $v) {
+foreach (array("perusta_tilaustyyppi", "projekti", "jarjlisa", "yt", "postitp", "kantaasiakastunnus", "ytunnus", "kateinen", "projektilask", "rivitunnus", "kohderivitunnus", "kplmaara", "myyjanro", "yllapidossa", "toimitusaikaikkuna") as $v) {
   if (!isset(${$v})) ${$v} = null;
 }
 
@@ -1312,6 +1312,60 @@ if (in_array($jarjesta, array("moveUp", "moveDown")) and $rivitunnus > 0) {
   }
   else {
     echo "<font class='error'>".t("VIRHE: riviä ei voi siirtää!")."</font><br>";
+  }
+
+  $tyhjenna   = "JOO";
+}
+
+// MUOKKAUS: rivin raahaus (drag & drop) haluttuun kohtaan, ks. javascript ja
+// 'raahauslomake' rivien tulostuskohdassa. Nuolet (yllä) vaihtavat vain naapuriin;
+// tässä rivi pudotetaan minkä tahansa toisen rivin kohdalle samassa parhaillaan avoinna
+// olevassa tilauksessa/tarjouksessa, jolloin väliin jäävät rivit siirtyvät sen verran.
+if ($jarjesta == "siirraKohteeseen" and (int)$rivitunnus > 0 and (int)$kohderivitunnus > 0
+  and (int)$rivitunnus != (int)$kohderivitunnus) {
+
+  $query = "SELECT tilausrivi.tunnus
+            FROM tilausrivi
+            WHERE tilausrivi.yhtio  = '$kukarow[yhtio]'
+            and tilausrivi.tyyppi  != 'D'
+            and tilausrivi.otunnus  = '$kukarow[kesken]'
+            and (tilausrivi.perheid=0 or tilausrivi.perheid=tilausrivi.tunnus)
+            ORDER BY tilausrivi.tilaajanrivinro ASC, tilausrivi.tunnus ASC";
+  $result = pupe_query($query);
+
+  $jarjestysluettelo = array();
+  while ($rivi = mysqli_fetch_assoc($result)) {
+    $jarjestysluettelo[] = (int)$rivi["tunnus"];
+  }
+
+  $lahde_avain = array_search((int)$rivitunnus, $jarjestysluettelo, true);
+  $kohde_avain = array_search((int)$kohderivitunnus, $jarjestysluettelo, true);
+
+  if ($lahde_avain === false or $kohde_avain === false) {
+    echo "<font class='error'>".t("VIRHE: riviä ei voi siirtää!")."</font><br>";
+  }
+  else {
+    // Raahataanko ylöspäin (rivi oli alempana kuin kohde) vai alaspäin? Kohderivin oma
+    // järjestysnumero ei saa muuttua kummassakaan suunnassa, vain raahattu rivi asettuu
+    // sen viereen -- ylöspäin raahattaessa kohteen YLÄpuolelle, alaspäin raahattaessa
+    // kohteen ALApuolelle. Ilman tätä kohde siirtyi itsekin yhdellä ylöspäin raahattaessa.
+    $raahataan_ylospain = ($lahde_avain > $kohde_avain);
+
+    // Otetaan raahattu rivi pois listalta ja lisätään takaisin kohteen viereen:
+    unset($jarjestysluettelo[$lahde_avain]);
+    $jarjestysluettelo = array_values($jarjestysluettelo);
+    $kohde_avain = array_search((int)$kohderivitunnus, $jarjestysluettelo, true);
+    $lisayskohta = $raahataan_ylospain ? ($kohde_avain + 1) : $kohde_avain;
+    array_splice($jarjestysluettelo, $lisayskohta, 0, array((int)$rivitunnus));
+
+    $i = 0;
+    foreach ($jarjestysluettelo as $rivin_tunnus) {
+      $i++;
+      $query = "UPDATE tilausrivi SET tilaajanrivinro = '$i'
+                WHERE yhtio = '$kukarow[yhtio]' and tunnus = '$rivin_tunnus'";
+      $updres = pupe_query($query);
+    }
+    korjaa_rivinumerointi((string)$kukarow['yhtio'], (int)$laskurow['tunnus']);
   }
 
   $tyhjenna   = "JOO";
@@ -7702,7 +7756,12 @@ if ($tee == '') {
 
         if ($muokkauslukko_rivi == "" and empty($_etukateen_maksettu) and $yhtiorow["tilauksen_jarjestys"] == "M" and in_array($toim, array("TARJOUS", "EXTTARJOUS", "PIKATILAUS", "RIVISYOTTO", "VALMISTAASIAKKAALLE", "SIIRTOLISTA", "TYOMAARAYS", "TYOMAARAYS_ASENTAJA", "REKLAMAATIO", "PROJEKTI"))) {
 
-          $buttonit =  "<div align='center'><form action='{$palvelin2}{$tilauskaslisa}tilaus_myynti.php#rivi_$rivino' name='siirra_$rivino' method='post'>
+          // MUOKKAUS: raahaus (drag & drop) samaan kahvaan nuolten kanssa, ks. myos
+          // rivin raahaus -kasittely alempana ($jarjesta == 'siirraKohteeseen') seka
+          // oma lomakkeensa 'raahauslomake' tata varten, tulostetaan vain kerran alla:
+          $buttonit =  "<div align='center' class='rivi-raahaus' draggable='true'
+                  data-rivitunnus='$row[tunnus]'>
+                  <form action='{$palvelin2}{$tilauskaslisa}tilaus_myynti.php#rivi_$rivino' name='siirra_$rivino' method='post'>
                   <input type='hidden' name='toim' value='$toim'>
                   <input type='hidden' name='lopetus' value='$lopetus'>
                   <input type='hidden' name='ruutulimit' value='$ruutulimit'>
@@ -7726,6 +7785,61 @@ if ($tee == '') {
           }
 
           $buttonit .= "</form></div>";
+
+          // MUOKKAUS: raahauslomake ja -skripti tulostetaan vain kerran koko sivulle.
+          // Oma lomakkeensa eika jonkin rivin omaa 'siirra_N'-lomaketta uudelleenkaytetty,
+          // koska $rivitunnus-nimista kenttaa luetaan tassa tiedostossa myös muualla
+          // saman POST:in aikana -- yhden rivin lomakkeen kentan arvon vaihtaminen toisen
+          // rivin tunnukseksi olisi voinut sekoittaa jonkin sellaisen kohdan:
+          static $raahausskripti_tulostettu = false;
+
+          if (!$raahausskripti_tulostettu) {
+            $raahausskripti_tulostettu = true;
+            $buttonit .= "<form action='{$palvelin2}{$tilauskaslisa}tilaus_myynti.php' name='raahauslomake' method='post'>
+                  <input type='hidden' name='toim' value='$toim'>
+                  <input type='hidden' name='lopetus' value='$lopetus'>
+                  <input type='hidden' name='ruutulimit' value='$ruutulimit'>
+                  <input type='hidden' name='projektilla' value='$projektilla'>
+                  <input type='hidden' name='tilausnumero' value = '$tilausnumero'>
+                  <input type='hidden' name='mista' value='$mista'>
+                  <input type='hidden' name='menutila' value='$menutila'>
+                  <input type='hidden' name='orig_tila' value='$orig_tila'>
+                  <input type='hidden' name='orig_alatila' value='$orig_alatila'>
+                  <input type='hidden' name='jarjesta' value='siirraKohteeseen'>
+                  <input type='hidden' name='rivitunnus' value=''>
+                  <input type='hidden' name='kohderivitunnus' value=''>
+                </form>
+                <script>
+              (function () {
+                var lahderivi = null;
+                document.addEventListener('dragstart', function (e) {
+                  var kahva = e.target.closest('.rivi-raahaus');
+                  if (!kahva) return;
+                  lahderivi = kahva.getAttribute('data-rivitunnus');
+                  if (e.dataTransfer) {
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', lahderivi);
+                  }
+                });
+                document.addEventListener('dragover', function (e) {
+                  if (!e.target.closest('.rivi-raahaus')) return;
+                  e.preventDefault();
+                  if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+                });
+                document.addEventListener('drop', function (e) {
+                  var kahva = e.target.closest('.rivi-raahaus');
+                  if (!kahva) return;
+                  e.preventDefault();
+                  var kohderivi = kahva.getAttribute('data-rivitunnus');
+                  var lomake = document.forms['raahauslomake'];
+                  if (!lomake || !lahderivi || lahderivi === kohderivi) return;
+                  lomake.elements['rivitunnus'].value = lahderivi;
+                  lomake.elements['kohderivitunnus'].value = kohderivi;
+                  lomake.submit();
+                });
+              }());
+            </script>";
+          }
         }
         else {
           $buttonit = "";
