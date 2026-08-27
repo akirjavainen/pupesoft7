@@ -7776,12 +7776,19 @@ if ($tee == '') {
                   <input type='hidden' name='orig_alatila' value='$orig_alatila'>
                   <input type='hidden' id='rivi_$rivino' name='jarjesta' value='$rivino'>";
 
+          // MUOKKAUS: draggable='false' nuolilla ja niiden kuvilla. <a> ja <img> ovat
+          // selaimessa raahattavia oletuksena, ja ilman tata Chrome tulkitsee raahauksen
+          // "linkin/kuvan raahaukseksi" (oma, koko selaimen sisainen mekanisminsa) taman
+          // 'rivi-raahaus'-kahvan omalla, JS:lla ohjatulla raahauksella paalla -- ja se on
+          // mika saa Chromen ehdottamaan "Jaettu nakyma" -jakoa, kun hiiri kayvea ikkunan
+          // reunalla kesken raahauksen. draggable='false' lapsissa ei estä itse kahvan
+          // (yllaoleva div, draggable='true') raahaamista.
           if (($rivino > 1 and $yhtiorow["tilauksen_jarjestys_suunta"] == "ASC") or ($rivino < $rivilaskuri and $yhtiorow["tilauksen_jarjestys_suunta"] == "DESC")) {
-            $buttonit .= "  <a href='#' onClick=\"getElementById('rivi_$rivino').value='moveUp'; document.forms['siirra_$rivino'].submit();\"><img src='".$palvelin2."pics/lullacons/arrow-single-up-green.png' height = '20' width = '20'></a><br>";
+            $buttonit .= "  <a href='#' draggable='false' onClick=\"getElementById('rivi_$rivino').value='moveUp'; document.forms['siirra_$rivino'].submit();\"><img src='".$palvelin2."pics/lullacons/arrow-single-up-green.png' height = '20' width = '20' draggable='false'></a><br>";
           }
 
           if (($rivilaskuri > $rivino and $yhtiorow["tilauksen_jarjestys_suunta"] == "ASC") or ($rivino > 1 and $yhtiorow["tilauksen_jarjestys_suunta"] == "DESC")) {
-            $buttonit .= "  <a href='#' onClick=\"getElementById('rivi_$rivino').value='moveDown'; document.forms['siirra_$rivino'].submit();\"><img src='".$palvelin2."pics/lullacons/arrow-single-down-red.png' height = '20' width = '20'></a>";
+            $buttonit .= "  <a href='#' draggable='false' onClick=\"getElementById('rivi_$rivino').value='moveDown'; document.forms['siirra_$rivino'].submit();\"><img src='".$palvelin2."pics/lullacons/arrow-single-down-red.png' height = '20' width = '20' draggable='false'></a>";
           }
 
           $buttonit .= "</form></div>";
