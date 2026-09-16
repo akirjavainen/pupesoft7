@@ -470,11 +470,12 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   $xmlPayload = '<?xml version="1.0" encoding="UTF-8"?>' .
   '<ApplicationRequest xmlns="http://bxd.fi/xmldata/" Id="Request_1">' .
     '<CustomerId>' . $pankkiyhteys['customer_id'] . '</CustomerId>' .
-    '<Command>downloadFileListin</Command>' .
+    '<Command>DownloadFileList</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
-    '<Environment>PRODUCTION</Environment>' .
+    '<Status>NEW</Status>' .
+    '<Environment>TEST</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
-    '<FileType>OP</FileType>' . // OP/TO
+    '<FileType>0130</FileType>' .
   '</ApplicationRequest>';
 
   $doc = new DOMDocument('1.0', 'UTF-8');
@@ -531,12 +532,12 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   $timestamp = date('Y-m-d\TH:i:s.vP'); // Muoto: 2026-06-30T14:15:00.000+03:00
 
   // 9. Rakennetaan virallinen Finanssialan WS-standardin mukainen kuori.
-  // HUOM: Metodi on 'downloadFileListin' ja se vaatii RequestHeader-lohkon nimiavaruudesta http://model.bxd.fi:
+  // HUOM: Metodi on 'downloadFileList' ja se vaatii RequestHeader-lohkon nimiavaruudesta http://model.bxd.fi:
   $soapEnvelope = '<?xml version="1.0" encoding="UTF-8"?>' .
   '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cor="http://bxd.fi/CorporateFileService" xmlns:mod="http://model.bxd.fi">' .
     '<soapenv:Header/>' .
     '<soapenv:Body>' .
-      '<cor:downloadFileListin>' .
+      '<cor:downloadFileList>' .
          '<mod:RequestHeader>' .
            '<mod:SenderId>' . $pankkiyhteys['customer_id'] . '</mod:SenderId>' . // Pankin asiakastunnus
             '<mod:RequestId>' . $requestId . '</mod:RequestId>' .
@@ -546,13 +547,13 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
             '<mod:ReceiverId>POPFFI2</mod:ReceiverId>' . // POP Pankin BIC (Varmista tuotanto-ohjeesta)
          '</mod:RequestHeader>' .
          '<mod:ApplicationRequest>' . $base64Payload . '</mod:ApplicationRequest>' .
-      '</cor:downloadFileListin>' .
+      '</cor:downloadFileList>' .
     '</soapenv:Body>' .
   '</soapenv:Envelope>';
 
   // 10. POP Pankin SOAP-osoite on Samlink --> Crosskey -siirtymävaiheessa vielä Samlinkin palvelin:
-  $endpointUrl = "https://ws.samlink.fi/services/CorporateFileService"; // Siirtymävaiheessa
-  //$endpointUrl = SEPA_ADDRESS_CROSSKEY; // Siirtymän jälkeen
+  //$endpointUrl = "https://ws.samlink.fi/services/CorporateFileService"; // Siirtymävaiheessa
+  $endpointUrl = SEPA_ADDRESS_CROSSKEY; // Siirtymän jälkeen
 
   // 11. Alustetaan cURL
   $ch = curl_init($endpointUrl);
@@ -563,7 +564,7 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     'Content-Type: text/xml; charset=utf-8',
     'Content-Length: ' . strlen($soapEnvelope),
     'SOAPAction: ""'
-    //'SOAPAction: "http://bxd.fi/CorporateFileService/downloadFileListin"'
+    //'SOAPAction: "http://bxd.fi/CorporateFileService/downloadFileList"'
   ];
 
   // 13. cURL:
