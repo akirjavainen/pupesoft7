@@ -8955,7 +8955,9 @@ if ($tee == '') {
               echo "$ale_echo %</td>";
             }
 
-            echo "<td $class align='right'>".hintapyoristys($kplhinta, 2)."</td>";
+            // MUOKKAUS: id, jotta askForValue() voi paivittaa rivin loppuhinnan sivua
+            // uudelleenlataamatta:
+            echo "<td $class align='right' id='rivihinta_$row[tunnus]'>".hintapyoristys($kplhinta, 2)."</td>";
           }
 
           if ($kukarow['hinnat'] == 1) {
@@ -10169,7 +10171,9 @@ if ($tee == '') {
               <td class='back' colspan='".($sarakkeet_alku-5)."'>&nbsp;</td>
               <th colspan='5' align='right'>".t("Verollinen yhteensä").":</th>";
 
-          echo "<td class='spec' align='right'>".sprintf("%.2f", $summa)."</td>";
+          // MUOKKAUS: id, jotta askForValue() voi paivittaa loppusumman sivua
+          // uudelleenlataamatta:
+          echo "<td class='spec' align='right' id='order_total'>".sprintf("%.2f", $summa)."</td>";
         }
 
         if ($kukarow['extranet'] == '' and $naytetaanko_kate) {
