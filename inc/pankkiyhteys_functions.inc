@@ -460,20 +460,22 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   $_c = pura_salaus($pankkiyhteys["signing_certificate"], $salasana);
   $_pk = pura_salaus($pankkiyhteys["signing_private_key"], $salasana);
   $_ssl = pura_salaus($pankkiyhteys["encryption_private_key"], $salasana);
+  $_ssl_cert = pura_salaus($pankkiyhteys["encryption_certificate"], $salasana);
 
   // Jos salauksen purkaminen ei onnistu, lopetetaan tähän:
-  if (!openssl_pkey_get_private($_pk)) {
+  if (!openssl_pkey_get_private($_pk) || !openssl_pkey_get_private($_ssl)) {
     return false;
   }
 
-  // 1. Luodaan POP Pankin vaatima ApplicationRequest-rakenne:
+  // 1. Luodaan POP Pankin vaatima ApplicationRequest-rakenne. Ei Id-attribuuttia juurella --
+  // Crosskeyn oma esimerkkipyyntö ei sellaista käytä, ks. alla:
   $xmlPayload = '<?xml version="1.0" encoding="UTF-8"?>' .
-  '<ApplicationRequest xmlns="http://bxd.fi/xmldata/" Id="Request_1">' .
+  '<ApplicationRequest xmlns="http://bxd.fi/xmldata/">' .
     '<CustomerId>' . $pankkiyhteys['customer_id'] . '</CustomerId>' .
     '<Command>DownloadFileList</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
     '<Status>NEW</Status>' .
-    '<Environment>TEST</Environment>' .
+    '<Environment>PRODUCTION</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
     '<FileType>0130</FileType>' .
   '</ApplicationRequest>';
@@ -482,56 +484,54 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   $doc->preserveWhiteSpace = false;
   $doc->loadXML($xmlPayload);
 
-  // 2. Rekisteröidään Id-attribuutti tiukasti isolla I-kirjaimella ('Id'):
-  $rootElement = $doc->documentElement;
-  $rootElement->setIdAttribute('Id', true);
-
-  // 3. Alustetaan allekirjoitus
+  // 2. Alustetaan allekirjoitus. Nämä kolme (kanonisointi, digest, allekirjoitusalgoritmi)
+  // on nyt asetettu vastaamaan tarkasti Crosskeyn omaa esimerkkipyyntöä
+  // (dowloadFileList-application-request_1.xml): C14N WithComments, SHA-1 digest,
+  // RSA-SHA1 allekirjoitus -- ei Exclusive C14N eikä SHA-256, joita täällä käytettiin ennen.
   $objDSig = new XMLSecurityDSig();
+  $objDSig->setCanonicalMethod(XMLSecurityDSig::C14N_COMMENTS);
 
-  // Exclusive C14N:
-  $objDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
-
-  // 3.1. Ensimmäiseksi parametriksi annetaan $rootElement (ei $doc)
-  // 3.2. Asetuksiin lisätään 'prefix' => '#Request_1' ja 'force_uri' => true:
+  // 2.1. $doc (ei $rootElement) addReference():n ensimmäisenä parametrina: xmlseclibs
+  // kirjoittaa URI-attribuutin tyhjäksi (URI="") vain kun kohde on DOMDocument, ja force_uri
+  // on tosi. $rootElement-kohteella se sen sijaan aina generoi ja liittää oman Id:n
+  // (URI="#..."), mitä esimerkkipyynnössä ei ole -- sen <Reference URI=""> allekirjoittaa
+  // koko dokumentin ilman erillistä Id:tä.
   $objDSig->addReference(
-    $rootElement, 
-    XMLSecurityDSig::SHA256, 
+    $doc,
+    XMLSecurityDSig::SHA1,
     [
-      'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
-      'http://www.w3.org/2001/10/xml-exc-c14n#'
+      'http://www.w3.org/2000/09/xmldsig#enveloped-signature'
     ],
     [
-      'id_name' => 'Id',
-      'overwrite' => false,
       'force_uri' => true
     ]
   );
 
-  // 4. Avaimen lataus:
-  $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
+  // 3. Avaimen lataus:
+  $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, ['type' => 'private']);
   $objKey->loadKey($_pk);
 
   // Allekirjoitus
   $objDSig->sign($objKey);
 
-  // 5. Sertifikaatin lisäys (PEM-otsikoiden kera, add509Cert() siivoaa ne pois):
-  $objDSig->add509Cert($_c);
+  // 4. Sertifikaatin lisäys (PEM-otsikoiden kera, add509Cert() siivoaa ne pois).
+  // issuerSerial => true lisää X509IssuerSerial-lohkon, kuten esimerkkipyynnössä:
+  $objDSig->add509Cert($_c, true, false, ['issuerSerial' => true]);
 
-  // 6. Liitetään Signature loppuun:
+  // 5. Liitetään Signature loppuun:
   $objDSig->appendSignature($doc->documentElement);
 
   // Otetaan lopullinen string ulos ilman mitään käsittelyä sen jälkeen:
   $requestBody = $doc->saveXML();
 
-  // 7. Allekirjoitettu raaka XML ($requestBody) muutetaan Base64-muotoon:
+  // 6. Allekirjoitettu raaka XML ($requestBody) muutetaan Base64-muotoon:
   $base64Payload = base64_encode(trim($requestBody));
 
-  // 8. Luodaan uniikki RequestId (pankki käyttää tätä duplikaattitunnistukseen):
+  // 7. Luodaan uniikki RequestId (pankki käyttää tätä duplikaattitunnistukseen):
   $requestId = time() . rand(100, 999);
   $timestamp = date('Y-m-d\TH:i:s.vP'); // Muoto: 2026-06-30T14:15:00.000+03:00
 
-  // 9. Rakennetaan virallinen Finanssialan WS-standardin mukainen kuori.
+  // 8. Rakennetaan virallinen Finanssialan WS-standardin mukainen kuori.
   // HUOM: Metodi on 'downloadFileList' ja se vaatii RequestHeader-lohkon nimiavaruudesta http://model.bxd.fi:
   $soapEnvelope = '<?xml version="1.0" encoding="UTF-8"?>' .
   '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cor="http://bxd.fi/CorporateFileService" xmlns:mod="http://model.bxd.fi">' .
@@ -551,14 +551,14 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     '</soapenv:Body>' .
   '</soapenv:Envelope>';
 
-  // 10. POP Pankin SOAP-osoite on Samlink --> Crosskey -siirtymävaiheessa vielä Samlinkin palvelin:
+  // 9. POP Pankin SOAP-osoite on Samlink --> Crosskey -siirtymävaiheessa vielä Samlinkin palvelin:
   //$endpointUrl = "https://ws.samlink.fi/services/CorporateFileService"; // Siirtymävaiheessa
   $endpointUrl = SEPA_ADDRESS_CROSSKEY; // Siirtymän jälkeen
 
-  // 11. Alustetaan cURL
+  // 10. Alustetaan cURL
   $ch = curl_init($endpointUrl);
 
-  // 12. KORJAUS: SOAPAction-header ilman lainausmerkkejä tai tietyissä palvelimissa lainausmerkeillä.
+  // 11. KORJAUS: SOAPAction-header ilman lainausmerkkejä tai tietyissä palvelimissa lainausmerkeillä.
   // Crosskey-ympäristöissä toimii tyypillisesti tyhjä action TAI tarkka osoite ilman pääte-slashia:
   $headers = [
     'Content-Type: text/xml; charset=utf-8',
@@ -567,22 +567,26 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     //'SOAPAction: "http://bxd.fi/CorporateFileService/downloadFileList"'
   ];
 
-  // 13. cURL:
+  // 12. cURL:
   curl_setopt($ch, CURLOPT_POST, true);
   curl_setopt($ch, CURLOPT_POSTFIELDS, $soapEnvelope);
   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
-  // Varmista mTLS-varmennekättely (POP Pankki vaatii tämän lähes poikkeuksetta)
-  curl_setopt($ch, CURLOPT_SSLCERT_BLOB, $_c);
-  curl_setopt($ch, CURLOPT_SSLKEY_BLOB, $_pk);
+  // Varmista mTLS-varmennekättely (POP Pankki vaatii tämän lähes poikkeuksetta).
+  // Aiemmin tässä käytettiin allekirjoitussertifikaattia ($_c/$_pk), mutta se on
+  // ApplicationRequestin XML-allekirjoitukseen tarkoitettu avainpari (ks. yllä) eikä TLS:ää
+  // varten -- salauspari ($_ssl_cert/$_ssl) on se, jonka pankki vahvistaa yhteyden
+  // avauksessa.
+  curl_setopt($ch, CURLOPT_SSLCERT_BLOB, $_ssl_cert);
+  curl_setopt($ch, CURLOPT_SSLKEY_BLOB, $_ssl);
 
   // Suoritetaan pyyntö
   $response = curl_exec($ch);
   $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-  // 14. cURL vastauksen käsittely:
+  // 13. cURL vastauksen käsittely:
   if (curl_errno($ch)) {
    echo "cURL virhe: " . curl_error($ch) . PHP_EOL;
    echo "cURL vastaus: " . $response . PHP_EOL;
@@ -607,7 +611,7 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     }
 }
 
-  // 15. Valmis!
+  // 14. Valmis!
   curl_close($ch);
   return true;
 }
