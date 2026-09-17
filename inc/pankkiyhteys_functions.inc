@@ -438,7 +438,7 @@ function sepa_download_file_list($params) {
   return $response;
 }
 
-// MUOKKAUS: Lisatty suora tuki POP Pankille:
+// MUOKKAUS: Lisätty suora tuki POP Pankille:
 // ---
 function sepa_download_file_list_crosskey(array $params): array | bool {
   global $kukarow, $yhtiorow, $sepa_pankkiyhteys_token;
@@ -577,14 +577,13 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
 
   $soapEnvelope = $wsse->saveXML();
 
-  // 9. POP Pankin SOAP-osoite on Samlink --> Crosskey -siirtymävaiheessa vielä Samlinkin palvelin:
-  //$endpointUrl = "https://ws.samlink.fi/services/CorporateFileService"; // Siirtymävaiheessa
-  $endpointUrl = SEPA_ADDRESS_CROSSKEY; // Siirtymän jälkeen
+  // 9. Palvelin-osoite (vaihda tarvittaessa testipalvelimen osoite tähän):
+  $endpointUrl = SEPA_ADDRESS_CROSSKEY;
 
   // 10. Alustetaan cURL
   $ch = curl_init($endpointUrl);
 
-  // 11. SOAPAction-header. Operaationimi korjattu 'downloadFileListin':ksi (ks. yllä):
+  // 11. SOAPAction-header. Operaationimi 'downloadFileListin' (ks. yllä):
   $headers = [
     'Content-Type: text/xml; charset=utf-8',
     'Content-Length: ' . strlen($soapEnvelope),
@@ -600,45 +599,623 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
   // Varmista mTLS-varmennekättely (POP Pankki vaatii tämän lähes poikkeuksetta).
-  // Aiemmin tässä käytettiin allekirjoitussertifikaattia ($_c/$_pk), mutta se on
-  // ApplicationRequestin XML-allekirjoitukseen tarkoitettu avainpari (ks. yllä) eikä TLS:ää
-  // varten -- salauspari ($_ssl_cert/$_ssl) on se, jonka pankki vahvistaa yhteyden
-  // avauksessa.
+  // Salauspari ($_ssl_cert/$_ssl) on se, jonka pankki vahvistaa yhteyden avauksessa:
   curl_setopt($ch, CURLOPT_SSLCERT_BLOB, $_ssl_cert);
   curl_setopt($ch, CURLOPT_SSLKEY_BLOB, $_ssl);
 
-  // Suoritetaan pyyntö
+  // Suoritetaan pyyntö:
   $response = curl_exec($ch);
   $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-  // 13. cURL vastauksen käsittely:
-  if (curl_errno($ch)) {
-   echo "cURL virhe: " . curl_error($ch) . PHP_EOL;
-   echo "cURL vastaus: " . $response . PHP_EOL;
-    
-  } else {
-    if ($httpCode === 200) {
-      echo "Pankin palauttama SOAP-vastaus (HTTP 200):" . PHP_EOL;
-
-      // Pankki palauttaa vastauksen (ApplicationResponse) myös Base64-muodossa SOAP-kuoressa.
-      // Otetaan se ulos säännöllisellä lausekkeella tai DOMParserilla:
-      if (preg_match('/<.*:Response>(.*)<\/.*:Response>/', $response, $matches)) {
-        $decodedResponse = base64_decode($matches[1]);
-        echo "Purettu tiedostolista (XML):" . PHP_EOL;
-        echo htmlspecialchars($decodedResponse) . PHP_EOL;
-      } else {
-        echo "Raaka vastaus:" . PHP_EOL;
-        echo $response . PHP_EOL;
-      }
-    } else {
-      echo "Palvelinvirhe (HTTP-koodi: $httpCode)";
-      echo $response . PHP_EOL;
-    }
-}
-
-  // 14. Valmis!
+  $curlError = curl_errno($ch) ? curl_error($ch) : "";
   curl_close($ch);
-  return true;
+
+  // 13. cURL-virhe:
+  if ($curlError !== "") {
+    echo "cURL virhe: " . $curlError . PHP_EOL;
+    echo "cURL vastaus: " . $response . PHP_EOL;
+    return false;
+  }
+
+  // HTTP 500 osoittautui sisältävän oikean ApplicationResponsen tälle pankille -- ks.
+  // "Sopimus ei voimassa" -tapaus. HTTP-status ei siis ratkaise onnistumista, vaan se onko
+  // SOAP-vastauksessa ApplicationResponse ylipäätään:
+  $responseDoc = sepa_crosskey_extract_application_response($response);
+
+  if ($responseDoc === null) {
+    echo "Palvelinvirhe (HTTP-koodi: $httpCode)" . PHP_EOL;
+    echo $response . PHP_EOL;
+    return false;
+  }
+
+  $xpath = new DOMXPath($responseDoc);
+  $xpath->registerNamespace('bxd', 'http://bxd.fi/xmldata/');
+
+  $responseCode = (string)$xpath->evaluate('string(//bxd:ResponseCode)');
+  $responseText = (string)$xpath->evaluate('string(//bxd:ResponseText)');
+
+  echo "Pankki vastasi: $responseCode $responseText" . PHP_EOL;
+
+  if ($responseCode !== '00') {
+    return false;
+  }
+
+  // 14. Palautusmuoto sama kuin vanhalla, Ahkion kautta kulkevalla
+  // sepa_download_file_list():lla -- ks. filelist_table() ja
+  // sepa_lataa_kaikki_uudet_tiedostot(), jotka lukevat tätä samaa "files"/"fileReference"/
+  // "fileTimestamp"/"status"-muotoa riippumatta siitä kumpi funktio sen tuotti.
+  // serviceId jää tyhjäksi: FileDescriptorilla ei ole tälle vastinetta, ja kutsujat jo
+  // varautuvat siihen olemalla tyhjä (fallback fileReferenceen):
+  $files = array();
+
+  foreach ($xpath->query('//bxd:FileDescriptors/bxd:FileDescriptor') as $node) {
+    $files[] = array(
+      "fileReference" => (string)$xpath->evaluate('string(bxd:FileReference)', $node),
+      "fileTimestamp" => (string)$xpath->evaluate('string(bxd:FileTimestamp)', $node),
+      "status" => (string)$xpath->evaluate('string(bxd:Status)', $node),
+      "serviceId" => ""
+    );
+  }
+
+  // 15. Valmis!
+  return array(
+    "files" => $files,
+    "target_id" => ""
+  );
+}
+// ---
+
+// ----------------------------------------------------------------------------------------
+// Etsii ApplicationResponsen Crosskeyn SOAP-vastauksesta ja palauttaa sen omana
+// DOMDocumenttina, kummassa tahansa muodossa jonka Crosskeyn omat esimerkit näyttävät
+// sille: itsenäisenä dokumenttina Base64-koodattuna elementin tekstinä (vahvistettu muoto
+// molemmilla latausoperaatioilla), tai suoraan sisäkkäisinä oikeina lapsielementteinä
+// (uploadFilen esimerkki -- ks. kommentti sepa_upload_file_crosskey():n kohdalla siitä
+// miksi se esimerkki on epävarmempi). Etsitään pelkän paikallisen nimen perusteella,
+// välittämättä siitä mitä etuliitettä tai oletusnimiavaruutta vastaus sattuu käyttämään,
+// koska sekin on jo vaihdellut esimerkkien välillä.
+//
+// Palauttaa null, jos ApplicationResponse-nimistä elementtiä ei löydy, tai sen sisältö ei
+// jäsenny kummassakaan muodossa -- kutsuja näyttää tällöin raa'an SOAP-vastauksen sellaisenaan:
+function sepa_crosskey_extract_application_response(string $soapResponseXml): ?DOMDocument {
+  $soapDoc = new DOMDocument();
+
+  if ($soapResponseXml === "" || !@$soapDoc->loadXML($soapResponseXml)) {
+    return null;
+  }
+
+  $xpath = new DOMXPath($soapDoc);
+  $nodes = $xpath->query('//*[local-name()="ApplicationResponse"]');
+
+  if ($nodes === false || $nodes->length === 0) {
+    return null;
+  }
+
+  $node = $nodes->item(0);
+
+  foreach ($node->childNodes as $child) {
+    if ($child->nodeType === XML_ELEMENT_NODE) {
+      // Jo oikeita lapsielementtejä: solmusta itsestään tulee uuden dokumentin juuri:
+      $responseDoc = new DOMDocument();
+      $responseDoc->appendChild($responseDoc->importNode($node, true));
+      return $responseDoc;
+    }
+  }
+
+  // Muuten: Base64-tekstiä, puretaan omaksi täydeksi dokumentiksi:
+  $decoded = base64_decode(trim($node->textContent), true);
+
+  if ($decoded === false) return null;
+
+  $responseDoc = new DOMDocument();
+
+  if (!@$responseDoc->loadXML($decoded)) return null;
+
+  return $responseDoc;
+}
+// ----------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------
+// Lataa yhden tai useamman tiedoston Crosskeystä niiden fileReferencen perusteella (kuten
+// sepa_download_file_list_crosskey() ne palauttaa). Yksi pyyntö per viite, samoin kuin
+// vanha, Ahkion kautta kulkeva sepa_download_files() alempana tekee ja samasta syystä:
+// Crosskeyn oma esimerkki (dowloadFile-application-request_1.xml) näyttää vain yhden
+// <FileReference>:n kerrallaan, joten useamman pyytämistä samassa <FileReferences>-lohkossa
+// -- minkä skeema kyllä sallisi -- ei ole tosiasiassa vahvistettu toimivaksi, ja yksi pyyntö
+// per tiedosto poistaa arvailun tarpeen.
+//
+// Palauttaa saman muodon kuin sepa_download_files(): listan, jossa yksi rivi per viite,
+// "file_type"/"viite"/"status" ("OK" tai "Virhe")/"data" (Base64, kuten vanhan funktion oma
+// "data" -- ks. tiedostot_table() ja kutsupaikat pankkiyhteys_tilioteviite.inc:ssä, jotka
+// tekevät sille itse base64_decode()n). false vain silloin kun pyyntöä ei voida edes
+// yrittää (parametri puuttuu, väärä salasana, pankkiyhteyttä ei löydy); yhden viitteen
+// epäonnistuminen omalla pankkikutsullaan näkyy sen omalla rivillä "status" => "Virhe", kuten
+// vanhalla funktiolla, kaatamatta koko loppulistaa mukanaan.
+//
+// Itse pyynnön rakenne -- sekä ApplicationRequestin oma allekirjoitus että SOAP-kuoren
+// WS-Security -- on kopioitu Crosskeyn omista esimerkeistä
+// (dowloadFile-application-request_1.xml / dowloadFile-SOAP-request_1.xml), samaan tapaan
+// kuin sepa_download_file_list_crosskey() yllä.
+// Kaksi asiaa on tarkoituksella eri tavalla kuin kyseisessä funktiossa, ei vahingossa, koska
+// esimerkit ovat niistä eri mieltä:
+//   - ApplicationRequestin allekirjoitus käyttää tässä plain C14N:ää (ei WithComments),
+//     kun downloadFileListin käyttää C14N WithCommentsia.
+//   - SOAP-kuoressa ei ole lainkaan WS-Security Timestampia tässä -- vain Body
+//     allekirjoitetaan, yksi Reference, ei "Timestamp + Body" kuten downloadFileListillä.
+function sepa_download_file_crosskey(array $params): array | bool {
+  global $kukarow, $yhtiorow, $sepa_pankkiyhteys_token;
+
+  ini_set('display_errors', '1');
+  ini_set('display_startup_errors', '1');
+  error_reporting(E_ALL & ~E_DEPRECATED);
+
+  $tunnus = parameter($params["pankkiyhteys_tunnus"]);
+  $salasana = parameter($params["pankkiyhteys_salasana"]);
+  $file_type = parameter($params["file_type"]);
+  $start_date = parameter($params["start_date"] ?? "");
+  $viitteet = $params["viitteet"] ?? array();
+
+  if (!is_array($viitteet)) $viitteet = array($viitteet);
+  $viitteet = array_values(array_unique(array_filter($viitteet, function ($v) {
+    return !empty((string)$v);
+  })));
+
+  if (empty($file_type) || count($viitteet) === 0) {
+    return false;
+  }
+
+  // Ei varmistettu esimerkillä -- standardi rajaa tällä minkä tiedostojen viitteeksi
+  // FileReference voi ylipäätään täsmätä, mutta Crosskeyn oma esimerkki näyttää vain
+  // yhden, jo tiedetyn päivämäärän. 30 päivää taaksepäin on riittävän väljä "juuri
+  // tiedostolistalta saatu viite" -tapaukseen ilman että väärä oletus pääsisi haittaamaan:
+  if (empty($start_date)) {
+    $start_date = date("Y-m-d", strtotime("-30 days"));
+  }
+
+  $pankkiyhteys = hae_pankkiyhteys($tunnus);
+
+  if (!$pankkiyhteys) {
+    return false;
+  }
+
+  // Tarkistetaan salasana ja haetaan salaamaton private key:
+  $_c = pura_salaus($pankkiyhteys["signing_certificate"], $salasana);
+  $_pk = pura_salaus($pankkiyhteys["signing_private_key"], $salasana);
+  $_ssl = pura_salaus($pankkiyhteys["encryption_private_key"], $salasana);
+  $_ssl_cert = pura_salaus($pankkiyhteys["encryption_certificate"], $salasana);
+
+  if (!openssl_pkey_get_private($_pk) || !openssl_pkey_get_private($_ssl)) {
+    return false;
+  }
+
+  $tiedostot = array();
+
+  foreach ($viitteet as $viite) {
+    echo "Haetaan tiedosto $viite..." . PHP_EOL;
+
+    // 1. ApplicationRequest:
+    $xmlPayload = '<?xml version="1.0" encoding="UTF-8"?>' .
+    '<ApplicationRequest xmlns="http://bxd.fi/xmldata/">' .
+      '<CustomerId>' . $pankkiyhteys['customer_id'] . '</CustomerId>' .
+      '<Command>DownloadFile</Command>' .
+      '<Timestamp>' . gmdate("c") . '</Timestamp>' .
+      '<StartDate>' . $start_date . '</StartDate>' .
+      '<Environment>PRODUCTION</Environment>' .
+      '<FileReferences>' .
+        '<FileReference>' . htmlspecialchars((string)$viite, ENT_XML1, 'UTF-8') . '</FileReference>' .
+      '</FileReferences>' .
+      '<Compression>false</Compression>' .
+      '<SoftwareId>Pupesoft</SoftwareId>' .
+      '<FileType>' . $file_type . '</FileType>' .
+    '</ApplicationRequest>';
+
+    $doc = new DOMDocument('1.0', 'UTF-8');
+    $doc->preserveWhiteSpace = false;
+    $doc->loadXML($xmlPayload);
+
+    // 2. Allekirjoitus. Plain C14N (ei WithComments), SHA-1 digest, RSA-SHA1 -- Crosskeyn
+    // oman dowloadFile-application-request_1.xml-esimerkin mukaisesti:
+    $objDSig = new XMLSecurityDSig();
+    $objDSig->setCanonicalMethod(XMLSecurityDSig::C14N);
+
+    // $doc (ei $doc->documentElement) addReference():n ensimmäisenä parametrina: xmlseclibs
+    // kirjoittaa URI-attribuutin tyhjäksi (URI="") vain kun kohde on DOMDocument -- ks.
+    // tarkempi selitys sepa_download_file_list_crosskey():n vastaavasta kohdasta:
+    $objDSig->addReference(
+      $doc,
+      XMLSecurityDSig::SHA1,
+      [
+        'http://www.w3.org/2000/09/xmldsig#enveloped-signature'
+      ],
+      [
+        'force_uri' => true
+      ]
+    );
+
+    $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, ['type' => 'private']);
+    $objKey->loadKey($_pk);
+    $objDSig->sign($objKey);
+
+    $objDSig->add509Cert($_c, true, false, ['issuerSerial' => true]);
+    $objDSig->appendSignature($doc->documentElement);
+
+    $requestBody = $doc->saveXML();
+    $base64Payload = base64_encode(trim($requestBody));
+
+    $requestId = time() . rand(100, 999);
+    $timestamp = date('Y-m-d\TH:i:s.vP');
+
+    // 3. SOAP-kuori. Operaatio on 'downloadFilein'. Ei WS-Security Timestampia lainkaan --
+    // vain Body allekirjoitetaan, Crosskeyn oman dowloadFile-SOAP-request_1.xml-esimerkin
+    // mukaisesti:
+    $soapEnvelopeXml = '<?xml version="1.0" encoding="UTF-8"?>' .
+    '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cor="http://bxd.fi/CorporateFileService" xmlns:mod="http://model.bxd.fi">' .
+      '<soapenv:Header/>' .
+      '<soapenv:Body>' .
+        '<cor:downloadFilein>' .
+           '<mod:RequestHeader>' .
+             '<mod:SenderId>' . $pankkiyhteys['customer_id'] . '</mod:SenderId>' .
+              '<mod:RequestId>' . $requestId . '</mod:RequestId>' .
+              '<mod:Timestamp>' . $timestamp . '</mod:Timestamp>' .
+              '<mod:Language>FI</mod:Language>' .
+              '<mod:UserAgent>Pupesoft</mod:UserAgent>' .
+              '<mod:ReceiverId>POPFFI2</mod:ReceiverId>' .
+           '</mod:RequestHeader>' .
+           '<mod:ApplicationRequest>' . $base64Payload . '</mod:ApplicationRequest>' .
+        '</cor:downloadFilein>' .
+      '</soapenv:Body>' .
+    '</soapenv:Envelope>';
+
+    $soapDoc = new DOMDocument('1.0', 'UTF-8');
+    $soapDoc->loadXML($soapEnvelopeXml);
+
+    // WSSESoap: ei addTimestamp()-kutsua tälle operaatiolle, ks. yllä:
+    $wsse = new WSSESoap($soapDoc);
+
+    $objSoapKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, ['type' => 'private']);
+    $objSoapKey->loadKey($_pk);
+    $wsse->signSoapDoc($objSoapKey, ['algorithm' => XMLSecurityDSig::SHA1]);
+
+    $soapToken = $wsse->addBinaryToken($_c);
+    $wsse->attachTokentoSig($soapToken);
+
+    $soapEnvelope = $wsse->saveXML();
+
+    $endpointUrl = SEPA_ADDRESS_CROSSKEY;
+    $ch = curl_init($endpointUrl);
+
+    $headers = [
+      'Content-Type: text/xml; charset=utf-8',
+      'Content-Length: ' . strlen($soapEnvelope),
+      'SOAPAction: "http://bxd.fi/CorporateFileService/downloadFilein"'
+    ];
+
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $soapEnvelope);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+
+    curl_setopt($ch, CURLOPT_SSLCERT_BLOB, $_ssl_cert);
+    curl_setopt($ch, CURLOPT_SSLKEY_BLOB, $_ssl);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_errno($ch) ? curl_error($ch) : "";
+    curl_close($ch);
+
+    // Yksittäisen viitteen epäonnistuminen ei keskeytä muita -- ks. yllä -- joten jokainen
+    // virhetapaus jatkaa seuraavaan viitteeseen "Virhe"-rivillä sen sijaan että koko
+    // funktio palauttaisi falsen:
+    if ($curlError !== "") {
+      echo "cURL virhe: " . $curlError . PHP_EOL;
+      echo "cURL vastaus: " . $response . PHP_EOL;
+
+      $tiedostot[] = array(
+        "file_type" => $file_type,
+        "viite" => $viite,
+        "status" => "Virhe",
+        "data" => null
+      );
+      continue;
+    }
+
+    // HTTP 500 osoittautui silti sisältävän oikean ApplicationResponsen tälle pankille --
+    // ks. sepa_download_file_list_crosskey():n "Sopimus ei voimassa" -tapaus. HTTP-status
+    // ei siis ratkaise onnistumista, vaan se onko SOAP-vastauksessa ApplicationResponse
+    // ylipäätään:
+    $responseDoc = sepa_crosskey_extract_application_response($response);
+
+    if ($responseDoc === null) {
+      echo "Palvelinvirhe (HTTP-koodi: $httpCode)" . PHP_EOL;
+      echo $response . PHP_EOL;
+
+      $tiedostot[] = array(
+        "file_type" => $file_type,
+        "viite" => $viite,
+        "status" => "Virhe",
+        "data" => null
+      );
+      continue;
+    }
+
+    $xpath = new DOMXPath($responseDoc);
+    $xpath->registerNamespace('bxd', 'http://bxd.fi/xmldata/');
+
+    $responseCode = (string)$xpath->evaluate('string(//bxd:ResponseCode)');
+    $responseText = (string)$xpath->evaluate('string(//bxd:ResponseText)');
+
+    echo "Pankki vastasi: $responseCode $responseText" . PHP_EOL;
+
+    if ($responseCode !== '00') {
+      $tiedostot[] = array(
+        "file_type" => $file_type,
+        "viite" => $viite,
+        "status" => "Virhe",
+        "data" => null
+      );
+      continue;
+    }
+
+    // "data" pysyy Base64-muodossa palautuksessa, kuten vanhalla sepa_download_files():lla
+    // -- kutsujat (esim. pankkiyhteys_tilioteviite.inc) purkavat sen itse. Pakkaus
+    // puretaan tässä silti tarpeen vaatiessa, koska pyyntö kertoo lähettäneensä
+    // Compression=false eikä kutsujilla ole syytä varautua koodaamaan sitä uudelleen:
+    $content = (string)$xpath->evaluate('string(//bxd:Content)');
+    $compressed = (string)$xpath->evaluate('string(//bxd:Compressed)') === 'true';
+
+    if ($compressed) {
+      $unzipped = @gzdecode(base64_decode($content));
+
+      if ($unzipped !== false) $content = base64_encode($unzipped);
+    }
+
+    $tiedostot[] = array(
+      "file_type" => $file_type,
+      "viite" => $viite,
+      "status" => "OK",
+      "data" => $content
+    );
+  }
+
+  return $tiedostot;
+}
+// ---
+
+// ----------------------------------------------------------------------------------------
+// Lähettää yhden tiedoston (käytännössä maksu- tai palkka-aineiston) Crosskeyhin.
+//
+// ApplicationRequestin oma allekirjoitus on kopioitu Crosskeyn omasta esimerkistä
+// (uploadFile-application-request_1.xml), samoin kuin kahdessa yllä olevassa
+// funktiossa -- sama plain C14N / SHA-1 / RSA-SHA1 -muoto, joka osoittautui kaikkien
+// kolmen ApplicationRequestin yhteiseksi.
+//
+// SOAP-kuorta EI ole kopioitu uploadFile-soap-request_1.xml:stä yhtä tarkasti kuin
+// latausfunktioiden kuoret omista esimerkeistään: kyseisessä esimerkissä on
+// WS-Addressing-otsikot (wsa:Action/MessageID/ReplyTo/To) ja se osoittaa
+// "stagepft.alandsbanken.fi":hin -- eri pankin staging-palvelimeen, ei POP
+// Pankin/Crosskeyn tuotanto-osoitteeseen, jota jokainen muu esimerkki tässä (oikein)
+// käyttää -- ja sen vastaus käyttää Crosskey-sisäistä nimiavaruutta eikä lainkaan
+// WS-Securitya, toisin kuin kolme muuta vastausta. Tämä viittaa vahvasti siihen, että tämä
+// yksi esimerkki on uudelleenkäytetty yleisestä SDK-näytteestä sen sijaan että se olisi
+// generoitu tätä integraatiota varten kuten muut. Sen WS-Security-muoto (wsu:Timestamp,
+// jossa sekä Timestamp että Body on allekirjoitettu) täsmää kuitenkin downloadFileListin
+// oman, jo toimivaksi todetun pyynnön kanssa, joten tämä funktio rakentaa saman sen sijaan
+// -- Timestamp allekirjoitettuna, ei WS-Addressingia. Jos lähetys silti tulee hylättynä
+// takaisin kun tätä oikeasti kokeillaan Crosskeytä vasten, WS-Addressing-otsikot ovat
+// ensimmäinen asia joka kannattaa lisätä takaisin:
+function sepa_upload_file_crosskey(array $params): array | bool {
+  global $kukarow, $yhtiorow, $sepa_pankkiyhteys_token;
+
+  ini_set('display_errors', '1');
+  ini_set('display_startup_errors', '1');
+  error_reporting(E_ALL & ~E_DEPRECATED);
+
+  $tunnus = parameter($params["pankkiyhteys_tunnus"]);
+  $salasana = parameter($params["pankkiyhteys_salasana"]);
+  $file_type = parameter($params["file_type"]);
+  $target_id = parameter($params["target_id"] ?? "");
+  $compress = !empty($params["compress"]);
+
+  // "maksuaineisto", ei "content": sama parametrinimi ja samat Base64-tavut kuin vanhalla
+  // Ahkio-reitteisellä sepa_upload_file():lla -- kutsujat (sepa.php, pankkiyhteys_send.inc)
+  // tekevät jo base64_encode(file_get_contents(...)):n ennen kutsua:
+  $maksuaineisto = parameter($params["maksuaineisto"] ?? "");
+  $filename = parameter($params["filename"] ?? "");
+
+  if (empty($file_type) || empty($maksuaineisto)) {
+    return false;
+  }
+  if (empty($target_id)) $target_id = "NONE";
+
+  // UserFilename on ApplicationRequestissa pakollinen, mutta vanha sepa_upload_file() ei
+  // koskaan pyytänyt sitä kutsujalta -- Ahkio ilmeisesti keksi sen itse. Sama tässä, jotta
+  // olemassa olevat kutsupaikat toimivat antamatta sitä:
+  if (empty($filename)) {
+    $filename = $file_type . "_" . date("YmdHis");
+  }
+
+  $pankkiyhteys = hae_pankkiyhteys($tunnus);
+
+  if (!$pankkiyhteys) {
+    return false;
+  }
+
+  // Tarkistetaan salasana ja haetaan salaamaton private key:
+  $_c = pura_salaus($pankkiyhteys["signing_certificate"], $salasana);
+  $_pk = pura_salaus($pankkiyhteys["signing_private_key"], $salasana);
+  $_ssl = pura_salaus($pankkiyhteys["encryption_private_key"], $salasana);
+  $_ssl_cert = pura_salaus($pankkiyhteys["encryption_certificate"], $salasana);
+
+  if (!openssl_pkey_get_private($_pk) || !openssl_pkey_get_private($_ssl)) {
+    return false;
+  }
+
+  // 1. ApplicationRequest. $maksuaineisto on jo Base64 -- puretaan välillä vain jos
+  // pyydetään pakkaamaan se uudelleen. <CompressionMethod> ilmestyy vain silloin, samoin
+  // kuin esimerkissä:
+  $base64Content = $compress
+    ? base64_encode(gzencode(base64_decode($maksuaineisto), 9))
+    : $maksuaineisto;
+
+  $xmlPayload = '<?xml version="1.0" encoding="UTF-8"?>' .
+  '<ApplicationRequest xmlns="http://bxd.fi/xmldata/">' .
+    '<CustomerId>' . $pankkiyhteys['customer_id'] . '</CustomerId>' .
+    '<Command>UploadFile</Command>' .
+    '<Timestamp>' . gmdate("c") . '</Timestamp>' .
+    '<Environment>PRODUCTION</Environment>' .
+    '<UserFilename>' . htmlspecialchars($filename, ENT_XML1, 'UTF-8') . '</UserFilename>' .
+    '<TargetId>' . htmlspecialchars($target_id, ENT_XML1, 'UTF-8') . '</TargetId>' .
+    '<Encryption>false</Encryption>' .
+    '<Compression>' . ($compress ? 'true' : 'false') . '</Compression>' .
+    ($compress ? '<CompressionMethod>GZIP</CompressionMethod>' : '') .
+    '<SoftwareId>Pupesoft</SoftwareId>' .
+    '<FileType>' . $file_type . '</FileType>' .
+    '<Content>' . $base64Content . '</Content>' .
+  '</ApplicationRequest>';
+
+  $doc = new DOMDocument('1.0', 'UTF-8');
+  $doc->preserveWhiteSpace = false;
+  $doc->loadXML($xmlPayload);
+
+  // 2. Allekirjoitus. Plain C14N (ei WithComments), SHA-1 digest, RSA-SHA1 -- Crosskeyn
+  // oman uploadFile-application-request_1.xml-esimerkin mukaisesti, sama kuvio kuin
+  // sepa_download_file_crosskey():ssä:
+  $objDSig = new XMLSecurityDSig();
+  $objDSig->setCanonicalMethod(XMLSecurityDSig::C14N);
+
+  $objDSig->addReference(
+    $doc,
+    XMLSecurityDSig::SHA1,
+    [
+      'http://www.w3.org/2000/09/xmldsig#enveloped-signature'
+    ],
+    [
+      'force_uri' => true
+    ]
+  );
+
+  $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, ['type' => 'private']);
+  $objKey->loadKey($_pk);
+  $objDSig->sign($objKey);
+
+  $objDSig->add509Cert($_c, true, false, ['issuerSerial' => true]);
+  $objDSig->appendSignature($doc->documentElement);
+
+  $requestBody = $doc->saveXML();
+  $base64Payload = base64_encode(trim($requestBody));
+
+  $requestId = time() . rand(100, 999);
+  $timestamp = date('Y-m-d\TH:i:s.vP');
+
+  // 3. SOAP-kuori. Operaatio on 'uploadFilein'. WS-Security: Timestamp + Body allekirjoitettu
+  // -- ks. yläpuolen kommentti siitä miksi ei WS-Addressing-otsikoita:
+  $soapEnvelopeXml = '<?xml version="1.0" encoding="UTF-8"?>' .
+  '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cor="http://bxd.fi/CorporateFileService" xmlns:mod="http://model.bxd.fi">' .
+    '<soapenv:Header/>' .
+    '<soapenv:Body>' .
+      '<cor:uploadFilein>' .
+         '<mod:RequestHeader>' .
+           '<mod:SenderId>' . $pankkiyhteys['customer_id'] . '</mod:SenderId>' .
+            '<mod:RequestId>' . $requestId . '</mod:RequestId>' .
+            '<mod:Timestamp>' . $timestamp . '</mod:Timestamp>' .
+            '<mod:Language>FI</mod:Language>' .
+            '<mod:UserAgent>Pupesoft</mod:UserAgent>' .
+            '<mod:ReceiverId>POPFFI2</mod:ReceiverId>' .
+         '</mod:RequestHeader>' .
+         '<mod:ApplicationRequest>' . $base64Payload . '</mod:ApplicationRequest>' .
+      '</cor:uploadFilein>' .
+    '</soapenv:Body>' .
+  '</soapenv:Envelope>';
+
+  $soapDoc = new DOMDocument('1.0', 'UTF-8');
+  $soapDoc->loadXML($soapEnvelopeXml);
+
+  $wsse = new WSSESoap($soapDoc);
+  $wsse->addTimestamp(3600);
+
+  $objSoapKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, ['type' => 'private']);
+  $objSoapKey->loadKey($_pk);
+  $wsse->signSoapDoc($objSoapKey, ['algorithm' => XMLSecurityDSig::SHA1]);
+
+  $soapToken = $wsse->addBinaryToken($_c);
+  $wsse->attachTokentoSig($soapToken);
+
+  $soapEnvelope = $wsse->saveXML();
+
+  $endpointUrl = SEPA_ADDRESS_CROSSKEY;
+  $ch = curl_init($endpointUrl);
+
+  $headers = [
+    'Content-Type: text/xml; charset=utf-8',
+    'Content-Length: ' . strlen($soapEnvelope),
+    'SOAPAction: "http://bxd.fi/CorporateFileService/uploadFilein"'
+  ];
+
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $soapEnvelope);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+
+  curl_setopt($ch, CURLOPT_SSLCERT_BLOB, $_ssl_cert);
+  curl_setopt($ch, CURLOPT_SSLKEY_BLOB, $_ssl);
+
+  $response = curl_exec($ch);
+  $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  $curlError = curl_errno($ch) ? curl_error($ch) : "";
+  curl_close($ch);
+
+  if ($curlError !== "") {
+    echo "cURL virhe: " . $curlError . PHP_EOL;
+    echo "cURL vastaus: " . $response . PHP_EOL;
+    return false;
+  }
+
+  // Sama päättely kuin sepa_download_file_crosskey():ssa: HTTP 500 ei ratkaise
+  // onnistumista tälle pankille, vaan se onko SOAP-vastauksessa ApplicationResponse
+  // ylipäätään.
+  //
+  // Toisin kuin kahden latausfunktion oma vahvistettu muoto (itsenäinen dokumentti,
+  // Base64-koodattuna elementin tekstinä), uploadFilen esimerkki näyttää
+  // ApplicationResponsen sisäkkäisinä oikeina lapsielementteinä ilman mitään purettavaa --
+  // ks. kommentti tämän funktion omasta otsikosta siitä miksi tuo esimerkki on
+  // epävarmempi kuin lataus-esimerkit. sepa_crosskey_extract_application_response()
+  // alapuolella käsittelee kumman tahansa muodon tämä lopulta tekeekin:
+  $responseDoc = sepa_crosskey_extract_application_response($response);
+
+  if ($responseDoc === null) {
+    echo "Palvelinvirhe (HTTP-koodi: $httpCode)" . PHP_EOL;
+    echo $response . PHP_EOL;
+    return false;
+  }
+
+  $xpath = new DOMXPath($responseDoc);
+  $xpath->registerNamespace('bxd', 'http://bxd.fi/xmldata/');
+
+  $responseCode = (string)$xpath->evaluate('string(//bxd:ResponseCode)');
+  $responseText = (string)$xpath->evaluate('string(//bxd:ResponseText)');
+
+  echo "Pankki vastasi: $responseCode $responseText" . PHP_EOL;
+
+  // Sama palautusmuoto kuin vanhalla sepa_upload_file():lla: false jokaisessa
+  // epäonnistumisessa (tässä myös pankin oma ResponseCode != 00, ei vain
+  // yhteysvirheissä), onnistuessa "litteä" array. Ei "ok"-avainta, koska kutsujat
+  // (sepa.php) käyvät koko arrayn läpi avain kerrallaan taulukkoon -- se näkyisi siinä
+  // ylimääräisenä rivinä. "content" jää tyhjäksi: normaali UploadFile-vastaus ei sisällä
+  // sitä (ks. uploadFile-soap-resp_1.xml), mutta esim. pankkiyhteys_functions.inc:n oma
+  // OP-saldokysely (joka käyttää tätä samaa toimintoa väärinkäyttäen) lukee sen -- ks.
+  // sen oma $response['content']:
+  if ($responseCode !== '00') {
+    return false;
+  }
+
+  return array(
+    "response_code" => $responseCode,
+    "response_text" => $responseText,
+    "amount_total" => (string)$xpath->evaluate('string(//bxd:AmountTotal)'),
+    "transaction_count" => (string)$xpath->evaluate('string(//bxd:TransactionCount)'),
+    "content" => (string)$xpath->evaluate('string(//bxd:Content)')
+  );
 }
 // ---
 
