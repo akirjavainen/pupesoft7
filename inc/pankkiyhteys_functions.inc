@@ -475,7 +475,7 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     '<Command>DownloadFileList</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
     '<Status>NEW</Status>' .
-    '<Environment>PRODUCTION</Environment>' .
+    '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
     '<FileType>0130</FileType>' .
   '</ApplicationRequest>';
@@ -799,7 +799,7 @@ function sepa_download_file_crosskey(array $params): array | bool {
       '<Command>DownloadFile</Command>' .
       '<Timestamp>' . gmdate("c") . '</Timestamp>' .
       '<StartDate>' . $start_date . '</StartDate>' .
-      '<Environment>PRODUCTION</Environment>' .
+      '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
       '<FileReferences>' .
         '<FileReference>' . htmlspecialchars((string)$viite, ENT_XML1, 'UTF-8') . '</FileReference>' .
       '</FileReferences>' .
@@ -1062,7 +1062,7 @@ function sepa_upload_file_crosskey(array $params): array | bool {
     '<CustomerId>' . $pankkiyhteys['customer_id'] . '</CustomerId>' .
     '<Command>UploadFile</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
-    '<Environment>PRODUCTION</Environment>' .
+    '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
     '<UserFilename>' . htmlspecialchars($filename, ENT_XML1, 'UTF-8') . '</UserFilename>' .
     '<TargetId>' . htmlspecialchars($target_id, ENT_XML1, 'UTF-8') . '</TargetId>' .
     '<Encryption>false</Encryption>' .
