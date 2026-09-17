@@ -1971,6 +1971,18 @@ function generoi_private_key_ja_csr($params = array()) {
     $csr_info[] = "emailAddress={$yhtiorow["email"]}";
     $csr_info[] = "L={$yhtiorow["kotipaikka"]}";
     $csr_info[] = "O={$yhtiorow['nimi']}";
+    break;
+  case "pop":
+    // MUOKKAUS: Crosskeyn PFT-spesifikaatio (kohta 3.1) vaatii CustomerId:n nimenomaan
+    // CN-kentässä ("CN=[CustomerId, korkeintaan 10 numeroa, ei alkunollia]"), ei SN:ssä
+    // kuten alempi default-haara tekee -- se aiheutti "07 Sopimus ei voimassa"
+    // -vastauksen, koska pankin myöntämän sertifikaatin CN oli yhtiön nimi eikä
+    // customer_id. SN pidetään silti mukana, koska sepa_renew_certificate() lukee
+    // customer_id:n seuraavalla uusintakerralla vanhan sertifikaatin SN-kentästä:
+    $csr_info[] = "CN={$customer_id}";
+    $csr_info[] = "SN={$customer_id}";
+    $csr_info[] = "O=Aineistopalvelut-Samlink";
+    break;
   default:
     $csr_info[] = "SN={$customer_id}";
     $csr_info[] = "CN={$company_name}";
