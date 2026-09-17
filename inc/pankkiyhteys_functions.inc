@@ -532,24 +532,50 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   $timestamp = date('Y-m-d\TH:i:s.vP'); // Muoto: 2026-06-30T14:15:00.000+03:00
 
   // 8. Rakennetaan virallinen Finanssialan WS-standardin mukainen kuori.
-  // HUOM: Metodi on 'downloadFileList' ja se vaatii RequestHeader-lohkon nimiavaruudesta http://model.bxd.fi:
-  $soapEnvelope = '<?xml version="1.0" encoding="UTF-8"?>' .
+  // HUOM: Operaatio on 'downloadFileListin' (ei 'downloadFileList' -- ApplicationRequestin
+  // <Command> on silti 'DownloadFileList', nämä kaksi ovat eri asioita). Tämä ja koko
+  // WS-Security-osuus alla on nyt tarkistettu Crosskeyn omasta esimerkkipyynnöstä
+  // (dowloadFileList-SOAP-request_1.xml): Header ei saa jäädä tyhjäksi
+  // ('<soapenv:Header/>', kuten se oli täällä ennen) -- pankki vaatii wsse:Security-lohkon,
+  // jossa on wsu:Timestamp ja erillinen ds:Signature Timestampin ja Bodyn ylle (eri
+  // allekirjoitus kuin ApplicationRequestin oma, yllä).
+  $soapEnvelopeXml = '<?xml version="1.0" encoding="UTF-8"?>' .
   '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cor="http://bxd.fi/CorporateFileService" xmlns:mod="http://model.bxd.fi">' .
     '<soapenv:Header/>' .
     '<soapenv:Body>' .
-      '<cor:downloadFileList>' .
+      '<cor:downloadFileListin>' .
          '<mod:RequestHeader>' .
            '<mod:SenderId>' . $pankkiyhteys['customer_id'] . '</mod:SenderId>' . // Pankin asiakastunnus
             '<mod:RequestId>' . $requestId . '</mod:RequestId>' .
             '<mod:Timestamp>' . $timestamp . '</mod:Timestamp>' .
             '<mod:Language>FI</mod:Language>' .
             '<mod:UserAgent>Pupesoft</mod:UserAgent>' .
-            '<mod:ReceiverId>POPFFI2</mod:ReceiverId>' . // POP Pankin BIC (Varmista tuotanto-ohjeesta)
+            '<mod:ReceiverId>POPFFI2</mod:ReceiverId>' . // POP Pankin BIC, varmistettu oikeaksi
          '</mod:RequestHeader>' .
          '<mod:ApplicationRequest>' . $base64Payload . '</mod:ApplicationRequest>' .
-      '</cor:downloadFileList>' .
+      '</cor:downloadFileListin>' .
     '</soapenv:Body>' .
   '</soapenv:Envelope>';
+
+  $soapDoc = new DOMDocument('1.0', 'UTF-8');
+  $soapDoc->loadXML($soapEnvelopeXml);
+
+  // 8.1. WSSESoap (jo ladattu tiedoston alussa, mutta ei aiemmin käytetty tässä
+  // funktiossa) lisää wsse:Security-lohkon ja allekirjoittaa sen. BinarySecurityToken
+  // lisätään vasta allekirjoituksen JÄLKEEN: signSoapDoc() allekirjoittaa kaikki sillä
+  // hetkellä Security-lohkossa olevat solmut plus Bodyn, ja esimerkkipyynnössä on
+  // allekirjoitettuna vain Timestamp ja Body -- ei BinarySecurityTokenia itseään.
+  $wsse = new WSSESoap($soapDoc);
+  $wsse->addTimestamp(3600);
+
+  $objSoapKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, ['type' => 'private']);
+  $objSoapKey->loadKey($_pk);
+  $wsse->signSoapDoc($objSoapKey, ['algorithm' => XMLSecurityDSig::SHA1]);
+
+  $soapToken = $wsse->addBinaryToken($_c);
+  $wsse->attachTokentoSig($soapToken);
+
+  $soapEnvelope = $wsse->saveXML();
 
   // 9. POP Pankin SOAP-osoite on Samlink --> Crosskey -siirtymävaiheessa vielä Samlinkin palvelin:
   //$endpointUrl = "https://ws.samlink.fi/services/CorporateFileService"; // Siirtymävaiheessa
@@ -558,13 +584,12 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   // 10. Alustetaan cURL
   $ch = curl_init($endpointUrl);
 
-  // 11. KORJAUS: SOAPAction-header ilman lainausmerkkejä tai tietyissä palvelimissa lainausmerkeillä.
-  // Crosskey-ympäristöissä toimii tyypillisesti tyhjä action TAI tarkka osoite ilman pääte-slashia:
+  // 11. SOAPAction-header. Operaationimi korjattu 'downloadFileListin':ksi (ks. yllä):
   $headers = [
     'Content-Type: text/xml; charset=utf-8',
     'Content-Length: ' . strlen($soapEnvelope),
-    'SOAPAction: ""'
-    //'SOAPAction: "http://bxd.fi/CorporateFileService/downloadFileList"'
+    //'SOAPAction: ""'
+    'SOAPAction: "http://bxd.fi/CorporateFileService/downloadFileListin"'
   ];
 
   // 12. cURL:
