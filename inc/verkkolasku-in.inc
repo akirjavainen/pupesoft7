@@ -1290,7 +1290,6 @@ if (!function_exists("verkkolasku_in")) {
                 lukko            = '1',
                 laatija          = 'verkkolas',
                 laadittu         = now()";
-error_log("VIN1277: $query");
       
       // MUOKKAUS: mysqli_insert_id():
       $result = pupe_query($query, $GLOBALS["link"]);
@@ -1429,7 +1428,6 @@ error_log("VIN1277: $query");
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
                     laadittu         = now()";
-error_log("VIN1416: $query");
           $result = pupe_query($query);
 
           $varastonmuutostili = $yhtiorow["varastonmuutos"];
@@ -1461,7 +1459,6 @@ error_log("VIN1416: $query");
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
                     laadittu         = now()";
-error_log("VIN1448: $query");
           $result = pupe_query($query);
         }
       }
@@ -1630,7 +1627,6 @@ error_log("VIN1448: $query");
                         lukko            = '',
                         laatija          = '$kukarow[kuka]',
                         laadittu         = now()";
-error_log("VIN1617: $query");
               $result = pupe_query($query);
 
               $varastonmuutostili = $yhtiorow["varastonmuutos"];
@@ -1662,7 +1658,6 @@ error_log("VIN1617: $query");
                         lukko            = '',
                         laatija          = '$kukarow[kuka]',
                         laadittu         = now()";
-error_log("VIN1649: $query");
               $result = pupe_query($query);
             }
           }
@@ -1847,7 +1842,6 @@ error_log("VIN1649: $query");
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
                     laadittu         = now()";
-error_log("VIN1834: $query");
           $xresult = pupe_query($query);
 
           list($kustp_ins, $kohde_ins, $projekti_ins) = kustannuspaikka_kohde_projekti($yhtiorow["selvittelytili"]);
@@ -1869,7 +1863,6 @@ error_log("VIN1834: $query");
                     lukko            = '',
                     laatija          = '$kukarow[kuka]',
                     laadittu         = now()";
-error_log("VIN1856: $query");
           $xresult = pupe_query($query);
 
           if ($tila == 'M') {
