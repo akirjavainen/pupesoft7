@@ -453,7 +453,8 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   $pankkiyhteys = hae_pankkiyhteys($tunnus);
 
   if (!$pankkiyhteys) {
-  return false;
+    echo "Pankkiyhteyttä tunnuksella $tunnus ei löytynyt (tarkista pankkiyhteys_tunnus)." . PHP_EOL;
+    return false;
   }
 
   // Tarkistetaan salasana ja haetaan salaamaton private key:
@@ -774,6 +775,7 @@ function sepa_download_file_crosskey(array $params): array | bool {
   $pankkiyhteys = hae_pankkiyhteys($tunnus);
 
   if (!$pankkiyhteys) {
+    echo "Pankkiyhteyttä tunnuksella $tunnus ei löytynyt (tarkista pankkiyhteys_tunnus)." . PHP_EOL;
     return false;
   }
 
@@ -1037,6 +1039,7 @@ function sepa_upload_file_crosskey(array $params): array | bool {
   $pankkiyhteys = hae_pankkiyhteys($tunnus);
 
   if (!$pankkiyhteys) {
+    echo "Pankkiyhteyttä tunnuksella $tunnus ei löytynyt (tarkista pankkiyhteys_tunnus)." . PHP_EOL;
     return false;
   }
 
@@ -1264,6 +1267,7 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
   $pankkiyhteys = hae_pankkiyhteys($tunnus);
 
   if (!$pankkiyhteys) {
+    echo "Pankkiyhteyttä tunnuksella $tunnus ei löytynyt (tarkista pankkiyhteys_tunnus)." . PHP_EOL;
     return false;
   }
 
@@ -1290,11 +1294,18 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
     }
   }
   else {
-    // Pelkkä paikallinen järkevyystarkistus (16 numeroa + Luhn-tarkiste) -- kiinni saa
-    // väärin näpätyn TransferKeyn heti tässä, ei korvaa pankin omaa tarkistusta:
-    if (!preg_match('/^\d{16}$/', $transfer_key) || !crosskey_luhn_ok($transfer_key)) {
-      echo "TransferKey ei näytä oikealta (16 numeroa, viimeinen Luhn-tarkistenumero)." . PHP_EOL;
+    // 16 numeroa on spesifikaation (kohta 3.1) kiistaton vaatimus -- tämä pysäyttää.
+    // Luhn-tarkiste sen sijaan vain VAROITTAA eikä pysäytä: se nojaa oletukseen että
+    // pankin kahdessa osassa toimittama TransferKey muodostetaan yksinkertaisesti
+    // liittämällä osat peräkkäin, mitä spesifikaatio ei sano suoraan eikä ole
+    // vahvistettu -- oma paikallinen arvaus ei saa olla tiukempi portti kuin pankin
+    // oma tarkistus, joka on tästä joka tapauksessa lopullinen totuus:
+    if (!preg_match('/^\d{16}$/', $transfer_key)) {
+      echo "TransferKey ei näytä oikealta (pitäisi olla 16 numeroa)." . PHP_EOL;
       return false;
+    }
+    if (!crosskey_luhn_ok($transfer_key)) {
+      echo "HUOM: TransferKeyn Luhn-tarkistenumero ei täsmää -- lähetetään silti, pankki päättää." . PHP_EOL;
     }
   }
 
@@ -1421,6 +1432,26 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
 
   $wsse = new WSSESoap($soapDoc);
   $wsse->addTimestamp(300);
+
+  // Ensimmäisen (allekirjoittamattoman) pyynnön kohdalla: WSSESoap::addTimestamp() lisää
+  // AINA soapenv:mustUnderstand="1" Security-elementtiin (locateSecurityHeader()in
+  // oletusarvo), mutta Crosskeyn omassa esimerkissä (getCertificate-soap-request_1.xml)
+  // sitä ei ole -- vain paljas wsu:Timestamp, ei allekirjoitusta, ei mustUnderstandia.
+  // Ensimmäinen yritys tällä koodilla sai pankilta "02 Signature verification failed",
+  // mikä täsmää siihen että WS-Security-pino tulkitsee mustUnderstand="1" ilman
+  // allekirjoitusta EPÄONNISTUNEEKSI tarkistukseksi sen sijaan että Security-lohko
+  // olisi vain tarpeeton -- poistetaan attribuutti, jotta rakenne täsmää esimerkkiin
+  // täsmälleen. (Uusinnassa jätetään mustUnderstand paikoilleen: sitä ei vielä ole
+  // testattu Crosskeytä vasten, koska tähän ei ole voimassa olevaa Crosskey-
+  // sertifikaattia allekirjoittamaan sitä.)
+  if (!$is_renewal) {
+    $securityNodes = $soapDoc->getElementsByTagNameNS(WSSESoap::WSSENS, 'Security');
+
+    foreach ($securityNodes as $securityNode) {
+      $securityNode->removeAttributeNS('http://schemas.xmlsoap.org/soap/envelope/', 'mustUnderstand');
+    }
+  }
+
   $soapEnvelope = $wsse->saveXML();
 
   // 5. cURL. Ei CURLOPT_SSLCERT_BLOB/SSLKEY_BLOB -mTLS-asetuksia: PFT-spesifikaatiossa ei
