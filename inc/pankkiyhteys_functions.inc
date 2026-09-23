@@ -1219,6 +1219,312 @@ function sepa_upload_file_crosskey(array $params): array | bool {
 }
 // ---
 
+// ----------------------------------------------------------------------------------------
+// Hakee/uusii Crosskeyn (PKI File Transfer, PFT Technical Description for software
+// supplier 2.5, kohta 3.1 "GetCertificate") ITSE MYÖNTÄMÄN allekirjoitussertifikaatin
+// CertificateServicen getCertificate-operaatiolla.
+//
+// PFT-spesifikaatio (kohta 3.1) kuvaa KAKSI eri tapaa, joita tämä yksi funktio molemmat
+// hoitaa $transfer_key-parametrin perusteella:
+//
+//   - ENSIMMÄINEN kerta ($transfer_key annettuna): CertApplicationRequestia EI
+//     allekirjoiteta ("CertApplicationRequest and SOAP don't need to be signed on the
+//     registration-call") -- Crosskey tunnistaa pyynnön TransferKeyn perusteella.
+//     TransferKey on 16-numeroinen, pankki toimittaa sen asiakkaalle KAHDESSA OSASSA, ja
+//     viimeinen numero on Luhn-tarkistenumero. Tätä tarvitaan juuri nyt, koska meillä ei
+//     ole yhtään Crosskeyn omaa, voimassa olevaa sertifikaattia allekirjoittamaan uusinta.
+//
+//   - UUSINTA ($transfer_key tyhjä, kohta 3.1.1): pyyntö allekirjoitetaan VANHALLA,
+//     vanhenevalla mutta Crosskeyn omalla sertifikaatilla. Toimii vain uusintaikkunassa
+//     (tuotannossa 60 vrk ennen vanhenemista) -- vanhentuneelle sertifikaatille pankilta
+//     täytyy pyytää uusi TransferKey ja tehdä tämä samat kuin ensimmäisellä kerralla.
+//
+// Molemmissa tapauksissa generoidaan AINA uusi avainpari+CSR ("renewal rekeying", kohta
+// 3.1.1: "New private key and csr should be generated in the renewal scenario and not
+// only a new request with the old csr") -- generoi_private_key_ja_csr():n "pop"-tapaus
+// asettaa CN:n ja SN:n oikein customer_id:ksi (ks. sen oma kommentti).
+//
+// Palauttaa onnistuessaan ["signing_certificate" => PEM, "signing_private_key" => PEM]:
+// KUTSUJAN/käyttäjän pitää itse SALATA (salaa()) ja tallentaa ne pankkiyhteys-tauluun --
+// tämä funktio ei kirjoita kantaan, samaan tapaan kuin sepa_renew_certificate() ei
+// tee sitä nykyiselle Ahkio-reitille (ks. pankkiyhteysadmin.php, "uusi_sertifikaatti_hae").
+// false virhetilanteissa, echottaen syyn (kuten muutkin crosskey-funktiot tässä
+// tiedostossa).
+function sepa_get_certificate_crosskey(array $params): array | bool {
+  global $kukarow, $yhtiorow;
+
+  ini_set('display_errors', '1');
+  ini_set('display_startup_errors', '1');
+  error_reporting(E_ALL & ~E_DEPRECATED);
+
+  $tunnus = parameter($params["pankkiyhteys_tunnus"]);
+  $salasana = parameter($params["pankkiyhteys_salasana"]);
+  $transfer_key = trim((string)parameter($params["transfer_key"] ?? ""));
+
+  $pankkiyhteys = hae_pankkiyhteys($tunnus);
+
+  if (!$pankkiyhteys) {
+    return false;
+  }
+
+  $customer_id = $pankkiyhteys['customer_id'];
+  $is_renewal = ($transfer_key === "");
+
+  // Ensimmäisellä kerralla ei tarvita/käytetä nykyistä (Samlink-peräistä) sertifikaattia
+  // mihinkään -- vain salasana tarkistetaan private keyn purkamisella, kuten muissa
+  // crosskey-funktioissa. Uusinnassa nykyinen VOIMASSA OLEVA Crosskey-sertifikaatti+avain
+  // sen sijaan tarvitaan allekirjoitukseen:
+  $_old_pk = pura_salaus($pankkiyhteys["signing_private_key"], $salasana);
+
+  if (!openssl_pkey_get_private($_old_pk)) {
+    echo "Salasana on väärä, tai signing_private_key ei purkaudu!" . PHP_EOL;
+    return false;
+  }
+
+  $_old_cert = pura_salaus($pankkiyhteys["signing_certificate"], $salasana);
+
+  if ($is_renewal) {
+    if (empty($_old_cert)) {
+      echo "Uusinta vaatii nykyisen Crosskey-sertifikaatin -- sitä ei ole, anna transfer_key ensimmäistä hakua varten." . PHP_EOL;
+      return false;
+    }
+  }
+  else {
+    // Pelkkä paikallinen järkevyystarkistus (16 numeroa + Luhn-tarkiste) -- kiinni saa
+    // väärin näpätyn TransferKeyn heti tässä, ei korvaa pankin omaa tarkistusta:
+    if (!preg_match('/^\d{16}$/', $transfer_key) || !crosskey_luhn_ok($transfer_key)) {
+      echo "TransferKey ei näytä oikealta (16 numeroa, viimeinen Luhn-tarkistenumero)." . PHP_EOL;
+      return false;
+    }
+  }
+
+  // 1. Uusi avainpari + CSR. CN=customer_id, PFT-spesifikaation ("CN=[CustomerId up to
+  // 10 digits, no leading zeros]", kohta 3.1) ja generoi_private_key_ja_csr():n
+  // "pop"-tapauksen mukaisesti -- AINA uusi, myös uusinnassa (kohta 3.1.1):
+  $uusi = generoi_private_key_ja_csr([
+    'pankki' => 'pop',
+    'customer_id' => $customer_id,
+  ]);
+
+  if (empty($uusi['csr']) || empty($uusi['private_key'])) {
+    echo "CSR:n generointi epäonnistui." . PHP_EOL;
+    return false;
+  }
+
+  // 2. CertApplicationRequest. HUOM: OMA juurielementti ja nimiavaruus
+  // (http://pft.ck.fi/xmldata/), eri kuin CorporateFileServicen ApplicationRequest
+  // (http://bxd.fi/xmldata/) -- vahvistettu crosskey-examples/getCertificate-
+  // application-request_*.xml -esimerkeistä. Content = CSR PEM-muodossa,
+  // Base64-koodattuna kertaalleen (kohta 3.1.2: "Certificate request should be in PEM
+  // form and then binary64-encoded"). Elementtijärjestys täsmää molempiin esimerkkeihin:
+  $content = base64_encode($uusi['csr']);
+  $timestamp = date('Y-m-d\TH:i:s.vP');
+
+  $xmlPayload = '<?xml version="1.0" encoding="UTF-8"?>' .
+  '<CertApplicationRequest xmlns="http://pft.ck.fi/xmldata/">' .
+    '<CustomerId>' . $customer_id . '</CustomerId>' .
+    '<Timestamp>' . $timestamp . '</Timestamp>' .
+    '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
+    '<SoftwareId>Pupesoft</SoftwareId>' .
+    ($is_renewal ? '<Command>GetCertificate</Command>' : '') .
+    '<Service>MATU</Service>' .
+    '<Content>' . $content . '</Content>' .
+    (!$is_renewal ? '<TransferKey>' . $transfer_key . '</TransferKey>' : '') .
+  '</CertApplicationRequest>';
+
+  $doc = new DOMDocument('1.0', 'UTF-8');
+  $doc->preserveWhiteSpace = false;
+  $doc->loadXML($xmlPayload);
+
+  // 3. Allekirjoitus VAIN uusinnassa, VANHALLA (vanhenevalla) sertifikaatilla/avaimella --
+  // "CertApplicationRequest and SOAP don't need to be signed on the registration-call"
+  // (kohta 3.1), mutta "On certificate renewal, a signed CertApplicationRequest is used"
+  // (kohta 3.1.1). Plain C14N + SHA-256 -- crosskey-examples/getCertificate-application-
+  // request_Signed.xml käyttää rsa-sha256/sha256, TOISIN kuin muut kolme Crosskey-
+  // operaatiota tässä tiedostossa (SHA-1) -- ei sekoiteta niihin:
+  if ($is_renewal) {
+    $objDSig = new XMLSecurityDSig();
+    $objDSig->setCanonicalMethod(XMLSecurityDSig::C14N);
+
+    $objDSig->addReference(
+      $doc,
+      XMLSecurityDSig::SHA256,
+      [
+        'http://www.w3.org/2000/09/xmldsig#enveloped-signature'
+      ],
+      [
+        'force_uri' => true
+      ]
+    );
+
+    $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
+    $objKey->loadKey($_old_pk);
+    $objDSig->sign($objKey);
+
+    $objDSig->add509Cert($_old_cert, true, false, ['issuerSerial' => true]);
+    $objDSig->appendSignature($doc->documentElement);
+  }
+
+  $requestBody = $doc->saveXML();
+  $base64Payload = base64_encode(trim($requestBody));
+
+  $requestId = time() . rand(100, 999);
+  $soapTimestamp = date('Y-m-d\TH:i:s.vP');
+
+  // 4. SOAP-kuori. Operaatio 'getCertificatein', OMA nimiavaruutensa
+  // (http://schemas.ck.fi/xml/ns/services/CKCertificateService-v1.0) -- eri kuin
+  // CorporateFileServicen (http://bxd.fi/CorporateFileService). RequestHeaderissä ei ole
+  // Language/UserAgent/ReceiverId-kenttiä, toisin kuin muilla kolmella operaatiolla --
+  // vahvistettu crosskey-examples/getCertificate-soap-request_1.xml -esimerkistä. Sen
+  // WS-Addressing-otsikot (wsa:Action/MessageID/ReplyTo/To) on OTETTU mukaan tähän --
+  // toisin kuin sepa_upload_file_crosskey() jätti omansa pois -- koska tämän esimerkin
+  // wsa:To osoittaa oikeasti Crosskeyn omaan popstagepft.crosskey.fi-osoitteeseen (PFT-
+  // spesifikaation kohdan 7 mukainen), ei jonkin toisen pankin osoitteeseen kuten
+  // uploadFilen esimerkki -- ei siis syytä epäillä sitä väärästä kontekstista
+  // uudelleenkäytetyksi. Ei WS-Security-allekirjoitusta SOAP-tasolla, vain wsu:Timestamp --
+  // CertApplicationRequestin OMA allekirjoitus (uusinnassa) riittää:
+  $messageId = sprintf(
+    'urn:uuid:%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+    mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+    mt_rand(0, 0xffff),
+    mt_rand(0, 0x0fff) | 0x4000,
+    mt_rand(0, 0x3fff) | 0x8000,
+    mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+  );
+
+  $endpointUrl = SEPA_WSDL_CROSSKEY; // Nimestä huolimatta oikea CertificateService-osoite
+
+  $soapEnvelopeXml = '<?xml version="1.0" encoding="UTF-8"?>' .
+  '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:cer="http://schemas.ck.fi/xml/ns/services/CKCertificateService-v1.0">' .
+    '<soapenv:Header>' .
+      '<wsa:Action/>' .
+      '<wsa:MessageID>' . $messageId . '</wsa:MessageID>' .
+      '<wsa:ReplyTo>' .
+        '<wsa:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</wsa:Address>' .
+      '</wsa:ReplyTo>' .
+      '<wsa:To>' . $endpointUrl . '</wsa:To>' .
+    '</soapenv:Header>' .
+    '<soapenv:Body>' .
+      '<cer:getCertificatein>' .
+         '<cer:RequestHeader>' .
+           '<cer:SenderId>' . $customer_id . '</cer:SenderId>' .
+            '<cer:RequestId>' . $requestId . '</cer:RequestId>' .
+            '<cer:Timestamp>' . $soapTimestamp . '</cer:Timestamp>' .
+         '</cer:RequestHeader>' .
+         '<cer:ApplicationRequest>' . $base64Payload . '</cer:ApplicationRequest>' .
+      '</cer:getCertificatein>' .
+    '</soapenv:Body>' .
+  '</soapenv:Envelope>';
+
+  $soapDoc = new DOMDocument('1.0', 'UTF-8');
+  $soapDoc->loadXML($soapEnvelopeXml);
+
+  $wsse = new WSSESoap($soapDoc);
+  $wsse->addTimestamp(300);
+  $soapEnvelope = $wsse->saveXML();
+
+  // 5. cURL. Ei CURLOPT_SSLCERT_BLOB/SSLKEY_BLOB -mTLS-asetuksia: PFT-spesifikaatiossa ei
+  // mainita erillistä mTLS-/encryption-sertifikaattia lainkaan (vain tämä sertifikaatti,
+  // jota juuri haetaan) -- ja encryption_certificate on kannassa tyhjä tälle
+  // pankkiyhteydelle jo nyt, siitä huolimatta muut kolme crosskey-funktiota saavat oikean,
+  // jäsentyvän ApplicationResponsen takaisin. Jos pankki jatkossa vaatiikin mTLS:n, virhe
+  // näkyy tässä cURL-tasolla (SSL-kättely epäonnistuu), ei sovellustason "07"-koodina:
+  $ch = curl_init($endpointUrl);
+
+  $headers = [
+    'Content-Type: text/xml; charset=utf-8',
+    'Content-Length: ' . strlen($soapEnvelope),
+    'SOAPAction: "http://schemas.ck.fi/xml/ns/services/CKCertificateService-v1.0/getCertificatein"'
+  ];
+
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $soapEnvelope);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+  $response = curl_exec($ch);
+  $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  $curlError = curl_errno($ch) ? curl_error($ch) : "";
+  curl_close($ch);
+
+  if ($curlError !== "") {
+    echo "cURL virhe: " . $curlError . PHP_EOL;
+    echo "cURL vastaus: " . $response . PHP_EOL;
+    return false;
+  }
+
+  // Debug: koko SOAP-vastaus näkyviin p.php:ssä testattaessa, kuten muillakin
+  // crosskey-funktioilla tässä tiedostossa on tapana palvelinvirheissä:
+  echo $response . PHP_EOL;
+
+  $responseDoc = sepa_crosskey_extract_application_response($response);
+
+  if ($responseDoc === null) {
+    echo "Palvelinvirhe (HTTP-koodi: $httpCode)" . PHP_EOL;
+    return false;
+  }
+
+  $xpath = new DOMXPath($responseDoc);
+  $xpath->registerNamespace('bxd', 'http://pft.ck.fi/xmldata/');
+
+  $responseCode = (string)$xpath->evaluate('string(//bxd:ResponseCode)');
+  $responseText = (string)$xpath->evaluate('string(//bxd:ResponseText)');
+
+  echo "Pankki vastasi: $responseCode $responseText" . PHP_EOL;
+
+  if ($responseCode !== '00') {
+    return false;
+  }
+
+  // 6. Uusi sertifikaatti vastauksesta. crosskey-examples/getCertificate-application-
+  // response.xml: bxd:Certificates/bxd:Certificate/bxd:Certificate on PEM, Base64-
+  // koodattuna kertaalleen (sama suunta kuin Content pyynnössä, kohta 3.1.2) -- mutta
+  // PEM-otsikot lisätään tässä varmuuden vuoksi, jos ne puuttuisivat:
+  $certBase64 = (string)$xpath->evaluate('string(//bxd:Certificates/bxd:Certificate[1]/bxd:Certificate)');
+
+  if ($certBase64 === '') {
+    echo "Vastauksesta ei löytynyt sertifikaattia." . PHP_EOL;
+    return false;
+  }
+
+  $certPem = base64_decode($certBase64);
+
+  if (!str_contains($certPem, '-----BEGIN CERTIFICATE-----')) {
+    $certPem = "-----BEGIN CERTIFICATE-----\n" .
+      chunk_split(base64_encode($certPem), 64, "\n") .
+      "-----END CERTIFICATE-----\n";
+  }
+
+  echo "Uusi Crosskey-sertifikaatti saatu onnistuneesti!" . PHP_EOL;
+
+  return array(
+    "signing_certificate" => $certPem,
+    "signing_private_key" => $uusi['private_key'],
+  );
+}
+// ----------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------
+// Luhn-tarkiste (mod 10) TransferKeylle -- PFT Technical Description 2.5, kohta 3.1:
+// "Transfer key is 16 digits... The last digit is the checksum digit."
+function crosskey_luhn_ok(string $numero): bool {
+  $summa = 0;
+  $pituus = strlen($numero);
+
+  for ($i = 0; $i < $pituus; $i++) {
+    $luku = (int)$numero[$pituus - 1 - $i];
+
+    if ($i % 2 === 1) {
+      $luku *= 2;
+      if ($luku > 9) $luku -= 9;
+    }
+    $summa += $luku;
+  }
+  return ($summa % 10) === 0;
+}
+// ----------------------------------------------------------------------------------------
+
 function sepa_download_files($params) {
   global $kukarow, $yhtiorow, $sepa_pankkiyhteys_token;
 
