@@ -8955,16 +8955,24 @@ if ($tee == '') {
               echo "$ale_echo %</td>";
             }
 
-            // MUOKKAUS: id, jotta askForValue() voi paivittaa rivin loppuhinnan sivua
-            // uudelleenlataamatta:
-            echo "<td $class align='right' id='rivihinta_$row[tunnus]'>".hintapyoristys($kplhinta, 2)."</td>";
+            // MUOKKAUS: id, jotta askForValue() voi paivittaa tan solun sivua
+            // uudelleenlataamatta. HUOM: tama on "Hinta"-otsikon alla nayttyva solu
+            // (kplhinta = alennettu kappalehinta), EI "Rivihinta" -- se on $summa,
+            // muutama rivi alempana, jolla ei ollut id:ta ollenkaan (ks. sen oma
+            // MUOKKAUS-kommentti):
+            echo "<td $class align='right' id='kplhinta_$row[tunnus]'>".hintapyoristys($kplhinta, 2)."</td>";
           }
 
           if ($kukarow['hinnat'] == 1) {
             echo "<td $class align='right'>".hintapyoristys($myyntihinta * ($row["varattu"] + $row["jt"]))."</td>";
           }
           elseif ($kukarow['hinnat'] == 0) {
-            echo "<td $class align='right'>".hintapyoristys($summa)."</td>";
+            // MUOKKAUS: id, jotta askForValue() voi paivittaa Rivihinnan sivua
+            // uudelleenlataamatta. Tama ($summa, ks. "Tan rivin rivihinta" -kommentti
+            // ylempana) on todellinen otsikon "Rivihinta" solu -- riippuu hinnasta
+            // JA maarasta (kpl), toisin kuin edella oleva kplhinta-solu, joten
+            // "Maara"-pikamuokkaus ei paivittanyt tata ollenkaan ennen tata id:ta:
+            echo "<td $class align='right' id='rivihinta_$row[tunnus]'>".hintapyoristys($summa)."</td>";
           }
 
           if ($kukarow['extranet'] == '' and $naytetaanko_kate) {
@@ -10039,10 +10047,12 @@ if ($tee == '') {
             echo "<td class='spec'>$laskurow[valkoodi]</td></tr>";
           }
           else {
+            // MUOKKAUS: id, jotta askForValue() voi paivittaa Veroton yhteensä
+            // -loppusumman sivua uudelleenlataamatta (ei ollut id:ta ollenkaan ennen):
             echo "<tr>$jarjlisa
                 <td class='back' colspan='".($sarakkeet_alku-5)."'>&nbsp;</td>
                 <th colspan='5' align='right'>".t("Veroton yhteensä").":</th>
-                <td class='spec' align='right'>".sprintf("%.2f", $arvo_eieri)."</td>";
+                <td class='spec' align='right' id='veroton_yhteensa'>".sprintf("%.2f", $arvo_eieri)."</td>";
 
             if ($kukarow['extranet'] == '' and $kotiarvo_eieri != 0 and $kotiarvo_eieri-$ostot_eieri != 0 and $naytetaanko_kate) {
               echo "<td class='spec' align='right' nowrap>".sprintf("%.2f", 100*$kate_eieri/($kotiarvo_eieri-$ostot_eieri))."%</td>";
@@ -10094,10 +10104,13 @@ if ($tee == '') {
             echo "<td class='spec'>$laskurow[valkoodi]</td></tr>";
           }
           else {
+            // MUOKKAUS: id, sama syy kuin toisessa "Veroton yhteensä" -kohdassa
+            // ylempänä -- nämä kaksi eivät ikinä näy samalla sivulla (erikoisale-ehto
+            // ratkaisee kumpi), niin sama id molemmissa on turvallista:
             echo "<tr>$jarjlisa
                 <td class='back' colspan='".($sarakkeet_alku-5)."'>&nbsp;</td>
                 <th colspan='5' align='right'>".t("Veroton yhteensä").":</th>
-                <td class='spec' align='right'>".sprintf("%.2f", $arvo)."</td>";
+                <td class='spec' align='right' id='veroton_yhteensa'>".sprintf("%.2f", $arvo)."</td>";
 
             if ($kukarow['extranet'] == '' and $kotiarvo != 0 and $naytetaanko_kate) {
               echo "<td class='spec' align='right' nowrap>".sprintf("%.2f", 100*$kate/($kotiarvo-$ostot))."%</td>";
