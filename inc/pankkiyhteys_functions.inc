@@ -436,6 +436,30 @@ function sepa_download_file_list($params) {
   return $response;
 }
 
+// Varoittaa jos pankkiyhteys-rivin customer_id ei ole sama kuin sertifikaatin CN. Crosskey
+// myöntää sertifikaatin CN=[CustomerId] ja tunnistaa asiakkaan siitä, joten epäsuhta antaa
+// vastauksen "07 Sopimus ei voimassa" vaikka kaikki muu olisi kunnossa.
+function sepa_crosskey_tarkista_cert($pankkiyhteys, $cert_pem) {
+  $parsed = openssl_x509_parse($cert_pem);
+
+  if ($parsed === false) {
+    echo "VAROITUS: signing_certificate ei ole luettavissa oleva X509-sertifikaatti." . PHP_EOL;
+    return;
+  }
+
+  $cn = $parsed["subject"]["CN"] ?? "";
+  $issuer = $parsed["issuer"]["CN"] ?? "";
+
+  if (trim($cn) !== trim($pankkiyhteys["customer_id"])) {
+    echo "VAROITUS: pankkiyhteys.customer_id='{$pankkiyhteys['customer_id']}', mutta sertifikaatin CN='{$cn}' (Issuer: {$issuer}). "
+      . "Pankki tunnistaa asiakkaan näiden pitää olla samat." . PHP_EOL;
+  }
+
+  if ($parsed["validTo_time_t"] < time()) {
+    echo "VAROITUS: sertifikaatti on vanhentunut " . date("Y-m-d H:i:s", $parsed["validTo_time_t"]) . "." . PHP_EOL;
+  }
+}
+
 // Crosskey/POP Pankki PFT: FileType on nelinumeroinen koodi (PFT Technical Description 2.5,
 // luku 6). Pupesoftin muualla käyttämät tyyppinimet (TITO, KTL, C2BN jne.) käännetään
 // tässä; valmis nelinumeroinen koodi (esim. 1700 KTOX, 1250 REFX) kelpaa sellaisenaan.
@@ -487,6 +511,8 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     return false;
   }
 
+  sepa_crosskey_tarkista_cert($pankkiyhteys, $_c);
+
   // 1. Luodaan POP Pankin vaatima ApplicationRequest-rakenne. Ei Id-attribuuttia juurella --
   // Crosskeyn oma esimerkkipyyntö ei sellaista käytä, ks. alla:
   $xmlPayload = '<?xml version="1.0" encoding="UTF-8"?>' .
@@ -495,6 +521,7 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     '<Command>DownloadFileList</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
     '<Status>' . $status . '</Status>' .
+    //'<Status>ALL</Status>' .
     //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
     '<Environment>TEST</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
@@ -506,17 +533,17 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   $doc->loadXML($xmlPayload);
 
   // 2. Alustetaan allekirjoitus. Nämä kolme (kanonisointi, digest, allekirjoitusalgoritmi)
-  // on nyt asetettu vastaamaan tarkasti Crosskeyn omaa esimerkkipyyntöä
+  // on asetettu vastaamaan tarkasti Crosskeyn omaa esimerkkipyyntöä
   // (dowloadFileList-application-request_1.xml): C14N WithComments, SHA-1 digest,
-  // RSA-SHA1 allekirjoitus -- ei Exclusive C14N eikä SHA-256, joita täällä käytettiin ennen.
-  $objDSig = new XMLSecurityDSig();
+  // RSA-SHA1 allekirjoitus -- ei Exclusive C14N eikä SHA-256:
+  $objDSig = new XMLSecurityDSig('');
   $objDSig->setCanonicalMethod(XMLSecurityDSig::C14N_COMMENTS);
 
   // 2.1. $doc (ei $rootElement) addReference():n ensimmäisenä parametrina: xmlseclibs
   // kirjoittaa URI-attribuutin tyhjäksi (URI="") vain kun kohde on DOMDocument, ja force_uri
   // on tosi. $rootElement-kohteella se sen sijaan aina generoi ja liittää oman Id:n
   // (URI="#..."), mitä esimerkkipyynnössä ei ole -- sen <Reference URI=""> allekirjoittaa
-  // koko dokumentin ilman erillistä Id:tä.
+  // koko dokumentin ilman erillistä Id:tä:
   $objDSig->addReference(
     $doc,
     XMLSecurityDSig::SHA1,
@@ -555,11 +582,11 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   // 8. Rakennetaan virallinen Finanssialan WS-standardin mukainen kuori.
   // HUOM: Operaatio on 'downloadFileListin' (ei 'downloadFileList' -- ApplicationRequestin
   // <Command> on silti 'DownloadFileList', nämä kaksi ovat eri asioita). Tämä ja koko
-  // WS-Security-osuus alla on nyt tarkistettu Crosskeyn omasta esimerkkipyynnöstä
+  // WS-Security-osuus alla on tarkistettu Crosskeyn omasta esimerkkipyynnöstä
   // (dowloadFileList-SOAP-request_1.xml): Header ei saa jäädä tyhjäksi
   // ('<soapenv:Header/>', kuten se oli täällä ennen) -- pankki vaatii wsse:Security-lohkon,
   // jossa on wsu:Timestamp ja erillinen ds:Signature Timestampin ja Bodyn ylle (eri
-  // allekirjoitus kuin ApplicationRequestin oma, yllä).
+  // allekirjoitus kuin ApplicationRequestin oma, yllä):
   $soapEnvelopeXml = '<?xml version="1.0" encoding="UTF-8"?>' .
   '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cor="http://bxd.fi/CorporateFileService" xmlns:mod="http://model.bxd.fi">' .
     '<soapenv:Header/>' .
@@ -585,7 +612,7 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   // funktiossa) lisää wsse:Security-lohkon ja allekirjoittaa sen. BinarySecurityToken
   // lisätään vasta allekirjoituksen JÄLKEEN: signSoapDoc() allekirjoittaa kaikki sillä
   // hetkellä Security-lohkossa olevat solmut plus Bodyn, ja esimerkkipyynnössä on
-  // allekirjoitettuna vain Timestamp ja Body -- ei BinarySecurityTokenia itseään.
+  // allekirjoitettuna vain Timestamp ja Body -- ei BinarySecurityTokenia itseään:
   $wsse = new WSSESoap($soapDoc);
   $wsse->addTimestamp(3600);
 
@@ -595,6 +622,13 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
 
   $soapToken = $wsse->addBinaryToken($_c);
   $wsse->attachTokentoSig($soapToken);
+
+  // Crosskeyn esimerkkipyynnössä Security-elementillä ei ole mustUnderstand-attribuuttia
+  // (vain pankin vastauksessa on). Poistetaan allekirjoituksen jälkeen: Security-elementti ei
+  // ole itse allekirjoitettu, joten allekirjoitus ei muutu:
+  foreach ($soapDoc->getElementsByTagNameNS(WSSESoap::WSSENS, 'Security') as $securityNode) {
+    $securityNode->removeAttributeNS('http://schemas.xmlsoap.org/soap/envelope/', 'mustUnderstand');
+  }
 
   $soapEnvelope = $wsse->saveXML();
 
@@ -620,7 +654,7 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
   // Ei TLS-asiakasvarmennetta: Crosskey PFT tunnistaa asiakkaan WS-Security-allekirjoituksesta
-  // (signing_certificate), eikä erillistä salaussertifikaattia myönnetä.
+  // (signing_certificate), eikä erillistä salaussertifikaattia myönnetä:
 
   // Suoritetaan pyyntö:
   $response = curl_exec($ch);
@@ -760,7 +794,7 @@ function sepa_crosskey_extract_application_response(string $soapResponseXml): ?D
 //     kun downloadFileListin käyttää C14N WithCommentsia.
 //   - SOAP-kuoressa ei ole lainkaan WS-Security Timestampia tässä -- vain Body
 //     allekirjoitetaan, yksi Reference, ei "Timestamp + Body" kuten downloadFileListillä.
-function sepa_download_file_crosskey(array $params): array | bool {
+function sepa_download_files_crosskey(array $params): array | bool {
   global $kukarow, $yhtiorow, $sepa_pankkiyhteys_token;
 
   ini_set('display_errors', '1');
@@ -833,7 +867,7 @@ function sepa_download_file_crosskey(array $params): array | bool {
 
     // 2. Allekirjoitus. Plain C14N (ei WithComments), SHA-1 digest, RSA-SHA1 -- Crosskeyn
     // oman dowloadFile-application-request_1.xml-esimerkin mukaisesti:
-    $objDSig = new XMLSecurityDSig();
+    $objDSig = new XMLSecurityDSig('');
     $objDSig->setCanonicalMethod(XMLSecurityDSig::C14N);
 
     // $doc (ei $doc->documentElement) addReference():n ensimmäisenä parametrina: xmlseclibs
@@ -896,6 +930,13 @@ function sepa_download_file_crosskey(array $params): array | bool {
 
     $soapToken = $wsse->addBinaryToken($_c);
     $wsse->attachTokentoSig($soapToken);
+
+    // Crosskeyn esimerkkipyynnössä Security-elementillä ei ole mustUnderstand-attribuuttia
+    // (vain pankin vastauksessa on). Poistetaan allekirjoituksen jälkeen: Security-elementti ei
+    // ole itse allekirjoitettu, joten allekirjoitus ei muutu.
+    foreach ($soapDoc->getElementsByTagNameNS(WSSESoap::WSSENS, 'Security') as $securityNode) {
+      $securityNode->removeAttributeNS('http://schemas.xmlsoap.org/soap/envelope/', 'mustUnderstand');
+    }
 
     $soapEnvelope = $wsse->saveXML();
 
@@ -1097,7 +1138,7 @@ function sepa_upload_file_crosskey(array $params): array | bool {
   // 2. Allekirjoitus. Plain C14N (ei WithComments), SHA-1 digest, RSA-SHA1 -- Crosskeyn
   // oman uploadFile-application-request_1.xml-esimerkin mukaisesti, sama kuvio kuin
   // sepa_download_file_crosskey():ssä:
-  $objDSig = new XMLSecurityDSig();
+  $objDSig = new XMLSecurityDSig('');
   $objDSig->setCanonicalMethod(XMLSecurityDSig::C14N);
 
   $objDSig->addReference(
@@ -1156,6 +1197,13 @@ function sepa_upload_file_crosskey(array $params): array | bool {
 
   $soapToken = $wsse->addBinaryToken($_c);
   $wsse->attachTokentoSig($soapToken);
+
+  // Crosskeyn esimerkkipyynnössä Security-elementillä ei ole mustUnderstand-attribuuttia
+  // (vain pankin vastauksessa on). Poistetaan allekirjoituksen jälkeen: Security-elementti ei
+  // ole itse allekirjoitettu, joten allekirjoitus ei muutu.
+  foreach ($soapDoc->getElementsByTagNameNS(WSSESoap::WSSENS, 'Security') as $securityNode) {
+    $securityNode->removeAttributeNS('http://schemas.xmlsoap.org/soap/envelope/', 'mustUnderstand');
+  }
 
   $soapEnvelope = $wsse->saveXML();
 
