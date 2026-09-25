@@ -595,7 +595,6 @@ if (!function_exists("pupesoft_rest")) {
     }
 
     $response_json = curl_exec($handle);
-    //print_r($response_json); // ZEPA
 
     switch ($parameters["posttype"]) {
     case "form":

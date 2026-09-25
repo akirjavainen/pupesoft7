@@ -7,7 +7,10 @@
 // sepa_renew_certificate():n tuloksen).
 //
 // Käyttö:
-//   php hae_crosskey_sertifikaatti.php <pankkiyhteys_tunnus> <salasana> [transfer_key]
+//   php hae_crosskey_sertifikaatti.php <pankkiyhteys_tunnus> <salasana> [transfer_key] [tallenna]
+//
+// 4. parametri 'tallenna' kirjoittaa haetun sertifikaatin ja avaimen kantaan (salattuna)
+// samassa ajossa. Uusinnassa (ei transfer_key) anna tyhjä: "" tallenna.
 //
 // transfer_key annettuna = ensimmäinen haku (esim. juuri saatu 16-numeroinen
 // kertakäyttösalasana, kahdesta osasta yhteen liitettynä). Jätä pois = uusinta
@@ -31,6 +34,7 @@ if (trim($argv[2] ?? '') == '') {
 $tunnus = (int) $argv[1];
 $salasana = $argv[2];
 $transfer_key = trim($argv[3] ?? '');
+$tallenna = (trim($argv[4] ?? '') === 'tallenna');
 
 ini_set("include_path", ini_get("include_path") . PATH_SEPARATOR . dirname(__FILE__));
 error_reporting(E_ALL);
@@ -84,7 +88,53 @@ if ($parsed !== false) {
   echo "Voimassa asti: " . date("Y-m-d H:i:s", $parsed["validTo_time_t"]) . "\n";
 }
 
-echo "\nSertifikaattia (signing_certificate) EI tallennettu kantaan -- tarkista Issuer\n";
-echo "yllä (pitäisi olla Crosskey/POP Pankki, ei Samlink) ja CN (pitäisi olla\n";
-echo "customer_id, {$tunnus} rivin customer_id, ei yhtiön nimi). Jos näyttää oikealta,\n";
-echo "sanotaan miten tallennus tehdään.\n";
+if (!$tallenna) {
+  echo "\nEI tallennettu kantaan (anna 4. parametriksi 'tallenna' tallentaaksesi).\n";
+  echo "HUOM: transfer_key on kertakäyttöinen -- jos haluat tallentaa, se pitää tehdä\n";
+  echo "SAMASSA ajossa kuin haku. Tämän ajon avain menetetään kun scripti päättyy.\n";
+  exit(0);
+}
+
+// Tallennus samaan tapaan kuin pankkiyhteysadmin.php (salaa() + UPDATE pankkiyhteys).
+// Kirjoitetaan ensin salaamaton varmuuskopio tiedostoihin (umask 0077), koska
+// kertakäyttöistä avainta ei saa uudestaan jos tallennus kantaan epäonnistuu.
+$backup_base = sys_get_temp_dir() . "/crosskey_tallenna_{$tunnus}_" . date("Ymd_His");
+$vanha_umask = umask(0077);
+file_put_contents("{$backup_base}.cert.pem", $tulos["signing_certificate"]);
+file_put_contents("{$backup_base}.key.pem", $tulos["signing_private_key"]);
+umask($vanha_umask);
+echo "\nVarmuuskopio (SALAAMATON, poista kun kanta on varmistettu):\n";
+echo "  {$backup_base}.cert.pem\n  {$backup_base}.key.pem\n";
+
+$vanha = hae_pankkiyhteys($tunnus);
+$vanha_backup = "{$backup_base}.vanha_rivi.json";
+file_put_contents($vanha_backup, json_encode($vanha));
+chmod($vanha_backup, 0600);
+echo "  {$vanha_backup} (vanhat salatut arvot)\n";
+
+$cert_salattu = salaa($tulos["signing_certificate"], $salasana);
+$key_salattu = salaa($tulos["signing_private_key"], $salasana);
+$valid_to = parse_sertificate($tulos["signing_certificate"]);
+$valid_to = $valid_to["valid_to"];
+
+print_r($tulos);
+
+$query = "UPDATE pankkiyhteys
+          SET signing_certificate = '{$cert_salattu}',
+              signing_private_key = '{$key_salattu}',
+              signing_certificate_valid_to = '{$valid_to}'
+          WHERE tunnus = {$tunnus}";
+pupe_query($query);
+
+// Varmistus: puretaanko kannasta takaisin samalla salasanalla ja täsmääkö avain+sertifikaatti
+$tarkistus = hae_pankkiyhteys($tunnus);
+$_c = pura_salaus($tarkistus["signing_certificate"], $salasana);
+$_k = pura_salaus($tarkistus["signing_private_key"], $salasana);
+
+if (openssl_x509_check_private_key($_c, $_k)) {
+  echo "\nTALLENNETTU ja varmistettu: pankkiyhteys.tunnus={$tunnus}, voimassa asti {$valid_to}.\n";
+}
+else {
+  echo "\nVAROITUS: kantaan kirjoitettu, mutta sertifikaatti/avain ei täsmää luettaessa takaisin!\n";
+  exit(1);
+}

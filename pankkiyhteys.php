@@ -173,18 +173,17 @@ if ($tee == "") {
         $params_ktl = array(
           "file_type"             => "KTL", // TITO (tiliotteet) tai KTL (viitemaksut)
           "status"                => "NEW", // NEW, DLD tai ALL
-          "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
+          "pankkiyhteys_tunnus"   => 1, //$pankkiyhteys["tunnus"],
           "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
         );
         $params_tito = array(
           "file_type"             => "TITO", // TITO (tiliotteet) tai KTL (viitemaksut)
           "status"                => "NEW", // NEW, DLD tai ALL
-          "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
+          "pankkiyhteys_tunnus"   => 1, //$pankkiyhteys["tunnus"],
           "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
         );
 
         $viite_tiedostot = sepa_download_file_list($params_ktl);
-        //$viite_tiedostot = sepa_download_file_list_samlink($params_ktl); // ZEPA
         $tiliote_tiedostot = sepa_download_file_list($params_tito);
         unset($params_ktl);
 	unset($params_tito);

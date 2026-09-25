@@ -2,10 +2,10 @@
 
 define('SEPA_ENVIRONMENT', 'production');
 define('SEPA_ADDRESS', 'https://sepa.ahkio.com');
-define('SEPA_ADDRESS_CROSSKEY', 'https://pft.poppankki.fi/CorporateFileService-v1'); // MUOKKAUS: Lisatty
-define('SEPA_WSDL_CROSSKEY', 'https://pft.poppankki.fi/CertificateService-v1'); // MUOKKAUS: Lisatty varmennepalvelun osoite
-//define('SEPA_ADDRESS_CROSSKEY', 'https://popstagepft.crosskey.fi/CorporateFileService-v1'); // MUOKKAUS: Test
-//define('SEPA_WSDL_CROSSKEY', 'https://popstagepft.crosskey.fi/CertificateService-v1'); // MUOKKAUS: Test
+//define('SEPA_ADDRESS_CROSSKEY', 'https://pft.poppankki.fi/CorporateFileService-v1'); // MUOKKAUS: Lisatty
+//define('SEPA_WSDL_CROSSKEY', 'https://pft.poppankki.fi/CertificateService-v1'); // MUOKKAUS: Lisatty varmennepalvelun osoite
+define('SEPA_ADDRESS_CROSSKEY', 'https://popstagepft.crosskey.fi/CorporateFileService-v1'); // MUOKKAUS: Test
+define('SEPA_WSDL_CROSSKEY', 'https://popstagepft.crosskey.fi/CertificateService-v1'); // MUOKKAUS: Test
 
 include("/var/www/robrichards/vendor/robrichards/wse-php/src/WSSESoap.php");
 
@@ -417,9 +417,7 @@ function sepa_download_file_list($params) {
       "status"                      => $status,
       "environment"                 => SEPA_ENVIRONMENT,
     ),
-    "url" => SEPA_ADDRESS . "/" . bank_provider($bank) . "/download_file_list", // ZEPA
-    //"url" => SEPA_ADDRESS, // ZEPA
-    //"url" => SEPA_ADDRESS . "/download_file_list", // ZEPA
+    "url" => SEPA_ADDRESS . "/" . bank_provider($bank) . "/download_file_list",
     "headers" => array(
       "Content-Type: application/json",
       "Authorization: Token token={$sepa_pankkiyhteys_token}"
@@ -476,7 +474,8 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     '<Command>DownloadFileList</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
     '<Status>NEW</Status>' .
-    '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
+    //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
+    '<Environment>TEST</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
     '<FileType>0130</FileType>' .
   '</ApplicationRequest>';
@@ -801,7 +800,8 @@ function sepa_download_file_crosskey(array $params): array | bool {
       '<Command>DownloadFile</Command>' .
       '<Timestamp>' . gmdate("c") . '</Timestamp>' .
       '<StartDate>' . $start_date . '</StartDate>' .
-      '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
+      //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
+      '<Environment>TEST</Environment>' .
       '<FileReferences>' .
         '<FileReference>' . htmlspecialchars((string)$viite, ENT_XML1, 'UTF-8') . '</FileReference>' .
       '</FileReferences>' .
@@ -1065,7 +1065,8 @@ function sepa_upload_file_crosskey(array $params): array | bool {
     '<CustomerId>' . $pankkiyhteys['customer_id'] . '</CustomerId>' .
     '<Command>UploadFile</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
-    '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
+    //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
+    '<Environment>TEST</Environment>' .
     '<UserFilename>' . htmlspecialchars($filename, ENT_XML1, 'UTF-8') . '</UserFilename>' .
     '<TargetId>' . htmlspecialchars($target_id, ENT_XML1, 'UTF-8') . '</TargetId>' .
     '<Encryption>false</Encryption>' .
@@ -1335,7 +1336,8 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
   '<CertApplicationRequest xmlns="http://pft.ck.fi/xmldata/">' .
     '<CustomerId>' . $customer_id . '</CustomerId>' .
     '<Timestamp>' . $timestamp . '</Timestamp>' .
-    '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
+    //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
+    '<Environment>TEST</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
     ($is_renewal ? '<Command>GetCertificate</Command>' : '') .
     '<Service>MATU</Service>' .
@@ -1472,20 +1474,48 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
   curl_setopt($ch, CURLOPT_POSTFIELDS, $soapEnvelope);
   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
+
+  // Sertifikaatin myöntäminen on hidas operaatio pankin päässä: 30 s ei riittänyt
+  // testiympäristössä (0 tavua vastaanotettu), vaikka pyyntö oli jo perillä ja
+  // käsiteltävänä -- ks. timeout-haara alla.
+  curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 
   $response = curl_exec($ch);
   $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-  $curlError = curl_errno($ch) ? curl_error($ch) : "";
+  $curlErrno = curl_errno($ch);
+  $curlError = $curlErrno ? curl_error($ch) : "";
   curl_close($ch);
 
   if ($curlError !== "") {
     echo "cURL virhe: " . $curlError . PHP_EOL;
     echo "cURL vastaus: " . $response . PHP_EOL;
+
+    // Aikakatkaisu jättää lopputuloksen epäselväksi: pankki on voinut myöntää
+    // sertifikaatin ja käyttää TransferKeyn, vaikka vastaus ei koskaan ehtinyt
+    // perille -- ja tässä generoitu private key on silloin ainoa kappale, joka
+    // sertifikaattiin sopii. Talletetaan se (vain omistajan luettavissa), jotta
+    // pankilta pyydetty sertifikaatti on jälkikäteen käyttökelpoinen, äläkä yritä
+    // samalla TransferKeylla uudestaan ennen kuin pankki on kertonut tilanteen:
+    if ($curlErrno === CURLE_OPERATION_TIMEDOUT && !$is_renewal) {
+      $edellinen_umask = umask(0077);
+      $avain_tiedosto = sys_get_temp_dir() . "/crosskey_" . preg_replace('/\D/', '', (string)$customer_id)
+        . "_" . date("Ymd_His") . ".key.pem";
+      $csr_tiedosto = preg_replace('/\.key\.pem$/', '.csr.pem', $avain_tiedosto);
+
+      file_put_contents($avain_tiedosto, $uusi['private_key']);
+      file_put_contents($csr_tiedosto, $uusi['csr']);
+      umask($edellinen_umask);
+
+      echo "HUOM: pankki on voinut käsitellä pyynnön ja myöntää sertifikaatin ennen aikakatkaisua." . PHP_EOL;
+      echo "Tässä ajossa generoitu private key on talletettu: $avain_tiedosto" . PHP_EOL;
+      echo "(CSR: $csr_tiedosto). Älä yritä samaa TransferKeytä uudelleen ennen kuin pankki" . PHP_EOL;
+      echo "on kertonut, myönnettiinkö sertifikaatti -- pyydä tarvittaessa sen kopio tai uusi TransferKey." . PHP_EOL;
+    }
     return false;
   }
 
-  // Debug: koko SOAP-vastaus näkyviin p.php:ssä testattaessa, kuten muillakin
+  // Debug: koko SOAP-vastaus näkyviin testattaessa, kuten muillakin
   // crosskey-funktioilla tässä tiedostossa on tapana palvelinvirheissä:
   echo $response . PHP_EOL;
 
@@ -1503,6 +1533,17 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
   $responseText = (string)$xpath->evaluate('string(//bxd:ResponseText)');
 
   echo "Pankki vastasi: $responseCode $responseText" . PHP_EOL;
+
+  if ($responseCode === '201') {
+    // Ei PFT-spesifikaation vastauskoodilistassa (kohta 5), mutta tekstin mukaan pankki
+    // pitää tätä uusintana: asiakkaalla on jo voimassa oleva sertifikaatti, ja se on
+    // vielä uusintaikkunan (60 vrk ennen vanhenemista) ulkopuolella. Ensimmäisellä
+    // hakukerralla se tarkoittaa yleensä, että sertifikaatti on jo myönnetty --
+    // esim. aiemmalla, aikakatkaisuun kaatuneella pyynnöllä, jonka vastaus hukkui:
+    echo "HUOM: pankin mukaan tälle asiakkaalle on jo sertifikaatti eikä sitä voi vielä uusia." . PHP_EOL;
+    echo "Jos aiempi haku kaatui aikakatkaisuun, sertifikaatti on voitu myöntää ja avain jäi" . PHP_EOL;
+    echo "tallentamatta -- pyydä pankilta sertifikaatin kopio tai uusi TransferKey." . PHP_EOL;
+  }
 
   if ($responseCode !== '00') {
     return false;
@@ -1529,10 +1570,16 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
 
   echo "Uusi Crosskey-sertifikaatti saatu onnistuneesti!" . PHP_EOL;
 
-  return array(
+  $result = array(
     "signing_certificate" => $certPem,
     "signing_private_key" => $uusi['private_key'],
   );
+
+  echo "Sertifikaatti:" . PHP_EOL;
+  print_r($result);
+  echo PHP_EOL;
+
+  return $result;
 }
 // ----------------------------------------------------------------------------------------
 
