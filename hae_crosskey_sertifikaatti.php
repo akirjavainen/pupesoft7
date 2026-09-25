@@ -40,6 +40,9 @@ ini_set("include_path", ini_get("include_path") . PATH_SEPARATOR . dirname(__FIL
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
+// xmlseclibs / wse-php (allekirjoitukset), kuten p.php:ssä
+require "/var/www/robrichards/vendor/autoload.php";
+
 require "inc/connect.inc";
 require "inc/functions.inc";
 require "inc/pankkiyhteys_functions.inc";
