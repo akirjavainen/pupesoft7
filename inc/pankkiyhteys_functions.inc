@@ -471,6 +471,8 @@ function sepa_crosskey_file_type($file_type) {
     "VIPN" => "0250",
     "C2BL" => "0100", // SCCT, maksuaineisto (pain.001)
     "C2BN" => "0130", // SPSR, maksuaineiston palautesanoma (pain.002)
+    "NDCORPAYS" => "0100", // sepa.php / pankkiyhteys_send.inc lähettävät maksuaineiston näillä
+    "NDCORPAYL" => "0130",
   );
 
   $file_type = trim($file_type);
@@ -521,7 +523,6 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     '<Command>DownloadFileList</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
     '<Status>' . $status . '</Status>' .
-    //'<Status>ALL</Status>' .
     //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
     '<Environment>TEST</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
@@ -2587,7 +2588,7 @@ function hae_tilin_saldo($params) {
 
   if (empty($pankkiyhteys) or $pankkiyhteys['hae_saldo'] != 1) return false;
 
-  // POP Pankki (Crosskey): saldo tulee 0710-tiedostona, ks. hae_tilin_saldo_crosskey()
+  // POP Pankki (Crosskey): saldo tulee 0710-tiedostona, ks. hae_tilin_saldo_crosskey():
   if ($pankkiyhteys['bic'] == 'POPFFI22') {
     $params["iban"] = $pankkiyhteys['iban'];
 
@@ -2671,11 +2672,11 @@ function hae_tilin_saldo_crosskey($params) {
     echo "0710-vastaus ({$iban}):" . PHP_EOL . $sisalto . PHP_EOL;
   }
 
-  // Tietueet erotetaan rivinvaihdoilla; jos pankki ei niitä käytä, etsitään T40 suoraan
+  // Tietueet erotetaan rivinvaihdoilla; jos pankki ei niitä käytä, etsitään T40 suoraan:
   foreach (preg_split('/\r\n|\r|\n/', $sisalto) as $tietue) {
     if (substr($tietue, 0, 3) != "T40") continue;
 
-    // Etumerkki + 18 numeroa (16 kok + 2 desi), kuten inc/tiliote.inc:ssä
+    // Etumerkki + 18 numeroa (16 kok + 2 desi), kuten inc/tiliote.inc:ssä:
     $saldo = substr($tietue, 12, 19);
     $kaytettavissa = substr($tietue, 31, 19);
 
