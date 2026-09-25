@@ -436,6 +436,24 @@ function sepa_download_file_list($params) {
   return $response;
 }
 
+// Crosskey/POP Pankki PFT: FileType on nelinumeroinen koodi (PFT Technical Description 2.5,
+// luku 6). Pupesoftin muualla käyttämät tyyppinimet (TITO, KTL, C2BN jne.) käännetään
+// tässä; valmis nelinumeroinen koodi (esim. 1700 KTOX, 1250 REFX) kelpaa sellaisenaan.
+function sepa_crosskey_file_type($file_type) {
+  $muunnokset = array(
+    "TITO" => "0700", // KTOF, konekielinen tiliote
+    "KTON" => "0700",
+    "KTL"  => "0250", // REFG, saapuvat viitemaksut
+    "VIPN" => "0250",
+    "C2BL" => "0100", // SCCT, maksuaineisto (pain.001)
+    "C2BN" => "0130", // SPSR, maksuaineiston palautesanoma (pain.002)
+  );
+
+  $file_type = trim($file_type);
+
+  return $muunnokset[$file_type] ?? $file_type;
+}
+
 // MUOKKAUS: Lisätty suora tuki POP Pankille:
 // ---
 function sepa_download_file_list_crosskey(array $params): array | bool {
@@ -448,6 +466,10 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   // Noudetaan pankkiyhteyteen vaaditut tiedot tietokannasta:
   $tunnus = parameter($params["pankkiyhteys_tunnus"]);
   $salasana = parameter($params["pankkiyhteys_salasana"]);
+  // file_type: Pupesoftin nimi (TITO, KTL, C2BN...) tai suoraan Crosskeyn nelinumeroinen koodi.
+  // status: NEW (oletus, vain uudet), DLD (jo haetut) tai ALL.
+  $file_type = sepa_crosskey_file_type(parameter($params["file_type"] ?? "") ?: "0700");
+  $status = strtoupper(parameter($params["status"] ?? "") ?: "NEW");
   $pankkiyhteys = hae_pankkiyhteys($tunnus);
 
   if (!$pankkiyhteys) {
@@ -458,11 +480,10 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   // Tarkistetaan salasana ja haetaan salaamaton private key:
   $_c = pura_salaus($pankkiyhteys["signing_certificate"], $salasana);
   $_pk = pura_salaus($pankkiyhteys["signing_private_key"], $salasana);
-  $_ssl = pura_salaus($pankkiyhteys["encryption_private_key"], $salasana);
-  $_ssl_cert = pura_salaus($pankkiyhteys["encryption_certificate"], $salasana);
 
   // Jos salauksen purkaminen ei onnistu, lopetetaan tähän:
-  if (!openssl_pkey_get_private($_pk) || !openssl_pkey_get_private($_ssl)) {
+  if (!openssl_pkey_get_private($_pk)) {
+    echo "Sertifikaatin salauksen purkaminen ei onnistunut." . PHP_EOL;
     return false;
   }
 
@@ -473,11 +494,11 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     '<CustomerId>' . $pankkiyhteys['customer_id'] . '</CustomerId>' .
     '<Command>DownloadFileList</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
-    '<Status>NEW</Status>' .
+    '<Status>' . $status . '</Status>' .
     //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
     '<Environment>TEST</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
-    '<FileType>0130</FileType>' .
+    '<FileType>' . $file_type . '</FileType>' .
   '</ApplicationRequest>';
 
   $doc = new DOMDocument('1.0', 'UTF-8');
@@ -550,7 +571,7 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
             '<mod:Timestamp>' . $timestamp . '</mod:Timestamp>' .
             '<mod:Language>FI</mod:Language>' .
             '<mod:UserAgent>Pupesoft</mod:UserAgent>' .
-            '<mod:ReceiverId>POPFFI2</mod:ReceiverId>' . // POP Pankin BIC, varmistettu oikeaksi
+            '<mod:ReceiverId>POPFFI22</mod:ReceiverId>' . // POP Pankin BIC, kuten Crosskeyn esimerkkipyynnöissä (POPFFI22)
          '</mod:RequestHeader>' .
          '<mod:ApplicationRequest>' . $base64Payload . '</mod:ApplicationRequest>' .
       '</cor:downloadFileListin>' .
@@ -598,10 +619,8 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
-  // Varmista mTLS-varmennekättely (POP Pankki vaatii tämän lähes poikkeuksetta).
-  // Salauspari ($_ssl_cert/$_ssl) on se, jonka pankki vahvistaa yhteyden avauksessa:
-  curl_setopt($ch, CURLOPT_SSLCERT_BLOB, $_ssl_cert);
-  curl_setopt($ch, CURLOPT_SSLKEY_BLOB, $_ssl);
+  // Ei TLS-asiakasvarmennetta: Crosskey PFT tunnistaa asiakkaan WS-Security-allekirjoituksesta
+  // (signing_certificate), eikä erillistä salaussertifikaattia myönnetä.
 
   // Suoritetaan pyyntö:
   $response = curl_exec($ch);
@@ -750,7 +769,7 @@ function sepa_download_file_crosskey(array $params): array | bool {
 
   $tunnus = parameter($params["pankkiyhteys_tunnus"]);
   $salasana = parameter($params["pankkiyhteys_salasana"]);
-  $file_type = parameter($params["file_type"]);
+  $file_type = sepa_crosskey_file_type(parameter($params["file_type"]));
   $start_date = parameter($params["start_date"] ?? "");
   $viitteet = $params["viitteet"] ?? array();
 
@@ -781,10 +800,8 @@ function sepa_download_file_crosskey(array $params): array | bool {
   // Tarkistetaan salasana ja haetaan salaamaton private key:
   $_c = pura_salaus($pankkiyhteys["signing_certificate"], $salasana);
   $_pk = pura_salaus($pankkiyhteys["signing_private_key"], $salasana);
-  $_ssl = pura_salaus($pankkiyhteys["encryption_private_key"], $salasana);
-  $_ssl_cert = pura_salaus($pankkiyhteys["encryption_certificate"], $salasana);
 
-  if (!openssl_pkey_get_private($_pk) || !openssl_pkey_get_private($_ssl)) {
+  if (!openssl_pkey_get_private($_pk)) {
     return false;
   }
 
@@ -860,7 +877,7 @@ function sepa_download_file_crosskey(array $params): array | bool {
               '<mod:Timestamp>' . $timestamp . '</mod:Timestamp>' .
               '<mod:Language>FI</mod:Language>' .
               '<mod:UserAgent>Pupesoft</mod:UserAgent>' .
-              '<mod:ReceiverId>POPFFI2</mod:ReceiverId>' .
+              '<mod:ReceiverId>POPFFI22</mod:ReceiverId>' .
            '</mod:RequestHeader>' .
            '<mod:ApplicationRequest>' . $base64Payload . '</mod:ApplicationRequest>' .
         '</cor:downloadFilein>' .
@@ -897,8 +914,6 @@ function sepa_download_file_crosskey(array $params): array | bool {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 
-    curl_setopt($ch, CURLOPT_SSLCERT_BLOB, $_ssl_cert);
-    curl_setopt($ch, CURLOPT_SSLKEY_BLOB, $_ssl);
 
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -1014,7 +1029,7 @@ function sepa_upload_file_crosskey(array $params): array | bool {
 
   $tunnus = parameter($params["pankkiyhteys_tunnus"]);
   $salasana = parameter($params["pankkiyhteys_salasana"]);
-  $file_type = parameter($params["file_type"]);
+  $file_type = sepa_crosskey_file_type(parameter($params["file_type"]));
   $target_id = parameter($params["target_id"] ?? "");
   $compress = !empty($params["compress"]);
 
@@ -1046,10 +1061,8 @@ function sepa_upload_file_crosskey(array $params): array | bool {
   // Tarkistetaan salasana ja haetaan salaamaton private key:
   $_c = pura_salaus($pankkiyhteys["signing_certificate"], $salasana);
   $_pk = pura_salaus($pankkiyhteys["signing_private_key"], $salasana);
-  $_ssl = pura_salaus($pankkiyhteys["encryption_private_key"], $salasana);
-  $_ssl_cert = pura_salaus($pankkiyhteys["encryption_certificate"], $salasana);
 
-  if (!openssl_pkey_get_private($_pk) || !openssl_pkey_get_private($_ssl)) {
+  if (!openssl_pkey_get_private($_pk)) {
     return false;
   }
 
@@ -1124,7 +1137,7 @@ function sepa_upload_file_crosskey(array $params): array | bool {
             '<mod:Timestamp>' . $timestamp . '</mod:Timestamp>' .
             '<mod:Language>FI</mod:Language>' .
             '<mod:UserAgent>Pupesoft</mod:UserAgent>' .
-            '<mod:ReceiverId>POPFFI2</mod:ReceiverId>' .
+            '<mod:ReceiverId>POPFFI22</mod:ReceiverId>' .
          '</mod:RequestHeader>' .
          '<mod:ApplicationRequest>' . $base64Payload . '</mod:ApplicationRequest>' .
       '</cor:uploadFilein>' .
@@ -1161,8 +1174,6 @@ function sepa_upload_file_crosskey(array $params): array | bool {
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 
-  curl_setopt($ch, CURLOPT_SSLCERT_BLOB, $_ssl_cert);
-  curl_setopt($ch, CURLOPT_SSLKEY_BLOB, $_ssl);
 
   $response = curl_exec($ch);
   $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
