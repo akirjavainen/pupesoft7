@@ -1412,7 +1412,8 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
   // request_Signed.xml käyttää rsa-sha256/sha256, TOISIN kuin muut kolme Crosskey-
   // operaatiota tässä tiedostossa (SHA-1) -- ei sekoiteta niihin:
   if ($is_renewal) {
-    $objDSig = new XMLSecurityDSig();
+    // Ilman ds:-etuliitetta, kuten esimerkissä (<Signature xmlns="...xmldsig#">)
+    $objDSig = new XMLSecurityDSig('');
     $objDSig->setCanonicalMethod(XMLSecurityDSig::C14N);
 
     $objDSig->addReference(
@@ -1502,12 +1503,27 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
   // täsmälleen. (Uusinnassa jätetään mustUnderstand paikoilleen: sitä ei vielä ole
   // testattu Crosskeytä vasten, koska tähän ei ole voimassa olevaa Crosskey-
   // sertifikaattia allekirjoittamaan sitä.)
-  if (!$is_renewal) {
-    $securityNodes = $soapDoc->getElementsByTagNameNS(WSSESoap::WSSENS, 'Security');
+  //
+  // Uusinnassa SOAP allekirjoitetaan myös: PFT-spesifikaatio sanoo että "CertApplication-
+  // Request and SOAP don't need to be signed on the registration-call" -- eli uusinnassa
+  // molemmat allekirjoitetaan, ja pankin vastauskoodi 02 tarkoittaa nimenomaan
+  // "SOAP signature error: Soap-level signature verification failed". Sama Timestamp+Body-
+  // allekirjoitus (SHA-1, exc-c14n, BinarySecurityToken) kuin muissa kolmessa toimivassa
+  // operaatiossa, vanhalla (vanhenevalla) sertifikaatilla ja avaimella:
+  if ($is_renewal) {
+    $objSoapKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, ['type' => 'private']);
+    $objSoapKey->loadKey($_old_pk);
+    $wsse->signSoapDoc($objSoapKey, ['algorithm' => XMLSecurityDSig::SHA1]);
 
-    foreach ($securityNodes as $securityNode) {
-      $securityNode->removeAttributeNS('http://schemas.xmlsoap.org/soap/envelope/', 'mustUnderstand');
-    }
+    $soapToken = $wsse->addBinaryToken($_old_cert);
+    $wsse->attachTokentoSig($soapToken);
+  }
+
+  // mustUnderstand pois muissa kolmessa toimivassa operaatiossa, kuten Crosskeyn esimerkeissä:
+  $securityNodes = $soapDoc->getElementsByTagNameNS(WSSESoap::WSSENS, 'Security');
+
+  foreach ($securityNodes as $securityNode) {
+    $securityNode->removeAttributeNS('http://schemas.xmlsoap.org/soap/envelope/', 'mustUnderstand');
   }
 
   $soapEnvelope = $wsse->saveXML();
