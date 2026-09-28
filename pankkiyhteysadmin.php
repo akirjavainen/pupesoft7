@@ -340,7 +340,7 @@ if ($tee == "uusi_sertifikaatti_hae") {
 
   if ($on_crosskey) {
     // POP Pankki (Crosskey): uusinta allekirjoitetaan nykyisellä sertifikaatilla. Jos sertifikaatti
-    // on jo vanhentunut, pankilta saatu uusi kertakäyttösalasana annetaan transfer_keyksi
+    // on jo vanhentunut, pankilta saatu uusi kertakäyttösalasana annetaan transfer_keyksi:
     $uudet_tunnukset = false;
 
     if (sepa_crosskey_lataa()) {
@@ -365,7 +365,7 @@ if ($tee == "uusi_sertifikaatti_hae") {
     virhe("Sertifikaatin uusiminen epäonnistui!");
   }
   elseif ($on_crosskey) {
-    // Vain allekirjoitussertifikaatti ja -avain, muut sarakkeet jäävät koskematta
+    // Vain allekirjoitussertifikaatti ja -avain, muut sarakkeet jäävät koskematta:
     $osc = salaa($uudet_tunnukset["signing_certificate"], $salasana);
     $spk = salaa($uudet_tunnukset["signing_private_key"], $salasana);
 
@@ -466,7 +466,7 @@ if ($tee == "luo") {
 }
 
 // POP Pankki (Crosskey): sertifikaatti haetaan 16-numeroisella kertakäyttösalasanalla
-// (PIN-kenttä), yksi avainpari, ei salaussertifikaattia eikä pankin sertifikaatteja
+// (PIN-kenttä), yksi avainpari, ei salaussertifikaattia eikä pankin sertifikaatteja:
 if ($tee == "luo" and $pin != '' and $pankki == 'POPFFI22') {
   if (!sepa_crosskey_lataa()) {
     virhe("POP Pankin Crosskey-yhteys ei ole käytettävissä tällä palvelimella");
