@@ -1,10 +1,7 @@
 <?php
 
 // Hakee UUDEN, Crosskeyn itse myöntämän allekirjoitussertifikaatin
-// sepa_get_certificate_crosskey():lla ja TULOSTAA sen (EI tallenna kantaan --
-// tarkista tuloste ja PEM-otsikoiden välissä oleva CN ensin, tallenna erikseen jos
-// näyttää oikealta samaan tapaan kuin pankkiyhteysadmin.php tallentaa
-// sepa_renew_certificate():n tuloksen).
+// sepa_get_certificate_crosskey():lla.
 //
 // Käyttö:
 //   php hae_crosskey_sertifikaatti.php <pankkiyhteys_tunnus> <salasana> [transfer_key] [tallenna]
@@ -35,6 +32,12 @@ $tunnus = (int) $argv[1];
 $salasana = $argv[2];
 $transfer_key = trim($argv[3] ?? '');
 $tallenna = (trim($argv[4] ?? '') === 'tallenna');
+
+// Uusinnassa (ei transfer_keytä) 'tallenna' kelpaa myös suoraan kolmantena parametrina
+if ($transfer_key === 'tallenna') {
+  $transfer_key = '';
+  $tallenna = true;
+}
 
 ini_set("include_path", ini_get("include_path") . PATH_SEPARATOR . dirname(__FILE__));
 error_reporting(E_ALL);
@@ -78,6 +81,7 @@ if ($tulos === false) {
 echo "ONNISTUI!\n\n";
 
 $parsed = openssl_x509_parse($tulos["signing_certificate"]);
+print_r($tulos);
 
 if ($parsed !== false) {
   echo "Uuden sertifikaatin Subject:\n";
@@ -119,8 +123,6 @@ $cert_salattu = salaa($tulos["signing_certificate"], $salasana);
 $key_salattu = salaa($tulos["signing_private_key"], $salasana);
 $valid_to = parse_sertificate($tulos["signing_certificate"]);
 $valid_to = $valid_to["valid_to"];
-
-print_r($tulos);
 
 $query = "UPDATE pankkiyhteys
           SET signing_certificate = '{$cert_salattu}',

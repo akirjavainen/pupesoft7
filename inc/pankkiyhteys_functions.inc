@@ -2,10 +2,10 @@
 
 define('SEPA_ENVIRONMENT', 'production');
 define('SEPA_ADDRESS', 'https://sepa.ahkio.com');
-//define('SEPA_ADDRESS_CROSSKEY', 'https://pft.poppankki.fi/CorporateFileService-v1'); // MUOKKAUS: Lisatty
-//define('SEPA_WSDL_CROSSKEY', 'https://pft.poppankki.fi/CertificateService-v1'); // MUOKKAUS: Lisatty varmennepalvelun osoite
-define('SEPA_ADDRESS_CROSSKEY', 'https://popstagepft.crosskey.fi/CorporateFileService-v1'); // MUOKKAUS: Test
-define('SEPA_WSDL_CROSSKEY', 'https://popstagepft.crosskey.fi/CertificateService-v1'); // MUOKKAUS: Test
+define('SEPA_ADDRESS_CROSSKEY', 'https://pft.poppankki.fi/CorporateFileService-v1'); // MUOKKAUS: Lisatty
+define('SEPA_WSDL_CROSSKEY', 'https://pft.poppankki.fi/CertificateService-v1'); // MUOKKAUS: Lisatty varmennepalvelun osoite
+//define('SEPA_ADDRESS_CROSSKEY', 'https://popstagepft.crosskey.fi/CorporateFileService-v1'); // MUOKKAUS: Test
+//define('SEPA_WSDL_CROSSKEY', 'https://popstagepft.crosskey.fi/CertificateService-v1'); // MUOKKAUS: Test
 
 include("/var/www/robrichards/vendor/robrichards/wse-php/src/WSSESoap.php");
 
@@ -523,8 +523,7 @@ function sepa_download_file_list_crosskey(array $params): array | bool {
     '<Command>DownloadFileList</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
     '<Status>' . $status . '</Status>' .
-    //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
-    '<Environment>TEST</Environment>' .
+    '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
     '<FileType>' . $file_type . '</FileType>' .
   '</ApplicationRequest>';
@@ -852,8 +851,7 @@ function sepa_download_files_crosskey(array $params): array | bool {
       '<Command>DownloadFile</Command>' .
       '<Timestamp>' . gmdate("c") . '</Timestamp>' .
       '<StartDate>' . $start_date . '</StartDate>' .
-      //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
-      '<Environment>TEST</Environment>' .
+      '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
       '<FileReferences>' .
         '<FileReference>' . htmlspecialchars((string)$viite, ENT_XML1, 'UTF-8') . '</FileReference>' .
       '</FileReferences>' .
@@ -1120,8 +1118,7 @@ function sepa_upload_file_crosskey(array $params): array | bool {
     '<CustomerId>' . $pankkiyhteys['customer_id'] . '</CustomerId>' .
     '<Command>UploadFile</Command>' .
     '<Timestamp>' . gmdate("c") . '</Timestamp>' .
-    //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
-    '<Environment>TEST</Environment>' .
+    '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
     '<UserFilename>' . htmlspecialchars($filename, ENT_XML1, 'UTF-8') . '</UserFilename>' .
     '<TargetId>' . htmlspecialchars($target_id, ENT_XML1, 'UTF-8') . '</TargetId>' .
     '<Encryption>false</Encryption>' .
@@ -1396,8 +1393,7 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
   '<CertApplicationRequest xmlns="http://pft.ck.fi/xmldata/">' .
     '<CustomerId>' . $customer_id . '</CustomerId>' .
     '<Timestamp>' . $timestamp . '</Timestamp>' .
-    //'<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
-    '<Environment>TEST</Environment>' .
+    '<Environment>' . strtoupper(SEPA_ENVIRONMENT) . '</Environment>' .
     '<SoftwareId>Pupesoft</SoftwareId>' .
     ($is_renewal ? '<Command>GetCertificate</Command>' : '') .
     '<Service>MATU</Service>' .
