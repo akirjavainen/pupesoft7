@@ -83,6 +83,9 @@ if ($tulos === false) {
 echo "ONNISTUI!\n\n";
 
 $parsed = openssl_x509_parse($tulos["signing_certificate"]);
+
+// Tulostetaan sertifikaatti ruudulle siltä varalta, että tietokantaan tallennus epäonnistuu
+// (jotta ei tarvitse kysellä pankista avaimen nollauksia):
 print_r($tulos);
 
 if ($parsed !== false) {

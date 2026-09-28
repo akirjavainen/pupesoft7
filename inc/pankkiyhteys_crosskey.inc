@@ -1251,6 +1251,8 @@ function sepa_get_certificate_crosskey(array $params): array | bool {
     "signing_private_key" => $uusi['private_key'],
   );
 
+  // Tulostetaan sertifikaatti ruudulle siltä varalta, että tietokantaan tallennus epäonnistuu
+  // (jotta ei tarvitse kysellä pankista avaimen nollauksia):
   echo "Sertifikaatti:" . PHP_EOL;
   print_r($result);
   echo PHP_EOL;

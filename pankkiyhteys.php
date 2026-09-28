@@ -173,13 +173,13 @@ if ($tee == "") {
         $params_ktl = array(
           "file_type"             => "KTL", // TITO (tiliotteet) tai KTL (viitemaksut)
           "status"                => "NEW", // NEW, DLD tai ALL
-          "pankkiyhteys_tunnus"   => 1, //$pankkiyhteys["tunnus"],
+          "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
           "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
         );
         $params_tito = array(
           "file_type"             => "TITO", // TITO (tiliotteet) tai KTL (viitemaksut)
           "status"                => "NEW", // NEW, DLD tai ALL
-          "pankkiyhteys_tunnus"   => 1, //$pankkiyhteys["tunnus"],
+          "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
           "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
         );
 
@@ -187,6 +187,38 @@ if ($tee == "") {
         $tiliote_tiedostot = sepa_download_file_list($params_tito);
         unset($params_ktl);
 	unset($params_tito);
+
+	// Tilin saldo (kuten selainkäyttöliittymän "Tilin saldo" -laatikko): haetaan vain jos
+	// pankkiyhteydellä on hae_saldo = 1, ja vain pankeilta jotka sen tukevat (OP, POP).
+	// Haetaan ennen kuin tarkistetaan onko uusia aineistoja, jotta saldo tulostuu myös silloin:
+	$saldo = hae_tilin_saldo(array(
+	  "pankkiyhteys_tunnus"   => $pankkiyhteys["tunnus"],
+	  "pankkiyhteys_salasana" => $sepa_pankkiyhteys_salasana
+	));
+
+	if ($saldo) {
+		echo "Tilin saldo: {$saldo['saldo']} {$saldo['valuutta']}";
+
+		// Käytettävissä oleva saldo yriti.maksulimitiksi, samaan tapaan kuin tiliotteen
+		// saldotietue (T40) sen päivittää (inc/tiliote.inc). Vain jos pankki kertoi
+		// käytettävissä olevan saldon (POP Pankki) ja tili tunnistettiin:
+		if (isset($saldo['kaytettavissa']) and !empty($saldo['yriti_tunnus'])) {
+			$_maksulimitti = round($saldo['kaytettavissa'], 2);
+			$_muuttaja = empty($kukarow['kuka']) ? 'pankkiyhteys' : $kukarow['kuka'];
+
+			$query = "UPDATE yriti SET
+			          maksulimitti = '{$_maksulimitti}',
+			          muutospvm    = now(),
+			          muuttaja     = '{$_muuttaja}'
+			          WHERE yhtio  = '{$kukarow['yhtio']}'
+			          AND tunnus   = {$saldo['yriti_tunnus']}";
+			pupe_query($query);
+
+			echo " (maksulimitti päivitetty: {$_maksulimitti})";
+		}
+
+		echo "\n";
+	}
 
 	if (!empty($viite_tiedostot["files"])) {
 		echo "viite_tiedostot:\n";

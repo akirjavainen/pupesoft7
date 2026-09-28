@@ -1402,7 +1402,7 @@ function hae_tilin_saldo($params) {
 
   if (empty($params['pankkiyhteys_tunnus'])) return false;
 
-  $query = "SELECT bic, tilino, iban, hae_saldo
+  $query = "SELECT bic, tilino, iban, hae_saldo, yriti.tunnus yriti_tunnus
             FROM pankkiyhteys
             JOIN yriti ON (yriti.yhtio = pankkiyhteys.yhtio
               AND yriti.bic          = pankkiyhteys.pankki)
@@ -1420,7 +1420,14 @@ function hae_tilin_saldo($params) {
 
     $params["iban"] = $pankkiyhteys['iban'];
 
-    return hae_tilin_saldo_crosskey($params);
+    $saldo = hae_tilin_saldo_crosskey($params);
+
+    if ($saldo) {
+      // Kutsuja voi tallentaa saldon tälle yriti-riville (ks. pankkiyhteys.php, CLI-ajo)
+      $saldo["yriti_tunnus"] = $pankkiyhteys['yriti_tunnus'];
+    }
+
+    return $saldo;
   }
 
   if ($pankkiyhteys['bic'] != 'OKOYFIHH') return false;
