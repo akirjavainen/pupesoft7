@@ -43,12 +43,14 @@ ini_set("include_path", ini_get("include_path") . PATH_SEPARATOR . dirname(__FIL
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-// xmlseclibs / wse-php (allekirjoitukset), kuten p.php:ssä
-require "/var/www/robrichards/vendor/autoload.php";
-
 require "inc/connect.inc";
 require "inc/functions.inc";
 require "inc/pankkiyhteys_functions.inc";
+
+// Crosskey-funktiot ja xmlseclibs ladataan erikseen (ei vaikuta Ahkio-pankkeihin)
+if (!sepa_crosskey_lataa()) {
+  exit(1);
+}
 
 // generoi_private_key_ja_csr() lukee $yhtiorow["maa"] CSR:n Country-kenttää varten --
 // tässä scriptissä ei ole kirjautunutta Pupesoft-sessiota joka täyttäisi sen normaalisti

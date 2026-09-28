@@ -310,6 +310,17 @@ if ($tee == "uusi_sertifikaatti") {
   echo "<td><input type='password' name='salasana'></td>";
   echo "</tr>";
 
+  $_uusi_row = hae_pankkiyhteys((int) $pankkiyhteys_tunnus);
+
+  if (!empty($_uusi_row) and $_uusi_row['pankki'] == 'POPFFI22') {
+    echo "<tr>";
+    echo "<th><label for='transfer_key'>";
+    echo t("Kertakäyttösalasana (vain jos sertifikaatti on jo vanhentunut)");
+    echo "</label></th>";
+    echo "<td><input type='text' name='transfer_key' id='transfer_key' autocomplete='off'></td>";
+    echo "</tr>";
+  }
+
   echo "</table>";
   echo "<br>";
 
@@ -325,10 +336,52 @@ if ($tee == "uusi_sertifikaatti_hae") {
     "bank"                => $pankkiyhteys['bank'],
   );
 
-  $uudet_tunnukset = sepa_renew_certificate($params);
+  $on_crosskey = ($pankkiyhteys['bank'] == 'pop');
+
+  if ($on_crosskey) {
+    // POP Pankki (Crosskey): uusinta allekirjoitetaan nykyisellä sertifikaatilla. Jos sertifikaatti
+    // on jo vanhentunut, pankilta saatu uusi kertakäyttösalasana annetaan transfer_keyksi
+    $uudet_tunnukset = false;
+
+    if (sepa_crosskey_lataa()) {
+      ob_start();
+      $uudet_tunnukset = sepa_get_certificate_crosskey(array(
+        "pankkiyhteys_tunnus"   => $pankkiyhteys_tunnus,
+        "pankkiyhteys_salasana" => $salasana,
+        "transfer_key"          => preg_replace('/\D/', '', empty($transfer_key) ? '' : $transfer_key),
+      ));
+      $_crosskey_viesti = trim(strip_tags(ob_get_clean()));
+
+      if ($_crosskey_viesti != "") {
+        echo "<pre>" . htmlspecialchars($_crosskey_viesti) . "</pre>";
+      }
+    }
+  }
+  else {
+    $uudet_tunnukset = sepa_renew_certificate($params);
+  }
 
   if (!$uudet_tunnukset) {
     virhe("Sertifikaatin uusiminen epäonnistui!");
+  }
+  elseif ($on_crosskey) {
+    // Vain allekirjoitussertifikaatti ja -avain, muut sarakkeet jäävät koskematta
+    $osc = salaa($uudet_tunnukset["signing_certificate"], $salasana);
+    $spk = salaa($uudet_tunnukset["signing_private_key"], $salasana);
+
+    $_temp    = parse_sertificate($uudet_tunnukset["signing_certificate"]);
+    $osc_time = $_temp['valid_to'];
+
+    $query = "UPDATE pankkiyhteys
+              SET signing_certificate          = '{$osc}',
+                  signing_private_key          = '{$spk}',
+                  signing_certificate_valid_to = '{$osc_time}'
+              WHERE yhtio  = '{$kukarow['yhtio']}'
+                AND tunnus = {$pankkiyhteys_tunnus}";
+    pupe_query($query);
+
+    ok("Sertifikaatti päivitetty!");
+    echo "<br>";
   }
   else {
     // Salataan sertifikaatit
@@ -412,8 +465,38 @@ if ($tee == "luo") {
   }
 }
 
+// POP Pankki (Crosskey): sertifikaatti haetaan 16-numeroisella kertakäyttösalasanalla
+// (PIN-kenttä), yksi avainpari, ei salaussertifikaattia eikä pankin sertifikaatteja
+if ($tee == "luo" and $pin != '' and $pankki == 'POPFFI22') {
+  if (!sepa_crosskey_lataa()) {
+    virhe("POP Pankin Crosskey-yhteys ei ole käytettävissä tällä palvelimella");
+    $tunnukset_pankista = false;
+  }
+  else {
+    ob_start();
+    $tunnukset_pankista = sepa_get_certificate_crosskey(array(
+      "customer_id"  => $customer_id,
+      "transfer_key" => preg_replace('/\D/', '', $pin),
+    ));
+    $_crosskey_viesti = trim(strip_tags(ob_get_clean()));
+
+    if ($_crosskey_viesti != "") {
+      echo "<pre>" . htmlspecialchars($_crosskey_viesti) . "</pre>";
+    }
+  }
+
+  if (!$tunnukset_pankista) {
+    virhe("Sertifikaatin hakeminen epäonnistui, tarkista kertakäyttösalasana ja asiakastunnus");
+    $tee = "";
+  }
+  else {
+    $signing_private_key = $tunnukset_pankista["signing_private_key"];
+    $tunnukset_pankista["own_signing_certificate"] = $tunnukset_pankista["signing_certificate"];
+  }
+}
+
 // Haetaan sertifikaatti jos PIN on annettu
-if ($tee == "luo" and $pin != '') {
+if ($tee == "luo" and $pin != '' and $pankki != 'POPFFI22') {
   $csr_params = array(
     "company_name" => $company_name,
     "customer_id"  => $customer_id,
@@ -459,6 +542,30 @@ if ($tee == "luo" and $pin == '' and $debug == 1) {
   $tunnukset_pankista["bank_encryption_certificate"] = file_get_contents($_FILES["bank_encryption_certificate"]["tmp_name"]);
   $tunnukset_pankista["bank_root_certificate"] = file_get_contents($_FILES["bank_root_certificate"]["tmp_name"]);
   $tunnukset_pankista["ca_certificate"] = file_get_contents($_FILES["ca_certificate"]["tmp_name"]);
+}
+
+// Tallennetaan POP Pankin (Crosskey) pankkiyhteys: vain allekirjoitusavainpari ja -sertifikaatti,
+// muut sertifikaattikentät jäävät tyhjiksi (NULL)
+if ($tee == "luo" and $pankki == 'POPFFI22') {
+  $spk = salaa($signing_private_key, $salasana);
+  $osc = salaa($tunnukset_pankista["own_signing_certificate"], $salasana);
+
+  $_temp = parse_sertificate($tunnukset_pankista["own_signing_certificate"]);
+  $osc_time = $_temp['valid_to'];
+
+  $query = "INSERT INTO pankkiyhteys SET
+            yhtio                        = '{$kukarow['yhtio']}',
+            pankki                       = '{$pankki}',
+            signing_certificate          = '{$osc}',
+            signing_private_key          = '{$spk}',
+            signing_certificate_valid_to = '{$osc_time}',
+            customer_id                  = '{$customer_id}'";
+  $result = pupe_query($query);
+
+  ok("Pankkiyhteys tallennettu!");
+  echo "<br>";
+
+  $tee = "";
 }
 
 // Tallennetaan pankkiyhteys
@@ -561,6 +668,7 @@ if ($tee == "") {
     echo "<tr>";
     echo "<th><label for='pin'>";
     echo t("Pankilta saatu PIN-koodi");
+    echo "<br><small>" . t("POP Pankki: 16-numeroinen kertakäyttösalasana, molemmat osat peräkkäin") . "</small>";
     echo "</label></th>";
     echo "<td><input type='text' name='pin' id='pin' value='{$pin}'/></td>";
     echo "</tr>";
@@ -670,7 +778,7 @@ if ($tee == "") {
       $toiminnot = array(
         'hae_saldo' => array(
           'nimi'        => 'Hae saldo',
-          'disable_for' => array('NDEAFIHH', 'DABAFIHH', 'HELSFIHH', 'ITELFIHH', 'POPFFI22', 'HANDFIHH'),
+          'disable_for' => array('NDEAFIHH', 'DABAFIHH', 'HELSFIHH', 'ITELFIHH', 'HANDFIHH'),
         ),
         'hae_factoring' => array(
           'nimi'        => 'Hae factoring',
