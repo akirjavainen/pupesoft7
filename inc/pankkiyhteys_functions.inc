@@ -217,17 +217,18 @@ function kasittele_pain_palaute($pain_data) {
   $_ok = array("ACCP", "ACTC", "ACSC", "ACCR", "ACSP");
   $_error = array("RJCT");
 
-  // Status voi tulla näissä elementeissä
-  $_status = array(
-    (string) $xml->{"pain.002.001.02"}->OrgnlGrpInfAndSts->GrpSts,
-    (string) $xml->{"pain.002.001.02"}->TxInfAndSts->TxSts,
-  );
-
-  // Virheviesti voi tulla näissä elementeissä
-  $_message = array(
-    (string) $xml->{"pain.002.001.02"}->OrgnlGrpInfAndSts->StsRsnInf->AddtlStsRsnInf,
-    (string) $xml->{"pain.002.001.02"}->TxInfAndSts->StsRsnInf->AddtlStsRsnInf,
-  );
+  // MUOKKAUS: Poimitaan tila- ja virhekoodit local-name()-XPathilla koko dokumentista sen
+  // sijaan, että haettaisiin kiinteältä $xml->{"pain.002.001.02"}->...-polulta. Ahkion oma,
+  // Samlink-pankeille yhteinen palautemuoto kääri ISO 20022 -sisällön ylimääräisen
+  // "pain.002.001.02"-nimisen solmun sisään (TxInfAndSts suoraan sen alla) -- Crosskey (POP
+  // Pankki) sen sijaan palauttaa pankin OMAN, ISO 20022 -standardin mukaisen pain.002-viestin
+  // suoraan (Document/CstmrPmtStsRpt/OrgnlPmtInfAndSts/TxInfAndSts, ei "pain.002.001.02"
+  // -nimistä solmua ollenkaan). Kiinteät polut aiheuttivat "Attempt to read property on null"
+  // -varoituksia POP Pankin palautteille eivätkä koskaan tunnistaneet niiden tilakoodia --
+  // GrpSts/TxSts/AddtlStsRsnInf ovat samat ISO 20022 -elementit molemmissa muodoissa, vain eri
+  // syvyydessä, ja xpath() ei koskaan varoita vaikka polkua ei löytyisi lainkaan:
+  $_status = array_map('strval', $xml->xpath('//*[local-name()="GrpSts" or local-name()="TxSts"]'));
+  $_message = array_map('strval', $xml->xpath('//*[local-name()="AddtlStsRsnInf"]'));
 
   // Intesect palauttaa arrayn elementeistä jotka matchaa, eli
   // jos joku löytyneistä status elementeistä löytyy ok arraystä,
@@ -243,7 +244,7 @@ function kasittele_pain_palaute($pain_data) {
 
     // Jos meillä oli joku virhekoodi, selitteeseen virheviesti
     $status = t("Virhe");
-    $selite = $_message[0];
+    $selite = $_message[0] ?? '';
   }
   else {
     // Reversesortataan arrayt niin tyhjät menee loppuun
@@ -251,7 +252,7 @@ function kasittele_pain_palaute($pain_data) {
     rsort($_status);
 
     // Jos ei tunnistettu statuskoodia, pistetään koko data selitteeseen
-    $status = $_status[0];
+    $status = $_status[0] ?? '';
     $selite = htmlentities($data);
   }
 
