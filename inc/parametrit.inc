@@ -290,6 +290,12 @@ require "salasanat.php";
 // MUOKKAUS: CLI passthrough:
 if (php_sapi_name() == 'cli') {
   $kukarow['yhtio'] = COMPANY_PUPESOFT;
+  // Ei kirjautunutta käyttäjää CLI-ajossa -- ilman tätä esim. tarkista_oikeus() (functions.inc)
+  // heittää "Undefined array key kuka" -varoituksen, koska sen kysely olettaa $kukarow[kuka]:n
+  // aina olevan asetettu. Ei vastaa mitään oikeaa oikeu-taulun riviä, niin oikeustarkistusten
+  // lopputulos (FALSE) ei muutu -- vain tunnistaa CLI-ajon lokeissa/muuttaja-sarakkeissa siitä,
+  // että ne eivät jää tyhjäksi (esim. inc/tiliote.inc:n yriti.maksulimitti-päivitys):
+  $kukarow['kuka'] = 'cron';
   define("SEPA_PANKKIYHTEYS", true);
  }
 
