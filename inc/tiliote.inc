@@ -14,6 +14,12 @@ if (!isset($toim))                $toim = $tilioteselailu_oikrow['alanimi'];
 if (!isset($selite_maksuavarten)) $selite_maksuavarten = "";
 if (!isset($eiselitetta))         $eiselitetta = 0;
 
+// $tiliotekuitti_oikeu tulee normaalisti tilioteselailu.php:stä (tarkista_oikeus('tilauskasittely/
+// tulosta_tiliotekuitti.php')), jota kautta tätä tiedostoa ei kutsuta CLI-ajossa
+// (pankkiyhteys.php -> kasittele_tiliote_viite()) -- siellä sitä ei siis koskaan asetetakaan.
+// Puuttuessaan oikeutta ei ole, kuten muuallakin tässä tiedostossa ($tilioteselailu_oikrow):
+if (!isset($tiliotekuitti_oikeu)) $tiliotekuitti_oikeu = false;
+
 $tunnus = mb_substr($tietue, 0, 3);
 
 // Kaikkien tietueiden aineistotunnus on T.
@@ -523,6 +529,14 @@ if ($tunnus != 'T11' and $tunnus != 'T81' and $maksu == 1) {
       echo "<font class='message'>".t("Tili, rahatili, kulutili tai tilin valuutta puuttuu/virheellinen")."!</font><br>\n";
     }
 
+    // Nollataan aina tässä, ennen kyselyä: tämä tiedosto require()taan uudelleen jokaiselle
+    // tiliotedata-riville samassa PHP-ajossa (kasittele_tiliote_viite()), eikä $tiliointirow
+    // muuten tyhjene rivien välillä. Ilman nollausta juuri käsittelemättömän rivin (jolla
+    // $tiliotedataka on "0000-00-00" ja tätä kyselyä siis EI tehdä, koska ei ole mitään
+    // tiliöintiä vielä haettavaksi) alla oleva "Jos tämä on selvittelyssä" -tarkistus
+    // (ks. alempana) käyttäisi EDELLISEN, täysin eri tapahtuman rivin tiliöintiä:
+    $tiliointirow = array();
+
     if ($tiliotedataka != '0000-00-00') {
       $query = "SELECT tiliointi.tilino tilino, tili.nimi nimi, concat_ws('@',korjattu, korjausaika) korjattu, ltunnus
                 FROM tiliointi
@@ -547,7 +561,7 @@ if ($tunnus != 'T11' and $tunnus != 'T81' and $maksu == 1) {
   echo "<td name='td_{$td_perheid}' class='$class'></td><td name='td_{$td_perheid}' class='$class'>";
 
   //Jos tämä on selvittelyssä, niin annetaan mahdollisuus suorittaa!
-  if (isset($tiliointirow) and $kuitattu_checked == ''
+  if (isset($tiliointirow['korjattu']) and $kuitattu_checked == ''
     and ($tiliointirow['korjattu'] == "0000-00-00 00:00:00"
       or $tiliointirow['korjattu'] == "@0000-00-00 00:00:00")
     and ($tiliointirow['tilino'] == $yhtiorow['selvittelytili']
