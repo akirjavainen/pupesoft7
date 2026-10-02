@@ -60,6 +60,16 @@ function sepa_crosskey_file_type($file_type) {
     "C2BN" => "0130", // SPSR, maksuaineiston palautesanoma (pain.002)
     "NDCORPAYS" => "0100", // sepa.php / pankkiyhteys_send.inc lähettävät maksuaineiston näillä
     "NDCORPAYL" => "0130",
+    // "LAHLASKUT" on harhaanjohtava nimi (Nordean "lähtevät verkkolaskut" -koodi, EFAK/0800):
+    // pankkiyhteys_send.inc:n "LAHLASKUT"-haara ei lähetä verkkolaskuja ollenkaan, vaan
+    // noutaa dataout/{pankki}_error/laskutus*-kansiosta tiedostot, joita YKSIN raportit/
+    // tilisiirto.php kirjoittaa sinne ("laskutus_tilisiirto_*.xml") -- ja ne ovat tavallisia
+    // yksittäisiä SEPA-maksuja (pain.001.001.02, ks. raportit/includes/class-sepa.php),
+    // esim. palkanmaksu. Oikea koodi on siis sama SCCT/0100 kuin C2BL/NDCORPAYS:llä:
+    "LAHLASKUT" => "0100",
+    // HAELASKUT on sen sijaan oikea verkkolasku: pankkiyhteys_tilioteviite.inc noutaa sillä
+    // oikeita saapuvia Finvoice-aineistoja pankista (DownloadFile, ei tämä upload-reitti):
+    "HAELASKUT" => "0820", // EFAH, saapuvat verkkolaskut
   );
 
   $file_type = trim($file_type);
