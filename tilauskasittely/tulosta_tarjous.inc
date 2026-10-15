@@ -12,6 +12,8 @@ if (in_array("gd", get_loaded_extensions())) {
   elseif (include_once "Barcode.php");
 }
 
+require_once dirname(dirname(__FILE__))."/inc/gwp_functions.inc"; // MUOKKAUS: GWP A1-A3
+
 // Haetaan asiakkaan kieli
 $querykiel = "SELECT kieli FROM asiakas WHERE yhtio = '$kukarow[yhtio]' and ytunnus = '$laskurow[ytunnus]'";
 $kielresult = pupe_query($querykiel);
@@ -2278,6 +2280,11 @@ if (!function_exists('tulosta_tarjous')) {
       file_get_contents("http://localhost/hinnasto/printable.php?pupe_order=$otunnus&pdf_write=1");
     }
 
+    // MUOKKAUS: GWP A1-A3 -yhteissumma tarjoukseen. Ikkunalaskuri laskee tarjouksen
+    // ikkuna- ja ovirivien hiilijalanjäljen; virhe tai aikakatkaisu ei estä tulostusta
+    // (GWP-rivi vain jätetään pois). Ks. inc/gwp_functions.inc.
+    gwp_aseta_pdf_yhteenveto($otunnus);
+
     $querykiel = "SELECT kieli FROM asiakas WHERE yhtio = '$kukarow[yhtio]' and tunnus = '$laskurow[liitostunnus]'";
     $kielresult = pupe_query($querykiel);
     $kielrow = mysqli_fetch_array($kielresult);
@@ -2492,7 +2499,8 @@ if (!function_exists('alvierittely')) {
   function alvierittely($pdf_tarjous, $page_tarjous, $sivu, $laskurow, $total_tarjous=0, $kassa_ale = '', $verolliset_verottomat_hinnat = '', $kala = 145) {
     global $yhtiorow, $kukarow, $toim, $rectparam, $norm, $pieni, $summa, $arvo, $kieli, $boldi;
 
-    if ($kala <= 145) {
+    // MUOKKAUS: + gwp_pdf_tila() = GWP A1-A3 -riveille varattu tila (inc/gwp_functions.inc):
+    if ($kala <= 145 + gwp_pdf_tila()) {
 
       if ($kassa_ale == '') {
         list($page_tarjous, $sivu) = loppu_tarjous($pdf_tarjous, $laskurow, $kieli, $page_tarjous, $sivu, 0, $total_tarjous);
@@ -2757,6 +2765,20 @@ if (!function_exists('alvierittely')) {
       $oikpos = $pdf_tarjous->mb_strlen(sprintf('%.2f', $total_tarjous), $boldi);
       $pdf_tarjous->draw_text(540-$oikpos, $kala+20, sprintf('%.2f', $total_tarjous), $page_tarjous[$sivu], $boldi);
       $pdf_tarjous->draw_text(550, $kala+20, $laskurow['valkoodi'], $page_tarjous[$sivu], $boldi);
+    }
+
+    // MUOKKAUS: GWP A1-A3 -yhteissumma ALV-erittelyn alle (ks. inc/gwp_functions.inc).
+    // Tila on varattu sivunvaihtorajassa funktion alussa (gwp_pdf_tila()).
+    $gwp_tekstit = gwp_pdf_tekstit($kieli);
+    if (!empty($gwp_tekstit)) {
+      $kala -= 15;
+      $pdf_tarjous->draw_text(350, $kala, $gwp_tekstit['otsikko'], $page_tarjous[$sivu], $norm);
+      $gwp_arvo = $gwp_tekstit['arvo']." ".$gwp_tekstit['yksikko'];
+      $oikpos = $pdf_tarjous->mb_strlen($gwp_arvo, $norm);
+      $pdf_tarjous->draw_text(575-$oikpos, $kala, $gwp_arvo, $page_tarjous[$sivu], $norm);
+      $kala -= 10;
+      $pdf_tarjous->draw_text(350, $kala, $gwp_tekstit['huomautus'], $page_tarjous[$sivu], $pieni);
+      gwp_pdf_merkitse_tulostetuksi();
     }
 
     return array($page_tarjous, $sivu, $kala);

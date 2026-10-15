@@ -194,6 +194,13 @@ else {
 
 $riresult = pupe_query($query);
 
+// MUOKKAUS: GWP A1-A3 -yhteissumma tilausvahvistukseen. Ikkunalaskuri laskee tilauksen
+// ikkuna- ja ovirivien hiilijalanjäljen; virhe tai aikakatkaisu ei estä tulostusta
+// (GWP-rivi vain jätetään pois). Haetaan ennen kuin tunnus vaihdetaan alla
+// vanhatunnukseksi. Ks. inc/gwp_functions.inc.
+require_once dirname(dirname(__FILE__))."/inc/gwp_functions.inc";
+gwp_aseta_pdf_yhteenveto($laskurow["tunnus"]);
+
 // tämä siksi koska halutaan alkuperäisen tilauksen tilausnumero pdf-filuun.
 if (($laskurow["tunnusnippu"] > 0 or $yhtiorow["tilausvahvistus_lahetys"] == 1) and $laskurow['vanhatunnus'] > 0) {
   $laskurow["tunnus"] = $laskurow['vanhatunnus'];
@@ -266,6 +273,9 @@ foreach ($laheterows as $row) {
 // Loppulaatikot
 $params_lahete["tots"] = 1;
 $params_lahete = loppu_lahete($params_lahete);
+
+// MUOKKAUS: GWP-yhteenveto ei saa siirtyä saman ajon seuraaviin dokumentteihin:
+gwp_aseta_pdf_yhteenveto(0);
 
 if (mb_strpos($_SERVER['SCRIPT_NAME'], "tulostakopio.php") === FALSE and $yhtiorow['tilausvahvistus_tallenna'] == 'K') {
   $tilausvahvistus_tallenna = "/tmp/Tilausvahvistus-".md5(uniqid(mt_rand(), true)).".pdf";

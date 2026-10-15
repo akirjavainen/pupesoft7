@@ -3,6 +3,8 @@
 if (@include_once "pdflib/phppdflib.class.php");
 else include_once "phppdflib.class.php";
 
+require_once dirname(dirname(__FILE__))."/inc/gwp_functions.inc"; // MUOKKAUS: GWP A1-A3
+
 if ($kieli == '') {
   $querykiel = "SELECT kieli
                 FROM asiakas
@@ -4004,7 +4006,8 @@ if (!function_exists('alvierittely_lahete')) {
 
     $sivu_vaihtui = FALSE;
 
-    if ($kala <= 150) {
+    // MUOKKAUS: + GWP A1-A3 -riveille varattu tila tilausvahvistuksella (inc/gwp_functions.inc):
+    if ($kala <= 150 + ((isset($tyyppi) and $tyyppi == 'TILAUSVAHVISTUS') ? gwp_pdf_tila() : 0)) {
       $sivu++;
 
       $ei_otsikoita = "EI";
@@ -4212,6 +4215,22 @@ if (!function_exists('alvierittely_lahete')) {
       $oikpos = $pdf->mb_strlen(sprintf('%.2f', $summa - $pyoristys), $boldi);
       $pdf->draw_text($vasen2-$oikpos, $kala, sprintf('%.2f', $summa - $pyoristys),     $thispage, $boldi);
       $pdf->draw_text($vasen2+3, $kala, $laskurow["valkoodi"],                 $thispage, $boldi);
+    }
+
+    // MUOKKAUS: GWP A1-A3 -yhteissumma tilausvahvistuksen ALV-erittelyn alle
+    // (ks. inc/gwp_functions.inc). Vain tilausvahvistukselle, ei lähetteille.
+    if (isset($tyyppi) and $tyyppi == 'TILAUSVAHVISTUS') {
+      $gwp_tekstit = gwp_pdf_tekstit($kieli);
+      if (!empty($gwp_tekstit)) {
+        $kala -= 15;
+        $pdf->draw_text($vasen1, $kala, $gwp_tekstit['otsikko'], $thispage, $norm);
+        $gwp_arvo = $gwp_tekstit['arvo']." ".$gwp_tekstit['yksikko'];
+        $oikpos = $pdf->mb_strlen($gwp_arvo, $norm);
+        $pdf->draw_text($vasen2+20-$oikpos, $kala, $gwp_arvo, $thispage, $norm);
+        $kala -= 10;
+        $pdf->draw_text($vasen1, $kala, $gwp_tekstit['huomautus'], $thispage, $pieni);
+        gwp_pdf_merkitse_tulostetuksi();
+      }
     }
 
     // Luodaan palautettavat
