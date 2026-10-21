@@ -26701,7 +26701,7 @@ if (!function_exists("lisaa_rivi")) {
     $rekisterinumero    = (!empty($parametrit['rekisterinumero']))    ? $parametrit['rekisterinumero'] : '';     // rekisterinumero
 
     for ($alepostfix = 1; $alepostfix <= $yhtiorow['myynnin_alekentat']; $alepostfix++) {
-      $ale_temp = str_replace(',', '.', $parametrit['ale'.$alepostfix]); // MUOKKAUS: deprecated -> []
+      $ale_temp = str_replace(',', '.', (string) ($parametrit['ale'.$alepostfix] ?? '')); // MUOKKAUS: deprecated -> [], puuttuva ale-kenttä = tyhjä (PHP 8.1+)
       ${'ale'.$alepostfix} = (!empty($ale_temp)) ? $ale_temp : "";
     }
 
