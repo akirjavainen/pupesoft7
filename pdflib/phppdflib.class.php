@@ -214,6 +214,9 @@ class pdffile {
 
     // Käännetään merkistö LATIN:iksi PDF-library ei hanskaa UTF-8:ia
     if (PUPE_UNICODE and $iconvdone != "DONE") {
+      // MUOKKAUS: HTML-entiteetit kirjaimiksi:
+      $text = html_entity_decode((string) $text, ENT_QUOTES | ENT_HTML5, "UTF-8");
+
       $text = str_replace("″", "\"", $text);
       $text = str_replace("′", "'", $text);
 
@@ -1128,6 +1131,9 @@ class pdffile {
   function draw_paragraph($top, $left, $bottom, $right, $text, $page, $param = array()) {
     // Käännetään merkistö LATIN:iksi PDF-library ei hanskaa UTF-8:ia
     if (PUPE_UNICODE) {
+      // MUOKKAUS: HTML-entiteetit kirjaimiksi, ks. draw_text():
+      $text = html_entity_decode((string) $text, ENT_QUOTES | ENT_HTML5, "UTF-8");
+
       $text = str_replace("″", "\"", $text);
       $text = str_replace("′", "'", $text);
 
@@ -1224,12 +1230,14 @@ class pdffile {
     default :
       if (substr($desc, 0, 1) == '#') {
         // Parse out a hex triplet
+        // (previously used eval("return ord(\"\\x$v\");") to do this — hexdec()
+        // does the same conversion without invoking the PHP parser on input data)
         $v = substr($desc, 1, 2);
-        $r['red'] = eval("return ord(\"\\x$v\");") / 255;
+        $r['red'] = hexdec($v) / 255;
         $v = substr($desc, 3, 2);
-        $r['green'] = eval("return ord(\"\\x$v\");") / 255;
+        $r['green'] = hexdec($v) / 255;
         $v = substr($desc, 5, 2);
-        $r['blue'] = eval("return ord(\"\\x$v\");") / 255;
+        $r['blue'] = hexdec($v) / 255;
       } else {
         // Error condition?
         $this->_push_error(6012, "Unparsable color identifier: $desc");
