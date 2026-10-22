@@ -1102,9 +1102,14 @@ if (!function_exists("tee_jt_tilaus")) {
                   $kysely  = mb_substr($kysely, 0, -1);
                   $kysely .= " WHERE yhtio='$kukarow[yhtio]' and tilausrivitunnus='$lisrow[tunnus]'";
                   $insres2 = pupe_query($kysely);
+                }
 
-                  // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi:
-                  if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=" . $orig_laskurow["tunnus"] . "&to_order=$id");
+                // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi, tämän rivin. Lisätiedoista
+                // riippumatta (ennen vain, jos rivillä oli lisätietoja), ja rivitunnuksella,
+                // koska kommenttiin on yllä lisätty "Alkuperäinen tilaus", eikä rivi enää
+                // löydy tekstin perusteella:
+                if (isset($orig_laskurow["tunnus"])) {
+                  jwio_kopioi_mittakuvat($orig_laskurow["tunnus"], $id, array($lisatty_tun => $lisataanrow["tunnus"]));
                 }
 
                 // jos alkuperäinen rivi oli suoratoimitettu asiakkaalle, merkataan rivit kerätyksi ja toimitetuksi

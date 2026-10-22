@@ -2275,13 +2275,9 @@ if (!function_exists('tulosta_tarjous')) {
 
     $laskurow['tunnus'] = $otunnus;
 
-    // MUOKKAUS: PDF-mittakuvien tallennus verkkolevylle. Taustalla, kuten
-    // tilaus_myynti.php:ssä: PDF:ien teko ja siirto pilveen (rclone) kestää, eikä tarjouksen
-    // tulostus tarvitse niitä. curl odottaa printable.php:n loppuun asti, exec() palaa heti:
-    if ($kukarow["yhtio"] == "sapu" && file_exists("../../hinnasto")) {
-      $pdf_write_url = "http://localhost/hinnasto/printable.php?pupe_order=" . (int) $otunnus . "&pdf_write=1";
-      exec("curl -s -o /dev/null --max-time 900 " . escapeshellarg($pdf_write_url) . " > /dev/null 2>&1 &");
-    }
+    // MUOKKAUS: tarjouksen ja mittakuvien PDF:t verkkolevylle, taustalla. Ks.
+    // jwio_tallenna_pdf_taustalla() inc/functions.inc:ssä:
+    jwio_tallenna_pdf_taustalla($otunnus);
 
     // MUOKKAUS: GWP A1-A3 -yhteissumma tarjoukseen. Ikkunalaskuri laskee tarjouksen
     // ikkuna- ja ovirivien hiilijalanjäljen; virhe tai aikakatkaisu ei estä tulostusta

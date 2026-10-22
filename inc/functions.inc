@@ -35970,5 +35970,112 @@ if (!function_exists('korjaa_rivinumerointi')) {
   }
 }
 
+// MUOKKAUS: JWIO, Ikkunalaskurin (/hinnasto/) kutsut. Kansio tarkistetaan tämän tiedoston
+// sijainnista eikä suhteellisella polulla ("../../hinnasto"), joka katsotaan avatun sivun
+// kansiosta: Pupesoftin juuressa olevalta sivulta se osoitti verkkojuuren ulkopuolelle,
+// eikä mitään tehty, ilman että siitä kerrottiin.
+if (!function_exists("jwio_hinnasto_kaytossa")) {
+  function jwio_hinnasto_kaytossa() {
+    return file_exists(dirname(dirname(__DIR__)) . "/hinnasto");
+  }
+}
+
+if (!function_exists("jwio_kopioi_mittakuvat")) {
+  // Kopioi ikkunoiden ja ovien mittakuvat (jwio_orders) tarjouksesta tai tilauksesta
+  // uudelle tilaukselle, hinnasto/order.php:llä.
+  //
+  // $rivikartta: uuden rivin tunnus => alkuperäisen rivin tunnus, kopioinnin tekijän
+  // tiedossa olevat parit (lisaarivi.inc:n $lisatyt_rivit tai INSERT:n tunnus). Riveillä ei
+  // ole muuta yhteistä tunnistetta: ilman paria rivi etsitään tekstien perusteella, mikä ei
+  // löydä riviä, jonka nimitys tai kommentti muuttui kopioitaessa, ja antaa kahdelle
+  // samannimiselle riville saman kuvan.
+  //
+  // Odottaa kopioinnin loppuun, koska tilauksen seuraava näkymä tarvitsee kuvat. Epäonnistuminen
+  // kirjataan PHP:n virhelokiin.
+  function jwio_kopioi_mittakuvat($otunnus, $utunnus, $rivikartta = array()) {
+    if (!jwio_hinnasto_kaytossa()) return;
+
+    $otunnus = (int) $otunnus;
+    $utunnus = (int) $utunnus;
+    if ($otunnus <= 0 or $utunnus <= 0) return;
+
+    $kartta = array();
+
+    foreach ((array) $rivikartta as $uusi => $vanha) {
+      if ((int) $uusi > 0 and (int) $vanha > 0) $kartta[(int) $uusi] = (int) $vanha;
+    }
+
+    $konteksti = stream_context_create(array(
+      "http" => array(
+        "method"        => "POST",
+        "header"        => "Content-Type: application/x-www-form-urlencoded\r\n",
+        "content"       => http_build_query(array("row_map" => json_encode($kartta))),
+        "timeout"       => 300,
+        "ignore_errors" => true,
+      )
+    ));
+
+    $vastaus = @file_get_contents(
+      "http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus",
+      false,
+      $konteksti
+    );
+
+    if ($vastaus === false) {
+      error_log("JWIO: mittakuvien kopiointi $otunnus -> $utunnus epäonnistui, hinnasto/order.php ei vastannut.");
+    }
+  }
+}
+
+if (!function_exists("jwio_tallenna_pdf_taustalla")) {
+  // Tallentaa tarjouksen tai tilausvahvistuksen PDF:t (Pupesoftin tuloste ja Ikkunalaskurin
+  // mittakuvat) verkkolevylle hinnasto/printable.php:n pdf_write:llä, taustalla: PDF:ien
+  // teko ja siirto pilveen (rclone) kestää, eikä käyttäjän tarvitse odottaa. curl odottaa
+  // printable.php:n loppuun asti, exec() palaa heti.
+  //
+  // printable.php hakee Pupesoftin tulosteen itse (tulostakopio.php), käyttäjän
+  // istunnolla, joten keksi annetaan curlille mukaan. Tiedostosta eikä komentoriviltä,
+  // ettei se näy prosessilistassa, ja tiedosto poistetaan heti haun jälkeen.
+  function jwio_tallenna_pdf_taustalla($otunnus) {
+    global $kukarow;
+
+    if ($kukarow["yhtio"] != "sapu" or !jwio_hinnasto_kaytossa()) return;
+
+    // Kun printable.php itse hakee tarjouksen (tulostakopio.php -> tulosta_tarjous()), ei
+    // aloiteta uutta tallennusta, joka hakisi taas:
+    if (!empty($_REQUEST["jwio_pdf_fetch"])) return;
+
+    $otunnus = (int) $otunnus;
+    if ($otunnus <= 0) return;
+
+    $url = "http://localhost/hinnasto/printable.php?pupe_order=$otunnus&pdf_write=1";
+    $komento = "curl -s -o /dev/null --max-time 900";
+
+    $session = isset($_COOKIE["pupesoft_session"]) ? (string) $_COOKIE["pupesoft_session"] : "";
+    $keksitiedosto = "";
+
+    if (preg_match("/^[A-Za-z0-9]{10,64}$/", $session)) {
+      $keksitiedosto = tempnam(sys_get_temp_dir(), "jwio_pdf_");
+
+      if ($keksitiedosto !== false) {
+        chmod($keksitiedosto, 0600);
+        file_put_contents($keksitiedosto, "Cookie: pupesoft_session=$session\n");
+        $komento .= " -H @" . escapeshellarg($keksitiedosto);
+      }
+      else {
+        $keksitiedosto = "";
+      }
+    }
+
+    $komento .= " " . escapeshellarg($url);
+
+    if ($keksitiedosto != "") {
+      $komento = "(" . $komento . "; rm -f " . escapeshellarg($keksitiedosto) . ")";
+    }
+
+    exec($komento . " > /dev/null 2>&1 &");
+  }
+}
+
 include_once("php7_compatibility_functions.php"); // MUOKKAUS: PHP7/8 yhteensopivuus
 

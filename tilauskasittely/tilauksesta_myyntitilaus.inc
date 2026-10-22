@@ -425,6 +425,10 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
               ORDER BY tilausrivi.tilaajanrivinro"; // MUOKKAUS: Kopioidaan rivit käyttäjän määrittämässä järjestyksessä
     $copresult = pupe_query($query);
 
+    // MUOKKAUS: JWIO, mistä alkuperäisestä rivistä mikin uusi rivi tehtiin (uusi => vanha),
+    // mittakuvien kopiointia varten. Ks. jwio_kopioi_mittakuvat():
+    $jwio_rivikartta = array();
+
     while ($coprivirow = mysqli_fetch_array($copresult)) {
 
       $query = "SELECT *
@@ -647,6 +651,11 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
 
       $lisatyt_rivit = array_merge($lisatyt_rivit1, $lisatyt_rivit2);
 
+      // MUOKKAUS: JWIO, ks. $jwio_rivikartta yllä:
+      foreach ($lisatyt_rivit as $jwio_uusi_rivi) {
+        $jwio_rivikartta[(int) $jwio_uusi_rivi] = (int) $coprivirow["tunnus"];
+      }
+
       if ($varataan_sa_revert) {
         $varataan_saldoa = "";
       }
@@ -800,7 +809,8 @@ if (!function_exists("tilauksesta_myyntitilaus")) {
       $tilauksesta_myyntitilaus .= "<br><br>$linkkilisa<br>";
     }
 
-    if (file_exists("../../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus"); // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi
+    // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi, rivi riviltä:
+    jwio_kopioi_mittakuvat($otunnus, $utunnus, $jwio_rivikartta);
     return $tilauksesta_myyntitilaus;
   }
 }

@@ -1451,8 +1451,9 @@ if ($tee == 'MONISTA') {
       $insres  = pupe_query($kysely, $GLOBALS["link"]);
       $utunnus = mysqli_insert_id($GLOBALS["link"]);
 
-      // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi:
-      if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus");
+      // MUOKKAUS: ikkunoiden/ovien mittakuvat kopioidaan vasta rivien jälkeen, alempana.
+      // Tästä uudesta tilauksesta alkuperäiseen, ja sen rivit (uusi => vanha):
+      $jwio_monistetut[$utunnus] = array("alkuperainen" => $otunnus, "rivit" => array());
 
       $query = "SELECT *
                 FROM lasku
@@ -1884,6 +1885,11 @@ if ($tee == 'MONISTA') {
         $insres = pupe_query($kysely, $GLOBALS["link"]);
         $insid = mysqli_insert_id($GLOBALS["link"]);
 
+        // MUOKKAUS: JWIO, mittakuvia varten, ks. $jwio_monistetut:
+        if (isset($jwio_monistetut[$utunnus])) {
+          $jwio_monistetut[$utunnus]["rivit"][(int) $insid] = (int) $rivirow["tunnus"];
+        }
+
         //Kopioidaan tilausrivin lisatiedot
         $query = "SELECT *
                   FROM tilausrivin_lisatiedot
@@ -2211,8 +2217,13 @@ if ($tee == 'MONISTA') {
     }
   }
 
-  // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi:
-  if (file_exists("../hinnasto")) file_get_contents("http://localhost/hinnasto/order.php?from_offer=$otunnus&to_order=$utunnus");
+  // MUOKKAUS: ikkunoiden/ovien mittakuvien kopiointi, jokaiselle monistetulle tilaukselle
+  // (ennen vain viimeiselle), rivi riviltä:
+  if (isset($jwio_monistetut) and is_array($jwio_monistetut)) {
+    foreach ($jwio_monistetut as $jwio_uusi => $jwio_monistettu) {
+      jwio_kopioi_mittakuvat($jwio_monistettu["alkuperainen"], $jwio_uusi, $jwio_monistettu["rivit"]);
+    }
+  }
   $tee = ''; //mennään alkuun
 
   // MUOKKAUS: lisatty meta refresh:
