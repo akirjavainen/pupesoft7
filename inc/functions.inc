@@ -35976,7 +35976,13 @@ if (!function_exists('korjaa_rivinumerointi')) {
 // eikä mitään tehty, ilman että siitä kerrottiin.
 if (!function_exists("jwio_hinnasto_kaytossa")) {
   function jwio_hinnasto_kaytossa() {
-    return file_exists(dirname(dirname(__DIR__)) . "/hinnasto");
+    // Verkkojuuresta (sama kansio, johon suhteellinen polku Pupesoftin sivuilta osoitti) tai,
+    // komentoriviltä ajettaessa, tämän tiedoston sijainnista. __DIR__ on todellinen polku,
+    // joten pelkkänä se ei löytäisi hinnastoa, jos pupesoft-kansio on symbolinen linkki:
+    $juuri = isset($_SERVER["DOCUMENT_ROOT"]) ? rtrim((string) $_SERVER["DOCUMENT_ROOT"], "/") : "";
+
+    return ($juuri != "" and file_exists($juuri . "/hinnasto"))
+      or file_exists(dirname(dirname(__DIR__)) . "/hinnasto");
   }
 }
 
