@@ -2291,9 +2291,13 @@ if ($tee == "VALMIS" and ($muokkauslukko == "" or $toim == "PROJEKTI")) {
       }
     }
 
-    // MUOKKAUS: PDF-mittakuvien tallennus verkkolevylle:
+    // MUOKKAUS: PDF-mittakuvien tallennus verkkolevylle. Taustalla: PDF:ien teko ja
+    // siirto pilveen (rclone) kestää, eikä mikään tässä tarvitse niitä, joten käyttäjän
+    // ei tarvitse odottaa. curl odottaa printable.php:n loppuun asti, exec() palaa heti
+    // (tulosteet /dev/null:iin ja & perään):
     if ($kukarow["yhtio"] == "sapu" && file_exists("../../hinnasto")) {
-      file_get_contents("http://localhost/hinnasto/printable.php?pupe_order=" . $laskurow["tunnus"] . "&pdf_write=1");
+      $pdf_write_url = "http://localhost/hinnasto/printable.php?pupe_order=" . (int) $laskurow["tunnus"] . "&pdf_write=1";
+      exec("curl -s -o /dev/null --max-time 900 " . escapeshellarg($pdf_write_url) . " > /dev/null 2>&1 &");
     }
   }
 
