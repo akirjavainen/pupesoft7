@@ -340,4 +340,12 @@ if ($tee == "") {
 require 'inc/footer.inc';
 
 // Flushataan bufferi tässä, koska cookiet on nyt done.
-ob_end_flush();
+// MUOKKAUS: vain tämän tiedoston alussa aloitettu bufferi. parametrit.inc kytkee
+// zlib.output_compressionin päälle tuon bufferin jälkeen, jolloin pakkauksen bufferi on
+// päällimmäisenä, eikä sitä voi päättää kesken skriptin ("Failed to send buffer of zlib
+// output compression"). Silloin PHP tyhjentää bufferit itse skriptin lopussa, eli heti tästä.
+$ob_kasittelijat = ob_list_handlers();
+
+if (count($ob_kasittelijat) > 0 and end($ob_kasittelijat) == "default output handler") {
+  ob_end_flush();
+}

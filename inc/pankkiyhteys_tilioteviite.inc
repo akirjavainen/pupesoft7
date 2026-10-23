@@ -7,6 +7,7 @@ if ($tee == "hae_aineistot") {
   $factoring_tiliote_references = isset($factoring_tiliote_references) ? $factoring_tiliote_references : array();
   $factoring_viite_references = isset($factoring_viite_references) ? $factoring_viite_references : array();
   $finvoice_references = isset($finvoice_references) ? $finvoice_references : array();
+  if (!isset($kasittele_aineistot)) $kasittele_aineistot = NULL; // MUOKKAUS: isset()
 
   if (count($tiliote_references) +
     count($viite_references) +
