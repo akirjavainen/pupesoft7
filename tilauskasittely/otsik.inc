@@ -4183,8 +4183,8 @@ if (isset($jatka)) {
   $nypaiva  = date("N");
 
   if ($toimvko != '') {
-    // MUOKKAUS: isset():
-    if (isset($apiro["toimaika"])) {
+    // MUOKKAUS: isset() ($apiro -> $apuro, kirjoitusvirheen takia tallennettua toimitusaikaa ei verrattu):
+    if (isset($apuro["toimaika"])) {
       $toimvuosilaskulla = date("Y", strtotime($apuro["toimaika"]));
       $toimvkolaskulla = date("W", strtotime($apuro["toimaika"]));
       $toimvkopvalaskulla = $apuro["toimvko"];
@@ -4206,6 +4206,15 @@ if (isset($jatka)) {
     }
     elseif ($toimvuosilaskulla > $nyvuosi) {
       $nyvuosi += 1;
+    }
+
+    // MUOKKAUS: jos päivämääräkentissä on päivä, joka on samalla (ISO 8601) viikolla kuin annettu
+    // viikko (esim. valittu kalenterista), käytetään sen päivän viikkovuotta eikä arvata vuotta:
+    if ($toimvv != '' and $toimkk != '' and $toimpp != '' and checkdate((int) $toimkk, (int) $toimpp, (int) $toimvv)) {
+      $_toimpvm_aika = mktime(12, 0, 0, (int) $toimkk, (int) $toimpp, (int) $toimvv);
+      if ((int) date("W", $_toimpvm_aika) == (int) $toimvko) {
+        $nyvuosi = (int) date("o", $_toimpvm_aika);
+      }
     }
 
     $toimvko = mb_strlen($toimvko) == 1 ? "0".$toimvko : $toimvko;
