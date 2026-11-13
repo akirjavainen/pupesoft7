@@ -57,7 +57,6 @@ if (!function_exists('gwp_aseta_pdf_yhteenveto')) {
       curl_setopt($ch, CURLOPT_TIMEOUT, $aikaraja);
       $vastaus = curl_exec($ch);
       $virhe = curl_error($ch);
-      curl_close($ch);
 
       if ($vastaus === false) {
         error_log("GWP: hinnasto/gwp.php ei vastannut (tilaus $otunnus): $virhe");
