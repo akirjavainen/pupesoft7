@@ -3882,7 +3882,9 @@ if ($tila == "" and !isset($jatka)) {
 
     // MUOKKAUS: lisatty:
     $vakiotekstit = "";
-    if (file_exists("../../config/includes/pupesoft-comments.php")) include("../../config/includes/pupesoft-comments.php");
+    // Vakiotekstit: koodi common-kansiossa, yrityskohtaiset tekstit config/includes/pupesoft-comments.json
+    if (file_exists("../../common/pupesoft-comments.php")) include("../../common/pupesoft-comments.php");
+    else $vakiotekstit = "</td></tr>";
 
     echo "<tr class='otsik_laaja_kommentit' $hiddenlisa2><td>".t("Kommentti")." 1:</td><td><textarea name='comments' id='comments'   rows='10' cols='50'>$srow[comments]</textarea></td><td>".t("tilausvahvistus")." + ".t("keräyslista")." + ".t("valmistus")." + ".t("työmääräys")." + ".t("lähete")." + ".t("tarjous") . $vakiotekstit;
 
