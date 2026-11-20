@@ -49,25 +49,20 @@ if ($type == '0' and substr($tietue, 0, 3) != "\$\$E" and substr($tietue, 0, 3) 
   echo "<th>".t("Tila")."</th></tr>";
 }
 elseif ($type == '3' or $type == 'S') {
-  // ---
-  $tietue = trim($tietue);
+  // MUOKKAUS: BUGIKORJAUS, kentät luetaan merkkipaikoista merkkeinä, ei tavuina. Viiteaineiston
+  // paikat ovat merkkejä (tietue on 90 merkkiä), mutta UTF-8-muotoisessa aineistossa maksajan
+  // nimen Ä ja Ö ovat kaksi tavua, jolloin substr() luki nimen jälkeiset kentät pykälän verran
+  // väärästä kohdasta (summa "paikasta 78", oikaisutunnus summan viimeisestä numerosta).
+  // ISO-8859-1-muotoinen aineisto muunnetaan ensin UTF-8:ksi. Summa: merkit 78-87 sentteinä,
+  // oikaisutunnus: merkki 88 (1 = oikaisu, näytetään negatiivisena).
+  $tietue_merkit = mb_check_encoding($tietue, "UTF-8") ? $tietue : mb_convert_encoding($tietue, "UTF-8", "ISO-8859-1");
 
-  // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos- ja substr-funktioilla, ei kiintealla (77/78) paikalla:
-  if (strrpos($tietue, " ") > 0) {
-    $sum = substr($tietue, strrpos($tietue, " ") + 1);
-  } else {
-    $sum = substr($tietue, strrpos($tietue, "1A") + 2);
+  $sum = (int) mb_substr($tietue_merkit, 77, 10) / 100;
+
+  if (mb_substr($tietue_merkit, 87, 1) == '1') {
+    $sum = -$sum;
   }
-  $sum = substr($sum, strpos($sum, "0"));
-  $sum = (float)preg_replace("/[^0-9]/", "", $sum);
-
-  $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MUOKKAUS: BUGIKORJAUS 100 -> 1000
   $viiteaineisto_summa = sprintf('%01.2f', $sum);
-  // ---
-
-  if (substr($tietue, 87, 1) == '1') {
-    $viiteaineisto_summa = sprintf('%.2f', $viiteaineisto_summa * -1);
-  }
 
   $viiteaineisto_viite = ltrim(substr($tietue, 43, 20), "0");
   if ($type == 'S') {
@@ -81,7 +76,7 @@ elseif ($type == '3' or $type == 'S') {
   echo "<td>$viiteaineisto_tilino</td>";
   echo "<td>".pankkipvm(substr($tietue, 15, 6))."</td>";
   echo "<td>".pankkipvm(substr($tietue, 21, 6))."</td>";
-  echo "<td>".substr($tietue, 63, 12)."</td>";
+  echo "<td>".mb_substr($tietue_merkit, 63, 12)."</td>"; // MUOKKAUS: merkkeinä, ks. yllä
   echo "<td align='right'>$viiteaineisto_summa</td>";
   echo "<td>$viiteaineisto_viite</td>";
   echo "<td>";

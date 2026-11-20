@@ -12,7 +12,14 @@
 // S -> factoringrivi, alatyyppi positiossa 88 (numerointi alkaa yhdestä)
 
 $type = substr($tietue, 0, 1);
-$factoring_oikaisutunnus = substr($tietue, 87, 1);
+
+// MUOKKAUS: BUGIKORJAUS, kentät luetaan merkkipaikoista merkkeinä, ei tavuina. Viiteaineiston
+// paikat ovat merkkejä (tietue on 90 merkkiä), mutta UTF-8-muotoisessa aineistossa maksajan
+// nimen Ä ja Ö ovat kaksi tavua, jolloin substr() luki nimen jälkeiset kentät (valuutta,
+// summa, oikaisutunnus) pykälän verran väärästä kohdasta. ISO-8859-1-muotoinen aineisto
+// muunnetaan ensin UTF-8:ksi, jota myös tietokantayhteys käyttää (inc/connect.inc).
+$tietue_merkit = mb_check_encoding($tietue, "UTF-8") ? $tietue : mb_convert_encoding($tietue, "UTF-8", "ISO-8859-1");
+$factoring_oikaisutunnus = mb_substr($tietue_merkit, 87, 1);
 
 if ($type == '0') {
   // print "Tietuetunnus => $type\n";
@@ -37,24 +44,18 @@ elseif ($type == '3' or ($type == 'S' and
     $account = substr($tietue, 1, 14);
   }
 
-  $payer_name = trim(substr($tietue, 63, 12));
+  $payer_name = trim(mb_substr($tietue_merkit, 63, 12)); // MUOKKAUS: merkkeinä, ks. yllä
   $reference = ltrim(substr($tietue, 43, 20), '0');
   $tietue = trim($tietue);
 
-  // MUOKKAUS: BUGIKORJAUS, haetaan summa strrpos- ja substr-funktioilla, ei kiintealla (77/78) paikalla:
-  if (strrpos($tietue, " ") > 0) {
-    $sum = substr($tietue, strrpos($tietue, " ") + 1);
-  } else {
-    $sum = substr($tietue, strrpos($tietue, "1A") + 2);
-  }
-  $sum = substr($sum, strpos($sum, "0"));
-  $sum = (float)preg_replace("/[^0-9]/", "", $sum);
+  // MUOKKAUS: BUGIKORJAUS, summa merkeistä 78-87 sentteinä (ks. $tietue_merkit yllä):
+  $sum = (int) mb_substr($tietue_merkit, 77, 10) / 100;
 
-  $sum = $sum / 1000; // XXX summa on sentteinä, etunollatäytöllä. MUOKKAUS: BUGIKORJAUS 100 -> 1000
-  //if ($factoring_oikaisutunnus != '0') { // MUOKKAUS: BUGIKORJAUS (kommentoitu ulos)
-  //  $sum = $sum * -1;
-  //}
-  $currency_code = substr($tietue, 75, 1);
+  // Oikaisu negatiivisena:
+  if ($factoring_oikaisutunnus != '0' and $factoring_oikaisutunnus != '') {
+    $sum = $sum * -1;
+  }
+  $currency_code = mb_substr($tietue_merkit, 75, 1); // MUOKKAUS: merkkeinä, ks. yllä
   $entry_date = "20".dateconv(substr($tietue, 15, 6)); // VVKKPP
   $payment_date = "20".dateconv(substr($tietue, 21, 6)); // VVKKPP
 
